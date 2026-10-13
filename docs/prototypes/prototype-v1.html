@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 自动化平台 · 产品原型 v1</title>
+<style>
+:root{
+  --ink:#0f172a;--ink-2:#475569;--ink-3:#8896a6;
+  --line:#e2e8f0;--bg:#f1f5f9;--surface:#ffffff;
+  --primary:#2f55f5;--primary-wash:#eef2ff;
+  --ok:#067647;--ok-bg:#ecfdf3;
+  --warn:#b54708;--warn-bg:#fffaeb;--warn-line:#f5dcc0;
+  --danger:#b42318;--danger-bg:#fef3f2;
+  --c1:#175cd3;--c1-bg:#eff8ff;
+  --mono:ui-monospace,SFMono-Regular,Consolas,monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;font-size:14px;line-height:1.55;color:var(--ink);background:var(--bg)}
+button{font:inherit;cursor:pointer;border:none;background:none;color:inherit}
+svg{flex:none}
+
+/* ── 布局 ── */
+.app{display:grid;grid-template-columns:216px 1fr;height:100vh;min-width:1200px}
+.side{background:#0d1526;color:#cbd5e1;display:flex;flex-direction:column;overflow-y:auto}
+.side .logo{padding:20px 18px 14px;color:#fff;font-weight:700;font-size:15px;letter-spacing:.5px}
+.side .logo small{display:block;font-weight:400;font-size:11px;color:#7c8db0;margin-top:2px}
+.navgroup{padding:10px 0 4px}
+.navgroup>span{display:block;padding:6px 18px;font-size:11px;color:#7c8db0;letter-spacing:1px}
+.nav-item{display:flex;align-items:center;gap:10px;width:100%;text-align:left;padding:8px 18px;color:#cbd5e1;font-size:13px;transition:background-color .12s}
+.nav-item:hover{background:#16213a}
+.nav-item[aria-current="true"]{background:var(--primary);color:#fff}
+.side .foot{margin-top:auto;padding:14px 18px;font-size:11px;color:#5b6b8c;border-top:1px solid #1c2a45}
+.main{overflow-y:auto;display:flex;flex-direction:column}
+.pagehead{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);padding:14px 28px;display:flex;align-items:center;gap:14px}
+.pagehead h1{font-size:18px}
+.pagehead .sub{color:var(--ink-3);font-size:12px}
+.content{padding:24px 28px 48px;flex:1}
+
+/* ── 原语 ── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(15,23,42,.06)}
+.card .card-h{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:600;font-size:14px;display:flex;align-items:center;gap:8px}
+.card .card-b{padding:16px 18px}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:1px 8px;border-radius:999px;font-size:11px;font-weight:600}
+.b-c2{background:var(--ok-bg);color:var(--ok)} .b-c1{background:var(--c1-bg);color:var(--c1)} .b-c0{background:#f2f4f7;color:#667085}
+.b-side{background:var(--danger-bg);color:var(--danger)} .b-warn{background:var(--warn-bg);color:var(--warn)}
+.b-run{background:var(--primary-wash);color:var(--primary)} .b-ok{background:var(--ok-bg);color:var(--ok)}
+.b-wait{background:var(--warn-bg);color:var(--warn)} .b-susp{background:#f2f4f7;color:#475569}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-weight:600;font-size:13px;transition:background-color .12s}
+.btn-p{background:var(--primary);color:#fff}.btn-p:hover{background:#2444cc}
+.btn-o{background:var(--surface);border:1px solid var(--line);color:var(--ink)}.btn-o:hover{background:#f8fafc}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.rate{font-family:var(--mono);font-weight:700}
+.note{font-size:12px;color:var(--ink-3)}
+.hr{border-top:1px solid var(--line);margin:14px 0}
+.kv{display:grid;grid-template-columns:130px 1fr;row-gap:9px;font-size:13px}
+.kv dt{color:var(--ink-3)} .kv dd{color:var(--ink)}
+.check{display:flex;gap:8px;align-items:flex-start;font-size:13px}
+.check input{margin-top:3px}
+.banner-warn{display:flex;gap:10px;background:var(--warn-bg);border:1px solid var(--warn-line);color:var(--warn);border-radius:10px;padding:12px 14px;font-size:13px;align-items:flex-start}
+.pagefoot{margin-top:18px;padding:12px 16px;background:#f8fafc;border:1px dashed var(--line);border-radius:10px;color:var(--ink-3);font-size:12px}
+.screen{display:none}.screen.on{display:block}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+
+/* ── 商店 ── */
+.searchbar{display:flex;gap:10px;margin-bottom:18px}
+.searchbar input{flex:1;max-width:520px;padding:9px 14px;border:1px solid var(--line);border-radius:8px;font:inherit;background:var(--surface)}
+.appcard{padding:16px;display:flex;flex-direction:column;gap:8px}
+.appcard .t{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px}
+.appcard .meta{font-size:12px;color:var(--ink-3);display:flex;gap:10px;flex-wrap:wrap}
+.appcard .cap{font-size:13px;color:var(--ink-2);min-height:40px}
+.appcard .row{display:flex;align-items:center;justify-content:space-between}
+.price{font-weight:700;font-family:var(--mono)}
+
+/* ── 详情 ── */
+.detail{display:grid;grid-template-columns:1fr 340px;gap:16px;align-items:start}
+.statrow{display:flex;gap:24px;padding:4px 0}
+.stat .n{font-family:var(--mono);font-size:22px;font-weight:700}
+.stat .l{font-size:12px;color:var(--ink-3)}
+
+/* ── 运行中心 ── */
+.tasks{display:flex;flex-direction:column;gap:10px}
+.task{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.task .name{font-weight:600}
+.task .desc{font-size:12px;color:var(--ink-3)}
+.task .grow{flex:1}
+.panel{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;align-items:start}
+.itemlist{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);border-radius:8px}
+.item.sel{background:var(--primary-wash)}
+.item .grow{flex:1}
+.browsermock{background:#dfe7f3;border:1px solid var(--line);border-radius:8px;height:230px;display:flex;flex-direction:column;overflow:hidden}
+.browsermock .bar{background:#f8fafc;border-bottom:1px solid var(--line);padding:6px 10px;display:flex;gap:6px;align-items:center;font-size:11px;color:var(--ink-3)}
+.browsermock .dot{width:9px;height:9px;border-radius:50%;background:#cbd5e1}
+.browsermock .body{flex:1;display:flex;align-items:center;justify-content:center;color:var(--ink-3);font-size:13px;flex-direction:column;gap:8px}
+
+/* ── 画布 ── */
+.canvas{position:relative;height:520px;background:radial-gradient(var(--line) 1px,transparent 1px);background-size:20px 20px;border-radius:12px;border:1px solid var(--line);overflow:auto}
+.cnode{position:absolute;width:150px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;box-shadow:0 1px 2px rgba(15,23,42,.08);font-size:12px;z-index:2}
+.cnode .nt{font-weight:600;font-size:12.5px;margin-bottom:3px}
+.cnode .nb{display:flex;gap:4px;flex-wrap:wrap}
+.cnode.side-fx{background:var(--danger-bg);border-color:#f1c7c3}
+.cnode.interact{background:var(--c1-bg);border-color:#cfe3fb}
+.composite{position:absolute;border:2px dashed #94a8c8;border-radius:14px;z-index:1;background:rgba(238,242,255,.25)}
+.composite .tag{position:absolute;top:-11px;left:12px;background:#334155;color:#fff;font-size:11px;padding:2px 10px;border-radius:999px}
+svg.wires{position:absolute;inset:0;width:100%;height:100%;z-index:1}
+.wires path{stroke:#94a8c8;stroke-width:1.6;fill:none}
+.lockpanel{font-family:var(--mono);font-size:12px}
+
+/* ── 录制 ── */
+.recstep{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px;align-items:flex-start}
+.recstep:last-child{border-bottom:none}
+.recstep .no{width:20px;height:20px;border-radius:50%;background:var(--ok-bg);color:var(--ok);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;margin-top:1px}
+.recstep.warn .no{background:var(--warn-bg);color:var(--warn)}
+.recstep .act{font-weight:600}
+.recstep .det{font-size:12px;color:var(--ink-3)}
+.paramrow{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}
+.paramrow:last-child{border:none}
+.paramrow .from{font-family:var(--mono);background:#f2f4f7;padding:2px 8px;border-radius:6px;font-size:12px}
+.paramrow .arrow{color:var(--ink-3)}
+.paramrow .to{font-family:var(--mono);background:var(--primary-wash);color:var(--primary);padding:2px 8px;border-radius:6px;font-size:12px;font-weight:600}
+
+/* ── 报告 ── */
+.report{font-family:var(--mono);font-size:12.5px;white-space:pre-wrap;line-height:1.8;background:#0d1526;color:#dbe6f5;border-radius:12px;padding:20px 22px}
+.report .hl{color:#7ee2a8;font-weight:700}
+.report .wl{color:#f5b988;font-weight:700}
+
+/* ── 步骤条 ── */
+.stepper{display:flex;gap:0;margin-bottom:18px}
+.step{flex:1;display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--surface);border:1px solid var(--line);font-size:13px;color:var(--ink-3)}
+.step:first-child{border-radius:8px 0 0 8px}.step:last-child{border-radius:0 8px 8px 0}
+.step .n{width:20px;height:20px;border-radius:50%;background:#f2f4f7;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none}
+.step.done{color:var(--ink)}.step.done .n{background:var(--ok-bg);color:var(--ok)}
+.step.cur{color:var(--primary);font-weight:600;background:var(--primary-wash);border-color:#c7d4ff}
+.step.cur .n{background:var(--primary);color:#fff}
+
+/* ── 表格 ── */
+table.tb{width:100%;border-collapse:collapse;font-size:13px}
+.tb th{text-align:left;color:var(--ink-3);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--line);font-size:12px}
+.tb td{padding:10px;border-bottom:1px solid var(--line)}
+.tb tr:hover td{background:#f8fafc}
+.mono{font-family:var(--mono);font-size:12.5px}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tab{padding:6px 14px;border-radius:8px;font-size:13px;color:var(--ink-2)}
+.tab:hover{background:#eef2f7}
+.tab[aria-current="true"]{background:var(--ink);color:#fff}
+</style>
+</head>
+<body>
+<div class="app">
+    <nav class="side">
+    <div class="logo">AI 自动化平台<small>产品原型 v1 · 2026-10-14</small></div>
+    <div class="navgroup"><span>用户端</span>
+      <button class="nav-item" data-t="store" aria-current="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16l-1.5 12h-13L4 7z"/><path d="M8 7a4 4 0 0 1 8 0"/></svg>应用商店</button>
+      <button class="nav-item" data-t="detail"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16.5v.01"/></svg>应用详情 · 信任字段</button>
+      <button class="nav-item" data-t="run"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 4l14 8-14 8V4z"/></svg>运行中心</button>
+      <button class="nav-item" data-t="library"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 5h5v14H5zM14 5h5v14h-5z"/></svg>我的库</button>
+    </div>
+    <div class="navgroup"><span>创作者中心</span>
+      <button class="nav-item" data-t="cc-search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>① 搜积木</button>
+      <button class="nav-item" data-t="cc-canvas"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="12" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8 7.5l7.5 3.5M8 16.5L15.5 13"/></svg>② 画布组装</button>
+      <button class="nav-item" data-t="cc-record"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5" fill="currentColor" stroke="none"/></svg>③ 演示录制</button>
+      <button class="nav-item" data-t="cc-cert"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 5-3.5 8-7 10-3.5-2-7-5-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>⑥ 认证报告</button>
+      <button class="nav-item" data-t="cc-publish"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 13l7-7 7 7M12 6v13"/></svg>⑧ 发布向导</button>
+    </div>
+    <div class="navgroup"><span>设置与平台</span>
+      <button class="nav-item" data-t="model"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>模型中心</button>
+      <button class="nav-item" data-t="admin-review"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 4h12v16l-6-3-6 3V4z"/></svg>后台 · 审核队列</button>
+      <button class="nav-item" data-t="admin-spot"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M8.5 11l2 2 3.5-3.5M20 20l-4-4"/></svg>后台 · C1 抽查</button>
+    </div>
+    <div class="foot">对应文档：PRD v14.1 / TDD v8.1<br>docs/ · 03-模块设计 M01-M16</div>
+  </nav>
+
+  <main class="main">
+    <section class="screen on" id="s-store">
+    <div class="pagehead"><h1>应用商店</h1><span class="sub">每个应用印着实测通过率——买之前就知道它能不能跑</span></div>
+    <div class="content">
+      <div class="searchbar"><input placeholder="搜索自动化工具：选品 / 报告 / 收藏 …"><button class="btn btn-p">搜索</button></div>
+      <div class="grid3">
+        <div class="card appcard">
+          <div class="t">小红书选品助手 <span class="badge b-c1">C1 认证</span></div>
+          <div class="meta"><span>平台自营</span><span>下载 12.4k</span><span>维护期至 2027-06</span></div>
+          <div class="cap">按主题搜索小红书笔记 → AI 分析 → 人工勾选爆品 → 生成 Excel 报告 → 1688 选品收藏（需确认）</div>
+          <div class="row"><span class="badge b-warn">best-effort · 高变更站点</span><span class="rate">90% <span class="note">近20次</span></span><span class="price">¥99</span></div>
+        </div>
+        <div class="card appcard">
+          <div class="t">GitHub Issue 日报 <span class="badge b-c2">C2 认证</span></div>
+          <div class="meta"><span>平台自营</span><span>下载 8.1k</span><span>维护期至 2027-05</span></div>
+          <div class="cap">定时拉取仓库 Issue 与 PR 变化，AI 汇总生成日报，无需登录、可无人值守</div>
+          <div class="row"><span class="badge b-ok">标准站点</span><span class="rate">98% <span class="note">近50次</span></span><span class="price">¥29</span></div>
+        </div>
+        <div class="card appcard">
+          <div class="t">知乎热榜监控 <span class="badge b-c2">C2 认证</span></div>
+          <div class="meta"><span>平台自营</span><span>下载 5.6k</span><span>维护期至 2027-05</span></div>
+          <div class="cap">监控知乎热榜关键词命中，生成每日变化报告并推送通知</div>
+          <div class="row"><span class="badge b-warn">中等变更</span><span class="rate">93% <span class="note">近30次</span></span><span class="price">¥19</span></div>
+        </div>
+      </div>
+      <div class="pagefoot">运行条件与成功率以信任字段为准；平台审核与认证不构成对运行结果的担保。</div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-detail">
+    <div class="pagehead"><h1>小红书选品助手</h1><span class="sub">v1.2.0 · 平台自营 · 买断（含 12 个月维护期）</span></div>
+    <div class="content">
+      <div class="banner-warn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4l9 16H3l9-16z"/><path d="M12 10v4M12 17v.01"/></svg><div><b>best-effort 应用</b>：本应用包含高变更频率站点（小红书 / 1688），页面结构可能随时变更，运行成功率以实测通过率为准，可能出现无法自动恢复的失效。</div></div>
+      <div style="height:14px"></div>
+      <div class="detail">
+        <div class="card">
+          <div class="card-h">实测可靠性（分列展示）</div>
+          <div class="card-b">
+            <div class="statrow">
+              <div class="stat"><div class="n" style="color:var(--ok)">90%</div><div class="l">认证通过率<br>近 20 次真实运行 · 2026-10</div></div>
+              <div class="stat"><div class="n" style="color:var(--c1)">88%</div><div class="l">用户运行成功率<br>近 35 次 · 滚动更新</div></div>
+              <div class="stat"><div class="n" style="color:var(--ink-3)">—</div><div class="l">1688 收藏节点<br>数据不足（&lt;30）</div></div>
+            </div>
+            <div class="hr"></div>
+            <dl class="kv">
+              <dt>认证等级</dt><dd><span class="badge b-c1">C1 登录流程认证</span>&nbsp;创作者环境实测，平台抽查复核</dd>
+              <dt>维护期</dt><dd>至 <b>2027-06-12</b>（含积木修复自动更新；期后 as-is，可续保）</dd>
+              <dt>Token 成本</dt><dd class="mono">¥0.12 – ¥0.35 / 次（认证实测）</dd>
+              <dt>登录站点</dt><dd>小红书 · 1688（凭证仅存本机）</dd>
+              <dt>人工交互</dt><dd>login（首次登录）· review（勾选爆品）· confirm（收藏 / 评论提交前逐条确认）</dd>
+              <dt>AI 内容标识</dt><dd>含 AI 生成内容（评论为草稿模式，逐条确认后提交）</dd>
+            </dl>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="card-h">购买</div>
+            <div class="card-b">
+              <div style="display:flex;align-items:baseline;gap:8px"><span class="price" style="font-size:26px">¥99</span><span class="note">一次性买断 · 当前版本</span></div>
+              <div style="height:12px"></div>
+              <label class="check"><input type="checkbox"><span>已知悉本商品为数字内容，按《退款政策》执行（24h 未激活全退；维护期内失效按比例退）</span></label>
+              <div style="height:12px"></div>
+              <button class="btn btn-p" style="width:100%;justify-content:center" disabled>购买并下载</button>
+              <div style="height:6px"></div>
+              <div class="note">勾选确认后可购买 · 首次运行前需完成能力授权</div>
+            </div>
+          </div>
+          <div style="height:14px"></div>
+          <div class="card"><div class="card-h">组成积木</div><div class="card-b" style="font-size:13px;line-height:2">
+            <span class="badge b-c1">C1 90%</span> 小红书搜索笔记 v1.2<br>
+            <span class="badge b-c1">C1 88%</span> 笔记批量读取 v1.0<br>
+            <span class="badge b-c2">C2 95%</span> AI 选品分析 v2.1<br>
+            <span class="badge b-c2">C2 97%</span> Excel 报告 v1.4<br>
+            <span class="badge b-c1">C1 86%</span> 1688 搜索 v1.1<br>
+            <span class="badge b-side">副作用</span> 1688 收藏 v1.0 <span class="note">（需确认）</span>
+          </div></div>
+        </div>
+      </div>
+      <div class="pagefoot">运行条件与成功率以信任字段为准；平台审核与认证不构成对运行结果的担保。</div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-run">
+    <div class="pagehead"><h1>运行中心</h1><span class="sub">任务队列 · 交互面板（表单族 / 浏览器族） · 挂起可恢复</span></div>
+    <div class="content">
+      <div class="card tasks">
+        <div class="task"><span class="badge b-wait">等待用户</span><div class="grow"><div class="name">小红书选品助手 #1024</div><div class="desc">运行中触发交互：请勾选要上架的爆品（review · 表单族 · 剩余 8 分钟，可续期）</div></div><button class="btn btn-p">去处理</button></div>
+        <div class="task"><span class="badge b-run">运行中</span><div class="grow"><div class="name">GitHub Issue 日报 #1023</div><div class="desc">步骤 3/5 · 拉取 PR 变更 · Token ¥0.08</div></div><button class="btn btn-o">日志</button></div>
+        <div class="task"><span class="badge b-susp">已挂起</span><div class="grow"><div class="name">1688 选品收藏 #1021</div><div class="desc">等待登录 1688（浏览器族 · 挂起 71 小时内可继续，浏览器会话将在挂起 2 小时后关闭）</div></div><button class="btn btn-o">稍后继续</button></div>
+        <div class="task"><span class="badge b-ok">已完成</span><div class="grow"><div class="name">知乎热榜监控 #1019</div><div class="desc">产出 report-1019.xlsx · 交互历史 2 条</div></div><button class="btn btn-o">详情</button></div>
+      </div>
+      <div class="panel">
+        <div class="card">
+          <div class="card-h">交互面板 · 表单族（review）<span class="badge b-wait">waiting_user</span></div>
+          <div class="card-b">
+            <div style="font-weight:600;margin-bottom:4px">请勾选要上架的爆品</div>
+            <div class="note" style="margin-bottom:10px">来自「AI 选品分析」· 已按互动数据排序</div>
+            <div class="itemlist">
+              <label class="item sel"><input type="checkbox" checked><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.4"><path d="M5 13l4 4L19 7"/></svg><div class="grow"><b>夏日连衣裙 A</b><div class="note">赞 1.2k · 藏 890 · 评 210</div></div></label>
+              <label class="item"><input type="checkbox"><div class="grow"><b>冰感防晒衣 B</b><div class="note">赞 980 · 藏 754 · 评 165</div></div></label>
+              <label class="item"><input type="checkbox"><div class="grow"><b>洞洞鞋 C</b><div class="note">赞 866 · 藏 601 · 评 143</div></div></label>
+            </div>
+            <div style="height:12px"></div>
+            <div style="display:flex;gap:8px"><button class="btn btn-p">确认上架所选（1）</button><button class="btn btn-o">跳过</button><button class="btn btn-o">续期 +10min</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h">交互面板 · 浏览器族（login）<span class="badge b-wait">waiting_user</span></div>
+          <div class="card-b">
+            <div style="font-weight:600;margin-bottom:4px">请登录 1688</div>
+            <div class="note" style="margin-bottom:10px">凭证仅存本机 · 完成后此流程后续运行免登录 · 账号风险告知：目标站点可能因自身规则限制自动化操作</div>
+            <div class="browsermock">
+              <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">https://login.1688.com</span></div>
+              <div class="body"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a8c8" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 20c1.5-3.5 4.5-5 8-5s6.5 1.5 8 5"/></svg>内嵌浏览器 · 请在页面中完成登录</div>
+            </div>
+            <div style="height:12px"></div>
+            <div style="display:flex;gap:8px"><button class="btn btn-p">我已完成登录</button><button class="btn btn-o">稍后继续</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-library">
+    <div class="pagehead"><h1>我的库</h1><span class="sub">已购应用 · 运行状态 · 授权与凭证管理</span></div>
+    <div class="content">
+      <div class="card"><table class="tb">
+        <tr><th>应用</th><th>版本 / 维护期</th><th>最近运行</th><th>健康</th><th></th></tr>
+        <tr><td><b>小红书选品助手</b></td><td class="mono">v1.2.0 · 至 2027-06-12</td><td>今天 10:24 · 成功</td><td><span class="badge b-c1">C1 · 88%</span></td><td style="text-align:right"><button class="btn btn-p">运行</button></td></tr>
+        <tr><td><b>GitHub Issue 日报</b></td><td class="mono">v2.0.1 · 至 2027-05-30</td><td>今天 08:00 · 定时 · 成功</td><td><span class="badge b-c2">C2 · 98%</span></td><td style="text-align:right"><button class="btn btn-o">运行</button></td></tr>
+        <tr><td><b>知乎热榜监控</b></td><td class="mono">v1.1.2 · 至 2027-05-18</td><td>昨天 21:00 · 成功</td><td><span class="badge b-c2">C2 · 93%</span></td><td style="text-align:right"><button class="btn btn-o">运行</button></td></tr>
+      </table></div>
+      <div style="height:16px"></div>
+      <div class="grid2">
+        <div class="card"><div class="card-h">凭证（仅存本机）</div><div class="card-b" style="font-size:13px;line-height:2.1">
+          xiaohongshu.com · 会话有效 · <button class="btn btn-o" style="padding:2px 10px;font-size:12px">撤销</button><br>
+          1688.com · 会话有效 · <button class="btn btn-o" style="padding:2px 10px;font-size:12px">撤销</button><br>
+          <span class="note">凭证加密存储于本机，服务端不存储；应用无权直接读取。</span>
+        </div></div>
+        <div class="card"><div class="card-h">数据与上报</div><div class="card-b" style="font-size:13px;line-height:2">
+          运行结果上报：<b>开启</b>（用于滚动成功率统计 · 不含页面内容）<br>
+          <button class="btn btn-o" style="padding:2px 10px;font-size:12px">关闭上报</button> <span class="note">关闭后不计入统计，退款判据自动切换为激活校验</span>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-cc-search">
+    <div class="pagehead"><h1>创作者中心 · 搜积木</h1><span class="sub">说一句话 → 装配助手推荐认证积木组合（九步流程 · 第 1 步）</span></div>
+    <div class="content">
+      <div class="card"><div class="card-b">
+        <div style="background:var(--primary-wash);border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:13px">帮我做一个：根据主题去小红书搜索笔记，读取指定数量，人工选爆品，生成报告，再去 1688 选品收藏</div>
+        <div style="display:flex;gap:8px"><input style="flex:1;padding:9px 14px;border:1px solid var(--line);border-radius:8px;font:inherit" placeholder="描述你想做的自动化…"><button class="btn btn-p">发送</button></div>
+      </div></div>
+      <div style="height:16px"></div>
+      <div class="card">
+        <div class="card-h">装配助手 · 推荐组合 <span class="note">全部来自认证积木库 · 展示各积木实测通过率</span></div>
+        <div class="card-b" style="font-size:13px">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <span class="badge b-c1">C1 90%</span>小红书搜索笔记 →
+            <span class="badge b-c1">C1 88%</span>笔记批量读取 →
+            <span class="badge b-c2">C2 95%</span>AI 选品分析 →
+            <span class="badge" style="background:var(--c1-bg);color:var(--c1)">交互</span>勾选爆品 →
+            <span class="badge b-c2">C2 97%</span>Excel 报告 →
+            <span class="badge b-c1">C1 86%</span>1688 搜索 →
+            <span class="badge b-side">副作用</span>1688 收藏
+            <button class="btn btn-p">放到画布 →</button>
+          </div>
+          <div class="hr"></div>
+          <div class="note">助手提问：「选择爆品」是 AI 自动选还是人工勾选？→ 已选<b>人工勾选</b>（插入 review 交互积木） · 「1688 收藏」为写操作，将自动追加 confirm 确认积木</div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="card"><div class="card-h">我的模块库（复合积木）</div><div class="card-b" style="font-size:13px;display:flex;gap:10px;flex-wrap:wrap">
+        <span class="badge b-c1">我的模块</span> <b>小红书选品模块</b> <span class="note">5 积木 · 明细展示通过率 · 被我自己复用 3 次</span>
+        <span class="badge b-c0">草稿 C0</span> <b>评论区关键词统计</b> <span class="note">未认证 · 仅私用，不可用于上架应用</span>
+      </div></div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-cc-canvas">
+    <div class="pagehead"><h1>创作者中心 · 画布组装</h1><span class="sub">副作用积木必须后接确认 · 接口兼容性自动校验 · 保存即生成 lock</span></div>
+    <div class="content">
+      <div class="canvas" id="cv">
+        <svg class="wires" viewBox="0 0 960 520" preserveAspectRatio="none">
+          <path d="M170 70 C220 70 220 110 250 110"/><path d="M400 110 C440 110 440 150 470 150"/>
+          <path d="M620 150 C660 150 660 110 690 110"/><path d="M840 110 C870 110 870 160 880 190"/>
+          <path d="M170 300 C230 300 230 260 260 260"/><path d="M410 260 C450 260 450 300 480 300"/>
+          <path d="M630 300 C670 300 670 340 700 340"/><path d="M850 340 C880 340 880 390 890 410"/>
+        </svg>
+        <div class="composite" style="left:30px;top:40px;width:660px;height:190px"><span class="tag">我的模块 · 小红书选品（复合积木，可整体复用）</span></div>
+        <div class="cnode" style="left:40px;top:66px"><div class="nt">启动表单</div><div class="nb"><span class="badge b-c0">输入</span>topic / 数量</div></div>
+        <div class="cnode" style="left:250px;top:96px"><div class="nt">小红书搜索笔记</div><div class="nb"><span class="badge b-c1">C1 90%</span></div></div>
+        <div class="cnode" style="left:470px;top:136px"><div class="nt">笔记批量读取</div><div class="nb"><span class="badge b-c1">C1 88%</span></div></div>
+        <div class="cnode interact" style="left:690px;top:96px"><div class="nt">【交互】勾选爆品</div><div class="nb"><span class="badge b-c1">review</span></div></div>
+        <div class="cnode" style="left:850px;top:170px"><div class="nt">Excel 报告</div><div class="nb"><span class="badge b-c2">C2 97%</span></div></div>
+        <div class="cnode" style="left:260px;top:246px"><div class="nt">1688 搜索</div><div class="nb"><span class="badge b-c1">C1 86%</span></div></div>
+        <div class="cnode side-fx" style="left:480px;top:286px"><div class="nt">1688 收藏 ⚠</div><div class="nb"><span class="badge b-side">副作用</span>禁自动重试</div></div>
+        <div class="cnode interact" style="left:700px;top:326px"><div class="nt">【确认】收藏清单</div><div class="nb"><span class="badge b-c1">confirm</span>幂等键 ✓</div></div>
+        <div class="cnode side-fx" style="left:860px;top:396px"><div class="nt">评论草稿生成</div><div class="nb"><span class="badge b-c2">C2 95%</span>AI 标识</div></div>
+        <div class="cnode interact" style="left:640px;top:440px"><div class="nt">【确认】逐条提交</div><div class="nb"><span class="badge b-c1">confirm</span></div></div>
+      </div>
+      <div style="height:14px"></div>
+      <div class="grid2">
+        <div class="card"><div class="card-h">画布校验</div><div class="card-b" style="font-size:13px;line-height:2">
+          ✓ 接口兼容性：11 节点全部匹配<br>
+          ✓ 副作用规则：2 个副作用积木均已后接 confirm<br>
+          <span style="color:var(--danger)">✕ C0 拦截：「评论区关键词统计（草稿）」未认证 —— 私用可运行，<b>含此积木不可提审</b></span>
+        </div></div>
+        <div class="card"><div class="card-h">积木版本锁定（lock）</div><div class="card-b lockpanel">
+          xhs_note_fetch : base 1.2.0 · window 1.2.* · <b>effective 1.2.3</b><br>
+          ai_selection&nbsp;&nbsp;&nbsp;: base 2.0.1 · window 2.0.* · effective 2.0.1<br>
+          <span class="note">声明式 patch 自动应用（权限不扩大 · 验签 · smoke · 失败回滚）</span>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-cc-record">
+    <div class="pagehead"><h1>创作者中心 · 演示录制参数化</h1><span class="sub">真人真跑通过的确定性轨迹，才变成工具 —— 不是 AI 发明的代码</span></div>
+    <div class="content">
+      <div class="grid2">
+        <div class="card">
+          <div class="card-h">内嵌浏览器 · 演示中 <span class="badge b-run">● REC</span></div>
+          <div class="card-b">
+            <div class="browsermock" style="height:260px">
+              <div class="bar"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span style="margin-left:8px">xiaohongshu.com/explore</span></div>
+              <div class="body"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#94a8c8" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>页面示意 · 你的每一步操作正被 CDP 记录</div>
+            </div>
+            <div style="height:12px"></div>
+            <div class="note">提示：点击输入内容时可圈选文字标记为「输入项」；重复动作会被识别为循环。录制数据仅存本机。</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-h">操作轨迹 · 本地回放自检</div>
+          <div class="card-b">
+            <div class="recstep"><span class="no">1</span><div><span class="act">打开 小红书探索页</span><div class="det">dom_anchor ✓ · 回放一致</div></div></div>
+            <div class="recstep warn"><span class="no">2</span><div><span class="act">输入「夏日连衣裙」</span><div class="det">字面量 → 候选输入项 <b>topic</b>（圈选标记）</div></div></div>
+            <div class="recstep"><span class="no">3</span><div><span class="act">滚动 ×4 · 等待加载</span><div class="det">重复模式 → 循环候选（滚动直到 10 条）</div></div></div>
+            <div class="recstep"><span class="no">4</span><div><span class="act">点击第 1 条笔记</span><div class="det">回放一致</div></div></div>
+            <div class="recstep warn"><span class="no">5</span><div><span class="act">提取标题 / 点赞数</span><div class="det"><b style="color:var(--warn)">脆弱步骤</b>：回放 2/3 失败（元素晚加载）→ 建议：重录该段 或 加等待锚点</div></div></div>
+          </div>
+        </div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="card">
+        <div class="card-h">参数化结果（LLM 参数化 · 全部可人工修改）</div>
+        <div class="card-b">
+          <div class="paramrow"><span class="from">"夏日连衣裙"</span><span class="arrow">→</span><span class="to">input.topic</span><span class="note">启动表单项</span></div>
+          <div class="paramrow"><span class="from">滚动直到第 10 条</span><span class="arrow">→</span><span class="to">input.max_notes = 10</span><span class="note">循环上限</span></div>
+          <div class="paramrow"><span class="from">笔记标题 / 点赞 / 收藏</span><span class="arrow">→</span><span class="to">output.title·likes·saves</span><span class="note">提取字段 → 输出 Schema</span></div>
+          <div style="height:10px"></div>
+          <button class="btn btn-p">生成积木草稿（C0）</button> <button class="btn btn-o">重新录制脆弱段</button> <span class="note">草稿私用可跑；上架需认证转正</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-cc-cert">
+    <div class="pagehead"><h1>创作者中心 · 认证报告</h1><span class="sub">实测通过率 = 纯真实运行口径 · 回放回归分列展示</span></div>
+    <div class="content">
+      <div class="grid2">
+        <div class="card"><div class="card-h">报告 · 小红书笔记抓取 v1.0.0</div><div class="card-b"><div class="report">积木认证报告：小红书笔记抓取 v1.0.0
+认证等级：<span class="hl">C1（登录流程认证 · 本机认证器）</span>
+实测：<span class="hl">20 次真实运行 · 通过 18 次 · 90%</span>
+      （2026-10-01 至 10-12 · 跨 2 时段 · 本机环境）
+环境：Windows 11 / Chrome 130 / 住宅网络 / 创作者会话
+回归：golden 回放 <span class="hl">20/20 通过</span>（单列 · 不计入实测）
+失败归因：2 次加载超时（network · 非 user-side）
+权限：domain / credential / ai:fast
+交互：login（首次）· input（运行中可能补充主题）
+站点变更等级：<span class="wl">高变更频率 —— best-effort</span>
+      详情页将显著标注</div></div></div>
+        <div>
+          <div class="card"><div class="card-h">阈值判定</div><div class="card-b" style="font-size:13px;line-height:2">
+            站点等级：<b>高变更频率</b> → 不设认证下限<br>
+            判定：<span class="badge b-ok">可上架（强制 best-effort 标注）</span><br>
+            抽查：报告已进入抽查池（每 10 份至少 1 份 · 重测任务模式）
+          </div></div>
+          <div style="height:14px"></div>
+          <div class="card"><div class="card-h">操作</div><div class="card-b" style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn btn-p">提交审核</button><button class="btn btn-o">补测 5 次</button><button class="btn btn-o">查看失败详情</button>
+          </div></div>
+          <div style="height:14px"></div>
+          <div class="card"><div class="card-h">应用整链验证（含 C1 积木）</div><div class="card-b" style="font-size:13px;line-height:2">
+            执行位置：<b>创作者本机整链 1 次</b>（免费额度）<br>
+            状态：✓ 已通过 · 报告已签名上传
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-cc-publish">
+    <div class="pagehead"><h1>创作者中心 · 发布向导</h1><span class="sub">信息 → 信任字段预览 → 站点合规声明 → 提审</span></div>
+    <div class="content">
+      <div class="stepper">
+        <div class="step done"><span class="n">✓</span>应用信息</div>
+        <div class="step done"><span class="n">✓</span>定价（自主定价）</div>
+        <div class="step cur"><span class="n">3</span>信任字段预览</div>
+        <div class="step"><span class="n">4</span>合规声明与提审</div>
+      </div>
+      <div class="grid2">
+        <div class="card"><div class="card-h">买家将看到的信任字段（预览）</div><div class="card-b"><dl class="kv">
+          <dt>认证通过率</dt><dd><span class="rate">90%</span>（近 20 次真实运行 · 2026-10）· C1 创作者环境实测</dd>
+          <dt>站点标注</dt><dd><span class="badge b-warn">best-effort · 高变更站点</span>（首屏显著警示）</dd>
+          <dt>维护期</dt><dd>12 个月 · 至 2027-10-12</dd>
+          <dt>Token 成本</dt><dd class="mono">¥0.12–0.35/次</dd>
+          <dt>人工交互</dt><dd>login / review / confirm（3 类）</dd>
+          <dt>AI 内容</dt><dd>含 AI 生成内容 · 评论为草稿模式</dd>
+        </dl></div></div>
+        <div class="card"><div class="card-h">站点合规声明（审核必填）</div><div class="card-b" style="font-size:13px;display:flex;flex-direction:column;gap:10px">
+          <label class="check"><input type="checkbox" checked><span>目标站点自动化访问政策已知晓（小红书 / 1688 限制条款）</span></label>
+          <label class="check"><input type="checkbox" checked><span>数据类型：公开页面数据 + 本人授权登录态数据（输出个人信息字段默认脱敏）</span></label>
+          <label class="check"><input type="checkbox"><span>包含对外发布动作（评论草稿 · 逐条确认）—— 将触发三要素叠加人工审核</span></label>
+          <div class="hr"></div>
+          <div class="note">审核清单：认证报告核验 · 合规声明 · AI 内容标识 · confirm 覆盖 · 权限最小化</div>
+          <button class="btn btn-p">提交审核</button>
+        </div></div>
+      </div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-model">
+    <div class="pagehead"><h1>模型中心</h1><span class="sub">Token 完全用户自付 · 平台不经手模型调用</span></div>
+    <div class="content">
+      <div class="banner-warn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4l9 16H3l9-16z"/><path d="M12 10v4M12 17v.01"/></svg><div>选择境外模型服务时，您的输入与输出将传输至相应境外服务商。</div></div>
+      <div style="height:14px"></div>
+      <div class="grid3">
+        <div class="card appcard"><div class="t">DeepSeek <span class="badge b-ok">已配置</span></div><div class="cap">fast / reasoning · API Key 已验证（本机加密）</div><div class="row"><span class="note">默认提供商</span></div></div>
+        <div class="card appcard"><div class="t">GLM <span class="badge b-ok">已配置</span></div><div class="cap">fast · vision · 本机加密存储</div><div class="row"><span class="note">备用</span></div></div>
+        <div class="card appcard"><div class="t">OpenAI <span class="badge b-c0">未配置</span></div><div class="cap">reasoning / vision · 境外服务</div><div class="row"><button class="btn btn-o">配置 Key</button></div></div>
+      </div>
+      <div style="height:16px"></div>
+      <div class="card"><div class="card-h">能力分级映射</div><div class="card-b"><table class="tb">
+        <tr><th>能力</th><th>映射</th><th>状态</th></tr>
+        <tr><td>fast</td><td class="mono">DeepSeek-V4</td><td><span class="badge b-ok">正常</span></td></tr>
+        <tr><td>reasoning</td><td class="mono">DeepSeek-R2</td><td><span class="badge b-ok">正常</span></td></tr>
+        <tr><td>vision</td><td class="mono">—（未配置）</td><td><span class="badge b-warn">回退 fast 并提示</span></td></tr>
+      </table></div></div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-admin-review">
+    <div class="pagehead"><h1>管理后台 · 审核队列</h1><span class="sub">角色：审核员 · 全操作落审计日志（≥3 年）</span></div>
+    <div class="content">
+      <div class="tabs"><button class="tab" aria-current="true">全部 6</button><button class="tab">待人工重点 2</button><button class="tab">已通过</button><button class="tab">已拒绝</button></div>
+      <div class="card"><table class="tb">
+        <tr><th>应用</th><th>认证报告</th><th>要素</th><th>判定</th><th></th></tr>
+        <tr style="background:var(--warn-bg)"><td><b>小红书引流评论助手</b><div class="note">v1.0 · 创作者 A</div></td><td><span class="badge b-c1">C1 86%</span></td><td><span class="badge b-warn">高变更</span> <span class="badge b-warn">个人信息</span> <span class="badge b-side">对外发布</span></td><td><b style="color:var(--warn)">三要素叠加</b><div class="note">→ 人工重点审核</div></td><td style="text-align:right"><button class="btn btn-p">审核</button></td></tr>
+        <tr><td><b>GitHub Issue 日报</b><div class="note">v2.0 · 平台自营</div></td><td><span class="badge b-c2">C2 98%</span></td><td><span class="badge b-ok">无叠加</span></td><td>常规</td><td style="text-align:right"><button class="btn btn-o">审核</button></td></tr>
+        <tr><td><b>知乎热榜监控</b><div class="note">v1.1 · 创作者 B</div></td><td><span class="badge b-c2">C2 93%</span></td><td><span class="badge b-ok">无叠加</span></td><td>常规</td><td style="text-align:right"><button class="btn btn-o">审核</button></td></tr>
+      </table></div>
+      <div style="height:16px"></div>
+      <div class="card"><div class="card-h">审核清单（五项）</div><div class="card-b" style="font-size:13px;line-height:2">① 认证报告核验（live/regression 分列） ② 站点合规声明 ③ AI 内容标识 ④ confirm 覆盖（发布类调用必须有确认交互） ⑤ 权限最小化</div></div>
+    </div>
+  </section>
+
+    <section class="screen" id="s-admin-spot">
+    <div class="pagehead"><h1>管理后台 · C1 抽查工作台</h1><span class="sub">每 10 份认证报告至少抽 1 份 · 重测任务模式 · 不符即处置</span></div>
+    <div class="content">
+      <div class="grid2">
+        <div class="card"><div class="card-h">抽查队列</div><div class="card-b"><table class="tb">
+          <tr><th>报告</th><th>创作者</th><th>状态</th><th></th></tr>
+          <tr><td class="mono">cert-2041</td><td>创作者 A</td><td><span class="badge b-run">重测中</span></td><td style="text-align:right"><button class="btn btn-o">查看</button></td></tr>
+          <tr><td class="mono">cert-2038</td><td>创作者 B</td><td><span class="badge b-ok">一致</span></td><td style="text-align:right"><button class="btn btn-o">归档</button></td></tr>
+          <tr><td class="mono">cert-2033</td><td>创作者 C</td><td><span class="badge b-wait">待响应（剩 9 天）</span></td><td style="text-align:right"><button class="btn btn-o">催办</button></td></tr>
+        </table></div></div>
+        <div class="card"><div class="card-h">比对 · cert-2041（小红书笔记抓取 v1.0.0）</div><div class="card-b" style="font-size:13px">
+          <table class="tb">
+            <tr><th></th><th>原报告</th><th>重测（服务端随机参数）</th></tr>
+            <tr><td>通过率</td><td class="mono">18/20</td><td class="mono">18/20 ✓</td></tr>
+            <tr><td>步骤序列指纹</td><td class="mono">a3f9…</td><td class="mono">a3f9… ✓</td></tr>
+            <tr><td>时序分布</td><td class="note">中位 96s</td><td class="mono">中位 99s ✓</td></tr>
+            <tr><td>环境一致性</td><td class="note">Win11/Chrome130</td><td class="mono">一致 ✓</td></tr>
+          </table>
+          <div style="height:12px"></div>
+          <div class="note">不符处置链：attestation_invalid → 积木版本下架 → 保障金池流程 → 引用应用标记「积木维护中」（不直接下架应用）；超 14 天未响应重测 → 按「创作者超期未响应」归因处理。</div>
+        </div></div>
+      </div>
+    </div>
+  </section>
+  </main>
+</div>
+<script>
+const btns=document.querySelectorAll('.nav-item');
+const screens=document.querySelectorAll('.screen');
+btns.forEach(b=>b.addEventListener('click',()=>{
+  btns.forEach(x=>x.removeAttribute('aria-current'));
+  b.setAttribute('aria-current','true');
+  screens.forEach(s=>s.classList.toggle('on',s.id==='s-'+b.dataset.t));
+  document.querySelector('.main').scrollTop=0;
+}));
+document.querySelectorAll('label.item input[type=checkbox]').forEach(cb=>{
+  cb.addEventListener('change',()=>cb.closest('.item').classList.toggle('sel',cb.checked));
+});
+</script>
+</body>
+</html>
