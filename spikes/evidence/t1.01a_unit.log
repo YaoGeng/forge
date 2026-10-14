@@ -1,0 +1,16 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\yg\Desktop\forge\spikes\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\yg\Desktop\forge
+plugins: anyio-4.12.1
+collecting ... collected 7 items
+
+spikes/test_egress_fw.py::test_percentile_known_vectors PASSED           [ 14%]
+spikes/test_egress_fw.py::test_delta_pct_denominator PASSED              [ 28%]
+spikes/test_egress_fw.py::test_proxy_connect_tunnel_and_log PASSED       [ 42%]
+spikes/test_egress_fw.py::test_proxy_rejects_non_connect PASSED          [ 57%]
+spikes/test_egress_fw.py::test_proxy_502_when_target_unreachable PASSED  [ 71%]
+spikes/test_egress_fw.py::test_tcp_attempt_classification PASSED         [ 85%]
+spikes/test_egress_fw.py::test_worker_writes_endpoint_file PASSED        [100%]
+
+============================== 7 passed in 4.15s ==============================
