@@ -41,9 +41,13 @@ def is_admin(runner: Runner) -> bool:
 
 
 def snapshot_profiles(runner: Runner) -> dict[str, dict[str, str]]:
+    # Action 属性是 NetSecurity.Action 枚举（NotConfigured=0/Allow=2/Block=4），
+    # ConvertTo-Json 会序列化成底层数字——必须先 ToString() 归一为字符串。
     raw = _ps(
-        "Get-NetFirewallProfile | Select-Object Name,DefaultInboundAction,"
-        "DefaultOutboundAction | ConvertTo-Json -Compress",
+        "Get-NetFirewallProfile | Select-Object Name,"
+        "@{n='DefaultInboundAction';e={$_.DefaultInboundAction.ToString()}},"
+        "@{n='DefaultOutboundAction';e={$_.DefaultOutboundAction.ToString()}}"
+        " | ConvertTo-Json -Compress",
         runner,
     )
     data = json.loads(raw)

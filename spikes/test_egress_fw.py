@@ -185,6 +185,9 @@ def test_snapshot_profiles_parses_canned_json():
     snap = snapshot_profiles(r)
     assert snap["Public"] == {"in": "Block", "out": "Allow"}
     assert len(snap) == 3
+    # 枚举必须在 PowerShell 源头 ToString() 归一（R5：ConvertTo-Json 会把
+    # NetSecurity.Action 序列化成数字 0/2/4，回读对不上字符串）
+    assert "ToString()" in " ".join(r.calls[0])
 
 
 def test_is_admin_true_and_false():
