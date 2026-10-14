@@ -1,1 +1,8 @@
 .mimosa/
+.superpowers/
+
+# MS-0 spike
+spikes/.venv/
+spikes/evidence/*.png
+__pycache__/
+*.py[cod]

@@ -1,0 +1,6 @@
+# MS-0 Spike 依赖（决策卡 D-M0.1，05-开发计划 A8）
+# 只写下限；实际版本安装后经 pip freeze 固化到 evidence/versions.txt
+patchright>=1.49
+browser-use>=0.4
+openpyxl>=3.1
+pytest>=8.0
