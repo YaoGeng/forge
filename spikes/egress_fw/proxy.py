@@ -48,11 +48,11 @@ class EgressProxy:
             self._thread.join(timeout=5)
             if self._thread.is_alive():
                 raise RuntimeError("proxy thread did not stop within 5s")
+        if self._server is not None:
+            self._server.close()  # 须先于 loop.close()（内部还要触达 proactor）
+            self._server = None
         if loop is not None:
             loop.close()
-        if self._server is not None:
-            self._server.close()
-            self._server = None
 
     def _run(self) -> None:
         self._loop = asyncio.new_event_loop()
