@@ -1,0 +1,72 @@
+[
+  {
+    "position": 1,
+    "title": "Uv is the best thing to happen to the Python ecosystem in a decade",
+    "url": "https://emily.space/posts/251023-uv",
+    "points": 2214,
+    "num_comments": 1324
+  },
+  {
+    "position": 2,
+    "title": "Sunsetting Python 2",
+    "url": "https://www.python.org/doc/sunset-python-2/",
+    "points": 1616,
+    "num_comments": 704
+  },
+  {
+    "position": 3,
+    "title": "Grumpy: Go running Python",
+    "url": "https://opensource.googleblog.com/2017/01/grumpy-go-running-python.html",
+    "points": 1411,
+    "num_comments": 451
+  },
+  {
+    "position": 4,
+    "title": "A from-scratch tour of Bitcoin in Python",
+    "url": "https://karpathy.github.io/2021/06/21/blockchain/",
+    "points": 1208,
+    "num_comments": 277
+  },
+  {
+    "position": 5,
+    "title": "Python 3.13 Gets a JIT",
+    "url": "https://tonybaloney.github.io/posts/python-gets-a-jit.html",
+    "points": 1081,
+    "num_comments": 521
+  },
+  {
+    "position": 6,
+    "title": "Show HN: I built a hardware processor that runs Python",
+    "url": "https://www.runpyxl.com/gpio",
+    "points": 983,
+    "num_comments": 265
+  },
+  {
+    "position": 7,
+    "title": "Prettymaps: Small Python library to draw customized maps from OpenStreetMap data",
+    "url": "https://github.com/marceloprates/prettymaps",
+    "points": 982,
+    "num_comments": 74
+  },
+  {
+    "position": 8,
+    "title": "Norvig's Python programs to practice or demonstrate skills",
+    "url": "https://github.com/norvig/pytudes",
+    "points": 937,
+    "num_comments": 84
+  },
+  {
+    "position": 9,
+    "title": "If AI writes your code, why use Python?",
+    "url": "https://medium.com/@NMitchem/if-ai-writes-your-code-why-use-python-bf8c4ba1a055",
+    "points": 919,
+    "num_comments": 980
+  },
+  {
+    "position": 10,
+    "title": "Ty: A fast Python type checker and language server",
+    "url": "https://github.com/astral-sh/ty",
+    "points": 916,
+    "num_comments": 287
+  }
+]

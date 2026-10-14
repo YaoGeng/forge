@@ -1,0 +1,10 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\yg\Desktop\forge\spikes\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\yg\Desktop\forge
+plugins: anyio-4.12.1
+collecting ... collected 1 item
+
+spikes/test_manual_block.py::test_search_to_excel_report PASSED          [100%]
+
+============================= 1 passed in 10.51s ==============================
