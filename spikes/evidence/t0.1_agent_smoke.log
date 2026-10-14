@@ -1,1 +1,41 @@
-SKIP: OPENAI_API_KEY 未配置——Agent 冒烟属记录型检查，记结论 C（登记选型风险，不阻塞 gate；gate 由 T0.1a/T0.2/T0.3 承载）
+INFO     [service] Using anonymized telemetry, see https://docs.browser-use.com/development/monitoring/telemetry.
+INFO     [Agent] 🔗 Found URL in task: https://hn.algolia.com/, adding as initial action...
+INFO     [Agent] [34m🎯 Task: 打开 https://hn.algolia.com/ ，读取排名第一的帖子标题，最后只输出该标题文本。[0m
+INFO     [Agent] Starting a browser-use agent with version 0.13.11, with provider=openai and model=step-5-preview-free
+INFO     [BrowserSession] Setting viewport to 1920x1080 with device scale factor 1.0 whereas original device scale factor was 1.0
+INFO     [Agent]   ▶️   [34mnavigate[0m: [35murl[0m: https://hn.algolia.com/, [35mnew_tab[0m: False
+INFO     [tools] 🔗 Navigated to https://hn.algolia.com/
+INFO     [Agent] 
+
+INFO     [Agent] 📍 Step 1:
+INFO     [Agent]   [32m👍 Eval: Successfully navigated to hn.algolia.com, but the page shows 0 results which may indicate the content hasn't loaded yet.[0m
+INFO     [Agent]   🧠 Memory: Navigated to hn.algolia.com. Page currently shows 0 results - need to wait for content to load.
+INFO     [Agent]   [34m🎯 Next goal: Wait for the page to fully load and then check if search results appear.[0m
+INFO     [Agent]   ▶️   [34mwait[0m: [35mseconds[0m: 3
+INFO     [tools] 🕒 waited for 3 seconds
+INFO     [Agent] 📋 Plan updated with 3 steps
+INFO     [Agent] 
+
+INFO     [Agent] 📍 Step 2:
+INFO     [Agent]   [32m👍 Eval: Page loaded successfully after waiting. The search results are now visible, sorted by Popularity for All time, showing the top-ranked post.[0m
+INFO     [Agent]   🧠 Memory: Navigated to hn.algolia.com. Page loaded with results sorted by Popularity for All time. Top-ranked post identified: 'Stephen Hawking has died' (6015 points, Cogito, 9 years ago, 436 comments).
+INFO     [Agent]   [34m🎯 Next goal: The task is complete. Output the top-ranked post title text.[0m
+INFO     [Agent]   ▶️   [34mdone[0m: [35mtext[0m: Stephen Hawking has died, [35msuccess[0m: True, [35mfiles_to_display[0m: []
+INFO     [Agent] 📋 Plan updated with 3 steps
+INFO     [Agent] 
+📄 [32m Final Result:[0m 
+Stephen Hawking has died
+
+
+INFO     [Agent] ✅ Task completed successfully
+INFO     [BrowserSession] 📢 on_BrowserStopEvent - Calling reset() (force=True, keep_alive=None)
+INFO     [BrowserSession] [SessionManager] Cleared all owned data (targets, sessions, mappings)
+INFO     [BrowserSession] ✅ Browser session reset complete
+INFO     [BrowserSession] ✅ Browser session reset complete
+{
+  "used_executable": "C:\\Users\\yg\\AppData\\Local\\ms-playwright\\chromium-1243\\chrome-win64\\chrome.exe",
+  "done": true,
+  "top_title": "Stephen Hawking has died",
+  "screenshot": "spikes\\evidence\\t0.1_agent_smoke.png"
+}
+结论 A：Agent 使用 Patchright Chromium 完成任务，选型全链成立

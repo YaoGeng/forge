@@ -2,6 +2,8 @@
 
 用法：python spikes/agent_smoke.py <outcome_json_path>
 产出 JSON 契约：{"used_executable": str|null, "done": bool, "top_title": str, "screenshot": str}
+（screenshot 为目标页渲染证明：优先取 Agent 会话 CDP 截图，失败则脚本用同一
+Patchright Chromium 自拍——Agent 证据本身是 done + top_title）
 无 OPENAI_API_KEY → 打印原因并退出码 3（EVIDENCE 记结论 C）。
 
 带 Key 分支按安装版本（browser-use 0.13.11）文档接入：模型经 OPENAI_BASE_URL +
@@ -16,10 +18,7 @@ from pathlib import Path
 # 让 `python spikes/agent_smoke.py` 可导入 spikes/common
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-TASK_TEMPLATE = (
-    "打开 {url} ，读取排名第一的帖子标题，"
-    "把页面截图保存到 {shot}，最后只输出该标题文本。"
-)
+TASK_TEMPLATE = "打开 {url} ，读取排名第一的帖子标题，最后只输出该标题文本。"
 
 
 def _chromium_executable():
@@ -45,20 +44,45 @@ def run_agent(outcome: dict) -> dict:
     profile_kwargs = {"headless": True}
     if executable:
         profile_kwargs["executable_path"] = executable
+    # OpenCode Go 端点要求每会话稳定 ID（路由/缓存优化），否则 400 MissingSessionID
+    session_headers = {}
+    if "opencode.ai" in (os.environ.get("OPENAI_BASE_URL") or ""):
+        from uuid import uuid4
+
+        session_headers = {"x-opencode-session": f"m0-agent-smoke-{uuid4().hex[:12]}"}
     llm = ChatOpenAI(
         model=os.environ.get("M0_AGENT_MODEL", "gpt-4.1-mini"),
         api_key=os.environ["OPENAI_API_KEY"],
         base_url=os.environ.get("OPENAI_BASE_URL") or None,
+        default_headers=session_headers or None,
     )
     shot_path = Path(outcome["screenshot"])
     agent = Agent(
-        task=TASK_TEMPLATE.format(url=live_front, shot=shot_path),
+        task=TASK_TEMPLATE.format(url=live_front),
         llm=llm,
         browser_profile=BrowserProfile(**profile_kwargs),
     )
-    result = asyncio.run(agent.run(max_steps=15))
+
+    async def _run():
+        result = await agent.run(max_steps=15)
+        try:
+            # 截图由脚本经 CDP 直存真实路径：Agent 的文件动作落虚拟 FS，写不进真实路径（实测）
+            await agent.browser_session.take_screenshot(path=str(shot_path))
+        except Exception:  # noqa: BLE001 —— 会话随任务收尾销毁，走脚本侧兜底
+            pass
+        return result
+
+    result = asyncio.run(_run())
+    if not Path(outcome["screenshot"]).exists():
+        from common.browser import new_page
+
+        with new_page() as page:
+            page.goto(live_front, wait_until="domcontentloaded", timeout=30_000)
+            page.wait_for_timeout(1_500)
+            page.screenshot(path=str(shot_path))
     final = getattr(result, "final_result", None)
-    outcome["top_title"] = (final() if callable(final) else final) or ""
+    final_text = (final() if callable(final) else final) or ""
+    outcome["top_title"] = " ".join(final_text.split())
     outcome["done"] = bool(outcome["top_title"]) and shot_path.exists()
     return outcome
 
@@ -90,8 +114,10 @@ def main() -> int:
         json.dumps(outcome, ensure_ascii=False, indent=2), encoding="utf-8"
     )
     print(json.dumps(outcome, ensure_ascii=False, indent=2))
-    if outcome["used_executable"]:
-        print("结论 A：Agent 使用 Patchright Chromium，选型全链成立")
+    if not outcome["done"]:
+        print("结论 X：Agent 运行未完成，组合结论待补验（详情见上方 JSON 与日志）")
+    elif outcome["used_executable"]:
+        print("结论 A：Agent 使用 Patchright Chromium 完成任务，选型全链成立")
     else:
         print("结论 B：Agent 用自带 Chromium 完成；Patchright 组合登记为 M06-a 首个验证项")
     return 0 if outcome["done"] else 2
