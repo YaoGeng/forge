@@ -107,6 +107,16 @@ def _collect(page, url: str, started: float, response) -> dict:
     except Exception:  # noqa: BLE001 —— load 事件可能已过
         pass
     page.wait_for_timeout(1_500)  # SPA 水合稳定窗
+    # 有界等待任一候选出现：搜索页的查询往返慢于水合（t0.2_evidence 观测到的扑空）
+    union = ",".join(_CANDIDATE_SELECTORS.values())
+    try:
+        page.wait_for_function(
+            "sel => document.querySelectorAll(sel).length > 0",
+            arg=union,
+            timeout=15_000,
+        )
+    except Exception:  # noqa: BLE001 —— 空结果页如实产出空候选表
+        pass
     content = page.content()
     lowered = content.lower()
     captcha = (

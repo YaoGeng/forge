@@ -1,0 +1,1 @@
+SKIP: OPENAI_API_KEY 未配置——Agent 冒烟属记录型检查，记结论 C（登记选型风险，不阻塞 gate；gate 由 T0.1a/T0.2/T0.3 承载）

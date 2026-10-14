@@ -1,0 +1,23 @@
+{
+  "url": "https://hn.algolia.com/?q=python",
+  "fetched_at": "2026-10-14T15:12:26+00:00",
+  "http_status": 200,
+  "dom_digest": "4efe7071d7798e37935a2ae901cdf9a07a9b6115c5f2a59851d373e5c40d131e",
+  "selector_candidates": {
+    "result_item": "article.Story",
+    "result_title": "article.Story .Story_title a",
+    "result_meta": "article.Story .Story_meta",
+    "story_link": "article.Story .Story_title a",
+    "story_row": "article.Story"
+  },
+  "login_flow_shape": {
+    "login_link_present": false
+  },
+  "stability": {
+    "response_ms": 7563,
+    "load_success": true,
+    "page_title": "All | Search powered by Algolia"
+  },
+  "robots_respected": true,
+  "captcha_detected": false
+}

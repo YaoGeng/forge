@@ -1,0 +1,12 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\yg\Desktop\forge\spikes\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\yg\Desktop\forge
+plugins: anyio-4.12.1
+collecting ... collected 2 items
+
+spikes/test_browser_link.py::test_patchright_open_read_screenshot screenshot: C:\Users\yg\AppData\Local\Temp\pytest-of-yg\pytest-1\test_patchright_open_read_scre0\front.png bytes=112420
+PASSED
+spikes/test_browser_link.py::test_chromium_missing_raises_environment_error PASSED
+
+============================== 2 passed in 8.47s ==============================

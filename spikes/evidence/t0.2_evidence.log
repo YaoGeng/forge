@@ -1,0 +1,6 @@
+[front] https://hn.algolia.com/
+  http_status=200 robots=True response_ms=7546
+  selector_candidates={"result_item": "article.Story", "result_title": "article.Story .Story_title a", "result_meta": "article.Story .Story_meta", "story_link": "article.Story .Story_title a", "story_row": "article.Story"}
+[search] https://hn.algolia.com/?q=python
+  http_status=200 robots=True response_ms=7563
+  selector_candidates={"result_item": "article.Story", "result_title": "article.Story .Story_title a", "result_meta": "article.Story .Story_meta", "story_link": "article.Story .Story_title a", "story_row": "article.Story"}
