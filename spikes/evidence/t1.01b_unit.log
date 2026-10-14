@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\yg\Desktop\forge\spikes\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\yg\Desktop\forge
+plugins: anyio-4.12.1
+collecting ... collected 14 items
+
+spikes/test_egress_fw.py::test_percentile_known_vectors PASSED           [  7%]
+spikes/test_egress_fw.py::test_delta_pct_denominator PASSED              [ 14%]
+spikes/test_egress_fw.py::test_proxy_connect_tunnel_and_log PASSED       [ 21%]
+spikes/test_egress_fw.py::test_proxy_rejects_non_connect PASSED          [ 28%]
+spikes/test_egress_fw.py::test_proxy_502_when_target_unreachable PASSED  [ 35%]
+spikes/test_egress_fw.py::test_tcp_attempt_classification PASSED         [ 42%]
+spikes/test_egress_fw.py::test_worker_writes_endpoint_file PASSED        [ 50%]
+spikes/test_egress_fw.py::test_snapshot_profiles_parses_canned_json PASSED [ 57%]
+spikes/test_egress_fw.py::test_is_admin_true_and_false PASSED            [ 64%]
+spikes/test_egress_fw.py::test_apply_block_preserves_inbound PASSED      [ 71%]
+spikes/test_egress_fw.py::test_add_sidecar_allow_command_shape PASSED    [ 78%]
+spikes/test_egress_fw.py::test_delete_uses_prefix_wildcard PASSED        [ 85%]
+spikes/test_egress_fw.py::test_policy_matches_catches_drift PASSED       [ 92%]
+spikes/test_egress_fw.py::test_ps_raises_on_nonzero PASSED               [100%]
+
+============================= 14 passed in 4.12s ==============================

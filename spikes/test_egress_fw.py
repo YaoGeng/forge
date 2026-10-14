@@ -156,3 +156,92 @@ def test_worker_writes_endpoint_file(tmp_path):
     assert f.read_text(encoding="utf-8").strip() == "127.0.0.1:59999"
     remove_endpoint_file(f)
     assert not f.exists()
+
+
+# ---------- T1.01-b：防火墙封装（fake runner，不触系统） ----------
+
+CANNED = json.dumps([
+    {"Name": "Domain", "DefaultInboundAction": "Block", "DefaultOutboundAction": "Allow"},
+    {"Name": "Private", "DefaultInboundAction": "Block", "DefaultOutboundAction": "Allow"},
+    {"Name": "Public", "DefaultInboundAction": "Block", "DefaultOutboundAction": "Allow"},
+])
+
+
+def fake_runner(stdout: str, rc: int = 0):
+    calls: list[list[str]] = []
+
+    def run(args):
+        calls.append(args)
+        return subprocess.CompletedProcess(args, rc, stdout, "")
+
+    run.calls = calls
+    return run
+
+
+def test_snapshot_profiles_parses_canned_json():
+    from egress_fw.firewall import snapshot_profiles
+
+    r = fake_runner(CANNED)
+    snap = snapshot_profiles(r)
+    assert snap["Public"] == {"in": "Block", "out": "Allow"}
+    assert len(snap) == 3
+
+
+def test_is_admin_true_and_false():
+    from egress_fw.firewall import is_admin
+
+    assert is_admin(fake_runner("True")) is True
+    assert is_admin(fake_runner("False")) is False
+
+
+def test_apply_block_preserves_inbound():
+    from egress_fw.firewall import apply_outbound_block
+
+    r = fake_runner("[]")
+    snap = {"Public": {"in": "Block", "out": "Allow"}}
+    apply_outbound_block(snap, r)
+    joined = " ".join(r.calls[0])
+    assert "Set-NetFirewallProfile" in joined
+    assert "-DefaultOutboundAction Block" in joined
+    assert "-DefaultInboundAction Block" in joined
+
+
+def test_add_sidecar_allow_command_shape():
+    from egress_fw.firewall import add_sidecar_allow
+
+    r = fake_runner("")
+    add_sidecar_allow(r"C:\v\.venv\Scripts\pythonw.exe", r)
+    joined = " ".join(r.calls[0])
+    assert "New-NetFirewallRule" in joined
+    assert "Forge-Spike-Allow-Sidecar" in joined
+    assert "Outbound" in joined and "Allow" in joined
+    assert r"C:\v\.venv\Scripts\pythonw.exe" in joined
+    assert "*" not in joined.replace("Forge-Spike-*", "")
+
+
+def test_delete_uses_prefix_wildcard():
+    from egress_fw.firewall import delete_spike_rules
+
+    r = fake_runner("")
+    delete_spike_rules(r)
+    assert "Forge-Spike-*" in " ".join(r.calls[0])
+
+
+def test_policy_matches_catches_drift():
+    from egress_fw.firewall import policy_matches, snapshot_profiles
+
+    snap = snapshot_profiles(fake_runner(CANNED))
+    assert policy_matches(snap, fake_runner(CANNED)) is True
+    r_drift = fake_runner(json.dumps([
+        {"Name": "Domain", "DefaultInboundAction": "Block", "DefaultOutboundAction": "Block"},
+        {"Name": "Private", "DefaultInboundAction": "Block", "DefaultOutboundAction": "Allow"},
+        {"Name": "Public", "DefaultInboundAction": "Block", "DefaultOutboundAction": "Allow"},
+    ]))
+    assert policy_matches(snap, r_drift) is False
+
+
+def test_ps_raises_on_nonzero():
+    from egress_fw.firewall import _ps
+
+    with pytest.raises(RuntimeError):
+        _ps("anything", fake_runner("", rc=1))
