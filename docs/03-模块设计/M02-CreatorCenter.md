@@ -73,7 +73,8 @@ modules_lib(            # 我的模块库（复合积木）
 )
 creation_sessions(      # 九步会话
   id, step, draft_workflow_json, lock_draft_json,
-  recordings_refs, autosave_at
+  recordings_refs,      # → M07 recordings.id（复数引用，非第二套轨迹主标识）
+  autosave_at
 )
 c0_drafts(              # 草稿积木库
   id, name, origin,     # record | dialog
