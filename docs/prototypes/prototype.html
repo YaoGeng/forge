@@ -1,0 +1,2685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Forge · AI 自动化应用平台 — 全量功能 UI 原型</title>
+<style>
+/* ============================================================
+   Forge UI 原型 · 一元纸币橄榄绿 × 玻璃拟态
+   bg #F4F6F1 · primary #3E5C3A · moss #6B8E5A · mist #A8B89B
+   ink #2C3E28 · ink2 #7A8B74 · glass #C9D6C0
+   ============================================================ */
+:root{
+  --bg:#F4F6F1; --primary:#3E5C3A; --primary-deep:#324C30; --moss:#6B8E5A; --mist:#A8B89B;
+  --ink:#2C3E28; --ink2:#7A8B74; --glass:#C9D6C0;
+  --card:rgba(255,255,255,.5); --card-strong:rgba(255,255,255,.72); --line:rgba(62,92,58,.14);
+  --line-soft:rgba(62,92,58,.08);
+  --ok-bg:#E7EFDC; --warn:#8A6A2C; --warn-bg:rgba(246,238,214,.8); --warn-line:rgba(196,164,84,.4);
+  --danger:#9D4A38; --danger-bg:rgba(247,232,226,.85); --danger-line:rgba(183,110,88,.4);
+  --r:16px; --r-sm:10px;
+  --shadow:0 6px 24px rgba(62,92,58,.08); --shadow-lg:0 18px 50px rgba(62,92,58,.16);
+  --font:-apple-system,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html{height:100%}
+body{font-family:var(--font); background:var(--bg); color:var(--ink); font-size:14px; line-height:1.6;
+  min-width:1180px; -webkit-font-smoothing:antialiased; overflow-x:auto}
+::selection{background:rgba(106,142,90,.3)}
+button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer}
+input,select,textarea{font-family:inherit; font-size:14px; color:var(--ink)}
+a{color:var(--primary); text-decoration:none}
+h1,h2,h3,h4{line-height:1.35}
+:focus-visible{outline:2px solid var(--primary); outline-offset:2px; border-radius:6px}
+.mono{font-family:ui-monospace,"Cascadia Mono",Consolas,monospace}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---------- 背景光晕 ---------- */
+.orbs{position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden}
+.orb{position:absolute; border-radius:50%; filter:blur(70px); opacity:.55}
+.orb.o1{width:560px; height:560px; left:-120px; top:-140px;
+  background:radial-gradient(circle,rgba(107,142,90,.34),transparent 68%); animation:drift1 52s ease-in-out infinite alternate}
+.orb.o2{width:680px; height:680px; right:-180px; top:16%;
+  background:radial-gradient(circle,rgba(168,184,155,.42),transparent 66%); animation:drift2 64s ease-in-out infinite alternate}
+.orb.o3{width:520px; height:520px; left:26%; bottom:-220px;
+  background:radial-gradient(circle,rgba(107,142,90,.26),transparent 70%); animation:drift3 70s ease-in-out infinite alternate}
+.orb.o4{width:300px; height:300px; right:24%; top:-90px;
+  background:radial-gradient(circle,rgba(201,214,192,.6),transparent 70%); animation:drift1 46s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate(70px,44px)}}
+@keyframes drift2{to{transform:translate(-60px,70px)}}
+@keyframes drift3{to{transform:translate(48px,-56px)}}
+
+/* ---------- 外壳 ---------- */
+.app{position:relative; z-index:1; display:flex; min-height:100vh}
+.rail{width:236px; flex:none; position:sticky; top:0; height:100vh; overflow-y:auto;
+  padding:22px 14px 16px; background:rgba(255,255,255,.44); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px);
+  border-right:1px solid rgba(255,255,255,.7); box-shadow:1px 0 24px rgba(62,92,58,.05)}
+.brand{display:flex; align-items:center; gap:10px; padding:2px 8px 16px}
+.brand .mark{width:38px; height:38px; border-radius:12px; background:linear-gradient(135deg,var(--primary),var(--moss));
+  display:grid; place-items:center; color:#fff; box-shadow:0 4px 14px rgba(62,92,58,.3)}
+.brand b{font-size:17px; letter-spacing:.02em}
+.brand small{display:block; font-size:11px; color:var(--ink2); font-weight:400; margin-top:1px}
+.roles{display:flex; background:rgba(62,92,58,.08); border-radius:12px; padding:3px; margin:0 2px 6px}
+.roles button{flex:1; padding:7px 4px; font-size:12.5px; font-weight:600; color:var(--ink2); border-radius:9px; transition:all .18s}
+.roles button.on{background:#fff; color:var(--primary); box-shadow:0 2px 8px rgba(62,92,58,.12)}
+.ngroup{margin-top:16px; padding:0 8px}
+.ngroup>h6{font-size:11.5px; font-weight:600; color:var(--mist); letter-spacing:.14em; margin-bottom:6px}
+.nitem{display:flex; align-items:center; gap:10px; width:100%; text-align:left; padding:9px 11px; margin:1px 0;
+  border-radius:11px; color:var(--ink2); font-size:14px; transition:all .16s}
+.nitem .ic{flex:none}
+.nitem:hover{background:rgba(255,255,255,.65); color:var(--ink)}
+.nitem.on{background:rgba(62,92,58,.11); color:var(--primary); font-weight:600}
+.nitem .tail{margin-left:auto; font-size:11px; color:#fff; background:var(--warn); border-radius:999px; padding:1px 7px; font-weight:600}
+.railfoot{margin-top:20px; padding:10px 8px 4px; border-top:1px solid var(--line-soft); display:flex; align-items:center; gap:10px}
+.railfoot .av{width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,var(--moss),var(--mist));
+  color:#fff; display:grid; place-items:center; font-size:13px; font-weight:700}
+.railfoot b{font-size:13px} .railfoot small{display:block; font-size:11px; color:var(--ink2)}
+
+.main{flex:1; min-width:0; display:flex; flex-direction:column}
+.topbar{position:sticky; top:0; z-index:30; display:flex; align-items:center; gap:14px; padding:13px 36px;
+  background:rgba(244,246,241,.72); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  border-bottom:1px solid var(--line-soft)}
+.crumb{font-size:15px; font-weight:700}
+.crumb small{color:var(--ink2); font-weight:400; margin-left:10px; font-size:12.5px}
+.tsearch{margin-left:auto; position:relative; width:300px}
+.tsearch .ic{position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--ink2)}
+.tsearch input{width:100%; padding:8.5px 12px 8.5px 34px; border-radius:11px; border:1px solid var(--line);
+  background:rgba(255,255,255,.6); transition:all .18s}
+.tsearch input:focus{outline:none; border-color:var(--moss); box-shadow:0 0 0 3px rgba(107,142,90,.15); background:#fff}
+.icon-btn{width:36px; height:36px; border-radius:11px; display:grid; place-items:center; color:var(--ink2);
+  background:rgba(255,255,255,.5); border:1px solid transparent; transition:all .16s; position:relative}
+.icon-btn:hover{background:#fff; color:var(--primary); border-color:var(--line)}
+.icon-btn .reddot{position:absolute; top:7px; right:8px; width:7px; height:7px; border-radius:50%;
+  background:var(--danger); border:1.5px solid #fff}
+.bellwrap{position:relative}
+.pop{position:absolute; right:0; top:44px; width:340px; z-index:60; display:none;
+  background:rgba(255,255,255,.9); backdrop-filter:blur(24px); border:1px solid rgba(255,255,255,.8);
+  border-radius:16px; box-shadow:var(--shadow-lg); overflow:hidden}
+.pop.show{display:block; animation:pop .18s ease}
+.pop header{padding:13px 16px 9px; font-size:13px; font-weight:700; color:var(--ink2); display:flex; justify-content:space-between}
+.pop header button{font-size:12px; color:var(--moss)}
+.ntf{display:flex; gap:10px; padding:11px 16px; border-top:1px solid var(--line-soft); cursor:pointer; transition:background .15s}
+.ntf:hover{background:rgba(255,255,255,.85)}
+.ntf .ic{flex:none; margin-top:2px; color:var(--moss)}
+.ntf b{font-size:13px; display:block}
+.ntf small{font-size:12px; color:var(--ink2)}
+.views{padding:30px 36px 90px; width:100%; max-width:1300px; margin:0 auto}
+.view{display:none}
+.view.on{display:block; animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0; transform:translateY(8px)} to{opacity:1}}
+@keyframes pop{from{opacity:0; transform:scale(.97) translateY(4px)} to{opacity:1}}
+.vhead{margin-bottom:22px}
+.vhead h1{font-size:23px; font-weight:700; letter-spacing:.01em}
+.vhead .sub{color:var(--ink2); font-size:13.5px; margin-top:4px}
+
+/* ---------- 玻璃卡片 ---------- */
+.glass{background:var(--card); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.65); border-radius:var(--r); box-shadow:var(--shadow)}
+.pad{padding:22px 24px} .pad-sm{padding:16px 18px} .pad-lg{padding:28px 30px}
+.g2{display:grid; grid-template-columns:1fr 1fr; gap:20px}
+.g23{display:grid; grid-template-columns:2fr 3fr; gap:20px}
+.g32{display:grid; grid-template-columns:3fr 2fr; gap:20px}
+.g13{display:grid; grid-template-columns:1fr 3fr; gap:20px; align-items:start}
+.g3{display:grid; grid-template-columns:repeat(3,1fr); gap:20px}
+.stack{display:flex; flex-direction:column; gap:20px}
+.row{display:flex; align-items:center; gap:10px}
+.row.between{justify-content:space-between}
+.row.wrap{flex-wrap:wrap}
+.mt8{margin-top:8px}.mt12{margin-top:12px}.mt16{margin-top:16px}.mt20{margin-top:20px}.mt24{margin-top:24px}
+.mb8{margin-bottom:8px}.mb12{margin-bottom:12px}.mb16{margin-bottom:16px}
+.divider{height:1px; background:var(--line-soft); margin:18px 0}
+.muted{color:var(--ink2)} .muted small,.small{font-size:12.5px}
+.hint{font-size:12.5px; color:var(--ink2)}
+.section-title{font-size:15px; font-weight:700; display:flex; align-items:center; gap:8px}
+.section-title .ic{color:var(--moss)}
+
+/* ---------- 按钮 ---------- */
+.btn{display:inline-flex; align-items:center; gap:7px; padding:9px 18px; border-radius:11px;
+  font-size:14px; font-weight:600; background:var(--primary); color:#fff; transition:all .16s; white-space:nowrap}
+.btn:hover{background:var(--primary-deep); box-shadow:0 4px 14px rgba(62,92,58,.28)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.42; cursor:not-allowed; box-shadow:none; transform:none}
+.btn.ghost{background:rgba(62,92,58,.09); color:var(--primary)}
+.btn.ghost:hover{background:rgba(62,92,58,.16); box-shadow:none}
+.btn.soft{background:rgba(255,255,255,.62); color:var(--ink); border:1px solid var(--line)}
+.btn.soft:hover{background:#fff; box-shadow:var(--shadow)}
+.btn.danger{background:var(--danger)}
+.btn.danger:hover{background:#87402F}
+.btn.sm{padding:5.5px 12px; font-size:12.5px; border-radius:9px}
+.btn.lg{padding:12px 26px; font-size:15px; border-radius:13px}
+.linklike{color:var(--moss); font-size:13px; font-weight:600; display:inline-flex; align-items:center; gap:4px}
+.linklike:hover{color:var(--primary)}
+
+/* ---------- 徽章 / 状态 ---------- */
+.badge{display:inline-flex; align-items:center; gap:5px; padding:2.5px 9px; border-radius:999px;
+  font-size:12px; font-weight:600; white-space:nowrap}
+.badge .dot{width:6px; height:6px; border-radius:50%; background:currentColor}
+.badge.c1{background:#DDE9D0; color:#42603A}
+.badge.c2{background:rgba(62,92,58,.09); color:#5A7452}
+.badge.c0{background:rgba(44,62,40,.08); color:var(--ink2)}
+.badge.warn{background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn-line)}
+.badge.danger{background:var(--danger-bg); color:var(--danger); border:1px solid var(--danger-line)}
+.badge.ok{background:var(--ok-bg); color:var(--primary)}
+.badge.mute{background:rgba(44,62,40,.07); color:var(--ink2)}
+.badge.free{background:rgba(107,142,90,.16); color:var(--moss)}
+.st-run{background:var(--ok-bg); color:var(--primary)}
+.st-wait{background:var(--warn-bg); color:var(--warn); border:1px solid var(--warn-line)}
+.st-susp{background:#F3E3C6; color:#7A5A1E}
+.st-ok{background:var(--ok-bg); color:var(--primary)}
+.st-fail{background:var(--danger-bg); color:var(--danger); border:1px solid var(--danger-line)}
+.st-queue{background:rgba(44,62,40,.07); color:var(--ink2)}
+
+/* ---------- 横幅 ---------- */
+.banner{display:flex; gap:12px; padding:14px 18px; border-radius:14px; font-size:13.5px; align-items:flex-start}
+.banner .ic{flex:none; margin-top:2px}
+.banner.warn{background:var(--warn-bg); border:1px solid var(--warn-line); color:#6E5522}
+.banner.danger{background:var(--danger-bg); border:1px solid var(--danger-line); color:#87402F}
+.banner.info{background:rgba(201,214,192,.38); border:1px solid var(--line); color:var(--ink)}
+.banner b{font-weight:700}
+
+/* ---------- 徽章容器：通过率环 ---------- */
+.ringwrap{display:inline-flex; align-items:center; gap:10px}
+.ring text{font-family:var(--font)}
+.rate{font-weight:700; font-variant-numeric:tabular-nums}
+.ring-cap{font-size:12px; color:var(--ink2); line-height:1.45}
+.ring-cap b{display:block; font-size:13px; color:var(--ink)}
+
+/* ---------- chips / tabs / seg ---------- */
+.chips{display:flex; gap:8px; flex-wrap:wrap}
+.chip{padding:6.5px 15px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.5);
+  font-size:13px; color:var(--ink2); transition:all .15s}
+.chip:hover{background:#fff; color:var(--ink)}
+.chip.on{background:var(--primary); border-color:var(--primary); color:#fff; font-weight:600}
+.tabs{display:flex; gap:2px; border-bottom:1px solid var(--line); margin-bottom:20px}
+.tab{padding:9px 16px 10px; font-size:14px; color:var(--ink2); border-bottom:2px solid transparent; margin-bottom:-1px; font-weight:500}
+.tab:hover{color:var(--ink)}
+.tab.on{color:var(--primary); font-weight:700; border-color:var(--primary)}
+.tab .cnt{font-size:11px; background:rgba(62,92,58,.1); border-radius:999px; padding:1px 7px; margin-left:5px; color:var(--primary)}
+.seg{display:inline-flex; background:rgba(62,92,58,.08); border-radius:12px; padding:3px}
+.seg button{padding:6.5px 15px; border-radius:9px; font-size:13px; color:var(--ink2); font-weight:500; transition:all .15s}
+.seg button.on{background:#fff; color:var(--primary); font-weight:700; box-shadow:0 2px 8px rgba(62,92,58,.12)}
+
+/* ---------- 表单 ---------- */
+.field{margin-bottom:16px}
+.field>label{display:block; font-size:13px; font-weight:600; margin-bottom:6px}
+.input,.select,textarea.input{width:100%; padding:10px 13px; border-radius:11px; border:1px solid var(--line);
+  background:rgba(255,255,255,.72); transition:all .16s}
+.input:focus,.select:focus,textarea.input:focus{outline:none; border-color:var(--moss);
+  box-shadow:0 0 0 3px rgba(107,142,90,.14); background:#fff}
+.input:disabled,.select:disabled{opacity:.55; cursor:not-allowed; background:rgba(255,255,255,.4)}
+textarea.input{resize:vertical; min-height:74px; line-height:1.6}
+.select{appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%237A8B74' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; padding-right:34px}
+.check{display:flex; gap:9px; align-items:flex-start; cursor:pointer; font-size:13.5px}
+.check input{width:16px; height:16px; margin-top:2.5px; accent-color:var(--primary); flex:none}
+.radio{display:flex; gap:8px; align-items:center; cursor:pointer; font-size:13.5px}
+.radio input{accent-color:var(--primary)}
+.switch{width:42px; height:23px; border-radius:999px; background:rgba(44,62,40,.2); position:relative; transition:background .2s; flex:none}
+.switch::after{content:""; position:absolute; left:2.5px; top:2.5px; width:18px; height:18px; border-radius:50%;
+  background:#fff; box-shadow:0 1px 4px rgba(0,0,0,.2); transition:transform .2s}
+.switch.on{background:var(--primary)}
+.switch.on::after{transform:translateX(19px)}
+.switch:disabled{opacity:.5; cursor:not-allowed}
+.setrow{display:flex; align-items:flex-start; justify-content:space-between; gap:24px; padding:15px 0; border-bottom:1px solid var(--line-soft)}
+.setrow:last-child{border-bottom:none}
+.setrow b{font-size:14px; display:block}
+.setrow p{font-size:12.5px; color:var(--ink2); margin-top:3px; max-width:560px}
+
+/* ---------- 表格 ---------- */
+.table{width:100%; border-collapse:collapse; font-size:13.5px}
+.table th{text-align:left; font-size:12px; font-weight:600; color:var(--ink2); padding:9px 12px;
+  border-bottom:1px solid var(--line); letter-spacing:.03em; white-space:nowrap}
+.table td{padding:11px 12px; border-bottom:1px solid var(--line-soft); vertical-align:middle}
+.table td.num{white-space:nowrap}
+.table td:first-child,.table td:last-child{white-space:nowrap}
+.table tr:hover td{background:rgba(255,255,255,.55)}
+.table tr.click{cursor:pointer}
+.table .sub{font-size:12px; color:var(--ink2); display:block}
+
+/* ---------- KV / 代码 ---------- */
+.kv{display:grid; grid-template-columns:128px 1fr; row-gap:9px; column-gap:14px; font-size:13.5px; align-items:baseline}
+.kv dt{color:var(--ink2); font-size:12.5px}
+.kv dd{font-weight:500}
+.code{font-family:ui-monospace,Consolas,monospace; font-size:12.5px; line-height:1.75;
+  background:rgba(62,92,58,.06); border-radius:12px; padding:14px 16px; white-space:pre-wrap; word-break:break-all}
+
+/* ---------- KPI ---------- */
+.kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:16px}
+.kpis.k3{grid-template-columns:repeat(3,1fr)}
+.kpi{padding:16px 20px}
+.kpi .num{font-size:26px; font-weight:700; letter-spacing:-.01em; font-variant-numeric:tabular-nums}
+.kpi .num small{font-size:14px; font-weight:600; color:var(--ink2)}
+.kpi .lbl{font-size:12.5px; color:var(--ink2); margin-top:2px}
+
+/* ---------- 时间线（任务步骤） ---------- */
+.steps{position:relative; padding-left:30px}
+.step{position:relative; padding:4px 0 20px}
+.step::before{content:""; position:absolute; left:-24px; top:7px; width:13px; height:13px; border-radius:50%;
+  background:#fff; border:2.5px solid var(--mist); z-index:1}
+.step::after{content:""; position:absolute; left:-18px; top:20px; bottom:-2px; width:2px; background:var(--line-soft)}
+.step:last-child::after{display:none}
+.step.done::before{background:var(--moss); border-color:var(--moss)}
+.step.run::before{border-color:var(--primary); animation:pulse 1.6s ease infinite}
+.step.fail::before{border-color:var(--danger); background:#F3D9CF}
+.step.warn::before{border-color:var(--warn); background:#F3E3C6}
+.step.skip::before{background:var(--mist); border-color:var(--mist)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(62,92,58,.25)} 50%{box-shadow:0 0 0 6px rgba(62,92,58,0)}}
+.step .st-head{display:flex; align-items:center; gap:9px; font-weight:600; font-size:14px}
+.step .st-meta{font-size:12.5px; color:var(--ink2); margin-top:2px}
+
+/* ---------- 横向步骤条（向导 / 九步） ---------- */
+.stepper{display:flex; gap:6px}
+.stp{flex:1; position:relative; padding:10px 12px 12px 16px; border-radius:12px; background:rgba(255,255,255,.42);
+  border:1px solid var(--line-soft); font-size:12.5px; color:var(--ink2); text-align:left}
+.stp b{display:block; font-size:13.5px; color:var(--ink); font-weight:600}
+.stp .no{position:absolute; top:9px; right:11px; width:19px; height:19px; border-radius:50%; background:rgba(44,62,40,.08);
+  display:grid; place-items:center; font-size:11px; font-weight:700; color:var(--ink2)}
+.stp.done{background:rgba(231,239,220,.75); border-color:transparent}
+.stp.done .no{background:var(--moss); color:#fff}
+.stp.cur{background:#fff; border-color:var(--primary); box-shadow:0 4px 14px rgba(62,92,58,.14)}
+.stp.cur .no{background:var(--primary); color:#fff}
+.stp.cur b{color:var(--primary)}
+
+/* ---------- 画布 ---------- */
+.canvas-wrap{position:relative; height:480px; border-radius:var(--r); overflow:hidden;
+  background:linear-gradient(rgba(62,92,58,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(62,92,58,.045) 1px,transparent 1px);
+  background-size:26px 26px; background-color:rgba(255,255,255,.28)}
+.cedges{position:absolute; inset:0; width:100%; height:100%; pointer-events:none}
+.cnode{position:absolute; width:196px; background:rgba(255,255,255,.78); backdrop-filter:blur(12px);
+  border:1.5px solid var(--line); border-radius:14px; padding:11px 13px; cursor:pointer; transition:all .16s; z-index:2}
+.cnode:hover{border-color:var(--moss); box-shadow:var(--shadow)}
+.cnode.sel{border-color:var(--primary); box-shadow:0 0 0 3px rgba(62,92,58,.15),var(--shadow)}
+.cnode.side{background:rgba(255,248,244,.82); border-color:rgba(183,110,88,.5)}
+.cnode .cn-type{font-size:11px; color:var(--ink2); letter-spacing:.05em}
+.cnode .cn-name{font-size:13.5px; font-weight:700; margin-top:1px}
+.cnode .cn-meta{display:flex; gap:6px; margin-top:6px; flex-wrap:wrap; align-items:center}
+.cnode .cn-rate{font-size:11.5px; color:var(--moss); font-weight:700}
+.blockitem{display:flex; align-items:center; gap:9px; padding:9px 10px; border-radius:11px; cursor:pointer; transition:background .14s; border:1px solid transparent}
+.blockitem:hover{background:rgba(255,255,255,.75); border-color:var(--line-soft)}
+.blockitem .bi-name{font-size:13px; font-weight:600}
+.blockitem .bi-sub{font-size:11.5px; color:var(--ink2)}
+
+/* ---------- 弹层 / toast ---------- */
+.overlay{position:fixed; inset:0; z-index:100; background:rgba(44,62,40,.3); backdrop-filter:blur(5px);
+  display:flex; align-items:center; justify-content:center; animation:fade .18s ease}
+@keyframes fade{from{opacity:0}}
+.modal{width:min(680px,92vw); max-height:88vh; overflow-y:auto; background:rgba(255,255,255,.88);
+  backdrop-filter:blur(28px); border:1px solid rgba(255,255,255,.85); border-radius:20px;
+  padding:26px 28px; box-shadow:var(--shadow-lg); animation:pop .22s ease; position:relative}
+.modal.wide{width:min(880px,94vw)}
+.modal h3{font-size:18px; font-weight:700; padding-right:36px}
+.modal .msub{font-size:13px; color:var(--ink2); margin-top:4px}
+.mclose{position:absolute; top:16px; right:16px}
+.mfoot{display:flex; justify-content:flex-end; gap:10px; margin-top:22px}
+.toast-root{position:fixed; bottom:26px; right:26px; z-index:300; display:flex; flex-direction:column; gap:10px}
+.toast{display:flex; align-items:center; gap:10px; background:rgba(255,255,255,.92); backdrop-filter:blur(20px);
+  border:1px solid rgba(255,255,255,.9); border-radius:13px; padding:12px 18px; font-size:13.5px; font-weight:500;
+  box-shadow:var(--shadow-lg); animation:toastIn .25s ease; max-width:380px}
+.toast .ic{color:var(--moss); flex:none}
+.toast.err .ic{color:var(--danger)}
+.toast.out{animation:toastOut .3s ease forwards}
+@keyframes toastIn{from{opacity:0; transform:translateX(24px)}}
+@keyframes toastOut{to{opacity:0; transform:translateX(24px)}}
+
+/* ---------- 商店卡片 ---------- */
+.appcard{padding:20px; cursor:pointer; transition:all .18s; display:flex; flex-direction:column; gap:10px}
+.appcard:hover{transform:translateY(-3px); box-shadow:var(--shadow-lg); background:rgba(255,255,255,.68)}
+.appcard .ic-tile{width:44px; height:44px; border-radius:13px; background:linear-gradient(135deg,rgba(107,142,90,.2),rgba(201,214,192,.5));
+  display:grid; place-items:center; color:var(--primary)}
+.appcard h4{font-size:15.5px; font-weight:700}
+.appcard p{font-size:12.5px; color:var(--ink2); line-height:1.55; flex:1}
+.price{font-size:17px; font-weight:800; font-variant-numeric:tabular-nums}
+.price.free{color:var(--moss)}
+
+/* ---------- 列表行 ---------- */
+.listrow{display:flex; align-items:center; gap:14px; padding:14px 18px; border-radius:14px; transition:background .15s}
+.listrow:hover{background:rgba(255,255,255,.6)}
+.listrow+.listrow{border-top:1px solid var(--line-soft)}
+.listrow .grow{flex:1; min-width:0}
+
+/* ---------- 库存其他 ---------- */
+.foot-note{font-size:12.5px; color:var(--ink2); border-top:1px dashed var(--line); padding-top:14px; margin-top:20px; line-height:1.7}
+.empty{padding:44px 20px; text-align:center; color:var(--ink2); font-size:13.5px}
+.empty .ic{opacity:.5; margin-bottom:8px}
+.progress{height:6px; border-radius:999px; background:rgba(62,92,58,.12); overflow:hidden}
+.progress i{display:block; height:100%; border-radius:999px; background:linear-gradient(90deg,var(--moss),var(--primary)); transition:width .4s ease}
+.mini-bars{display:flex; align-items:flex-end; gap:3px; height:34px}
+.mini-bars i{width:9px; border-radius:3px 3px 1px 1px; background:var(--mist)}
+.mini-bars i.hi{background:var(--moss)}
+
+/* ---------- 浏览器 mock ---------- */
+.browser{border-radius:14px; overflow:hidden; border:1px solid var(--line); background:rgba(255,255,255,.7)}
+.browser .bbar{display:flex; align-items:center; gap:8px; padding:8px 12px; background:rgba(62,92,58,.07); border-bottom:1px solid var(--line-soft)}
+.browser .bdot{width:9px; height:9px; border-radius:50%; background:var(--mist)}
+.browser .url{flex:1; font-size:12px; background:#fff; border-radius:7px; padding:4px 10px; color:var(--ink2); font-family:ui-monospace,Consolas,monospace}
+.browser .bbody{padding:18px; min-height:210px; position:relative}
+.skel{border-radius:7px; background:rgba(62,92,58,.1)}
+.skel.lt{background:rgba(62,92,58,.06)}
+.recmk{position:absolute; border:2px dashed var(--moss); border-radius:9px; background:rgba(107,142,90,.08);
+  font-size:11px; color:var(--primary); font-weight:700; padding:3px 8px; display:flex; align-items:center; gap:5px}
+
+/* ---------- 交互面板 ---------- */
+.iptype{display:flex; gap:7px; flex-wrap:wrap}
+.ipchip{padding:5px 12px; border-radius:9px; font-size:12.5px; background:rgba(62,92,58,.07); color:var(--ink2); font-weight:600; border:1px solid transparent}
+.ipchip.on{background:#fff; color:var(--primary); border-color:var(--primary); box-shadow:var(--shadow)}
+.ipchip.fam-browser{border-radius:999px}
+.pick-el{position:absolute; border:2px dashed var(--primary); border-radius:9px; background:rgba(62,92,58,.06); cursor:pointer; font-size:11.5px; font-weight:700; color:var(--primary); padding:2px 7px}
+.pick-el.sel{background:var(--primary); color:#fff; border-style:solid}
+
+/* ---------- 审计 / 日志流 ---------- */
+.logstream{font-family:ui-monospace,Consolas,monospace; font-size:12px; line-height:1.8; background:rgba(62,92,58,.05);
+  border-radius:12px; padding:12px 16px; height:150px; overflow-y:auto}
+.logstream .t{color:var(--ink2)}
+.logstream .ok{color:var(--moss)} .logstream .bad{color:var(--danger)}
+
+/* ---------- 响应式（原型以桌面 1200+ 为主） ---------- */
+@media (max-width:1240px){
+  .rail{width:76px}
+  .rail .brand b,.rail .brand small,.rail .ngroup>h6,.rail .nitem span,.rail .railfoot div,.roles{display:none}
+  .nitem{justify-content:center; padding:11px 0}
+  .views{padding:24px 22px 80px}
+  .topbar{padding:12px 22px}
+  .g2,.g3,.g23,.g32,.g13{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important; transition:none!important}
+}
+.ic{width:18px; height:18px; flex:none}
+.ic.lg{width:22px; height:22px}
+</style>
+</head>
+<body>
+
+<!-- SVG 图标库（细线 1.5 · 主色描边） -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="4" y="12.5" width="7" height="7" rx="1.6"/><rect x="13" y="12.5" width="7" height="7" rx="1.6"/>
+      <rect x="8.5" y="4.5" width="7" height="6" rx="1.6"/><path d="M17 4.5c2.4.3 3.6 1.6 3.9 3.9"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 7.5 5.6 4h12.8L20 7.5M4 7.5h16M4 7.5V19a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V7.5"/><path d="M9 20v-6h6v6"/></symbol>
+    <symbol id="i-lib" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="4" width="17" height="5" rx="1.4"/><path d="M5.5 9v9.6a1.4 1.4 0 0 0 1.4 1.4h10.2a1.4 1.4 0 0 0 1.4-1.4V9M10 13h4"/></symbol>
+    <symbol id="i-run" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5"/><path d="M10 8.8v6.4l5.2-3.2z"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></symbol>
+    <symbol id="i-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3 5.5 5.5"/></symbol>
+    <symbol id="i-flow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="3.5" width="7" height="6" rx="1.6"/><rect x="14" y="14.5" width="7" height="6" rx="1.6"/>
+      <path d="M6.5 9.5V15a2 2 0 0 0 2 2h5.5"/></symbol>
+    <symbol id="i-rec" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+      <circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9.5 3h5M10.5 3v5.2L5 17.4A2 2 0 0 0 6.8 20.5h10.4A2 2 0 0 0 19 17.4l-5.5-9.2V3"/><path d="M7.5 14.5h9"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3l7.5 3v5.2c0 4.6-3.2 7.7-7.5 9.3-4.3-1.6-7.5-4.7-7.5-9.3V6z"/><path d="M9 11.6l2.1 2.1 4-4.2"/></symbol>
+    <symbol id="i-rocket" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21.5 2.5 11 13M21.5 2.5l-6.8 19-3.2-8.5L3 9.8z"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="8" cy="15.5" r="4.2"/><path d="M11 12.5 20 3.5M16.5 7l3 3M14 9.5l2.4 2.4"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <rect x="3.5" y="3.5" width="7.4" height="7.4" rx="1.6"/><rect x="13.1" y="3.5" width="7.4" height="7.4" rx="1.6"/>
+      <rect x="3.5" y="13.1" width="7.4" height="7.4" rx="1.6"/><rect x="13.1" y="13.1" width="7.4" height="7.4" rx="1.6"/></symbol>
+    <symbol id="i-clip" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="4" width="14" height="17" rx="1.8"/><path d="M9 4.5V3h6v1.5M8.5 11l2 2 4-4M8.5 16.5H15"/></symbol>
+    <symbol id="i-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.6" opacity=".45"/><path d="M12 12l5.6-5.6"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4v16M8 20h8M5 7h14"/><path d="M5 7l-2.4 5.4a2.9 2.9 0 0 0 5.6 0zM19 7l-2.4 5.4a2.9 2.9 0 0 0 5.6 0z" transform="translate(0 -.5)"/></symbol>
+    <symbol id="i-coin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="2.8" y="6.5" width="18.4" height="11" rx="2"/><circle cx="12" cy="12" r="2.6"/><path d="M6 12h.01M18 12h.01"/></symbol>
+    <symbol id="i-horn" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3.5 10.5v3a1.5 1.5 0 0 0 1.5 1.5h2l7 4.5v-15l-7 4.5H5a1.5 1.5 0 0 0-1.5 1.5z"/><path d="M18 9.5a4 4 0 0 1 0 5"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M6.5 3h7L19 8.5V19a2 2 0 0 1-2 2H6.5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M13 3v6h6M9 13h6M9 16.5h6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M18 10a6 6 0 1 0-12 0c0 5-2 6-2 6h16s-2-1-2-6"/><path d="M10 19.5a2.2 2.2 0 0 0 4 0"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3.5 22 20H2z"/><path d="M12 10v4.5M12 17.4h.01"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <circle cx="12" cy="12" r="8.6"/><path d="M12 11v5M12 7.6h.01"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M13 2.5 4.5 13.5H11l-1 8L18.5 10H12z"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7M12 14.5v2.5"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 12a8 8 0 1 1-2.3-5.6M20 3.5V8h-4.5"/></symbol>
+    <symbol id="i-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 4v11M6.5 10.5 12 16l5.5-5.5M4.5 20h15"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 12h15M13.5 5.5 20 12l-6.5 6.5"/></symbol>
+    <symbol id="i-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 5.5 6.5 6.5L9 18.5"/></symbol>
+    <symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round">
+      <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="i-login" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M13 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5M3 12h11M10 8l4 4-4 4"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 7 8.5 6 8.5-6"/></symbol>
+    <symbol id="i-cal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M8 3v4M16 3v4M3.5 10h17"/></symbol>
+    <symbol id="i-cursor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 3.5 19 11l-6 1.5L9.5 19z"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M8 12V5.5a1.5 1.5 0 0 1 3 0V11m0-6.5v-1a1.5 1.5 0 0 1 3 0V11m0-5.5a1.5 1.5 0 0 1 3 0V12m0-2a1.5 1.5 0 0 1 3 0v4.5a6.5 6.5 0 0 1-6.5 6.5h-1A6.5 6.5 0 0 1 6 14.5L4.6 12a1.4 1.4 0 0 1 2.4-1.4L8 12"/></symbol>
+    <symbol id="i-pack" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M12 3 21 7.5v9L12 21l-9-4.5v-9z"/><path d="M3.3 7.6 12 12l8.7-4.4M12 12v8.8"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 5a2 2 0 0 1 2-2h14v16H6a2 2 0 0 0-2 2z"/><path d="M4 19a2 2 0 0 1 2-2h14"/></symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="6" width="18" height="13" rx="2.4"/><path d="M3 10h18M16 14.5h2"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21.5 2.5 11 13M21.5 2.5l-6.8 19-3.2-8.5L3 9.8z"/></symbol>
+  </defs>
+</svg>
+
+<div class="orbs" aria-hidden="true">
+  <div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="orb o4"></div>
+</div>
+
+<div class="app">
+  <!-- ============ 侧栏 ============ -->
+  <aside class="rail">
+    <div class="brand">
+      <span class="mark"><svg class="ic lg"><use href="#i-logo"/></svg></span>
+      <div><b>Forge</b><small>AI 自动化应用平台</small></div>
+    </div>
+    <div class="roles" role="tablist" aria-label="端切换">
+      <button class="on" data-role="user">用户端</button>
+      <button data-role="creator">创作者</button>
+      <button data-role="admin">管理后台</button>
+    </div>
+    <nav id="nav" aria-label="主导航"></nav>
+    <div class="railfoot">
+      <span class="av">叶</span>
+      <div><b>Yeager</b><small>已实名 · 个人版</small></div>
+    </div>
+  </aside>
+
+  <!-- ============ 主区 ============ -->
+  <div class="main">
+    <header class="topbar">
+      <div class="crumb" id="crumb">应用商店<small id="crumb-sub"></small></div>
+      <div class="tsearch" id="tsearch-wrap">
+        <svg class="ic"><use href="#i-search"/></svg>
+        <input id="tsearch" type="search" placeholder="搜索应用、积木…" aria-label="搜索">
+      </div>
+      <div class="bellwrap">
+        <button class="icon-btn" id="bell" aria-label="通知中心" aria-expanded="false">
+          <svg class="ic"><use href="#i-bell"/></svg><span class="reddot"></span>
+        </button>
+        <div class="pop" id="bellpop" role="menu">
+          <header>通知中心<button id="ntf-clear">全部已读</button></header>
+          <div class="ntf" data-go="run"><svg class="ic"><use href="#i-clock"/></svg>
+            <div><b>任务挂起，等你确认</b><small>小红书选品日报 #482 · 72 小时恢复窗口进行中</small></div></div>
+          <div class="ntf" data-go="library"><svg class="ic"><use href="#i-refresh"/></svg>
+            <div><b>积木修复中，应用即将恢复</b><small>GitHub 仓库周报 · hn_read 1.0.2 检测到站点变更</small></div></div>
+          <div class="ntf" data-go="cc-cert"><svg class="ic"><use href="#i-radar"/></svg>
+            <div><b>收到抽查重测任务</b><small>xhs_note_fetch 1.2.3 · 请在时间窗内完成</small></div></div>
+          <div class="ntf" data-go="settings"><svg class="ic"><use href="#i-down"/></svg>
+            <div><b>客户端 1.4.3 更新就绪</b><small>将在任务空闲时自动安装</small></div></div>
+        </div>
+      </div>
+      <button class="icon-btn" data-go="settings" aria-label="设置"><svg class="ic"><use href="#i-gear"/></svg></button>
+    </header>
+
+    <div class="views">
+<!-- ================= 用户端 ================= -->
+<section class="view on" id="v-store" aria-label="应用商店">
+  <div class="g32" style="align-items:stretch">
+    <div class="glass pad-lg" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="badge warn" style="align-self:flex-start"><span class="dot"></span>可靠性是测出来的，不是生成出来的</div>
+      <h1 style="font-size:32px;line-height:1.3;margin-top:14px;letter-spacing:.01em">买之前，<br>就知道它能不能跑。</h1>
+      <p class="muted" style="margin-top:12px;max-width:52ch">每个应用详情页都印着<strong>实测通过率</strong>——来自真实运行的逐次测量，
+      带样本量与测量时间。认证积木组装，演示录制参数化，认证流水线放行，才配上架。</p>
+      <div class="row mt20">
+        <button class="btn lg" data-go="detail">逛逛本周实测之星<svg class="ic"><use href="#i-arrow"/></svg></button>
+        <span class="hint">买断制 · 含 12 个月维护期 · Token 完全自付</span>
+      </div>
+    </div>
+    <div class="glass pad-lg" style="display:flex;gap:24px;align-items:center" data-go="detail" role="button" tabindex="0">
+      <div id="store-hero-ring"></div>
+      <div>
+        <div class="row" style="gap:8px"><span class="badge c1">C1 登录流程认证</span><span class="badge warn"><span class="dot"></span>高变更站点</span></div>
+        <h3 style="font-size:19px;margin-top:10px">小红书选品日报</h3>
+        <p class="muted small" style="margin-top:6px;max-width:40ch">关键词笔记抓取 → AI 选品点评 → Excel 汇总 → 邮件发送。每晚自动跑，早上看结果。</p>
+        <div class="row mt12" style="gap:14px">
+          <span class="price">¥68</span><span class="hint">买断 · 维护期至 2027-10-13</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row between mt24 mb12" style="align-items:flex-end">
+    <div class="chips" id="store-chips">
+      <button class="chip on" data-cat="all">全部</button>
+      <button class="chip" data-cat="site">站点自动化</button>
+      <button class="chip" data-cat="data">数据整理</button>
+      <button class="chip" data-cat="monitor">监控速报</button>
+      <button class="chip" data-cat="free">免费</button>
+    </div>
+    <span class="hint" id="store-count"></span>
+  </div>
+  <div class="g3" id="store-grid" style="gap:18px"></div>
+  <p class="foot-note">列表页精简展示信任字段（实测通过率带样本量、认证等级、best-effort 标注）；完整字段见详情页。五星评分延后引入——实测通过率就是最好的评分。</p>
+</section>
+
+<section class="view" id="v-detail" aria-label="应用详情">
+  <button class="linklike" data-go="store" style="margin-bottom:14px"><svg class="ic" style="transform:rotate(180deg)"><use href="#i-chev"/></svg>返回商店</button>
+  <div class="banner warn mb16" id="d-banner"></div>
+  <div class="g23">
+    <div class="stack">
+      <div class="glass pad-lg">
+        <div class="row between" style="align-items:flex-start">
+          <div class="row" style="gap:16px;align-items:flex-start">
+            <span class="ic-tile" style="width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,rgba(107,142,90,.22),rgba(201,214,192,.55));display:grid;place-items:center;color:var(--primary)">
+              <svg class="ic" style="width:26px;height:26px"><use href="#i-book"/></svg></span>
+            <div>
+              <h1 style="font-size:22px">小红书选品日报 <span class="muted" style="font-weight:400;font-size:14px">v1.4.2</span></h1>
+              <p class="muted small mt8" style="max-width:56ch">每日 08:30 抓取指定关键词的小红书笔记，AI 选品点评后汇总 Excel，并邮件发送给你订阅的人。含登录流程，首次运行需授权登录。</p>
+              <div class="row mt8" style="gap:8px">
+                <span class="badge c1">C1 登录流程认证</span><span class="badge warn"><span class="dot"></span>高变更频率站点</span>
+                <span class="badge mute">平台自营 · 应用创作者：平台团队</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:right">
+            <div class="price" style="font-size:24px">¥68</div>
+            <div class="hint">一次性买断</div>
+            <button class="btn mt8" id="d-buy">立即购买</button>
+            <div><button class="linklike mt8" id="d-auth-demo">预览首次运行授权页</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass pad-lg">
+        <h3 class="section-title mb16"><svg class="ic"><use href="#i-shield"/></svg>信任字段 <span class="muted" style="font-weight:400;font-size:12.5px">v2 · 买之前，先看这里</span></h3>
+        <div class="g2" id="d-trust"></div>
+        <div class="divider"></div>
+        <div class="kv" id="d-trust2"></div>
+      </div>
+
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-pack"/></svg>组成积木与可靠性明细</h3>
+        <p class="hint mb12">应用不展示合成通过率——串联流程的合成值是推算而非实测。这里列出每块积木各自的实测通过率，与整链验证结果。</p>
+        <table class="table" id="d-blocks">
+          <thead><tr><th>积木</th><th>版本</th><th>认证</th><th>实测通过率（纯真实运行口径）</th><th>健康（用户运行上报）</th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <div class="banner info mt12" style="padding:10px 14px;font-size:12.5px"><svg class="ic"><use href="#i-info"/></svg>
+          <span>整链验证：<strong>通过（N=1，非统计值）</strong>——应用发布前整链真实运行 1 次的验证结果，不是统计口径。</span></div>
+      </div>
+
+      <div class="glass pad-lg">
+        <h3 class="section-title mb16"><svg class="ic"><use href="#i-book"/></svg>文字评价</h3>
+        <div class="listrow" style="padding-left:0;padding-right:0">
+          <span class="av" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#8FA97E,#A8B89B);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none">木</span>
+          <div class="grow"><b style="font-size:13.5px">木鱼<span class="badge ok" style="margin-left:8px">已购 · 运行 61 次</span></b>
+          <p class="small mt8">跑了一个月，周末站点改版挂过一次，第二天积木补丁就推下来了，没管它自己恢复了。</p></div>
+          <span class="hint">2026-10-08</span>
+        </div>
+        <div class="listrow" style="padding-left:0;padding-right:0;border-bottom:none">
+          <span class="av" style="width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#B3C4A4,#C9D6C0);color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex:none">南</span>
+          <div class="grow"><b style="font-size:13.5px">南山客<span class="badge mute" style="margin-left:8px">已购 · 运行 12 次</span></b>
+          <p class="small mt8">首次登录要扫一下自己的号，之后全自动。提醒一句：小红书改版频繁，详情页那个 best-effort 标注是认真的。</p></div>
+          <span class="hint">2026-10-02</span>
+        </div>
+      </div>
+      <p class="foot-note">运行条件与成功率以信任字段为准；平台审核与认证不构成对运行结果的担保。</p>
+    </div>
+
+    <div class="stack">
+      <div class="glass pad" id="d-health-card">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-radar"/></svg>健康状态</h3>
+        <div id="d-health"></div>
+        <p class="hint mt12" style="line-height:1.6">健康评分覆盖公开页检测；含登录态与交互的流程依赖用户运行上报。</p>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-run"/></svg>运行它需要做什么</h3>
+        <ol class="steps" style="font-size:13.5px">
+          <li class="step done"><div class="st-head">购买并下载</div><div class="st-meta">验签后自动安装，积木按需拉取</div></li>
+          <li class="step done"><div class="st-head">配置你的模型 Key</div><div class="st-meta">Token 费用走你自己的账号</div></li>
+          <li class="step done"><div class="st-head">授权登录小红书</div><div class="st-meta">凭证仅存本机加密，可随时撤销</div></li>
+          <li class="step run"><div class="st-head">订阅关键词，开始运行</div><div class="st-meta">需要你确认的动作会挂起等你</div></li>
+        </ol>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-coin"/></svg>退款政策</h3>
+        <ul class="hint" style="line-height:1.9;padding-left:18px">
+          <li>购买后 24 小时内未完成在线激活校验 → 全额退款</li>
+          <li>完成激活即视为已开始使用，不再适用 24h 全退</li>
+          <li>维护期内积木失效超 7 天 → 按剩余维护月份比例退款</li>
+          <li>失效判定以健康归因为准；你的网络/账号问题不计失效</li>
+          <li>争议期 7 天，平台仲裁</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-library" aria-label="我的库">
+  <div class="vhead"><h1>我的库</h1><p class="sub">已购应用与我的模块（复合积木）。修复发生在积木层——一次修复，所有引用应用自动恢复。</p></div>
+  <div class="tabs">
+    <button class="tab on" data-llib="apps">已购应用<span class="cnt">5</span></button>
+    <button class="tab" data-llib="modules">我的模块<span class="cnt">2</span></button>
+  </div>
+  <div id="llib-apps" class="stack" style="gap:14px"></div>
+  <div id="llib-modules" class="stack" style="gap:14px;display:none"></div>
+</section>
+
+<section class="view" id="v-run" aria-label="运行中心">
+  <div class="vhead row between" style="align-items:flex-end">
+    <div><h1>运行中心</h1><p class="sub">有人值守为主，尽力自动。需要你的任务会挂起等人，72 小时内随时恢复。</p></div>
+    <button class="btn ghost" id="btn-new-sched"><svg class="ic"><use href="#i-plus"/></svg>新建定时任务</button>
+  </div>
+  <div class="kpis mb16">
+    <div class="glass kpi"><div class="num">12</div><div class="lbl">今日运行</div></div>
+    <div class="glass kpi"><div class="num">10</div><div class="lbl">成功</div></div>
+    <div class="glass kpi"><div class="num" style="color:var(--warn)">1</div><div class="lbl">挂起中</div></div>
+    <div class="glass kpi"><div class="num" style="color:var(--danger)">1</div><div class="lbl">等你操作</div></div>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-rtab="queue">队列任务<span class="cnt">5</span></button>
+    <button class="tab" data-rtab="sched">定时任务<span class="cnt">3</span></button>
+  </div>
+  <div class="glass" id="rtab-queue" style="overflow:hidden"></div>
+  <div class="glass" id="rtab-sched" style="overflow:hidden;display:none"></div>
+</section>
+
+<section class="view" id="v-task" aria-label="任务详情">
+  <button class="linklike" data-go="run" style="margin-bottom:14px"><svg class="ic" style="transform:rotate(180deg)"><use href="#i-chev"/></svg>返回运行中心</button>
+  <div class="chips mb16" id="task-switch">
+    <button class="chip on" data-task="t482">选品日报 #482 · 挂起中</button>
+    <button class="chip" data-task="t479">GitHub 周报 #479 · 失败</button>
+  </div>
+  <div class="vhead row between" style="align-items:flex-start;margin-bottom:16px">
+    <div>
+      <h1 id="tk-title">小红书选品日报 · 手动运行 #482</h1>
+      <p class="sub" id="tk-sub">2026-10-14 08:30 发起 · 关键词「露营灯」</p>
+    </div>
+    <div class="row" id="tk-actions"></div>
+  </div>
+  <div id="tk-banner"></div>
+  <div class="g32 mt16">
+    <div class="glass pad-lg">
+      <h3 class="section-title mb16"><svg class="ic"><use href="#i-flow"/></svg>执行步骤 <span class="muted" style="font-weight:400;font-size:12px">· 按运行时实际生效积木版本（lock effective）归因</span></h3>
+      <ol class="steps" id="tk-steps"></ol>
+    </div>
+    <div class="stack">
+      <div class="glass pad" id="tk-error" style="display:none"></div>
+      <div class="glass pad">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-clock"/></svg>交互历史</h3>
+        <div id="tk-interactions" class="stack" style="gap:10px"></div>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-file"/></svg>日志与导出</h3>
+        <p class="hint mb12">导出前经统一脱敏管道（内置模式 + 明文集精确替换），不含页面内容与凭证。</p>
+        <button class="btn soft sm" id="tk-export"><svg class="ic"><use href="#i-down"/></svg>导出脱敏日志 (JSONL)</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="view" id="v-settings" aria-label="设置">
+  <div class="vhead"><h1>设置</h1><p class="sub">账户、通知、数据与更新。</p></div>
+  <div class="g2" style="align-items:start">
+    <div class="stack">
+      <div class="glass pad">
+        <h3 class="section-title mb8"><svg class="ic"><use href="#i-user"/></svg>账户</h3>
+        <div class="row mt12" style="gap:14px">
+          <span class="av" style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--moss),var(--mist));color:#fff;display:grid;place-items:center;font-size:17px;font-weight:700">叶</span>
+          <div><b style="font-size:15px">Yeager</b><div class="hint">yeager@example.com · <span class="badge ok">已实名</span></div></div>
+        </div>
+        <p class="hint mt12">提现前需完成实名认证；注册环节已确认年龄 16+。</p>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb4"><svg class="ic"><use href="#i-bell"/></svg>通知</h3>
+        <div class="setrow"><div><b>任务挂起与恢复窗口</b><p>任务进入挂起、恢复窗口临近超时（72h）时提醒。关键通知，不可关闭。</p></div>
+          <button class="switch on" disabled aria-label="始终开启"></button></div>
+        <div class="setrow"><div><b>积木失效与应用恢复</b><p>引用积木检测到失效、修复完成自动恢复时提醒。</p></div>
+          <button class="switch on" data-toggle aria-label="开关"></button></div>
+        <div class="setrow"><div><b>废弃预告</b><p>已购应用将被创作者废弃时提前 30 天提醒。</p></div>
+          <button class="switch on" data-toggle aria-label="开关"></button></div>
+        <div class="setrow"><div><b>运营与活动</b><p>公告、推荐与新应用上架速递。</p></div>
+          <button class="switch" data-toggle aria-label="开关"></button></div>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb4"><svg class="ic"><use href="#i-radar"/></svg>运行上报</h3>
+        <div class="setrow"><div><b>参与运行统计</b><p>上报运行结果（不含任何页面内容），参与「用户运行成功率」与健康分统计，让其他买家看到更真实的可靠性。
+          关闭后你的账号不参与统计，退款判据将改用激活校验时间戳。</p></div>
+          <button class="switch on" data-toggle id="sw-report" aria-label="开关"></button></div>
+        <div class="banner info" style="padding:10px 14px;font-size:12.5px"><svg class="ic"><use href="#i-info"/></svg>
+          <span id="report-note">已开启：运行结果参与成功率统计（failure_class × env_class 归因，user-side 类不计入积木健康分）。</span></div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="glass pad">
+        <h3 class="section-title mb4"><svg class="ic"><use href="#i-file"/></svg>数据清理</h3>
+        <div class="setrow"><div><b>交互记录</b><p>运行中「暂停-操作-恢复」的交互历史按隐私政策留存；清理后不可恢复，不影响任务运行。</p></div>
+          <button class="btn soft sm" id="btn-clean-ix">清理…</button></div>
+        <div class="setrow"><div><b>本地缓存积木包</b><p>本地保留最后可用版本以保证离线可运行，清理后下次运行将重新下载签名积木包。</p></div>
+          <button class="btn soft sm" id="btn-clean-blk">清理…</button></div>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb8"><svg class="ic"><use href="#i-down"/></svg>版本更新</h3>
+        <div class="row between">
+          <div><b>Forge 客户端 <span class="mono">1.4.2</span></b><p class="hint mt8">Runtime sidecar 与客户端版本锁死，原子切换更新。</p></div>
+          <button class="btn ghost sm" id="btn-update">检查更新</button>
+        </div>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-book"/></svg>关于与协议</h3>
+        <div class="stack" style="gap:9px;font-size:13.5px">
+          <a href="#" onclick="return ui.toast('原型演示：打开《用户协议》')">《用户协议》</a>
+          <a href="#" onclick="return ui.toast('原型演示：打开《隐私政策》（含运行上报与交互记录留存策略）')">《隐私政策》</a>
+          <a href="#" onclick="return ui.toast('原型演示：打开《创作者协议》（含站点声明与负面清单）')">《创作者协议》</a>
+          <p class="hint mt8">Forge 客户端 v1.4.2 · Windows x64 · 交易与审计记录保存 ≥ 3 年</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-model" aria-label="模型与凭证">
+  <div class="vhead"><h1>模型与凭证</h1><p class="sub">模型 Key 完全自配自付——平台不经手、不代付任何一次模型调用。</p></div>
+  <div class="banner warn mb16" style="border-left:4px solid var(--warn)">
+    <svg class="ic"><use href="#i-alert"/></svg>
+    <span><b>选择境外模型服务时，您的输入与输出将传输至相应境外服务商。</b>
+    <span class="muted">（首次引导固定提示，无条件展示）</span></span>
+  </div>
+  <div class="tabs">
+    <button class="tab on" data-mtab="prov">模型中心</button>
+    <button class="tab" data-mtab="cred">凭证管理</button>
+  </div>
+
+  <div id="mtab-prov" class="g32" style="align-items:start">
+    <div class="stack">
+      <div class="glass pad-lg">
+        <div class="row between mb16">
+          <h3 class="section-title"><svg class="ic"><use href="#i-key"/></svg>接入方式</h3>
+          <div class="seg" id="prov-seg">
+            <button class="on" data-pseg="builtin">内置提供商</button>
+            <button data-pseg="agg">聚合平台</button>
+            <button data-pseg="custom">自定义</button>
+          </div>
+        </div>
+        <div id="prov-builtin" class="stack" style="gap:12px">
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.62)">
+            <div class="row between"><div class="row" style="gap:10px"><b>DeepSeek 官方</b><span class="badge ok">已配置</span></div>
+              <button class="btn soft sm" data-test-key>测试连通</button></div>
+            <div class="row mt12" style="gap:14px;flex-wrap:wrap">
+              <label class="row hint" style="gap:6px">fast <select class="select" style="width:170px;padding:6px 30px 6px 10px;font-size:13px"><option>deepseek-chat</option><option>未配置（回退 fast）</option></select></label>
+              <label class="row hint" style="gap:6px">reasoning <select class="select" style="width:190px;padding:6px 30px 6px 10px;font-size:13px"><option>deepseek-reasoner</option><option>未配置（回退 fast）</option></select></label>
+              <label class="row hint" style="gap:6px">vision <select class="select" style="width:180px;padding:6px 30px 6px 10px;font-size:13px"><option>未配置（回退 fast）</option><option>—</option></select></label>
+            </div>
+          </div>
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.62)">
+            <div class="row between"><div class="row" style="gap:10px"><b>智谱 GLM</b><span class="badge ok">已配置</span></div>
+              <button class="btn soft sm" data-test-key>测试连通</button></div>
+            <div class="row mt12" style="gap:14px;flex-wrap:wrap">
+              <label class="row hint" style="gap:6px">fast <select class="select" style="width:170px;padding:6px 30px 6px 10px;font-size:13px"><option>glm-4-flash</option><option>未配置（回退 fast）</option></select></label>
+              <label class="row hint" style="gap:6px">vision <select class="select" style="width:180px;padding:6px 30px 6px 10px;font-size:13px"><option>glm-4v-plus</option><option>未配置（回退 fast）</option></select></label>
+            </div>
+          </div>
+          <p class="hint">能力分级 fast / reasoning / vision；某级未配置时自动回退 fast 并在通知中心提示。目录由平台签名下发，客户端不可增删内置项。</p>
+        </div>
+        <div id="prov-agg" style="display:none">
+          <div class="field"><label>聚合平台</label>
+            <select class="select"><option>OpenRouter</option><option>硅基流动</option></select></div>
+          <div class="field"><label>API Key</label><input class="input mono" type="password" placeholder="sk-or-…" id="agg-key"></div>
+          <button class="btn" data-test-key>保存并测试连通</button>
+          <p class="hint mt12">Key 经 safeStorage 加密后仅存本机（Windows DPAPI / macOS Keychain），任何日志、上报、崩溃转储均不含明文。</p>
+        </div>
+        <div id="prov-custom" style="display:none">
+          <div class="field"><label>Base URL</label><input class="input mono" placeholder="https://…/v1"></div>
+          <div class="field"><label>API Key</label><input class="input mono" type="password" placeholder="sk-…"></div>
+          <button class="btn" data-test-key>保存并测试连通</button>
+          <p class="hint mt12">自定义提供商的出网端点将加入出口代理白名单，仅放行该 base_url 域名。</p>
+        </div>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb16"><svg class="ic"><use href="#i-coin"/></svg>Token 用量与熔断 <span class="muted" style="font-weight:400;font-size:12.5px">· 近 7 日</span></h3>
+        <div class="row" style="gap:28px;align-items:flex-end">
+          <div id="usage-chart"></div>
+          <div class="stack" style="gap:6px">
+            <div class="kpi" style="padding:0"><div class="num" style="font-size:21px">¥6.42</div><div class="lbl">本周合计（你的 Key）</div></div>
+            <div class="kpi" style="padding:0"><div class="num" style="font-size:21px">128.6k</div><div class="lbl">tokens（含输入 / 输出）</div></div>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="setrow" style="padding:12px 0"><div><b>会话熔断上限（覆盖）</b><p>平台分档默认：标准站点 ¥1.5 / 中变更 ¥1.2 / 高变更 ¥0.8，签名只读不可改写。你可以设置更严的会话级上限；熔断不可关闭。</p></div>
+          <div class="row" style="gap:8px"><span class="hint">¥</span><input class="input" style="width:90px" value="2.00" id="budget-in">
+            <button class="btn ghost sm" id="budget-save">保存</button></div></div>
+      </div>
+    </div>
+
+    <div class="glass pad-lg">
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-info"/></svg>模型调用怎么计费</h3>
+      <div class="stack" style="gap:14px;font-size:13.5px">
+        <div class="banner info" style="padding:11px 14px"><svg class="ic"><use href="#i-check"/></svg><span>所有调用经 ModelRouter 逐次计量：provider / model / tokens / cost，可在本地账本查询。</span></div>
+        <div class="banner info" style="padding:11px 14px"><svg class="ic"><use href="#i-check"/></svg><span>平台的认证与健康检测使用<strong>平台自有账户</strong>，属平台质量活动——不占用你的额度。</span></div>
+        <div class="banner info" style="padding:11px 14px"><svg class="ic"><use href="#i-lock"/></svg><span>认证会话（C1）与你日常凭证隔离存储，跑完即焚，可随时撤销。</span></div>
+      </div>
+      <div class="divider"></div>
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-zap"/></svg>回退链</h3>
+      <ol class="steps" style="font-size:13px">
+        <li class="step done"><div class="st-head">请求 tier（如 vision）</div></li>
+        <li class="step done"><div class="st-head">vision 未配置 → 回退 fast 并提示</div><div class="st-meta">提示事件写入运行日志与通知中心</div></li>
+        <li class="step fail"><div class="st-head">fast 亦未配置 → 挂起等你</div><div class="st-meta">credential_missing → 引导完成模型配置</div></li>
+      </ol>
+    </div>
+  </div>
+
+  <div id="mtab-cred" class="g32" style="align-items:start;display:none">
+    <div class="stack">
+      <div class="glass pad-lg">
+        <div class="row between mb12">
+          <h3 class="section-title"><svg class="ic"><use href="#i-lock"/></svg>站点凭证</h3>
+          <span class="hint">仅存本机 · safeStorage 加密 · 服务端不存储</span>
+        </div>
+        <table class="table" id="cred-table">
+          <thead><tr><th>站点</th><th>类型</th><th>状态</th><th>最近使用</th><th style="width:90px"></th></tr></thead>
+          <tbody></tbody>
+        </table>
+        <p class="hint mt12">撤销即时生效：凭证句柄全部失效、密文删除、无可恢复副本；引用该凭证的运行将挂起并引导重新登录。</p>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-shield"/></svg>认证会话隔离区（C1）</h3>
+        <div class="empty" id="auth-sess-empty">
+          <svg class="ic" style="width:30px;height:30px"><use href="#i-shield"/></svg>
+          <div>暂无进行中的认证会话</div>
+          <p class="hint mt8">提交登录类积木认证时临时创建，报告上传完成后自动焚毁（磁盘残留扫描验证）。</p>
+        </div>
+        <div id="auth-sess-live" style="display:none">
+          <div class="banner warn"><svg class="ic"><use href="#i-radar"/></svg>
+            <span><b>认证会话进行中</b> · xiaohongshu.com<br><span class="small">与日常凭证隔离存储 · 报告上传后即焚 · <a href="#" onclick="return ui.confirmBurn()">立即焚毁</a></span></span></div>
+          <button class="btn danger sm mt12" onclick="ui.confirmBurn()">撤销并中止认证</button>
+        </div>
+      </div>
+    </div>
+    <div class="glass pad-lg">
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-key"/></svg>凭证如何被使用</h3>
+      <ol class="steps" style="font-size:13.5px">
+        <li class="step done"><div class="st-head">浏览器族 login 交互完成</div><div class="st-meta">CDP 捕获 Cookie（主路径）+ token/localStorage（按站点适配器）</div></li>
+        <li class="step done"><div class="st-head">加密落库 → 发放不透明句柄</div><div class="st-meta">CredentialHandle 不可反推内容，组件进程永不见明文</div></li>
+        <li class="step done"><div class="st-head">运行时受控注入</div><div class="st-meta">仅两条通道：浏览器会话装载 / 模型调用装载 Key</div></li>
+        <li class="step warn"><div class="st-head">凭证出现在网络请求体 = 一票否决</div><div class="st-meta">静态检查强制，不上架</div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+<!-- ================= 创作者中心 ================= -->
+<section class="view" id="v-cc-home" aria-label="创作台">
+  <div class="vhead row between" style="align-items:flex-end">
+    <div><h1>创作台</h1><p class="sub">拼认证积木、录一遍演示，产出上架级应用。每一步产物自动保存，崩溃可恢复。</p></div>
+    <button class="btn lg" id="btn-new-create"><svg class="ic"><use href="#i-plus"/></svg>新建创作</button>
+  </div>
+
+  <div class="glass pad-lg mb20">
+    <h3 class="section-title mb16"><svg class="ic"><use href="#i-flow"/></svg>九步主流程</h3>
+    <div class="stepper" id="nine-steps"></div>
+  </div>
+
+  <div class="g32" style="align-items:start">
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-file"/></svg>我的创作会话</h3>
+        <div class="stack" style="gap:0" id="cc-sessions"></div>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-flask"/></svg>草稿积木库 <span class="badge c0">C0 · 未认证</span></h3>
+        <p class="hint mb12">对话生成或录制参数化产生的草稿：私用可用；上架必须通过认证转正。</p>
+        <table class="table">
+          <thead><tr><th>草稿</th><th>来源</th><th>状态</th><th style="width:110px"></th></tr></thead>
+          <tbody>
+            <tr><td><b>网课平台签到</b><span class="sub mono">draft_signin · v0.3</span></td><td>对话生成</td>
+              <td><span class="badge c0">C0 未认证</span></td>
+              <td><button class="btn soft sm" onclick="ui.toast('原型演示：进入认证转正流程（C1/C2）')">转正认证</button></td></tr>
+            <tr><td><b>闲鱼消息自动回复</b><span class="sub mono">draft_xy_reply · v0.1</span></td><td>录制参数化</td>
+              <td><span class="badge c0">C0 未认证<span class="sub">含 1 个脆弱步骤</span></span></td>
+              <td><button class="btn soft sm" onclick="ui.go('cc-record')">去处置</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-rocket"/></svg>创作成绩</h3>
+        <div class="kpis k3" style="grid-template-columns:1fr 1fr">
+          <div class="kpi" style="padding:0"><div class="num">3</div><div class="lbl">已上架应用</div></div>
+          <div class="kpi" style="padding:0"><div class="num">68%</div><div class="lbl">创作成功率（月）</div></div>
+          <div class="kpi" style="padding:0"><div class="num">¥1,286</div><div class="lbl">本月分成（70%）</div></div>
+          <div class="kpi" style="padding:0"><div class="num">2<small> 期</small></div><div class="lbl">保证金已释放（共 6 期）</div></div>
+        </div>
+        <div class="divider"></div>
+        <p class="hint">下一期保证金将于 2026-12-14 释放；跨过 24h 退款窗与 7 天争议期的份额可提现。</p>
+        <button class="btn ghost sm mt12" onclick="ui.toast('原型演示：打开结算台账（80% 可结算 / 20% 保证金双月释放）')">查看结算台账</button>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-horn"/></svg>平台通告</h3>
+        <p class="small" style="line-height:1.7">「积木市场」将于阶段 4 开放：积木买断制，免费 / 作者定价双轨，买断收入平台 30% / 积木作者 70%，不按引用量分成。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-cc-canvas" aria-label="画布组装">
+  <div class="vhead row between" style="align-items:flex-end">
+    <div>
+      <h1>小红书选品日报 <span class="muted" style="font-weight:400;font-size:15px">v1.5 · 草稿</span></h1>
+      <p class="sub">自动保存于 2 分钟前 · 接口兼容性与副作用规则实时校验</p>
+    </div>
+    <div class="row">
+      <button class="btn soft" id="btn-pack"><svg class="ic"><use href="#i-pack"/></svg>打包为我的模块</button>
+      <button class="btn" data-go="cc-record">下一步：录制与表单<svg class="ic"><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+
+  <div id="canvas-banners"></div>
+
+  <div class="g13 mt12">
+    <!-- 积木库 -->
+    <div class="glass pad" style="position:sticky;top:76px">
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-search"/></svg>积木库</h3>
+      <input class="input mb12" placeholder="搜索认证积木…" id="blk-search">
+      <div id="blk-list" class="stack" style="gap:2px;max-height:560px;overflow-y:auto"></div>
+      <div class="divider"></div>
+      <p class="hint">逐项展示纯真实运行实测通过率（带样本量）。点击积木卡添加到画布末尾。</p>
+    </div>
+
+    <!-- 画布 -->
+    <div class="stack">
+      <div class="canvas-wrap glass" id="canvas" style="border-radius:var(--r)">
+        <svg class="cedges" id="cedges"></svg>
+      </div>
+      <div class="row between">
+        <div class="row hint" style="gap:16px">
+          <span class="row" style="gap:6px"><svg class="ic" style="width:14px;height:14px;color:var(--moss)"><use href="#i-check"/></svg>接口兼容 5/5</span>
+          <span class="row" style="gap:6px"><svg class="ic" style="width:14px;height:14px;color:var(--moss)"><use href="#i-check"/></svg>副作用规则满足</span>
+          <span class="row" style="gap:6px"><svg class="ic" style="width:14px;height:14px;color:var(--warn)"><use href="#i-alert"/></svg>1 个高变更站点积木</span>
+        </div>
+        <div class="row" style="gap:8px">
+          <button class="btn soft sm" id="btn-break-confirm">试试：断开 confirm 再保存</button>
+          <button class="btn sm" id="btn-save-flow">保存流程</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右侧属性 -->
+    <div class="stack" style="position:sticky;top:76px">
+      <div class="glass pad" id="cnode-props">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-eye"/></svg>节点属性</h3>
+        <div id="cnode-props-body"><p class="hint">点击画布上的积木节点查看参数、Schema 与权限。</p></div>
+      </div>
+      <div class="glass pad">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-lock"/></svg>版本锁定（lock 草案）</h3>
+        <div class="code">{
+  "pins": {
+    "xhs_note_fetch": {
+      "base": "1.2.0",
+      "patch_window": "1.2.*"
+    }
+  },
+  "effective": {
+    "xhs_note_fetch": "1.2.3"
+  }
+}</div>
+        <p class="hint mt12">应用引用积木而非内嵌：base 精确基准 + patch 浮动窗口 + effective 实际生效版本，每次变更留审计。</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="view" id="v-cc-record" aria-label="录制工作室">
+  <div class="vhead row between" style="align-items:flex-end">
+    <div><h1>录制工作室 <span class="muted" style="font-weight:400;font-size:15px">· 小红书选品日报</span></h1>
+      <p class="sub">亲手演示一遍，系统记录确定性操作轨迹；LLM 只把字面量提升为输入项——工具可靠，因为它本来就是真人真跑通过的。</p></div>
+    <div class="row">
+      <span class="badge danger"><span class="dot"></span>录制中 00:47</span>
+      <button class="btn danger sm" id="btn-rec-stop"><svg class="ic"><use href="#i-rec"/></svg>停止录制</button>
+    </div>
+  </div>
+
+  <div class="g23" style="align-items:start">
+    <div class="stack">
+      <div class="browser">
+        <div class="bbar"><span class="bdot"></span><span class="bdot"></span><span class="bdot"></span>
+          <span class="url">https://www.xiaohongshu.com/search_result?keyword=露营灯</span>
+          <span class="badge danger" style="font-size:11px">● REC</span></div>
+        <div class="bbody" id="rec-browser">
+          <div class="skel" style="width:46%;height:34px;margin-bottom:14px"></div>
+          <div class="row" style="gap:10px;margin-bottom:16px">
+            <div class="skel lt" style="width:58%;height:30px"></div>
+            <div class="skel" style="width:74px;height:30px"></div>
+          </div>
+          <div class="g3" style="gap:12px">
+            <div class="skel lt" style="height:110px"></div>
+            <div class="skel lt" style="height:110px"></div>
+            <div class="skel lt" style="height:110px"></div>
+            <div class="skel lt" style="height:110px"></div>
+            <div class="skel lt" style="height:110px"></div>
+            <div class="skel lt" style="height:110px"></div>
+          </div>
+          <span class="recmk" style="left:18px;top:64px">① 输入「露营灯」</span>
+          <span class="recmk" style="left:52%;top:64px">② 点击搜索</span>
+          <span class="recmk" style="left:18px;bottom:56px">③ 点击笔记卡片 ×12（循环）</span>
+        </div>
+      </div>
+      <div class="banner warn">
+        <svg class="ic"><use href="#i-alert"/></svg>
+        <span><b>脆弱步骤</b> · 步骤 7「点击笔记卡片」回放失败 1 次（selector 失效概率高，高变更站点）。
+          <div class="row mt8" style="gap:8px">
+            <button class="btn sm" onclick="ui.toast('原型演示：保留其余轨迹，重录该段（步骤 7-12）')">重录该段</button>
+            <button class="btn ghost sm" onclick="ui.toast('原型演示：用站点积木 xhs_note_fetch 1.2.3 替换该段')">替换为站点积木</button>
+          </div></span>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-rec"/></svg>录制轨迹 <span class="muted" style="font-weight:400;font-size:12.5px">· CDP 采集：操作 + DOM 快照 + 网络请求，仅存本机</span></h3>
+        <ol class="steps" style="font-size:13.5px">
+          <li class="step done"><div class="st-head">打开搜索页</div><div class="st-meta mono">nav · xiaohongshu.com/search_result</div></li>
+          <li class="step done"><div class="st-head">点击搜索框，输入「露营灯」</div><div class="st-meta mono">click + input · DOM 快照 #12 · 1 张截图</div></li>
+          <li class="step done"><div class="st-head">点击搜索按钮</div><div class="st-meta mono">click · 等待 1.2s · 网络请求 ×3</div></li>
+          <li class="step warn"><div class="st-head">点击笔记卡片（重复 12 次）</div><div class="st-meta">重复模式 · 提取：标题 / 点赞 / 作者 · <span style="color:var(--warn)">回放脆弱</span></div></li>
+          <li class="step done"><div class="st-head">翻页并重复采集</div><div class="st-meta mono">scroll + loop ×3</div></li>
+        </ol>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb16"><svg class="ic"><use href="#i-flask"/></svg>参数化草案 <span class="muted" style="font-weight:400;font-size:12.5px">· LLM 提升，全部可人工编辑</span></h3>
+        <div class="stack" style="gap:12px">
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.62)">
+            <div class="row between"><b style="font-size:13.5px">字面量 → 输入项</b><button class="switch on" data-toggle aria-label="启用"></button></div>
+            <p class="small mt8">「露营灯」→ 输入项 <span class="mono">search_keyword</span>（string，示例值取自演示，已脱敏为占位符）</p>
+          </div>
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.62)">
+            <div class="row between"><b style="font-size:13.5px">重复模式 → 循环节点</b><button class="switch on" data-toggle aria-label="启用"></button></div>
+            <p class="small mt8">笔记卡片点击 ×12 → 循环：每轮变化量为卡片序号；边界可调整（当前 1–12）</p>
+            <input type="range" min="4" max="24" value="12" style="width:100%;accent-color:var(--primary);margin-top:8px" aria-label="循环次数">
+          </div>
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.62)">
+            <div class="row between"><b style="font-size:13.5px">提取字段 → 输出 Schema</b><button class="switch on" data-toggle aria-label="启用"></button></div>
+            <div class="row mt8" style="gap:7px;flex-wrap:wrap">
+              <span class="badge mute mono">title: string</span><span class="badge mute mono">likes: number</span>
+              <span class="badge mute mono">author: string</span><span class="badge mute mono">note_url: string</span>
+            </div>
+          </div>
+        </div>
+        <div class="row mt16" style="justify-content:flex-end;gap:10px">
+          <button class="btn ghost" onclick="ui.toast('原型演示：保存为 C0 草稿积木（draft_xhs_pick）')">存为草稿积木</button>
+          <button class="btn" data-go="cc-canvas">应用到画布</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-cc-dryrun" aria-label="本地干跑">
+  <div class="vhead"><h1>本地干跑 <span class="muted" style="font-weight:400;font-size:15px">· 小红书选品日报 v1.5</span></h1>
+    <p class="sub">与本机录制逐比对，接口 Schema 校验。干跑是回归口径（非统计值），实测通过率以认证报告为准。</p></div>
+  <div class="g32" style="align-items:start">
+    <div class="glass pad-lg">
+      <div class="row between mb16">
+        <h3 class="section-title"><svg class="ic"><use href="#i-flask"/></svg>最近一次干跑 · 18/19 步骤通过</h3>
+        <button class="btn" id="btn-dryrun-run"><svg class="ic"><use href="#i-refresh"/></svg>重新干跑</button>
+      </div>
+      <table class="table" id="dryrun-table">
+        <thead><tr><th>#</th><th>步骤</th><th>预期（录制）</th><th>实际（干跑）</th><th>结果</th><th>耗时</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-alert"/></svg>脆弱步骤处置</h3>
+        <div class="banner warn" style="margin-bottom:12px"><svg class="ic"><use href="#i-alert"/></svg>
+          <span><b>步骤 7</b> · 点击笔记卡片<br><span class="small">selector 命中率下降（高变更站点常见）。选择处置方式：</span></span></div>
+        <div class="stack" style="gap:8px">
+          <button class="btn soft" onclick="ui.go('cc-record');ui.toast('已定位到录制步骤 7，可重录该段')">重录该段（保留其余轨迹）</button>
+          <button class="btn soft" onclick="ui.toast('原型演示：替换为站点积木 xhs_note_fetch 1.2.3（C1 · 90%，近 20 次）')">替换为站点积木</button>
+        </div>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-shield"/></svg>干跑结论</h3>
+        <div class="kv">
+          <dt>回归通过</dt><dd>18 / 19 步骤（回归口径，非统计值）</dd>
+          <dt>Schema 校验</dt><dd>接口输入输出全部通过</dd>
+          <dt>会话预算</dt><dd class="num">¥0.31 / ¥2.00</dd>
+          <dt>下一步</dt><dd>提交认证（含登录 → C1 本机）</dd>
+        </div>
+        <button class="btn mt16" data-go="cc-cert" style="width:100%">去提交认证<svg class="ic"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-cc-cert" aria-label="提交认证">
+  <div class="vhead"><h1>提交认证 <span class="muted" style="font-weight:400;font-size:15px">· xhs_note_fetch 1.2.3</span></h1>
+    <p class="sub">可靠性是测出来的：真实运行实测 N≥20，通过率带样本量印上详情页。</p></div>
+
+  <div class="g2 mb16" id="cert-paths">
+    <div class="glass pad-lg" style="border:1.5px solid var(--primary);box-shadow:0 0 0 3px rgba(62,92,58,.1)">
+      <div class="row between"><h3 class="section-title"><svg class="ic"><use href="#i-shield"/></svg>C1 · 登录流程认证</h3><span class="badge c1">已选择</span></div>
+      <p class="hint mt8" style="line-height:1.7">含登录积木 → 创作者本机认证器执行：真实运行 N≥20（本机环境 × ≥2 时段）→ 设备密钥签名上报 → 平台抽查复核（每 10 份至少 1 份）。凭证不出本机。</p>
+    </div>
+    <div class="glass pad-lg" style="opacity:.75">
+      <div class="row between"><h3 class="section-title"><svg class="ic"><use href="#i-shield"/></svg>C2 · 公开页认证</h3><span class="badge mute">本流程含登录，不适用</span></div>
+      <p class="hint mt8" style="line-height:1.7">无登录积木 → 平台沙箱真实运行 N≥20（≥2 OS × ≥2 时段）。认证中遇到 login 会自动转 C1 路径。</p>
+    </div>
+  </div>
+
+  <div class="g32" style="align-items:start">
+    <div class="stack">
+      <div class="glass pad-lg" id="cert-run-panel">
+        <div class="row between mb12">
+          <h3 class="section-title"><svg class="ic"><use href="#i-run"/></svg>本机认证批次</h3>
+          <span class="hint">批次礼仪：≤20 次真实访问 · 跨 ≥48h · 单会话 · 限频</span>
+        </div>
+        <div id="cert-idle">
+          <div class="banner info mb16"><svg class="ic"><use href="#i-info"/></svg>
+            <span>开始前请确认：设备已注册（指纹 <span class="mono">8F3A…C2</span>）；将创建<b>临时认证会话</b>（与日常凭证隔离，跑完即焚）；
+            使用你的自有账号，目标站点可能对自动化操作进行限制，风险由账号主体承担。</span></div>
+          <button class="btn lg" id="btn-cert-start"><svg class="ic"><use href="#i-run"/></svg>开始本机认证（20 次真实运行）</button>
+        </div>
+        <div id="cert-progress" style="display:none">
+          <ol class="steps mb16" id="cert-steps"></ol>
+          <div class="progress"><i id="cert-bar" style="width:0%"></i></div>
+          <p class="hint mt8" id="cert-status">准备中…</p>
+        </div>
+      </div>
+
+      <div class="glass pad-lg" id="cert-report" style="display:none">
+        <div class="row between mb16">
+          <h3 class="section-title"><svg class="ic"><use href="#i-clip"/></svg>积木认证报告</h3>
+          <span class="badge c1">C1 · 已通过初审</span>
+        </div>
+        <div class="row" style="gap:26px;align-items:center;margin-bottom:16px">
+          <div id="cert-ring"></div>
+          <div class="small" style="line-height:1.8">
+            <b>小红书笔记抓取 v1.2.3</b> · 认证等级 C1（登录流程认证，本机认证器，创作者环境实测，平台抽查复核）<br>
+            <span class="muted">实测 20 次真实运行，通过 18 次 · <span class="num">2026-10-01 至 10-12</span>（跨 ≥2 时段）</span><br>
+            <span class="muted">golden 回归通过率 <b>94%</b>（N=17，回归口径，非统计值）——与实测口径分列，不混算</span>
+          </div>
+        </div>
+        <div class="g2">
+          <div>
+            <div class="kv">
+              <dt>环境</dt><dd>Windows 11 · Chrome 130<br><span class="muted small">住宅网络 · 创作者会话</span></dd>
+              <dt>失败归因</dt><dd>2 次加载超时（网络类 timeout）</dd>
+              <dt>需要的权限</dt><dd><span class="badge mute mono">domain</span> <span class="badge mute mono">credential</span> <span class="badge mute mono">ai:fast</span></dd>
+              <dt>需要的交互</dt><dd>login（首次）、input（运行中补充主题）</dd>
+              <dt>站点变更等级</dt><dd><span class="badge warn"><span class="dot"></span>高变更频率</span> <span class="muted small">best-effort，详情页将显著标注</span></dd>
+            </div>
+          </div>
+          <div class="code" style="font-size:12px">attestation: ed25519(client_device_key)
+nonce:      9f3c…（一次性 · 5min 有效）
+report_hash: b71e…
+env:        win11/chrome130/residential
+runs:       20 live / 17 regression
+verdict:    pass (≥ 高变更阈值不设下限)</div>
+        </div>
+        <div class="row mt20" style="gap:10px">
+          <button class="btn" id="btn-to-review">提交审核<svg class="ic"><use href="#i-arrow"/></svg></button>
+          <button class="btn ghost" id="btn-cert-more">补测 5 次</button>
+          <button class="btn soft" onclick="ui.toast('失败详情：2 次超时均发生在 22:00-23:00 时段，详见逐次日志')">查看失败详情</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-pack"/></svg>应用整链验证</h3>
+        <p class="hint mb12">含 C1 积木的应用 → 创作者本机整链 1 次（复用本机认证器，免费额度）。</p>
+        <div class="row between">
+          <div><b style="font-size:14px">小红书选品日报 v1.5</b><p class="hint">6 积木 · 含 C1 ×2</p></div>
+          <button class="btn sm" id="btn-chain">开始整链验证</button>
+        </div>
+        <div id="chain-done" class="banner ok mt12" style="display:none;background:var(--ok-bg);border:1px solid transparent">
+          <svg class="ic"><use href="#i-check"/></svg><span><b>整链验证通过</b>（N=1，非统计值）· 签名报告已生成</span></div>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-radar"/></svg>抽查重测</h3>
+        <p class="hint" style="line-height:1.7">平台按报告抽检（每 10 份至少 1 份）：下发随机参数与时间窗，本机重测并流式上报，服务端比对运行结构指纹。</p>
+        <div class="banner warn mt12" style="padding:11px 14px"><svg class="ic"><use href="#i-alert"/></svg>
+          <span><b>1 个重测任务待响应</b><br><span class="small">SP-2101 · xhs_note_fetch 1.2.3 · 窗口 10-15 20:00 ~ 10-16 20:00</span>
+          <div class="row mt8" style="gap:8px">
+            <button class="btn sm" onclick="ui.toast('原型演示：接受重测任务，本机认证器将实时流式上报')">接受任务</button>
+            <button class="btn ghost sm" onclick="ui.toast('原型演示：查看重测参数集（服务端随机生成，不可自选）')">查看参数</button>
+          </div></span></div>
+        <p class="hint mt12">超 14 天未响应 → 按「创作者超期未响应」归因，未释放保证金转入保障金池。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-cc-publish" aria-label="发布向导">
+  <div class="vhead"><h1>发布向导 <span class="muted" style="font-weight:400;font-size:15px">· 小红书选品日报 v1.5</span></h1>
+    <p class="sub">认证通过后最后四步：填信息、定价、核对信任字段、站点合规声明。</p></div>
+  <div class="stepper mb20" id="pub-steps">
+    <button class="stp cur" data-pstep="1"><span class="no">1</span><b>应用信息</b>名称、分类、简介</button>
+    <button class="stp" data-pstep="2"><span class="no">2</span><b>定价</b>买断价与同类参考</button>
+    <button class="stp" data-pstep="3"><span class="no">3</span><b>信任字段预览</b>v2 规则自动生成</button>
+    <button class="stp" data-pstep="4"><span class="no">4</span><b>合规声明与提审</b>站点声明 · 三要素</button>
+  </div>
+
+  <div class="glass pad-lg" id="pstep-1">
+    <div class="g2">
+      <div>
+        <div class="field"><label>应用名称</label><input class="input" value="小红书选品日报"></div>
+        <div class="field"><label>分类</label><select class="select"><option>站点自动化</option><option>数据整理</option><option>监控速报</option></select></div>
+        <div class="field"><label>一句话简介（展示在商店卡片）</label><input class="input" value="关键词笔记抓取 → AI 选品点评 → Excel 汇总 → 邮件发送"></div>
+        <div class="field"><label>详细说明</label><textarea class="input">每日 08:30 抓取指定关键词的小红书笔记，AI 点评选品机会后汇总 Excel 并邮件发送。首次运行需登录小红书；Token 走你自己的模型 Key。</textarea></div>
+      </div>
+      <div>
+        <div class="field"><label>图标</label>
+          <div class="row" style="gap:12px">
+            <span style="width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,rgba(107,142,90,.25),rgba(201,214,192,.6));display:grid;place-items:center;color:var(--primary)"><svg class="ic" style="width:30px;height:30px"><use href="#i-book"/></svg></span>
+            <button class="btn soft sm" onclick="ui.toast('原型演示：上传图标')">更换</button>
+          </div></div>
+        <div class="field"><label>发布说明（v1.5）</label><textarea class="input">升级 xhs_note_fetch 至 1.2.3（C1 · 90%）；新增发送前人工确认。</textarea></div>
+      </div>
+    </div>
+    <div class="row" style="justify-content:flex-end"><button class="btn" data-pnext="2">下一步：定价<svg class="ic"><use href="#i-arrow"/></svg></button></div>
+  </div>
+
+  <div class="glass pad-lg" id="pstep-2" style="display:none">
+    <div class="g32" style="align-items:start">
+      <div>
+        <div class="field" style="max-width:260px"><label>买断价（¥）</label><input class="input num" id="price-in" value="68"></div>
+        <p class="hint">涨价不影响已购用户；平台提供同类应用价格分布参考，<b>不提供 AI 定价建议</b>。买断含 12 个月维护期。</p>
+        <div class="divider"></div>
+        <p class="hint" style="line-height:1.8">收入分配：平台 30% / 你 70%。其中 80% 可结算（跨过退款窗与争议期后提现），20% 为维护保证金，双月释放一期、共 6 期。</p>
+      </div>
+      <div class="glass pad" style="background:rgba(255,255,255,.55)">
+        <p class="hint mb12">同类应用价格分布（近 90 天成交）</p>
+        <div id="price-dist"></div>
+        <div class="row between mt12"><span class="hint">你的定价</span><b class="rate" style="color:var(--primary)">¥68</b></div>
+      </div>
+    </div>
+    <div class="row mt16" style="justify-content:space-between">
+      <button class="btn soft" data-pnext="1">上一步</button>
+      <button class="btn" data-pnext="3">下一步：信任字段预览<svg class="ic"><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+
+  <div class="glass pad-lg" id="pstep-3" style="display:none">
+    <p class="hint mb16">以下字段由认证结果与声明自动生成，买家买之前最先看到这里。</p>
+    <div class="g2">
+      <div class="glass pad" style="background:rgba(255,255,255,.55)">
+        <div class="kv">
+          <dt>实测通过率</dt><dd><b class="rate">90%</b><span class="muted small">（近 20 次真实运行实测，2026-10）</span></dd>
+          <dt>认证等级</dt><dd><span class="badge c1">C1 登录流程认证</span></dd>
+          <dt>标注</dt><dd class="small muted">创作者环境实测，平台抽查复核</dd>
+          <dt>维护期</dt><dd>2027-10-14 前（12 个月），期后 as-is</dd>
+          <dt>Token 成本</dt><dd class="num">¥0.12 – ¥0.35 / 次（用户自付）</dd>
+          <dt>用户运行成功率</dt><dd class="muted">数据不足（新版本，最小样本 30）</dd>
+        </div>
+      </div>
+      <div class="stack" style="gap:12px">
+        <label class="check"><input type="checkbox" checked>本应用含对外发布动作（邮件发送），产出将标注「AI 生成」</label>
+        <label class="check"><input type="checkbox" checked>高变更站点应用首屏显著标注 best-effort（不可折叠）</label>
+        <label class="check"><input type="checkbox" checked disabled>详情页页脚固定声明：运行条件与成功率以信任字段为准；平台审核与认证不构成对运行结果的担保</label>
+      </div>
+    </div>
+    <div class="row mt16" style="justify-content:space-between">
+      <button class="btn soft" data-pnext="2">上一步</button>
+      <button class="btn" data-pnext="4">下一步：合规声明<svg class="ic"><use href="#i-arrow"/></svg></button>
+    </div>
+  </div>
+
+  <div class="glass pad-lg" id="pstep-4" style="display:none">
+    <div class="g32" style="align-items:start">
+      <div>
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-clip"/></svg>站点合规声明</h3>
+        <div class="stack" style="gap:10px">
+          <label class="check"><input type="checkbox" id="dec-1" checked>我已知晓目标站点的自动化访问政策（小红书 · 高变更频率）</label>
+          <label class="check"><input type="radio" name="dtype" id="dec-2" value="public" checked>数据类型：公开页面数据，不含个人信息输出</label>
+          <label class="check"><input type="radio" name="dtype" value="personal">数据类型：含个人信息输出（高变更 + 对外发布叠加时触发重点审核）</label>
+          <label class="check"><input type="checkbox" id="dec-3" checked>存在对外发布动作（邮件发送），已配置 confirm 交互与 AI 内容标识</label>
+        </div>
+        <div class="divider"></div>
+        <h3 class="section-title mb12">提审前自动检查</h3>
+        <div class="stack" style="gap:8px;font-size:13.5px" id="precheck">
+          <span class="row" style="gap:8px"><svg class="ic" style="color:var(--moss)"><use href="#i-check"/></svg>认证报告核验：C1 通过，attestation 签名有效</span>
+          <span class="row" style="gap:8px"><svg class="ic" style="color:var(--moss)"><use href="#i-check"/></svg>confirm 覆盖：email_send 已后接确认积木</span>
+          <span class="row" style="gap:8px"><svg class="ic" style="color:var(--moss)"><use href="#i-check"/></svg>权限最小化：permissions_max 与声明一致</span>
+          <span class="row" style="gap:8px"><svg class="ic" style="color:var(--moss)"><use href="#i-check"/></svg>无 C0 积木：全部积木已认证</span>
+        </div>
+      </div>
+      <div class="glass pad" style="background:rgba(255,255,255,.55)">
+        <h3 class="section-title mb12">提审后</h3>
+        <ol class="steps" style="font-size:13px">
+          <li class="step done"><div class="st-head">submitted</div></li>
+          <li class="step done"><div class="st-head">certifying</div><div class="st-meta">已通过（认证报告在档）</div></li>
+          <li class="step run"><div class="st-head">in_review</div><div class="st-meta">审核员五项清单核验</div></li>
+          <li class="step"><div class="st-head">approved → published</div></li>
+        </ol>
+      </div>
+    </div>
+    <div id="three-flag" class="banner warn mt16" style="display:none"><svg class="ic"><use href="#i-alert"/></svg>
+      <span><b>三要素叠加</b>：高变更站点 + 个人信息输出 + 对外发布——将进入人工重点审核，可能限制上架。</span></div>
+    <div class="row mt16" style="justify-content:space-between">
+      <button class="btn soft" data-pnext="3">上一步</button>
+      <button class="btn lg" id="btn-submit-review">提交审核</button>
+    </div>
+  </div>
+</section>
+<!-- ================= Web 管理后台 ================= -->
+<section class="view" id="v-admin" aria-label="管理后台总览">
+  <div class="vhead"><h1>管理后台 · 总览</h1><p class="sub">审核 / 抽查 / 仲裁 / 财务 / 运营 · 一切写操作落审计日志，归档 ≥ 3 年。</p></div>
+  <div class="kpis mb20">
+    <div class="glass kpi"><div class="num">5</div><div class="lbl">待审核（in_review）</div></div>
+    <div class="glass kpi"><div class="num" style="color:var(--warn)">3</div><div class="lbl">抽查队列</div></div>
+    <div class="glass kpi"><div class="num" style="color:var(--danger)">2</div><div class="lbl">争议中（disputed）</div></div>
+    <div class="glass kpi"><div class="num">¥128,400</div><div class="lbl">保障金池余额</div></div>
+  </div>
+  <div class="g32" style="align-items:start">
+    <div class="glass pad-lg">
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-clock"/></svg>今日待办</h3>
+      <div class="stack" style="gap:0" id="admin-todos"></div>
+    </div>
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-alert"/></svg>安全事件（近 7 日）</h3>
+        <div class="row between" style="padding:8px 0;border-bottom:1px solid var(--line-soft)">
+          <span class="small"><span class="mono">egress_denied</span> · 出口代理拦截</span><span class="badge danger">1 起 · 已处置</span></div>
+        <div class="row between" style="padding:8px 0">
+          <span class="small"><span class="mono">update_permission_escalation</span></span><span class="badge ok">0 起</span></div>
+        <p class="hint mt8">security 类单列统计，不进入成功率分母；安全事件规则命中可一键发起应急下架。</p>
+        <button class="btn danger sm mt12" data-go="admin-ops">发起应急下架</button>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-coin"/></svg>北极星指标</h3>
+        <div class="kv">
+          <dt>首跑成功率</dt><dd><b class="rate">83.5%</b> <span class="muted small">目标 ≥80%（剔除 user-side）</span></dd>
+          <dt>30 天退款率</dt><dd><b class="rate">3.1%</b> <span class="muted small">目标 <5%</span></dd>
+          <dt>积木覆盖率</dt><dd><b class="rate">64%</b> <span class="muted small">阶段 1 gate ≥60% ✓</span></dd>
+          <dt>unknown 归因</dt><dd><b class="rate">22%</b> <span class="muted small">告警线 30%</span></dd>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-admin-review" aria-label="审核工作台">
+  <div class="vhead"><h1>审核工作台</h1><p class="sub">五项清单逐项核验，全部通过方可批准；三要素叠加应用强制人工重点审核。</p></div>
+  <div class="g13" style="align-items:start">
+    <div class="glass pad" style="position:sticky;top:76px">
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-clip"/></svg>审核队列</h3>
+      <div class="stack" style="gap:2px" id="review-queue"></div>
+    </div>
+    <div class="stack">
+      <div class="glass pad-lg">
+        <div class="row between mb16">
+          <div>
+            <h3 class="section-title"><svg class="ic"><use href="#i-book"/></svg>小红书选品日报 v1.5 <span class="badge warn" style="margin-left:6px"><span class="dot"></span>三要素叠加</span></h3>
+            <p class="hint mt8">提交者：平台团队 · 认证：C1 通过（attestation 有效）· 提交于 2026-10-13 16:20</p>
+          </div>
+          <div class="row">
+            <button class="btn ghost" id="rv-reject">驳回</button>
+            <button class="btn" id="rv-approve" disabled>批准上架</button>
+          </div>
+        </div>
+        <div class="stack" style="gap:12px" id="rv-checklist"></div>
+      </div>
+      <div class="banner info"><svg class="ic"><use href="#i-info"/></svg>
+        <span>批准 / 驳回均写入审计日志（操作者 · 时间 · 对象 · 前后状态）；驳回须附认证报告与修订指引，修订后可重提。</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-admin-spot" aria-label="C1 抽查工作台">
+  <div class="vhead"><h1>C1 抽查工作台</h1><p class="sub">每 10 份 C1 报告至少抽 1 份：下发重测任务 → 本机执行流式上报 → 比对运行结构指纹 → 处置。</p></div>
+  <div class="g23" style="align-items:start">
+    <div class="glass pad-lg">
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-radar"/></svg>抽查队列</h3>
+      <table class="table" id="spot-table">
+        <thead><tr><th>任务</th><th>积木 / 版本</th><th>创作者</th><th>窗口</th><th>状态</th></tr></thead>
+        <tbody></tbody>
+      </table>
+      <p class="hint mt12">点击行查看比对详情。比对维度：步骤序列 / 时序分布 / 网络行为形状 + 环境一致性。</p>
+    </div>
+    <div class="stack">
+      <div class="glass pad-lg">
+        <div class="row between mb12">
+          <h3 class="section-title"><svg class="ic"><use href="#i-eye"/></svg>SP-2101 比对详情 <span class="badge ok" style="margin-left:8px">done · 一致</span></h3>
+          <span class="hint">xhs_note_fetch 1.2.3 · 张三</span>
+        </div>
+        <div class="row mb12" style="gap:8px">
+          <span class="badge mute">步骤序列 ✓ 20/20</span>
+          <span class="badge mute">环境指纹 ✓ win11/chrome130</span>
+          <span class="badge mute">时长下限 ✓</span>
+        </div>
+        <p class="hint mb8">时序分布对比（原报告 vs 重测，按步骤耗时）</p>
+        <div id="spot-chart"></div>
+        <div class="divider"></div>
+        <div class="row" style="gap:10px">
+          <button class="btn ghost sm" onclick="ui.toast('原型演示：查看逐步比对 JSON（compare_json）')">查看 compare_json</button>
+          <button class="btn soft sm" onclick="ui.toast('原型演示：生成抽查结论归档')">归档结论</button>
+        </div>
+      </div>
+      <div class="glass pad-lg" id="spot-mismatch">
+        <div class="row between mb12">
+          <h3 class="section-title" style="color:var(--danger)"><svg class="ic" style="color:var(--danger)"><use href="#i-alert"/></svg>SP-2098 比对不符 <span class="badge danger" style="margin-left:8px">mismatch</span></h3>
+          <span class="hint">ali_detail 2.1.0 · 赵六</span>
+        </div>
+        <p class="hint mb12">网络行为形状与原报告不符（异常域名出现 4 次），疑似未真实运行。</p>
+        <div class="row" style="gap:8px">
+          <button class="btn danger sm" id="btn-spot-delist">下架积木版本（delisted）</button>
+          <button class="btn soft sm" onclick="ui.toast('原型演示：引用应用标记「积木维护中」，买家赔付走保障金池')">标记引用应用</button>
+          <button class="btn soft sm" onclick="ui.toast('原型演示：创建保障金池流程工单 GP-32')">转保障金池流程</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-admin-arb" aria-label="仲裁与赔付">
+  <div class="vhead"><h1>仲裁与赔付</h1><p class="sub">争议期 7 天平台仲裁；失效归因四档决定资金动作；赔付以冲正分录入账，原始分录不可修改。</p></div>
+  <div class="g32" style="align-items:start">
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-scale"/></svg>争议工单</h3>
+        <table class="table" id="arb-table">
+          <thead><tr><th>工单</th><th>订单</th><th>争议方</th><th>归因初判</th><th>剩余</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-eye"/></svg>D-31 证据视图 · 订单 #A1024</h3>
+        <div class="row mb12" style="gap:8px">
+          <button class="ipchip on">订单</button><button class="ipchip">认证报告（版本归档）</button>
+          <button class="ipchip">健康归因记录</button><button class="ipchip">运行上报聚合</button>
+        </div>
+        <div class="kv">
+          <dt>订单</dt><dd>小红书选品日报 · ¥68 · 2026-09-30</dd>
+          <dt>买家主张</dt><dd>「连续 9 天运行失败」</dd>
+          <dt>健康归因</dt><dd>站点变更（非创作者过错）· 10-02 起</dd>
+          <dt>运行上报</dt><dd>该买家 failure_class=selector_missing ×5，env_class=device</dd>
+          <dt>修复进度</dt><dd>积木 patch 1.2.4 已灰度 50%，预计 10-15 全量</dd>
+        </div>
+        <div class="row mt16" style="gap:10px">
+          <button class="btn" onclick="ui.toast('已裁决：站点变更档——释放暂停，修复后恢复；买家获 30% 比例补偿（保障金池）')">裁决并生成冲正</button>
+          <button class="btn ghost" onclick="ui.toast('原型演示：转人工重点复核')">转复核</button>
+        </div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-scale"/></svg>失效归因 · 四档资金动作</h3>
+        <div class="stack" style="gap:10px;font-size:13px">
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.55)"><b>站点变更（非创作者过错）</b><p class="hint">释放暂停，修复后恢复 · 不转入保障金池</p></div>
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.55)"><b>创作者超 14 天未响应</b><p class="hint">未释放份额转入保障金池</p></div>
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.55)"><b>平台积木缺陷</b><p class="hint">不罚创作者 · 平台赔付（保障金池优先，不足平台承担）</p></div>
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.55)"><b>第三方积木作者缺陷</b><p class="hint">积木下架 + 扣信用分 · 无保证金划转 · 买家赔付走保障金池</p></div>
+          <div class="glass pad-sm" style="background:rgba(255,255,255,.55)"><b>废弃</b><p class="hint">剩余释放暂停 · 维护期内退款由平台承担</p></div>
+        </div>
+      </div>
+      <div class="glass pad-lg">
+        <div class="row between mb12">
+          <h3 class="section-title"><svg class="ic"><use href="#i-coin"/></svg>保障金池赔付审批</h3>
+          <span class="badge warn">1 待审</span>
+        </div>
+        <div class="kv mb12">
+          <dt>工单</dt><dd>GP-15 · GitHub 仓库周报失效</dd>
+          <dt>覆盖买家</dt><dd>4 位 · 合计 <b class="num">¥1,360</b></dd>
+          <dt>资金来源</dt><dd>保障金池（平台注资 ¥100,000 起始）</dd>
+        </div>
+        <button class="btn" id="btn-gp-approve">批准赔付 ¥1,360</button>
+        <p class="hint mt12">批准后生成冲正分录入 guarantee_pool_ledger；台账只增不改。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-admin-fin" aria-label="财务结算">
+  <div class="vhead"><h1>财务结算</h1><p class="sub">金额一律「分」存储、UTC 时间；退款/赔付只以冲正分录实现。</p></div>
+  <div class="kpis k3 mb20">
+    <div class="glass kpi"><div class="num">¥86,420</div><div class="lbl">本月 GMV</div></div>
+    <div class="glass kpi"><div class="num">¥18,214</div><div class="lbl">待结算（创作者 70% 中可结算部分）</div></div>
+    <div class="glass kpi"><div class="num" style="color:var(--warn)">2</div><div class="lbl">冲正待审批</div></div>
+  </div>
+  <div class="g32" style="align-items:start">
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-wallet"/></svg>退款冲正审批</h3>
+        <table class="table">
+          <thead><tr><th>单号</th><th>类型</th><th>金额</th><th>追回路径</th><th></th></tr></thead>
+          <tbody>
+            <tr><td class="mono">R-77</td><td>24h 未激活全退</td><td class="num">¥39.00</td><td class="hint">未释放保证金冲抵（自动，免审批）</td><td><span class="badge ok">已冲正</span></td></tr>
+            <tr><td class="mono">R-76</td><td>维护期失效比例退款<br><span class="sub">剩余 11 / 12 个月</span></td><td class="num">¥62.33</td><td class="hint">① 未释放保证金 → ② 未结算余额 → ③ 平台垫付应收</td>
+              <td><button class="btn sm" onclick="ui.toast('已批准：冲正分录生成（关联订单 #A1024 与归因记录）')">批准冲正</button></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-file"/></svg>对账报表 · 2026-10</h3>
+        <div class="kv mb12">
+          <dt>订单 ↔ 分录</dt><dd><span class="badge ok">平衡 ✓</span> 1,204 笔 / ¥86,420.00</dd>
+          <dt>分录 ↔ 保障金池</dt><dd><span class="badge ok">平衡 ✓</span> 归集 ¥28,400 · 赔付 ¥0</dd>
+          <dt>差异清单</dt><dd class="muted">空</dd>
+        </div>
+        <button class="btn ghost sm mt8" onclick="ui.toast('原型演示：导出对账报表')">导出报表</button>
+        <button class="btn soft sm mt8" onclick="ui.toast('原型演示：发票入口（规则见创作者协议）')">发票入口</button>
+      </div>
+    </div>
+    <div class="glass pad-lg">
+      <h3 class="section-title mb12"><svg class="ic"><use href="#i-coin"/></svg>分账结构</h3>
+      <div class="code">订单支付 ¥P
+ ├─ 平台 30%
+ └─ 创作者 70%
+     ├─ 80% 可结算（跨 24h 退款窗
+     │   + 7 天争议期后可提现）
+     └─ 20% 维护保证金
+         双月释放一期 × 6
+         （对齐 12 个月维护期）</div>
+      <div class="divider"></div>
+      <h3 class="section-title mb8">积木买断（阶段 4）</h3>
+      <p class="hint" style="line-height:1.8">免费 / 作者定价双轨；买断收入平台 30% / 积木作者 70%，不按引用量持续分成。积木作者不设保证金，以信用处置替代（扣信用分 / 分成暂停 / 下架）。</p>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-admin-ops" aria-label="运营与应急">
+  <div class="vhead"><h1>运营与应急</h1><p class="sub">分类、公告、推荐位 + 下架应急 SOP（delisted 立即生效 + 买家通知推送）。</p></div>
+  <div class="g32" style="align-items:start">
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-alert"/></svg>下架应急 SOP</h3>
+        <ol class="steps mb16" style="font-size:13.5px">
+          <li class="step done"><div class="st-head">触发：安全事件规则命中</div><div class="st-meta mono">egress_denied · 记录 EV-2214 · 影响面初判：2 应用 / 41 买家</div></li>
+          <li class="step run"><div class="st-head">创建应急工单（必填事件引用与影响面）</div></li>
+          <li class="step"><div class="st-head">执行下架 published → delisted</div><div class="st-meta">立即生效</div></li>
+          <li class="step"><div class="st-head">用户通知推送</div><div class="st-meta">涉应用 → 通知已购买家；涉积木 → 引用应用标记「积木维护中」</div></li>
+          <li class="step"><div class="st-head">处置分流 + 复盘归档</div></li>
+        </ol>
+        <button class="btn danger" id="btn-emergency"><svg class="ic"><use href="#i-zap"/></svg>发起应急下架…</button>
+      </div>
+      <div class="glass pad-lg">
+        <div class="row between mb12"><h3 class="section-title"><svg class="ic"><use href="#i-horn"/></svg>公告管理</h3>
+          <button class="btn ghost sm" id="btn-ann">新建公告</button></div>
+        <div class="stack" style="gap:0">
+          <div class="listrow" style="padding:12px 4px"><div class="grow"><b style="font-size:13.5px">积木市场开放预告（阶段 4）</b><p class="hint">积木买断制：免费 / 作者定价双轨，买断收入 30% / 70%。</p></div><span class="hint">置顶</span></div>
+          <div class="listrow" style="padding:12px 4px"><div class="grow"><b style="font-size:13.5px">认证阈值调优公告</b><p class="hint">中等变更站点阈值维持 ≥85%，执行细则见认证文档。</p></div><span class="hint">10-09</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="stack">
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-grid"/></svg>分类管理</h3>
+        <div class="chips" id="cats">
+          <span class="chip on">站点自动化</span><span class="chip on">数据整理</span><span class="chip on">监控速报</span>
+          <button class="chip" style="border-style:dashed" onclick="ui.toast('原型演示：新建分类')">+ 新增</button>
+        </div>
+        <p class="hint mt12">免费应用限制橱窗位；健康分影响曝光，修复响应时效仅作曝光微调因子。</p>
+      </div>
+      <div class="glass pad-lg">
+        <h3 class="section-title mb12"><svg class="ic"><use href="#i-store"/></svg>推荐位配置</h3>
+        <div class="kv">
+          <dt>橱窗 1</dt><dd>小红书选品日报 <span class="badge mute">健康分 92</span></dd>
+          <dt>橱窗 2</dt><dd>发票整理助手 <span class="badge mute">健康分 97</span></dd>
+          <dt>本周新星</dt><dd>知乎热榜速览 <span class="badge warn">认证 88% · 观察中</span></dd>
+        </div>
+        <button class="btn soft sm mt12" onclick="ui.toast('原型演示：编辑推荐位')">编辑推荐位</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="view" id="v-admin-audit" aria-label="审计日志">
+  <div class="vhead"><h1>审计日志</h1><p class="sub">全部后台写操作留痕；审计记录与认证报告随版本归档保存 ≥ 3 年。</p></div>
+  <div class="row mb16" style="gap:8px">
+    <div class="chips">
+      <button class="chip on">全部</button><button class="chip">审核</button><button class="chip">应急</button><button class="chip">财务</button><button class="chip">权限</button>
+    </div>
+    <div class="tsearch" style="margin-left:auto;width:260px">
+      <svg class="ic"><use href="#i-search"/></svg>
+      <input type="search" placeholder="检索认证报告归档（按版本）…" id="audit-search">
+    </div>
+  </div>
+  <div class="glass" style="overflow:hidden">
+    <table class="table" id="audit-table">
+      <thead><tr><th>时间（UTC）</th><th>操作者</th><th>动作</th><th>对象</th><th>前后状态</th><th>关联</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+<!-- @@VIEWS@@ -->
+    </div>
+  </div>
+</div>
+
+<div id="modal-root"></div>
+<div class="toast-root" id="toasts" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* ================= 工具 ================= */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const h=html=>{const t=document.createElement('template');t.innerHTML=html.trim();return t.content.firstElementChild};
+const ico=(id,cls='ic')=>`<svg class="${cls}" aria-hidden="true"><use href="#${id}"/></svg>`;
+
+/* ================= UI 原语 ================= */
+const ui={
+  toast(msg,err){
+    const t=h(`<div class="toast ${err?'err':''}">${ico(err?'i-alert':'i-check')}<span>${msg}</span></div>`);
+    $('#toasts').appendChild(t);
+    setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),340)},3600);
+  },
+  modal(html,opts={}){
+    const ov=h(`<div class="overlay"><div class="modal ${opts.wide?'wide':''}" role="dialog" aria-modal="true">
+      <button class="icon-btn mclose" aria-label="关闭">${ico('i-x')}</button>${html}</div></div>`);
+    const close=()=>{ov.remove();document.removeEventListener('keydown',onkey)};
+    const onkey=e=>{if(e.key==='Escape')close()};
+    ov.addEventListener('click',e=>{if(e.target===ov)close()});
+    ov.querySelector('.mclose').addEventListener('click',close);
+    document.addEventListener('keydown',onkey);
+    $('#modal-root').appendChild(ov);
+    return {ov,close};
+  },
+  confirmDialog({title,body,okText='确认',danger=false,onOk}){
+    const m=this.modal(`<h3>${title}</h3><p class="msub" style="max-width:52ch">${body}</p>
+      <div class="mfoot"><button class="btn soft" data-c>取消</button>
+      <button class="btn ${danger?'danger':''}" data-ok>${okText}</button></div>`);
+    m.ov.querySelector('[data-c]').addEventListener('click',m.close);
+    m.ov.querySelector('[data-ok]').addEventListener('click',()=>{m.close();onOk&&onOk()});
+  },
+  confirmBurn(){
+    this.confirmDialog({title:'撤销认证会话？',okText:'撤销并焚毁',danger:true,
+      body:'认证运行将立即中止，临时会话即刻焚毁（磁盘残留扫描验证）。你的日常凭证不受影响。',
+      onOk:()=>{$('#auth-sess-live').style.display='none';$('#auth-sess-empty').style.display='';ui.toast('认证会话已焚毁')}});
+  },
+  go(id){
+    const page=PAGES.find(p=>p.id===id); if(!page)return;
+    $$('.view').forEach(v=>v.classList.remove('on'));
+    const v=$('#v-'+id); if(!v)return;
+    void v.offsetWidth; v.classList.add('on');
+    $$('#nav .nitem').forEach(b=>b.classList.toggle('on',b.dataset.page===id));
+    const roleTag=page.role==='admin'?'管理后台':page.role==='creator'?'创作者中心':'';
+    $('#crumb').innerHTML=`${page.title}${roleTag?`<small>${roleTag}</small>`:''}`;
+    window.scrollTo({top:0,behavior:'instant'});
+  },
+  setRole(r){
+    $$('.roles button').forEach(b=>b.classList.toggle('on',b.dataset.role===r));
+    renderNav(r);
+    this.go(NAV_GROUPS[r][0].items[0]);
+  }
+};
+window.ui=ui;
+
+/* ================= 页面与导航 ================= */
+const PAGES=[
+  {id:'store',role:'user',icon:'i-store',label:'应用商店',title:'应用商店'},
+  {id:'library',role:'user',icon:'i-lib',label:'我的库',title:'我的库'},
+  {id:'run',role:'user',icon:'i-run',label:'运行中心',title:'运行中心',tail:'1'},
+  {id:'settings',role:'user',icon:'i-gear',label:'设置',title:'设置'},
+  {id:'detail',role:'user',hidden:true,title:'应用详情'},
+  {id:'task',role:'user',hidden:true,title:'任务详情'},
+  {id:'cc-home',role:'creator',icon:'i-grid',label:'创作台',title:'创作台'},
+  {id:'cc-canvas',role:'creator',icon:'i-flow',label:'画布组装',title:'画布组装'},
+  {id:'cc-record',role:'creator',icon:'i-rec',label:'录制工作室',title:'录制工作室'},
+  {id:'cc-dryrun',role:'creator',icon:'i-flask',label:'本地干跑',title:'本地干跑'},
+  {id:'cc-cert',role:'creator',icon:'i-shield',label:'提交认证',title:'提交认证'},
+  {id:'cc-publish',role:'creator',icon:'i-rocket',label:'发布向导',title:'发布向导'},
+  {id:'model',role:'creator',icon:'i-key',label:'模型与凭证',title:'模型与凭证'},
+  {id:'admin',role:'admin',icon:'i-grid',label:'总览',title:'管理后台'},
+  {id:'admin-review',role:'admin',icon:'i-clip',label:'审核工作台',title:'审核工作台',tail:'5'},
+  {id:'admin-spot',role:'admin',icon:'i-radar',label:'抽查工作台',title:'C1 抽查工作台',tail:'1'},
+  {id:'admin-arb',role:'admin',icon:'i-scale',label:'仲裁赔付',title:'仲裁与赔付',tail:'2'},
+  {id:'admin-fin',role:'admin',icon:'i-coin',label:'财务结算',title:'财务结算'},
+  {id:'admin-ops',role:'admin',icon:'i-horn',label:'运营与应急',title:'运营与应急'},
+  {id:'admin-audit',role:'admin',icon:'i-file',label:'审计日志',title:'审计日志'},
+];
+const NAV_GROUPS={
+  user:[{t:'逛与用',items:['store','library','run']},{t:'通用',items:['settings']}],
+  creator:[{t:'创作',items:['cc-home','cc-canvas','cc-record','cc-dryrun','cc-cert','cc-publish']},{t:'配置',items:['model']}],
+  admin:[{t:'工作台',items:['admin','admin-review','admin-spot','admin-arb','admin-fin','admin-ops','admin-audit']}],
+};
+function renderNav(role){
+  const nav=$('#nav'); nav.innerHTML='';
+  NAV_GROUPS[role].forEach(g=>{
+    const box=h(`<div class="ngroup"><h6>${g.t}</h6></div>`);
+    g.items.forEach(id=>{
+      const p=PAGES.find(x=>x.id===id);
+      box.appendChild(h(`<button class="nitem" data-page="${id}">${ico(p.icon)}<span>${p.label}</span>${p.tail?`<span class="tail">${p.tail}</span>`:''}</button>`));
+    });
+    nav.appendChild(box);
+  });
+}
+
+/* ================= SVG 图表 ================= */
+function ring(pct,size=76,stroke=7){
+  const c2=size/2,r=(size-stroke)/2,c=2*Math.PI*r;
+  if(pct==null)return `<svg class="ring" width="${size}" height="${size}">
+    <circle cx="${c2}" cy="${c2}" r="${r}" fill="none" stroke="rgba(62,92,58,.16)" stroke-width="${stroke}" stroke-dasharray="3 5"/>
+    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="central" font-size="${Math.round(size*.155)}" font-weight="600" fill="#7A8B74">数据不足</text></svg>`;
+  const off=c*(1-pct/100);
+  return `<svg class="ring" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" role="img" aria-label="通过率 ${pct}%">
+    <circle cx="${c2}" cy="${c2}" r="${r}" fill="none" stroke="rgba(62,92,58,.12)" stroke-width="${stroke}"/>
+    <circle cx="${c2}" cy="${c2}" r="${r}" fill="none" stroke="var(--primary)" stroke-width="${stroke}" stroke-linecap="round"
+      stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}" transform="rotate(-90 ${c2} ${c2})"/>
+    <text x="50%" y="52%" text-anchor="middle" dominant-baseline="central" font-size="${Math.round(size*.21)}" font-weight="700" fill="#2C3E28" style="font-variant-numeric:tabular-nums">${pct}%</text></svg>`;
+}
+function chartBars(data,{w=300,hh=120,unit='',hi}={}){
+  const max=Math.max(...data.map(d=>d.v))*1.2, bw=26, gap=(w-data.length*bw)/(data.length+1);
+  let out='';
+  data.forEach((d,i)=>{
+    const bh=Math.max(4,d.v/max*(hh-34)), x=gap+(bw+gap)*i, y=hh-26-bh;
+    out+=`<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw}" height="${bh.toFixed(1)}" rx="5" fill="${i===hi?'var(--primary)':'var(--moss)'}" opacity="${i===hi?1:.5}"/>`;
+    out+=`<text x="${(x+bw/2).toFixed(1)}" y="${hh-8}" text-anchor="middle" font-size="10" fill="#7A8B74">${d.label}</text>`;
+    if(i===hi)out+=`<text x="${(x+bw/2).toFixed(1)}" y="${(y-6).toFixed(1)}" text-anchor="middle" font-size="10.5" font-weight="700" fill="var(--primary)">${unit}${d.v}</text>`;
+  });
+  return `<svg width="${w}" height="${hh}" aria-hidden="true">${out}</svg>`;
+}
+function chartSpot(){
+  const a=[1.2,.8,1.5,2.1,1,.9,3.2,1.1,.7,1.4,1,.8,1.2,.9,1.6,1.1,.8,1.3,1,.9];
+  const b=[1.3,.9,1.4,2,1.1,1,3,1.3,.8,1.5,1.1,.9,1.3,1,1.7,1,.9,1.2,1.1,1];
+  const W=560,H=150,max=3.6,px=i=>24+i*(W-48)/19,py=v=>H-26-(v/max)*(H-44);
+  const path=s=>'M'+s.map((v,i)=>`${px(i).toFixed(1)} ${py(v).toFixed(1)}`).join(' L ');
+  let grid='';for(let g=0;g<=3;g++){const y=py(g*1.2);grid+=`<line x1="24" y1="${y.toFixed(1)}" x2="${W-24}" y2="${y.toFixed(1)}" stroke="rgba(62,92,58,.1)"/><text x="6" y="${(y+3).toFixed(1)}" font-size="9" fill="#A8B89B">${(g*1.2).toFixed(1)}s</text>`}
+  return `<svg width="100%" viewBox="0 0 ${W} ${H}" style="max-width:560px" aria-hidden="true">${grid}
+    <path d="${path(a)}" fill="none" stroke="var(--mist)" stroke-width="2.4" stroke-linecap="round"/>
+    <path d="${path(b)}" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round"/>
+    <text x="${W-24}" y="14" text-anchor="end" font-size="11" fill="#7A8B74">— 原报告　- - 重测</text></svg>`;
+}
+
+/* ================= 数据 ================= */
+const APPS=[
+  {id:'xhs',title:'小红书选品日报',desc:'关键词笔记抓取 → AI 选品点评 → Excel 汇总 → 邮件发送，每晚自动跑。',cat:'site',price:68,level:'C1',tier:'high',rate:90,n:20,when:'2026-10',icon:'i-book'},
+  {id:'hn',title:'HN 精选晨报',desc:'Hacker News 头条聚合 + AI 摘要，每天 07:00 邮件送达。',cat:'monitor',price:0,level:'C2',tier:null,rate:95,n:20,when:'2026-10',icon:'i-file'},
+  {id:'gh',title:'GitHub 仓库周报',desc:'追踪 Star 仓库的发布、Issue 与动态，每周一汇总成报。',cat:'monitor',price:25,level:'C2',tier:null,rate:94,n:20,when:'2026-09',icon:'i-flow'},
+  {id:'zh',title:'知乎热榜速览',desc:'热榜问题抓取与话题摘要，每 2 小时刷新本地视图。',cat:'monitor',price:39,level:'C2',tier:'medium',rate:88,n:20,when:'2026-10',icon:'i-eye'},
+  {id:'ali',title:'1688 商品详情采集',desc:'按关键词采集商品详情与价格区间，自动导出 Excel。',cat:'site',price:88,level:'C1',tier:'high',rate:85,n:20,when:'2026-10',icon:'i-store'},
+  {id:'inv',title:'发票整理助手',desc:'扫描本地发票 PDF，字段提取并按月归档到 Excel。',cat:'data',price:45,level:'C2',tier:null,rate:98,n:24,when:'2026-09',icon:'i-pack'},
+  {id:'md',title:'网页正文转 Markdown',desc:'粘贴或抓取 URL，输出干净的 Markdown 文档。',cat:'data',price:0,level:'C2',tier:null,rate:99,n:20,when:'2026-10',icon:'i-file'},
+];
+const BLOCKS={
+  site:[
+    {id:'xhs_note_fetch',name:'小红书笔记抓取',ver:'1.2.3',lv:'C1',rate:90,n:20,tier:'high',perm:'domain: xiaohongshu.com · credential: xhs_login · ai: fast'},
+    {id:'xhs_search',name:'小红书搜索',ver:'1.1.0',lv:'C1',rate:91,n:20,tier:'high',perm:'domain: xiaohongshu.com · credential: xhs_login'},
+    {id:'zhihu_hot',name:'知乎热榜读取',ver:'1.4.0',lv:'C2',rate:88,n:20,tier:'medium',perm:'domain: zhihu.com'},
+    {id:'hn_read',name:'HN 首页读取',ver:'1.0.2',lv:'C2',rate:96,n:20,tier:null,perm:'domain: news.ycombinator.com'},
+    {id:'gh_repo',name:'GitHub 仓库读取',ver:'1.0.2',lv:'C2',rate:94,n:20,tier:null,perm:'domain: github.com'},
+    {id:'ali_detail',name:'1688 商品详情',ver:'2.1.0',lv:'C1',rate:85,n:20,tier:'high',perm:'domain: 1688.com · credential: ali_login'}],
+  generic:[
+    {id:'excel_read',name:'Excel 读取',ver:'2.3.0',lv:'C2',rate:98,n:22,perm:'fs: read'},
+    {id:'excel_write',name:'Excel 写入',ver:'3.1.0',lv:'C2',rate:96,n:22,perm:'fs: write'},
+    {id:'ai_sum',name:'AI 总结',ver:'2.0.1',lv:'C2',rate:97,n:24,perm:'ai: fast'},
+    {id:'ai_extract',name:'AI 字段提取',ver:'1.5.2',lv:'C2',rate:95,n:21,perm:'ai: fast'},
+    {id:'file_org',name:'文件整理',ver:'1.8.0',lv:'C2',rate:98,n:20,perm:'fs: read · fs: write'},
+    {id:'email_send',name:'邮件发送',ver:'1.4.0',lv:'C2',rate:95,n:21,side:true,perm:'api: smtp · 交互: confirm（强制）'},
+    {id:'webhook',name:'Webhook 推送',ver:'1.2.0',lv:'C2',rate:93,n:20,side:true,perm:'api: https · 交互: confirm（强制）'}],
+  interact:[
+    {id:'ask_input',name:'用户输入',ver:'2.0.0',builtin:true,perm:'interact: input'},
+    {id:'ask_confirm',name:'危险操作确认',ver:'2.1.0',builtin:true,perm:'interact: confirm'},
+    {id:'ask_login',name:'请求登录',ver:'1.0.4',builtin:true,perm:'interact: login'}],
+};
+/* ================= 用户端 · 商店 ================= */
+let storeCat='all', storeQ='';
+function storeCard(a){
+  const price=a.price?`<span class="price num">¥${a.price}</span>`:`<span class="price free">免费</span>`;
+  const tier=a.tier==='high'?`<span class="badge warn"><span class="dot"></span>best-effort</span>`:
+            a.tier==='medium'?`<span class="badge mute">中变更</span>`:'';
+  return `<article class="glass appcard" data-go="detail" tabindex="0" role="button" aria-label="${a.title} 详情">
+    <div class="row between"><span class="ic-tile">${ico(a.icon)}</span>${price}</div>
+    <h4>${a.title}</h4><p>${a.desc}</p>
+    <div class="row" style="gap:6px;flex-wrap:wrap"><span class="badge ${a.level.toLowerCase()}">${a.level} 认证</span>${tier}</div>
+    <div class="row between" style="margin-top:auto;padding-top:6px">
+      <span class="ringwrap">${ring(a.rate,46,5)}<span class="ring-cap"><b>认证通过率</b>近 ${a.n} 次 · ${a.when}</span></span>
+      ${ico('i-arrow')}</div></article>`;
+}
+function renderStore(){
+  const q=storeQ.trim();
+  const list=APPS.filter(a=>(storeCat==='all'||(storeCat==='free'?a.price===0:a.cat===storeCat))
+    &&(!q||a.title.includes(q)||a.desc.includes(q)));
+  $('#store-grid').innerHTML=list.map(storeCard).join('')||`<div class="glass empty" style="grid-column:1/-1">${ico('i-search','ic lg')}<div>没有匹配的应用——换个关键词试试</div></div>`;
+  $('#store-count').textContent=`${list.length} 个应用 · 通过率均为纯真实运行口径`;
+}
+/* ================= 用户端 · 详情 ================= */
+function renderDetail(){
+  $('#store-hero-ring').innerHTML=ring(90,124,10);
+  $('#d-banner').innerHTML=`${ico('i-alert')}<span><b>best-effort 提示（不可折叠）</b> · 本应用含<strong>高变更频率站点（小红书）</strong>：
+    自动化成功率随站点改版波动，运行中可能需要你的人工介入。请先阅读下方信任字段再决定购买。</span>`;
+  const tc='glass pad';const bg='background:rgba(255,255,255,.55)';
+  $('#d-trust').innerHTML=`
+    <div class="${tc}" style="${bg}"><div class="ringwrap">${ring(90,84,8)}<span class="ring-cap"><b>认证通过率（初始）</b>近 20 次真实运行实测 · 2026-10<br><span class="badge c1" style="margin-top:4px">创作者环境实测，平台抽查复核</span></span></div></div>
+    <div class="${tc}" style="${bg}"><div class="ringwrap">${ring(92,84,8)}<span class="ring-cap"><b>用户运行成功率（滚动）</b>92.3%（近 156 次，2026-10）<br><span class="muted">最小样本 30，不足显示「数据不足」</span></span></div></div>
+    <div class="${tc}" style="${bg}"><b style="font-size:13.5px">认证等级</b><div class="mt8"><span class="badge c1">C1 登录流程认证</span></div><p class="hint mt8">本机认证器 · N≥20 真实运行 · 签名报告 + 抽查复核</p></div>
+    <div class="${tc}" style="${bg}"><b style="font-size:13.5px">维护期截止日</b><div class="mt8 rate" style="font-size:17px">2027-10-13</div><p class="hint mt8">买断含 12 个月维护；期后 as-is，创作者可续保</p></div>
+    <div class="${tc}" style="${bg}"><b style="font-size:13.5px">预估单次 Token 成本</b><div class="mt8 rate" style="font-size:17px">¥0.12 – ¥0.35</div><p class="hint mt8">认证过程顺带实测 · 完全用户自付</p></div>
+    <div class="${tc}" style="${bg}"><b style="font-size:13.5px">AI 生成内容标识</b><div class="mt8"><span class="badge warn"><span class="dot"></span>含对外发布</span></div><p class="hint mt8">邮件日报为 AI 生成内容，将随邮件标注</p></div>`;
+  $('#d-trust2').innerHTML=`
+    <dt>需要登录的站点</dt><dd>小红书（首次运行登录一次，凭证仅存本机）</dd>
+    <dt>运行时人工交互</dt><dd>登录（首次）· 输入补充主题 · 确认（发送前）</dd>
+    <dt>失效退款政策</dt><dd>维护期内积木失效超 7 天，按剩余维护月份比例退款</dd>
+    <dt>数据类型</dt><dd>公开页面数据 · 输出物默认脱敏，不得二次分发</dd>`;
+  const rows=[
+    ['登录小红书 <span class="badge mute">交互积木 · 内置</span>','ask_login 1.0.4','内置','—','89.6%（近 87 次）'],
+    ['小红书笔记抓取','xhs_note_fetch 1.2.3','C1','<b class="rate">90%</b><span class="muted small">（近 20 次，2026-10）</span>','91.8%（近 142 次）'],
+    ['AI 总结点评','ai_summarize 2.0.1','C2','<b class="rate">97%</b><span class="muted small">（近 24 次）</span>','96.9%（近 153 次）'],
+    ['Excel 写入','excel_write 3.1.0','C2','<b class="rate">96%</b><span class="muted small">（近 22 次）</span>','97.4%（近 150 次）'],
+    ['邮件发送 <span class="badge danger" style="font-size:10.5px;padding:1px 6px">副作用</span>','email_send 1.4.0','C2','<b class="rate">95%</b><span class="muted small">（近 21 次）</span>','94.2%（近 121 次）'],
+    ['发送前确认 <span class="badge mute">交互积木 · 内置</span>','ask_confirm 2.1.0','内置','—','99.0%（近 130 次）'],
+  ];
+  $('#d-blocks tbody').innerHTML=rows.map(r=>`<tr><td><b>${r[0]}</b><span class="sub mono">${r[1]}</span></td><td>${r[2]}</td><td>${r[3]}</td><td class="num">${r[4]}</td></tr>`).join('');
+  $('#d-health').innerHTML=`
+    <div class="row between mb12"><span class="hint">综合状态</span><span class="badge ok">健康 · 积木修复自动恢复</span></div>
+    <div class="stack" style="gap:10px">
+      <div class="row between"><span class="small">认证通过率</span><b class="rate">90% <span class="muted" style="font-weight:400;font-size:12px">（N=20）</span></b></div>
+      <div class="row between"><span class="small">用户运行成功率</span><b class="rate">92.3% <span class="muted" style="font-weight:400;font-size:12px">（N=156）</span></b></div>
+      <div class="row between"><span class="small">检测覆盖</span><span class="badge mute">公开页 24h · 含登录部分检测</span></div>
+    </div>`;
+}
+/* ================= 用户端 · 我的库 ================= */
+const PURCHASED=[
+  {id:'xhs',v:'1.4.2',maint:'2027-10-13',health:'ok',runs:61},
+  {id:'hn',v:'2.1.0',maint:'2027-09-02',health:'ok',runs:44},
+  {id:'inv',v:'0.9.4',maint:'2027-08-18',health:'ok',runs:12},
+  {id:'gh',v:'1.0.3',maint:'2027-07-25',health:'repair',runs:8},
+  {id:'zh',v:'1.1.0',maint:'2027-10-01',health:'ok',runs:5},
+];
+function renderLibrary(){
+  $('#llib-apps').innerHTML=PURCHASED.map(p=>{
+    const a=APPS.find(x=>x.id===p.id);
+    const hl=p.health==='repair'
+      ?`<span class="badge warn"><span class="dot"></span>积木维护中</span>`
+      :`<span class="badge ok">健康</span>`;
+    const bn=p.health==='repair'?`<div class="banner warn mt12" style="padding:10px 14px">${ico('i-refresh')}<span>积木 <span class="mono">gh_repo_read 1.0.2</span> 检测到站点变更，声明式修复已进入灰度——修复完成后本应用自动恢复，无需你操作。</span></div>`:'';
+    return `<div class="glass pad">${bn}
+      <div class="row" style="margin-top:${bn?'12px':'0'}">
+        <span class="ic-tile">${ico(a.icon)}</span>
+        <div class="grow"><b>${a.title} <span class="mono muted" style="font-weight:400;font-size:12px">${p.v}</span></b>
+          <div class="hint mt8">维护期至 ${p.maint} · 已运行 ${p.runs} 次</div></div>
+        ${hl}
+        <button class="btn soft sm" data-run="${a.id}">运行</button>
+        <button class="btn ghost sm" data-go="detail">详情</button>
+      </div></div>`;
+  }).join('');
+  $$('#llib-apps [data-run]').forEach(b=>b.addEventListener('click',()=>{
+    if(b.dataset.run==='xhs')openAuthFlow();
+    else ui.toast('任务已提交运行（跳过授权：无新增站点登录态）');
+  }));
+  $('#llib-modules').innerHTML=`
+    <details class="glass pad-lg" open>
+      <summary style="cursor:pointer;list-style:none"><div class="row between">
+        <span class="row" style="gap:10px">${ico('i-pack')}<b>小红书选品模块</b><span class="mono muted" style="font-size:12px">v1.0.0</span><span class="badge ok">整链验证通过（N=1 · 非统计值）</span></span>
+        <span class="hint">被引用 2 个应用 · 随应用分发（app-bound）</span></div></summary>
+      <div class="mt16">
+        <p class="hint mb8">可靠性展示：组成积木各自实测通过率明细（不合成单一通过率）</p>
+        <table class="table"><thead><tr><th>内层积木</th><th>认证</th><th>实测通过率</th><th>用户运行</th></tr></thead>
+        <tbody>
+          <tr><td>xhs_note_fetch 1.2.3</td><td><span class="badge c1">C1</span></td><td class="num"><b>90%</b>（近 20 次）</td><td class="num">91.8%（N=142）</td></tr>
+          <tr><td>ai_selection 2.0.1</td><td><span class="badge c2">C2</span></td><td class="num"><b>97%</b>（近 24 次）</td><td class="num">96.9%（N=153）</td></tr>
+        </tbody></table>
+        <p class="hint mt12">复合积木无自动更新通道（仅整体重发布）；内层原子积木的声明式 patch 走应用 lock 正常通道。</p>
+      </div>
+    </details>
+    <details class="glass pad-lg">
+      <summary style="cursor:pointer;list-style:none"><div class="row between">
+        <span class="row" style="gap:10px">${ico('i-pack')}<b>竞品价格监控模块</b><span class="mono muted" style="font-size:12px">v0.9</span><span class="badge c0">含 C0 内层</span></span>
+        <span class="hint">不可认证 · 不可用于上架应用</span></div></summary>
+      <div class="banner warn mt16" style="padding:10px 14px">${ico('i-alert')}<span>含未认证（C0）内层积木的复合积木不可打包上架——在打包与提审两处拦截。可通过认证转正后使用。</span></div>
+    </details>`;
+}
+/* ================= 用户端 · 运行中心 ================= */
+const TASKS=[
+  {id:'t482',app:'小红书选品日报',st:'suspended',when:'今天 08:30 · 手动',note:'等你确认发送 · <b>浏览器会话将在挂起 2 小时后关闭</b>',cd:true},
+  {id:'t480',app:'发票整理助手',st:'waiting',when:'今天 09:12 · 手动',note:'等你勾选要归档的发票（12 选 8）'},
+  {id:'t479',app:'GitHub 仓库周报',st:'failed',when:'今天 07:00 · 定时',note:'timeout · env=network → 判定 user-side，不计积木健康分'},
+  {id:'t477',app:'HN 精选晨报',st:'running',when:'今天 07:00 · 定时',note:'步骤 3/5 · AI 摘要中',prog:62},
+  {id:'t475',app:'网页正文转 Markdown',st:'ok',when:'昨天 21:40 · 手动',note:'用时 1 分 52 秒'},
+];
+const SCHEDS=[
+  {app:'小红书选品日报',cron:'每天 08:30',next:'明天 08:30',on:true},
+  {app:'HN 精选晨报',cron:'每天 07:00',next:'明天 07:00',on:true},
+  {app:'知乎热榜速览',cron:'每 2 小时',next:'—（已暂停）',on:false},
+];
+const ST_BADGE={suspended:'<span class="badge st-susp">挂起中</span>',waiting:'<span class="badge st-wait">等你操作</span>',
+  failed:'<span class="badge st-fail">失败</span>',running:'<span class="badge st-run">运行中</span>',ok:'<span class="badge st-ok">成功</span>'};
+function renderRun(){
+  $('#rtab-queue').innerHTML=TASKS.map(t=>`
+    <div class="listrow">
+      ${ST_BADGE[t.st]}
+      <div class="grow"><b>${t.app}</b><div class="hint mt8">${t.note}</div>
+        ${t.prog?`<div class="progress mt8" style="max-width:280px"><i style="width:${t.prog}%"></i></div>`:''}</div>
+      ${t.cd?`<span class="badge st-susp mono">${ico('i-clock')}72h 窗口 <b data-cd>--:--:--</b></span>`:''}
+      <span class="hint">${t.when}</span>
+      ${t.st==='suspended'?`<button class="btn sm" data-act="resume" data-task="${t.id}">恢复运行</button>`:''}
+      ${t.st==='waiting'?`<button class="btn sm" data-act="panel" data-task="${t.id}">打开交互面板</button>`:''}
+      ${t.st==='failed'?`<button class="btn soft sm" data-act="view" data-task="${t.id}">查看详情</button>`:''}
+      ${t.st==='running'||t.st==='ok'?`<button class="btn soft sm" onclick="ui.toast('原型演示：运行中/已完成任务详情结构与挂起任务一致')">详情</button>`:''}
+    </div>`).join('');
+  $('#rtab-sched').innerHTML=SCHEDS.map((s,i)=>`
+    <div class="listrow">
+      <span class="badge ${s.on?'st-run':'st-queue'}">${s.on?'启用中':'已暂停'}</span>
+      <div class="grow"><b>${s.app}</b><div class="hint mt8">${s.cron} · 下次：${s.next}</div></div>
+      <button class="switch ${s.on?'on':''}" data-sched="${i}" aria-label="开关"></button>
+      <button class="btn soft sm" onclick="ui.toast('原型演示：编辑定时任务（调度由 TaskScheduler 承载）')">编辑</button>
+    </div>`).join('');
+  $$('#rtab-sched [data-sched]').forEach(b=>b.addEventListener('click',()=>{
+    const s=SCHEDS[+b.dataset.sched]; s.on=!s.on; b.classList.toggle('on',s.on);
+    ui.toast(s.on?'定时任务已启用（触发时调用 task.submit）':'定时任务已暂停');
+    renderRun();
+  }));
+  $$('#rtab-queue [data-act]').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.task;
+    if(b.dataset.act==='resume'){ui.toast('恢复运行：checkpoint 续跑，副作用节点先人工确认');openInteraction('confirm');}
+    else if(b.dataset.act==='panel'){openInteraction('review',{title:'发票整理助手 #480'});}
+    else ui.go('task'),setTask('t479');
+  }));
+}
+/* ================= 用户端 · 任务详情 ================= */
+const TASK_DETAIL={
+  t482:{
+    title:'小红书选品日报 · 手动运行 #482',sub:'2026-10-14 08:30 发起 · 关键词「露营灯」',
+    banner:`<div class="banner warn">${ico('i-clock')}<span><b>任务挂起（suspended）</b> · 「发送前确认」10 分钟未响应。
+      恢复窗口剩 <b class="mono" data-cd>--:--:--</b>，超窗自动取消（cancelled）。挂起不回滚已发生的外部副作用。</span>
+      <span style="margin-left:auto"><button class="btn sm" id="tk-resume">恢复运行</button></span></div>`,
+    actions:`<button class="btn" id="tk-resume2">恢复运行</button><button class="btn soft" onclick="ui.toast('原型演示：稍后继续（保持挂起，通知保留）')">稍后继续</button>`,
+    steps:[
+      {s:'done',n:'登录小红书',m:'ask_login 1.0.4 · 08:31 完成 · Cookie + token 已加密落库（本机）'},
+      {s:'done',n:'抓取笔记 ×12',m:'xhs_note_fetch 1.2.3 · 96 条记录 · 2 分 41 秒'},
+      {s:'done',n:'AI 选品点评',m:'ai_summarize 2.0.1 · tokens 8.2k · ¥0.09（你的 Key）'},
+      {s:'done',n:'写入 Excel',m:'excel_write 3.1.0 · 选品日报-1014.xlsx'},
+      {s:'warn',n:'发送邮件',m:'email_send 1.4.0 · 半执行态：请求已发出未收到响应',extra:'<div class="banner warn mt8" style="padding:9px 12px;font-size:12.5px">该步骤可能已执行，请核查——副作用节点按「已完成 / 未开始」二态保守处理，恢复时不回滚。</div>'},
+      {s:'run',n:'发送前确认',m:'ask_confirm 2.1.0 · 10 分钟未响应 → 挂起（表单族超时）'},
+    ],
+    interactions:[
+      {t:'08:31',ty:'浏览器族 · login',st:'已响应',note:'完成登录，凭证捕获并加密存入本机'},
+      {t:'08:52',ty:'表单族 · confirm',st:'超时挂起',note:'10 分钟未响应 → suspended · 进入 72h 恢复窗口'},
+    ],err:null},
+  t479:{
+    title:'GitHub 仓库周报 · 定时运行 #479',sub:'2026-10-14 07:00 由 TaskScheduler 触发',
+    banner:`<div class="banner danger">${ico('i-alert')}<span><b>任务失败（failed）</b> · retryable 判定：timeout × env=network → 不自动重试，避免掩盖网络侧问题。</span>
+      <span style="margin-left:auto"><button class="btn sm" onclick="ui.toast('已重新入队（副作用节点跳过：未开始）')">重试任务</button></span></div>`,
+    actions:`<button class="btn" onclick="ui.toast('已重新入队')">重试任务</button>`,
+    steps:[
+      {s:'done',n:'读取仓库列表',m:'gh_repo 1.0.2 · 14 个仓库'},
+      {s:'done',n:'抓取 Release 与 Issue',m:'gh_repo 1.0.2 · 200 OK ×14'},
+      {s:'done',n:'AI 周报撰写',m:'ai_summarize 2.0.1 · tokens 12.4k'},
+      {s:'fail',n:'发送邮件',m:'email_send 1.4.0 · <span class="mono">component_timeout</span> · 未发出（未开始，无副作用）'},
+    ],
+    interactions:[{t:'07:03',ty:'系统 · 无交互',st:'—',note:'本次运行未产生人工交互'}],
+    err:{cls:'timeout',env:'network',user:true,
+      advice:'失败模式库匹配 3 例相似失败：多为本地网络波动。建议切换网络或配置代理（平台不提供代理服务）后重试。',
+      note:'user-side 归因（failure_class=timeout × env_class=network）：不计入积木健康分，不触发失效退款判据。'}},
+};
+let curTask='t482';
+function setTask(id){
+  curTask=id;
+  $$('#task-switch .chip').forEach(c=>c.classList.toggle('on',c.dataset.task===id));
+  const d=TASK_DETAIL[id];
+  $('#tk-title').textContent=d.title; $('#tk-sub').textContent=d.sub;
+  $('#tk-actions').innerHTML=d.actions;
+  $('#tk-banner').innerHTML=d.banner;
+  $('#tk-steps').innerHTML=d.steps.map(s=>`<li class="step ${s.s}"><div class="st-head">${s.n}</div>
+    <div class="st-meta">${s.m}</div>${s.extra||''}</li>`).join('');
+  $('#tk-interactions').innerHTML=d.interactions.map(i=>`
+    <div class="glass pad-sm" style="background:rgba(255,255,255,.55)">
+      <div class="row between"><b style="font-size:13px">${i.ty}</b><span class="hint num">${i.t}</span></div>
+      <div class="row between mt8"><span class="hint">${i.note}</span><span class="badge ${i.st==='已响应'?'ok':'st-wait'}" style="font-size:11px">${i.st}</span></div>
+    </div>`).join('');
+  const err=$('#tk-error');
+  if(d.err){err.style.display='';
+    err.innerHTML=`<h3 class="section-title mb12" style="color:var(--danger)">${ico('i-alert')}错误归因</h3>
+      <div class="row mb12" style="gap:8px"><span class="badge st-fail mono">failure_class: ${d.err.cls}</span>
+      <span class="badge mute mono">env_class: ${d.err.env}</span>
+      <span class="badge ${d.err.user?'warn':'mute'}">${d.err.user?'user-side（不计积木分）':'站点/积木侧'}</span></div>
+      <p class="small" style="line-height:1.7"><b>修复建议</b>（失败模式库）：${d.err.advice}</p>
+      <p class="hint mt12">${d.err.note}</p>`;
+  } else err.style.display='none';
+  const r1=$('#tk-resume');if(r1)r1.addEventListener('click',()=>{ui.toast('恢复运行：checkpoint 续跑');openInteraction('confirm')});
+  const r2=$('#tk-resume2');if(r2)r2.addEventListener('click',()=>{ui.toast('恢复运行：checkpoint 续跑');openInteraction('confirm')});
+}
+/* ================= 交互面板（两族八类型） ================= */
+const IP_FAM={input:'form',select:'form',confirm:'form',review:'form',login:'browser',captcha:'browser',pick:'browser',takeover:'browser'};
+function openInteraction(type='confirm',ctx={}){
+  const title=ctx.title||'小红书选品日报 #482';
+  const m=ui.modal(`<h3>任务等你操作 <span class="badge st-wait">waiting_user</span></h3>
+    <p class="msub" id="ip-sub"></p>
+    <div class="row mt12" style="gap:12px;align-items:center;flex-wrap:wrap">
+      <div class="iptype" style="flex:1">${Object.keys(IP_FAM).map(t=>
+        `<button class="ipchip ${IP_FAM[t]==='browser'?'fam-browser':''}" data-ipt="${t}">${t}</button>`).join('')}</div>
+      <button class="btn soft sm" id="ip-extend">${ico('i-clock')}续期</button>
+    </div>
+    <div class="mt16" id="ip-body"></div>
+    <p class="hint mt12">${ico('i-lock')} 登录 / 验证码 / 确认类交互永不预授权——无人值守只允许挂起等人，不允许代答。</p>`,{wide:true});
+  const body=m.ov.querySelector('#ip-body'),sub=m.ov.querySelector('#ip-sub');
+  function fam(t){return IP_FAM[t]==='form'?'表单族 · 超时 10 分钟':'浏览器族 · 超时 2 小时'}
+  function render(t){
+    sub.innerHTML=`${title} · 交互 <b>${t}</b> · ${fam(t)}（可续期）· interaction_id <span class="mono">ix_8f21c4</span>`;
+    body.innerHTML=IP_BODY[t](m);
+    $$('.ipchip',m.ov).forEach(c=>{c.classList.toggle('on',c.dataset.ipt===t);c.onclick=()=>render(c.dataset.ipt)});
+  }
+  m.ov.querySelector('#ip-extend').addEventListener('click',()=>ui.toast('已续期：超时计时重置（续期次数 +1）'));
+  render(type);
+}
+function ipDone(m,msg){ui.toast(msg||'已响应（interaction_id 校验通过）· 任务恢复运行');m.close()}
+const IP_BODY={
+  input:m=>`<div class="field"><label>运行参数 · 补充搜索主题 <span class="muted" style="font-weight:400">（user_input_schema 声明）</span></label>
+    <input class="input" value="露营灯" id="ip-in"><p class="hint mt8">本次运行将使用该值回放录制轨迹中的参数化输入项。</p></div>
+    <div class="mfoot"><button class="btn" id="ip-ok">提交并继续</button></div>`,
+  select:m=>`<div class="field"><label>日报发送时间</label>
+    <select class="select" id="ip-sel"><option>立即发送</option><option>今晚 21:00</option><option>暂不发送</option></select></div>
+    <div class="mfoot"><button class="btn" id="ip-ok">提交并继续</button></div>`,
+  confirm:m=>`<div class="banner danger mb16">${ico('i-alert')}<span><b>重复执行可能产生重复效果</b>（副作用节点固定提示）</span></div>
+    <div class="glass pad" style="background:rgba(255,255,255,.6)"><div class="kv">
+      <dt>动作</dt><dd>发送邮件「选品日报-1014」</dd>
+      <dt>收件人</dt><dd>3 位订阅者</dd>
+      <dt>幂等键</dt><dd class="mono">idem_run482_email</dd></div></div>
+    <div class="mfoot"><button class="btn soft" id="ip-no">取消（保持挂起）</button><button class="btn danger" id="ip-ok">确认执行</button></div>`,
+  review:m=>`<p class="small mb12">扫描到 <b>12</b> 张发票，勾选要归档的（已按月份智能预选）：</p>
+    <div class="stack" style="gap:6px;max-height:240px;overflow:auto">${['滴滴出行-0112 ¥68','餐饮-0115 ¥230','酒店-0121 ¥1288','火车票-0128 ¥553','办公用品-0203 ¥96','软件订阅-0205 ¥299']
+      .map((x,i)=>`<label class="check glass pad-sm" style="background:rgba(255,255,255,.55);padding:9px 14px"><input type="checkbox" ${i<4?'checked':''}><span>${x}</span></label>`).join('')}</div>
+    <div class="mfoot"><button class="btn soft" id="ip-no">全部跳过</button><button class="btn" id="ip-ok">确认所选并归档</button></div>`,
+  login:m=>`<div class="g2" style="align-items:stretch">
+    <div><div class="banner info mb12" style="padding:10px 14px">${ico('i-login')}<span>请在右侧浏览器中完成<b>小红书登录</b>。完成后点击「我已登录」，系统将经 CDP 捕获登录态（Cookie 主路径 + token/localStorage 按站点适配器）并<b>加密存入本机</b>。</span></div>
+    <p class="hint">超时 2 小时 → 挂起；挂起 2 小时后浏览器会话关闭，恢复时该节点重跑。</p></div>
+    <div class="browser"><div class="bbar"><span class="bdot"></span><span class="bdot"></span><span class="bdot"></span><span class="url">xiaohongshu.com/login</span></div>
+      <div class="bbody"><div class="skel" style="width:40%;height:26px;margin:0 auto 16px"></div>
+      <div class="skel lt" style="height:34px;margin-bottom:10px"></div><div class="skel lt" style="height:34px;margin-bottom:14px"></div>
+      <div class="skel" style="height:34px;width:52%;margin:0 auto"></div></div></div></div>
+    <div class="mfoot"><button class="btn soft" id="ip-no">稍后</button><button class="btn" id="ip-ok">我已完成登录</button></div>`,
+  captcha:m=>`<div class="g2" style="align-items:center">
+    <div><p class="small mb12">运行中命中验证码——<b>平台不处理验证码</b>，请你手动完成后继续。</p>
+    <div class="field"><label>输入图中字符</label><input class="input mono" placeholder="如 A7XK" id="ip-cap"></div></div>
+    <div class="glass pad" style="background:#fff;text-align:center">
+      <svg width="180" height="64" id="cap-img"><rect width="180" height="64" rx="8" fill="#EDF2E6"/>
+      ${[0,1,2,3].map(i=>`<text x="${34+i*38}" y="${38+(i%2?4:-3)}" font-size="26" font-weight="700" fill="#3E5C3A" transform="rotate(${i%2?8:-7} ${34+i*38} 38)">${'A7XK'[i]}</text>`).join('')}
+      ${[0,1,2,3,4].map(i=>`<line x1="${i*40+8}" y1="${(i*13)%50+8}" x2="${i*40+34}" y2="${(i*17)%46+12}" stroke="#A8B89B" stroke-width="1.4"/>`).join('')}</svg>
+      <button class="linklike mt8" id="ip-cap-refresh">${ico('i-refresh')}换一张</button></div></div>
+    <div class="mfoot"><button class="btn" id="ip-ok">提交并继续</button></div>`,
+  pick:m=>`<p class="small mb12">元素圈选：点击页面中要操作的候选元素（高亮 ① / ②），用于修正 selector。</p>
+    <div class="browser"><div class="bbar"><span class="bdot"></span><span class="bdot"></span><span class="bdot"></span><span class="url">xiaohongshu.com/search_result</span></div>
+    <div class="bbody" style="min-height:150px">
+      <div class="skel lt" style="height:56px;width:78%;margin-bottom:10px"></div>
+      <div class="skel lt" style="height:56px;width:78%;margin-bottom:10px"></div>
+      <span class="pick-el" data-pk="1" style="left:22px;top:36px">① 笔记卡片 A</span>
+      <span class="pick-el" data-pk="2" style="left:22px;top:102px">② 笔记卡片 B</span>
+    </div></div>
+    <div class="mfoot"><button class="btn" id="ip-ok" disabled>确认选择</button></div>`,
+  takeover:m=>`<div class="banner warn mb16">${ico('i-hand')}<span><b>转人工（takeover）</b> · 草稿生成连续 2 次同指纹失败，自动循环已终止（8 轮上限内）。</span></div>
+    <p class="small" style="line-height:1.8">你可以直接接管内嵌浏览器手动完成该步骤；完成后系统将把你的操作与剩余流程合并。best-so-far 版本已留存，不会丢失。</p>
+    <div class="mfoot"><button class="btn soft" id="ip-no">放弃本次</button><button class="btn" id="ip-ok">接回控制</button></div>`,
+};
+function bindIp(t,m){
+  const body=m.ov.querySelector('#ip-body');
+  const ok=body.querySelector('#ip-ok');
+  if(t==='confirm'){
+    ok&&ok.addEventListener('click',()=>ipDone(m,'已确认执行（幂等键已记录）'));
+    const no=body.querySelector('#ip-no');no&&no.addEventListener('click',()=>{ui.toast('保持挂起：可稍后在运行中心恢复','err');m.close()});
+  } else if(t==='review'){
+    ok&&ok.addEventListener('click',()=>{
+      const n=$$('#ip-body input:checked',body).length;
+      ipDone(m,`已确认 ${n} 项 · 任务恢复运行`);});
+    const no=body.querySelector('#ip-no');no&&no.addEventListener('click',()=>{ipDone(m,'已跳过全部（标记 partial_succeeded）')});
+  } else if(t==='pick'){
+    $$('.pick-el',body).forEach(p=>p.addEventListener('click',()=>{
+      $$('.pick-el',body).forEach(x=>x.classList.remove('sel'));p.classList.add('sel');ok.disabled=false;}));
+    ok&&ok.addEventListener('click',()=>ipDone(m,'selector 已更新 · 任务恢复运行'));
+  } else if(t==='captcha'){
+    const r=body.querySelector('#ip-cap-refresh');r&&r.addEventListener('click',()=>ui.toast('已刷新验证码'));
+    ok&&ok.addEventListener('click',()=>ipDone(m,'验证通过 · 任务恢复运行'));
+  } else if(t==='login'){
+    ok&&ok.addEventListener('click',()=>ipDone(m,'登录态已捕获并加密存入本机（CredentialHandle 已发放）'));
+    const no=body.querySelector('#ip-no');no&&no.addEventListener('click',()=>{ui.toast('挂起中：浏览器会话将在 2 小时后关闭','err');m.close()});
+  } else if(ok){ok.addEventListener('click',()=>ipDone(m));}
+  const no=body.querySelector('#ip-no');
+  if(t==='takeover'&&no)no.addEventListener('click',()=>{ui.toast('已放弃本次草稿会话（best-so-far 已留存）','err');m.close()});
+}
+/* ================= 购买 / 授权 ================= */
+function openPurchase(){
+  const m=ui.modal(`<h3>购买确认</h3><p class="msub">小红书选品日报 · 一次性买断</p>
+    <div class="glass pad-sm mt16" style="background:rgba(255,255,255,.6)"><div class="kv">
+      <dt>实测通过率</dt><dd><b class="rate">90%</b><span class="muted small">（近 20 次真实运行实测，2026-10）</span></dd>
+      <dt>维护期</dt><dd>2027-10-13 前 · 期后 as-is</dd>
+      <dt>预估 Token</dt><dd class="num">¥0.12 – ¥0.35 / 次（你的 Key 自付）</dd>
+      <dt>价格</dt><dd><b class="rate" style="font-size:17px">¥68</b></dd></div></div>
+    <div class="banner warn mt16">${ico('i-info')}<span>购买后 24 小时内未完成在线激活校验可全额退款；<b>完成激活即视为已开始使用</b>，不再适用 24h 全退（维护期失效退款仍适用）。</span></div>
+    <label class="check mt16"><input type="checkbox" id="pay-check">我已知晓本商品为数字内容，按《退款规则》执行</label>
+    <div class="mfoot"><button class="btn soft" data-c>取消</button><button class="btn" id="pay-go" disabled>支付 ¥68</button></div>`);
+  m.ov.querySelector('[data-c]').addEventListener('click',m.close);
+  const chk=m.ov.querySelector('#pay-check'),go=m.ov.querySelector('#pay-go');
+  chk.addEventListener('change',()=>go.disabled=!chk.checked);
+  go.addEventListener('click',()=>{
+    go.disabled=true;go.textContent='支付中…';
+    setTimeout(()=>{m.close();ui.toast('支付成功 · 正在下载签名应用包并验签…');
+      setTimeout(openAuthFlow,900);},1100);
+  });
+}
+function openAuthFlow(){
+  const m=ui.modal(`<h3>首次运行授权 · 小红书选品日报</h3>
+    <p class="msub">本应用将使用你在以下站点的登录态执行以下动作：</p>
+    <div class="glass pad-sm mt16" style="background:rgba(255,255,255,.6)"><div class="kv">
+      <dt>小红书</dt><dd><span class="badge mute">浏览抓取</span> <span class="badge mute">表单提交</span> <span class="badge warn"><span class="dot"></span>对外发布</span></dd>
+      <dt>登录</dt><dd>首次运行需完成一次登录（浏览器族 login 交互）</dd></div></div>
+    <div class="banner warn mt16">${ico('i-alert')}<span>目标站点可能因自身规则对自动化操作进行限制，相关风险由账号主体承担。</span></div>
+    <p class="hint mt12">${ico('i-lock')} 凭证仅存本机加密（safeStorage / DPAPI），服务端不存储；可随时在「模型与凭证 → 凭证管理」撤销。</p>
+    <div class="mfoot"><button class="btn soft" data-c>暂不</button><button class="btn" data-ok>同意并运行</button></div>`);
+  m.ov.querySelector('[data-c]').addEventListener('click',m.close);
+  m.ov.querySelector('[data-ok]').addEventListener('click',()=>{m.close();ui.toast('授权已写入本地 grants · 任务 #483 已提交');ui.go('run')});
+}
+/* ================= 创作者 · 创作台 ================= */
+const NINE=[['说需求','装配助手推荐'],['画布组装','拖拽连线'],['录制参数化','缺积木时'],['启动表单','user_input_schema'],
+  ['本地干跑','回归比对'],['提交认证','C1 / C2'],['认证报告','通过率·归因'],['发布配置','信任字段'],['提审上架','in_review']];
+function renderCCHome(){
+  $('#nine-steps').innerHTML=NINE.map((s,i)=>
+    `<div class="stp ${i<4?'done':i===4?'cur':''}"><span class="no">${i+1}</span><b>${s[0]}</b><span class="hint" style="font-size:11px">${s[1]}</span></div>`).join('');
+  const SESS=[
+    {n:'小红书选品日报 v1.5',st:'画布组装',cls:'mute',note:'自动保存于 2 分钟前 · 6 节点 · 副作用规则满足',go:'cc-canvas',btn:'继续'},
+    {n:'HN 精选晨报 v2.1',st:'认证中',cls:'st-run',note:'C2 沙箱批次进行中 · 预计 10-16 出报告',go:'cc-cert',btn:'查看'},
+    {n:'发票整理助手 v0.3',st:'草稿',cls:'mute',note:'录制参数化完成 · 1 个脆弱步骤待处置',go:'cc-record',btn:'去处置'},
+  ];
+  $('#cc-sessions').innerHTML=SESS.map(s=>`
+    <div class="listrow" style="padding:13px 4px"><div class="grow"><b style="font-size:14px">${s.n}</b>
+      <div class="hint mt8">${s.note}</div></div>
+      <span class="badge ${s.cls}">${s.st}</span>
+      <button class="btn soft sm" data-go="${s.go}">${s.btn}</button></div>`).join('');
+}
+/* ================= 创作者 · 画布 ================= */
+const canvasWrap=$('#canvas'),cedges=$('#cedges');
+let canvasState,uid=6;
+function initCanvas(){
+  const g=BLOCKS.generic,s=BLOCKS.site,it=BLOCKS.interact;
+  canvasState={confirmOn:true,hasC0:false,nodes:[
+    {id:'n1',blk:it[2],title:'登录小红书',x:16,y:64},
+    {id:'n2',blk:s[0],title:'抓取笔记 ×12',x:246,y:64},
+    {id:'n3',blk:g[2],title:'AI 选品点评',x:476,y:64},
+    {id:'n4',blk:g[1],title:'写入 Excel',x:16,y:272},
+    {id:'n5',blk:g[5],title:'发送日报邮件',x:246,y:272},
+    {id:'n6',blk:it[1],title:'发送前确认',x:476,y:272,hidden:false},
+  ]};
+  renderCanvas();
+}
+function renderCanvas(){
+  const ns=canvasState.nodes.filter(n=>!n.hidden);
+  const rows=Math.max(2,Math.ceil(ns.length/3));
+  canvasWrap.style.height=(rows*208+96)+'px';
+  let edges='';
+  for(let i=0;i<ns.length-1;i++){
+    const a=ns[i],b=ns[i+1];
+    let d;
+    if(b.y>a.y+40){ // 换行：从上排节点底部中心接到下排节点顶部中心
+      const ax=a.x+98,ay=a.y+92,bx=b.x+98,by=b.y-6,mid=(ay+by)/2;
+      d=`M${ax} ${ay} C ${ax} ${mid}, ${bx} ${mid}, ${bx} ${by}`;
+    }else{
+      const ax=a.x+196,ay=a.y+40,bx=b.x,by=b.y+40,dx=Math.max(30,(bx-ax)/2);
+      d=`M${ax} ${ay} C ${ax+dx} ${ay}, ${bx-dx} ${by}, ${bx} ${by}`;
+    }
+    edges+=`<path d="${d}" fill="none" stroke="rgba(62,92,58,.38)" stroke-width="2"/>
+      <circle cx="${ns[i].x+98}" cy="${a.y+ (b.y>a.y+40?92:40)}" r="3.5" fill="var(--moss)"/>
+      <circle cx="${(b.y>a.y+40?b.x+98:b.x)}" cy="${b.y+(b.y>a.y+40?-6:40)}" r="3.5" fill="var(--moss)"/>`;
+  }
+  cedges.setAttribute('width',canvasWrap.clientWidth);
+  cedges.setAttribute('height',canvasWrap.clientHeight);
+  cedges.innerHTML=edges;
+  $$('#canvas .cnode').forEach(n=>n.remove());
+  ns.forEach(n=>{
+    const b=n.blk;
+    const lv=b.builtin?'<span class="badge mute">内置</span>':n.c0?'<span class="badge c0">C0 未认证</span>':`<span class="badge ${b.lv.toLowerCase()}">${b.lv}</span>`;
+    const side=b.side?`<span class="badge danger">${ico('i-zap')}副作用</span>`:'';
+    const tier=b.tier==='high'?'<span class="badge warn"><span class="dot"></span>高变更</span>':'';
+    const rate=b.rate&&!n.c0?`<span class="cn-rate">${b.rate}%（近 ${b.n} 次）</span>`:n.c0?'<span class="cn-rate" style="color:var(--ink2)">未实测</span>':'';
+    const d=h(`<div class="cnode ${canvasState.sel===n.id?'sel':''} ${b.side?'side':''}" data-node="${n.id}" style="left:${n.x}px;top:${n.y}px" tabindex="0" role="button">
+      <div class="cn-type">${n.title}</div><div class="cn-name">${b.name}${b.ver?` <span class="mono" style="font-weight:400;font-size:11px">${b.ver}</span>`:''}</div>
+      <div class="cn-meta">${lv}${rate}${side}${tier}</div></div>`);
+    d.addEventListener('click',()=>{canvasState.sel=n.id;renderCanvas();renderProps(n)});
+    canvasWrap.appendChild(d);
+  });
+}
+function renderProps(n){
+  const b=n.blk,cat=BLOCKS.site.includes(b)?'站点积木':BLOCKS.generic.includes(b)?'通用积木':'交互积木（内置）';
+  $('#cnode-props-body').innerHTML=n.c0
+    ?`<div class="banner warn" style="padding:10px 12px">${ico('i-alert')}<span><b>C0 草稿积木</b> · 未认证，私用可用；含 C0 的流程不能提审（提交入口直接拦截）。</span></div>`
+    :`<div class="kv"><dt>类型</dt><dd>${cat}</dd><dt>版本</dt><dd class="mono">${b.ver}</dd>
+      <dt>认证</dt><dd>${b.builtin?'内置 · 免认证':`<span class="badge ${b.lv.toLowerCase()}">${b.lv}</span>`}</dd>
+      ${b.rate?`<dt>实测通过率</dt><dd><b class="rate">${b.rate}%</b><span class="muted small">（近 ${b.n} 次，2026-10）</span></dd>`:''}
+      <dt>权限声明</dt><dd class="small muted">${b.perm}</dd>
+      ${b.side?`<dt>副作用</dt><dd><span class="badge danger">${ico('i-zap')}禁自动重试</span> 幂等键 ✓ · default_response ✓</dd>`:''}</div>`;
+}
+function canvasBanner(kind,html){
+  $('#canvas-banners').innerHTML=`<div class="banner ${kind}">${html}</div>`;
+}
+function saveFlow(){
+  if(canvasState.hasC0){
+    canvasBanner('danger',`${ico('i-alert')}<span><b>不可保存为可提审流程</b> · 含未认证积木（C0）：<button class="btn sm" style="margin-left:8px" onclick="document.getElementById('canvas-banners').innerHTML=''">仅存私用草稿</button></span>`);
+    ui.toast('含 C0 积木的应用不能进入提审——已拦截','err');return;
+  }
+  if(!canvasState.confirmOn){
+    canvasBanner('danger',`${ico('i-alert')}<span><b>不可保存</b> · 副作用积木「邮件发送」必须后接确认积木（confirm）。
+      <button class="btn sm" style="margin-left:8px" id="btn-relink">重新连接 confirm</button></span>`);
+    ui.toast('副作用规则拦截：发布类积木无后置 confirm','err');
+    $('#btn-relink').addEventListener('click',()=>{canvasState.confirmOn=true;canvasState.nodes.forEach(n=>n.hidden=false);canvasBanner('info',`${ico('i-check')}<span>已恢复 confirm 连接，副作用规则满足。</span>`);renderCanvas()});
+    return;
+  }
+  canvasBanner('info',`${ico('i-check')}<span>流程已保存 · lock 草案已生成 · 自动保存于刚刚。</span>`);
+  ui.toast('流程已保存（每一步产物自动保存，崩溃可恢复）');
+}
+function addBlock(b){
+  const i=canvasState.nodes.filter(n=>!n.hidden).length;
+  const node={id:'n'+(++uid),blk:b,title:b.name,x:16+(i%3)*230,y:64+Math.floor(i/3)*208,c0:!!b.c0};
+  canvasState.nodes.push(node);
+  if(b.c0)canvasState.hasC0=true;
+  canvasState.sel=node.id;
+  renderCanvas();renderProps(node);
+  ui.toast(`已添加「${b.name}」${b.side?' · 副作用积木需后接 confirm':''}`);
+}
+function renderBlkList(q=''){
+  const list=$('#blk-list');list.innerHTML='';
+  [['站点积木',BLOCKS.site],['通用积木',BLOCKS.generic],['交互积木（内置）',BLOCKS.interact]].forEach(([t,arr])=>{
+    const items=arr.filter(b=>!q||b.name.includes(q)||b.id.includes(q));
+    if(!items.length)return;
+    list.appendChild(h(`<div class="hint" style="padding:8px 10px 3px;font-size:11.5px;letter-spacing:.1em">${t}</div>`));
+    items.forEach(b=>list.appendChild(h(`<div class="blockitem" data-blk="${b.id}" tabindex="0" role="button">
+      <div style="flex:1;min-width:0"><div class="bi-name">${b.name}${b.side?' <span class="badge danger" style="font-size:10.5px;padding:1px 6px">副作用</span>':''}</div>
+      <div class="bi-sub">${b.builtin?'内置 · 免认证':`${b.lv} · ${b.rate}%（近 ${b.n} 次）`}${b.tier==='high'?' · 高变更':''}</div></div>${ico('i-plus')}</div>`)));
+  });
+  list.appendChild(h(`<button class="chip" style="margin:12px 10px 4px;border-style:dashed;width:calc(100% - 20px)" id="blk-c0">+ 引入 C0 草稿积木（对话生成）</button>`));
+  $$('.blockitem',list).forEach(it=>it.addEventListener('click',()=>{
+    const b=[...BLOCKS.site,...BLOCKS.generic,...BLOCKS.interact].find(x=>x.id===it.dataset.blk);
+    addBlock(b);
+  }));
+  $('#blk-c0').addEventListener('click',()=>{
+    addBlock({id:'draft_signin',name:'网课签到（草稿）',ver:'v0.3',c0:true,perm:'—'});
+  });
+}
+function openPack(){
+  const m=ui.modal(`<h3>打包为我的模块（复合积木）</h3>
+    <p class="msub">选中一段连线打包命名，存入「我的模块库」；可拖拽复用、作为单节点连线。默认私有；用于上架应用时自动随应用分发（app-bound）。</p>
+    <div class="stack mt16" style="gap:8px" id="pk-list">
+      ${canvasState.nodes.filter(n=>!n.hidden).map((n,i)=>`
+        <label class="check glass pad-sm" style="background:rgba(255,255,255,.55);padding:9px 14px">
+          <input type="checkbox" ${i>=1&&i<=4?'checked':''} value="${n.id}"><span><b>${n.title}</b> · ${n.blk.name}</span></label>`).join('')}
+    </div>
+    <div class="field mt16"><label>模块名称</label><input class="input" value="小红书选品模块" id="pk-name"></div>
+    <div class="banner info" style="padding:10px 14px">${ico('i-info')}<span>权限 = 组成积木权限<b>并集（不可裁剪）</b>；接口可裁剪；认证 = 组成积木认证聚合 + 整链验证 1 次；<b>不展示合成通过率</b>。嵌套上限 2 层、引用图无环。</span></div>
+    <div class="mfoot"><button class="btn soft" data-c>取消</button><button class="btn" id="pk-go">打包并入库</button></div>`);
+  m.ov.querySelector('[data-c]').addEventListener('click',m.close);
+  m.ov.querySelector('#pk-go').addEventListener('click',function(){
+    const n=m.ov.querySelectorAll('#pk-list input:checked').length;
+    if(n<2){ui.toast('至少选择 2 个节点才能打包','err');return}
+    const name=m.ov.querySelector('#pk-name').value||'未命名模块';
+    m.close();ui.toast(`「${name}」已打包 ${n} 个节点 → 我的模块库（可在「我的库 → 我的模块」查看）`);
+  });
+}
+/* ================= 创作者 · 认证 ================= */
+const CERT_SEQ=[
+  {p:8,t:'取得 nonce 与参数集（服务端随机生成，不可自选）'},
+  {p:32,t:'真实运行 1–6 次（时段 A · 上午）'},
+  {p:58,t:'真实运行 7–14 次（时段 B · 晚间）'},
+  {p:80,t:'真实运行 15–20 次 · 命中验证码计失败（本批 0 次）'},
+  {p:92,t:'失败归因分析：2 次 timeout（网络类）'},
+  {p:100,t:'生成认证报告 · 设备密钥签名（nonce + 报告哈希）'},
+];
+function startCert(){
+  $('#cert-idle').style.display='none';
+  const prog=$('#cert-progress');prog.style.display='';
+  const stepsBox=$('#cert-steps');
+  stepsBox.innerHTML=CERT_SEQ.map(s=>`<li class="step"><div class="st-head">${s.t}</div></li>`).join('');
+  let i=0;
+  const timer=setInterval(()=>{
+    const li=stepsBox.children[i];if(li)li.classList.add('done');
+    i++;
+    const cur=CERT_SEQ[Math.min(i,CERT_SEQ.length-1)];
+    $('#cert-bar').style.width=cur.p+'%';
+    $('#cert-status').textContent=i>=CERT_SEQ.length?'批次完成 · 正在生成报告…':cur.t;
+    if(i>=CERT_SEQ.length){
+      clearInterval(timer);
+      setTimeout(()=>{
+        prog.style.display='none';
+        $('#cert-report').style.display='';
+        $('#cert-ring').innerHTML=ring(90,104,9);
+        ui.toast('认证通过：90%（20 次真实运行实测）· 报告已签名上报');
+      },700);
+    }
+  },850);
+}
+/* ================= 创作者 · 发布向导 ================= */
+function pstep(n){
+  $$('#pub-steps .stp').forEach(b=>b.classList.toggle('cur',+b.dataset.pstep===+n));
+  [1,2,3,4].forEach(i=>$('#pstep-'+i).style.display=+i===+n?'':'none');
+  window.scrollTo({top:0});
+}
+/* ================= 管理后台 ================= */
+function renderAdmin(){
+  const todos=[
+    {t:'审核：小红书选品日报 v1.5（三要素叠加）',g:'admin-review',b:'in_review',c:'st-run'},
+    {t:'抽查处置：SP-2098 比对不符',g:'admin-spot',b:'mismatch',c:'st-fail'},
+    {t:'仲裁：D-31 争议剩 3 天',g:'admin-arb',b:'disputed',c:'st-wait'},
+    {t:'财务：R-76 冲正待审批',g:'admin-fin',b:'冲正',c:'st-wait'},
+  ];
+  $('#admin-todos').innerHTML=todos.map(x=>`
+    <div class="listrow" style="padding:12px 4px"><div class="grow"><b style="font-size:13.5px">${x.t}</b></div>
+    <span class="badge ${x.c}">${x.b}</span><button class="btn soft sm" data-go="${x.g}">处理</button></div>`).join('');
+  const RQ=[
+    {n:'小红书选品日报 v1.5',by:'平台团队',flag:true},
+    {n:'微博关键词速报 v1.0',by:'创作者 @北桥'},
+    {n:'PDF 账单归档 v0.9',by:'创作者 @简'},
+    {n:'豆瓣观影记录 v1.2',by:'创作者 @Momo'},
+    {n:'Notion 周报同步 v0.8',by:'创作者 @Kito'},
+  ];
+  $('#review-queue').innerHTML=RQ.map((r,i)=>`
+    <div class="blockitem ${i===0?'rq-sel':''}" data-rq="${i}">
+      <div style="flex:1;min-width:0"><div class="bi-name">${r.n}${r.flag?' <span class="badge warn" style="font-size:10.5px;padding:1px 6px">三要素</span>':''}</div>
+      <div class="bi-sub">${r.by}</div></div></div>`).join('');
+  $$('#review-queue .blockitem').forEach(it=>it.addEventListener('click',()=>{
+    $$('#review-queue .blockitem').forEach(x=>x.style.background='');
+    it.style.background='rgba(62,92,58,.09)';
+    ui.toast('原型演示：队列切换（其余应用清单结构一致）');
+  }));
+  const CK=[
+    {t:'① 认证报告核验',d:'C1 通过 · 实测 90%（N=20，2026-10）· attestation 签名有效 · 状态：待抽查（每 10 份至少 1 份）',lock:true},
+    {t:'② 站点合规声明核验 · 三要素叠加重点审核',d:'高变更站点 + 个人信息输出 + 对外发布——需逐项确认数据类型与发布动作'},
+    {t:'③ AI 生成内容标识',d:'邮件产出将标注「AI 生成」',lock:true},
+    {t:'④ confirm 覆盖',d:'email_send 已后接 ask_confirm · 幂等键已实现（lint 强制）',lock:true},
+    {t:'⑤ 权限最小化',d:'permissions_max 与积木声明并集一致，无扩大'},
+  ];
+  $('#rv-checklist').innerHTML=CK.map((c,i)=>`
+    <label class="glass pad-sm row" style="background:rgba(255,255,255,.55);gap:12px;align-items:flex-start;cursor:${c.lock?'default':'pointer'}">
+      ${c.lock?`<span class="badge ok" style="margin-top:2px">${ico('i-check')}已核</span>`
+        :`<input type="checkbox" data-ck="${i}" style="width:17px;height:17px;margin-top:3px;accent-color:var(--primary)">`}
+      <span style="flex:1"><b style="font-size:13.5px">${c.t}</b><p class="hint mt8">${c.d}</p></span>
+      ${c.t.includes('三要素')?'<span class="badge warn"><span class="dot"></span>重点审核</span>':''}</label>`).join('');
+  function gateApprove(){
+    const all=$$('#rv-checklist input[data-ck]');
+    $('#rv-approve').disabled=!all.every(c=>c.checked);
+  }
+  $$('#rv-checklist input[data-ck]').forEach(c=>c.addEventListener('change',gateApprove));
+  $('#rv-approve').addEventListener('click',()=>ui.confirmDialog({title:'批准上架？',
+    body:'小红书选品日报 v1.5 → published，五项清单结果与审计记录随版本归档（≥3 年）。',
+    okText:'批准上架',onOk:()=>{ui.toast('已批准：published · 审计日志已写入');addAudit('2026-10-14 10:24','审核员 · 小林','批准上架','小红书选品日报 v1.5','in_review → published','—');}}));
+  $('#rv-reject').addEventListener('click',()=>ui.confirmDialog({title:'驳回？',danger:true,okText:'驳回',
+    body:'驳回须附认证报告与修订指引；修订后可重新提审（submitted）。',
+    onOk:()=>ui.toast('已驳回（附认证报告与修订指引）','err')}));
+  const SPOTS=[
+    {id:'SP-2101',b:'xhs_note_fetch 1.2.3',c:'张三',w:'10-15 ~ 10-16',st:'streaming'},
+    {id:'SP-2102',b:'zhihu_hot 1.4.0',c:'李四',w:'10-15 ~ 10-17',st:'pending'},
+    {id:'SP-2103',b:'gh_repo_read 1.0.2',c:'王五',w:'已完成',st:'done'},
+    {id:'SP-2098',b:'ali_detail 2.1.0',c:'赵六',w:'10-11 ~ 10-13',st:'mismatch'},
+    {id:'SP-2087',b:'weibo_search 0.9.1',c:'孙七',w:'09-28 ~ 09-30',st:'timeout'},
+  ];
+  const SPB={streaming:'<span class="badge st-run">重测中 · 流式上报</span>',pending:'<span class="badge mute">待接受</span>',
+    done:'<span class="badge ok">一致</span>',mismatch:'<span class="badge st-fail">不符</span>',timeout:'<span class="badge st-wait">超 14 天未响应</span>'};
+  $('#spot-table tbody').innerHTML=SPOTS.map(s=>`
+    <tr class="click" data-spot="${s.id}"><td class="mono">${s.id}</td><td><b>${s.b.split(' ')[0]}</b><span class="sub mono">${s.b.split(' ')[1]}</span></td>
+    <td>${s.c}</td><td class="num small">${s.w}</td><td>${SPB[s.st]}</td></tr>`).join('');
+  $$('#spot-table tr[data-spot]').forEach(tr=>tr.addEventListener('click',()=>{
+    $$('#spot-table tr').forEach(x=>x.style.background='');tr.style.background='rgba(62,92,58,.08)';
+    ui.toast(`原型演示：载入 ${tr.dataset.spot} 比对详情`);
+  }));
+  $('#spot-chart').innerHTML=chartSpot();
+  const spotCard=$('#spot-chart').parentElement;
+  spotCard.appendChild(h(`<div class="row between mt12"><span class="hint">重测实时流式上报（SP-2101 · 张三本机认证器）</span>
+    <button class="btn soft sm" id="btn-stream">${ico('i-run')}模拟执行</button></div>`));
+  spotCard.appendChild(h(`<div class="logstream mt8" id="spot-log"><span class="t">等待开始…</span></div>`));
+  $('#btn-stream').addEventListener('click',function(){
+    this.disabled=true;this.textContent='上报中…';
+    const log=$('#spot-log');log.innerHTML='';
+    const lines=[['run #17 · step 1/6 nav','ok'],['run #17 · step 2/6 input · 200 OK · 0.4s','ok'],
+      ['run #17 · step 3/6 extract ×12','ok'],['run #17 · step 4/6 wait 1.2s','ok'],
+      ['run #17 · step 5/6 post · 幂等键校验','ok'],['run #17 · step 6/6 done · 2.8s','ok'],
+      ['run #18 · 结构指纹采样中…','t'],['环境指纹：win11 / chrome130 / residential ✓','ok']];
+    let i=0;
+    const tm=setInterval(()=>{
+      const l=lines[i++];
+      log.appendChild(h(`<div class="${l[1]==='ok'?'ok':l[1]==='bad'?'bad':'t'}">[10-15 20:0${Math.floor(i/6)}:${String(7+i).padStart(2,'0')}] ${l[0]}</div>`));
+      log.scrollTop=log.scrollHeight;
+      if(i>=lines.length){clearInterval(tm);
+        const btn=$('#btn-stream');if(btn){btn.textContent='已完成 · 比对：一致'}
+        ui.toast('重测完成 · 步骤序列 / 时序 / 网络形状与原报告一致');}
+    },380);
+  });
+  $('#btn-spot-delist').addEventListener('click',()=>ui.confirmDialog({title:'确认处置 SP-2098？',danger:true,okText:'下架积木版本',
+    body:'ali_detail 2.1.0 → delisted；转入保障金池流程（GP 工单）；其引用应用标记「积木维护中」（不直接下架应用）；全程审计留痕。',
+    onOk:()=>{ui.toast('ali_detail 2.1.0 已下架 · 保障金池流程工单已创建');addAudit('2026-10-14 10:31','审核员 · 大树','抽查处置','ali_detail 2.1.0','streaming → delisted','SP-2098');}}));
+  const ARB=[
+    {id:'D-31',o:'#A1024',who:'买家 vs 平台团队',cause:'站点变更',left:'3 天',c:'st-wait'},
+    {id:'D-32',o:'#A0992',who:'买家 vs @北桥',cause:'超 14 天未响应',left:'1 天',c:'st-fail'},
+  ];
+  $('#arb-table tbody').innerHTML=ARB.map(a=>`
+    <tr class="click" data-arb="${a.id}"><td class="mono"><b>${a.id}</b></td><td class="mono">${a.o}</td><td>${a.who}</td>
+    <td>${a.cause}</td><td><span class="badge ${a.c}">剩 ${a.left}</span></td>
+    <td><button class="btn soft sm">查看证据</button></td></tr>`).join('');
+  $$('#arb-table tr[data-arb]').forEach(tr=>tr.addEventListener('click',()=>ui.toast(`原型演示：载入 ${tr.dataset.arb} 证据视图（订单 / 认证报告 / 健康归因 / 运行上报聚合）`)));
+  $$('#v-admin-arb .ipchip').forEach(c=>c.addEventListener('click',()=>{
+    $$('#v-admin-arb .ipchip').forEach(x=>x.classList.remove('on'));c.classList.add('on');
+    ui.toast('原型演示：切换证据标签（只读视图，不含页面内容）');
+  }));
+  $('#btn-gp-approve').addEventListener('click',function(){
+    ui.confirmDialog({title:'批准赔付 ¥1,360？',body:'资金来源：保障金池。批准后生成冲正分录入 guarantee_pool_ledger（原始分录不可修改，仅冲正）。',
+      okText:'批准赔付',onOk:()=>{this.disabled=true;this.textContent='已批准 · 冲正分录 GP-15 已入账';
+        ui.toast('赔付 ¥1,360 已批准（4 位买家）');addAudit('2026-10-14 10:40','财务 · 阿采','保障金池赔付','GP-15','pending → paid','—');}});
+  });
+  $('#btn-emergency').addEventListener('click',()=>{
+    const m=ui.modal(`<h3>发起应急下架</h3><p class="msub">触发：安全事件规则命中（EV-2214 · egress_denied）· 影响面初判：2 应用 / 41 买家</p>
+      <div class="field mt16"><label>下架对象</label><select class="select"><option>应用：PDF 账单归档 v0.9</option><option>积木：ali_detail 2.1.0</option></select></div>
+      <div class="field"><label>事件引用（必填）</label><input class="input mono" value="EV-2214"></div>
+      <div class="field"><label>影响面初判（必填）</label><textarea class="input">egress_denied 命中 1 次；涉及 2 个应用、41 位买家；无凭证外泄证据。</textarea></div>
+      <div class="banner warn">${ico('i-alert')}<span>执行后 <b>delisted 立即生效</b>，并推送买家通知（涉应用通知已购买家；涉积木将引用应用标记「积木维护中」）。全程 audit_logs 留痕。</span></div>
+      <div class="mfoot"><button class="btn soft" data-c>取消</button><button class="btn danger" data-ok>执行下架并推送通知</button></div>`);
+    m.ov.querySelector('[data-c]').addEventListener('click',m.close);
+    m.ov.querySelector('[data-ok]').addEventListener('click',()=>{m.close();
+      ui.toast('已下架（delisted）· 买家通知已推送 · 审计已留痕');
+      addAudit('2026-10-14 10:52','管理员 · 老周','应急下架','PDF 账单归档 v0.9','published → delisted','EV-2214');});
+  });
+  $('#btn-ann').addEventListener('click',()=>{
+    const m=ui.modal(`<h3>新建公告</h3>
+      <div class="field mt16"><label>标题</label><input class="input" placeholder="公告标题"></div>
+      <div class="field"><label>内容</label><textarea class="input" placeholder="公告内容…"></textarea></div>
+      <div class="mfoot"><button class="btn soft" data-c>取消</button><button class="btn" data-ok>发布</button></div>`);
+    m.ov.querySelector('[data-c]').addEventListener('click',m.close);
+    m.ov.querySelector('[data-ok]').addEventListener('click',()=>{m.close();ui.toast('公告已发布')});
+  });
+  $('#audit-table tbody').innerHTML=AUDIT.map(a=>`
+    <tr><td class="mono num small">${a[0]}</td><td>${a[1]}</td><td><b>${a[2]}</b></td>
+    <td class="mono small">${a[3]}</td><td class="mono small">${a[4]}</td><td class="mono small">${a[5]}</td></tr>`).join('');
+  $('#audit-search').addEventListener('input',function(){
+    const q=this.value.trim();
+    $$('#audit-table tbody tr').forEach(tr=>tr.style.display=(!q||tr.textContent.includes(q))?'':'none');
+  });
+}
+const AUDIT=[
+  ['2026-10-14 06:12','审核员 · 小林','批准上架','hn_morning v2.1','in_review → published','—'],
+  ['2026-10-13 18:40','管理员 · 老周','应急下架','pdf_biller v0.9','published → delisted','EV-2213'],
+  ['2026-10-13 16:22','审核员 · 小林','重点审核登记','xhs_pick v1.5','in_review + 三要素','—'],
+  ['2026-10-12 11:05','财务 · 阿采','退款冲正','订单 #A0971','— → R-75','归因：站点变更'],
+  ['2026-10-11 09:31','管理员 · 老周','权限变更','运营账号 op02','+ 推荐位管理','WT-88'],
+  ['2026-10-10 15:47','审核员 · 大树','抽查处置','ali_detail 2.1.0','streaming → mismatch','SP-2098'],
+];
+function addAudit(ts,who,act,obj,trans,ref){
+  AUDIT.unshift([ts,who,act,obj,trans,ref]);
+  const tb=$('#audit-table tbody');
+  tb.insertAdjacentHTML('afterbegin',`<tr><td class="mono num small">${ts}</td><td>${who}</td><td><b>${act}</b></td>
+    <td class="mono small">${obj}</td><td class="mono small">${trans}</td><td class="mono small">${ref}</td></tr>`);
+}
+/* ================= 全局绑定与初始化 ================= */
+function bindGlobal(){
+  document.addEventListener('click',e=>{
+    const g=e.target.closest('[data-go]');
+    if(g){ui.go(g.dataset.go);$('#bellpop').classList.remove('show');}
+    const tg=e.target.closest('[data-toggle]');
+    if(tg&&!tg.disabled)tg.classList.toggle('on');
+    if(!e.target.closest('.bellwrap'))$('#bellpop').classList.remove('show');
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&e.target.matches('[role="button"][data-go]'))e.target.click();
+  });
+  $('#nav').addEventListener('click',e=>{
+    const it=e.target.closest('.nitem');if(it)ui.go(it.dataset.page);
+  });
+  $$('.roles button').forEach(b=>b.addEventListener('click',()=>ui.setRole(b.dataset.role)));
+  $('#bell').addEventListener('click',e=>{e.stopPropagation();
+    const p=$('#bellpop');p.classList.toggle('show');
+    $('#bell').setAttribute('aria-expanded',p.classList.contains('show'));});
+  $('#ntf-clear').addEventListener('click',()=>{$('#bellpop').classList.remove('show');$('.reddot').style.display='none';ui.toast('通知已全部标记已读')});
+  $('#tsearch').addEventListener('input',function(){
+    storeQ=this.value;
+    if(!$('#v-store').classList.contains('on'))ui.go('store');
+    renderStore();
+  });
+  $$('#store-chips .chip').forEach(c=>c.addEventListener('click',()=>{
+    $$('#store-chips .chip').forEach(x=>x.classList.remove('on'));c.classList.add('on');
+    storeCat=c.dataset.cat;renderStore();
+  }));
+  $('#d-buy').addEventListener('click',openPurchase);
+  $('#d-auth-demo').addEventListener('click',openAuthFlow);
+  $$('[data-llib]').forEach(t=>t.addEventListener('click',()=>{
+    $$('[data-llib]').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+    $('#llib-apps').style.display=t.dataset.llib==='apps'?'':'none';
+    $('#llib-modules').style.display=t.dataset.llib==='modules'?'':'none';
+  }));
+  $$('[data-rtab]').forEach(t=>t.addEventListener('click',()=>{
+    $$('[data-rtab]').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+    $('#rtab-queue').style.display=t.dataset.rtab==='queue'?'':'none';
+    $('#rtab-sched').style.display=t.dataset.rtab==='sched'?'':'none';
+  }));
+  $('#btn-new-sched').addEventListener('click',()=>{
+    const m=ui.modal(`<h3>新建定时任务</h3><p class="msub">定时/队列触发由 TaskScheduler 承载；登录、验证码、确认类交互触发即挂起等人。</p>
+      <div class="field mt16"><label>应用</label><select class="select">${PURCHASED.map(p=>`<option>${APPS.find(a=>a.id===p.id).title}</option>`).join('')}</select></div>
+      <div class="field"><label>重复</label><select class="select"><option>每天</option><option>每 2 小时</option><option>每周一</option></select></div>
+      <div class="field"><label>时间</label><input class="input" type="time" value="08:30"></div>
+      <div class="mfoot"><button class="btn soft" data-c>取消</button><button class="btn" data-ok>创建</button></div>`);
+    m.ov.querySelector('[data-c]').addEventListener('click',m.close);
+    m.ov.querySelector('[data-ok]').addEventListener('click',()=>{m.close();ui.toast('定时任务已创建 · 下次运行明天 08:30')});
+  });
+  $$('#task-switch .chip').forEach(c=>c.addEventListener('click',()=>setTask(c.dataset.task)));
+  $('#tk-export').addEventListener('click',()=>ui.toast('已导出脱敏日志 run_482.jsonl（经统一脱敏管道，不含页面内容与凭证）'));
+  $$('[data-test-key]').forEach(b=>b.addEventListener('click',function(){
+    this.disabled=true;this.textContent='测试中…';
+    setTimeout(()=>{this.disabled=false;this.textContent=this.closest('#prov-builtin')?'测试连通':'保存并测试连通';
+      ui.toast('连通成功 · fast 可用（时延 240ms）· Key 已 safeStorage 加密');},850);
+  }));
+  $$('#prov-seg button').forEach(b=>b.addEventListener('click',()=>{
+    $$('#prov-seg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    $('#prov-builtin').style.display=b.dataset.pseg==='builtin'?'':'none';
+    $('#prov-agg').style.display=b.dataset.pseg==='agg'?'':'none';
+    $('#prov-custom').style.display=b.dataset.pseg==='custom'?'':'none';
+  }));
+  $$('[data-mtab]').forEach(t=>t.addEventListener('click',()=>{
+    $$('[data-mtab]').forEach(x=>x.classList.remove('on'));t.classList.add('on');
+    $('#mtab-prov').style.display=t.dataset.mtab==='prov'?'':'none';
+    $('#mtab-cred').style.display=t.dataset.mtab==='cred'?'':'none';
+  }));
+  $('#budget-save').addEventListener('click',()=>ui.toast(`会话熔断上限已保存（本地覆盖 ¥${$('#budget-in').value}）· 平台分档默认仍生效`));
+  $('#sw-report').addEventListener('click',()=>{
+    const on=$('#sw-report').classList.contains('on');
+    $('#report-note').textContent=on
+      ?'已开启：运行结果参与成功率统计（failure_class × env_class 归因，user-side 类不计入积木健康分）。'
+      :'已关闭：你的账号不参与统计；退款判据改用激活校验时间戳（购买后 24h 内未激活可全退）。';
+  });
+  $('#btn-clean-ix').addEventListener('click',()=>ui.confirmDialog({title:'清理交互记录？',danger:true,okText:'清理',
+    body:'按隐私政策留存的「暂停-操作-恢复」历史将被删除，不可恢复；不影响任务运行。',
+    onOk:()=>ui.toast('交互记录已清理')}));
+  $('#btn-clean-blk').addEventListener('click',()=>ui.confirmDialog({title:'清理本地积木缓存？',okText:'清理',
+    body:'将删除本地缓存积木包（保留最后可用版本策略重新拉取）。离线运行能力在下次联网后恢复。',
+    onOk:()=>ui.toast('本地积木缓存已清理')}));
+  $('#btn-update').addEventListener('click',function(){this.disabled=true;this.textContent='检查中…';
+    setTimeout(()=>{this.disabled=false;this.textContent='检查更新';ui.toast('已是最新版本（1.4.2 · sidecar 版本锁死）')},900)});
+  $('#btn-new-create').addEventListener('click',()=>{
+    const m=ui.modal(`<h3>新建创作</h3><p class="msub">用一句话描述你要的自动化，装配助手会推荐认证积木组合（展示各积木实测通过率）；也可以直接进画布拖拽。</p>
+      <div class="field mt16"><label>需求描述</label><textarea class="input" placeholder="例：每天早上抓取小红书「露营灯」相关笔记，AI 点评后汇总 Excel 发邮件给我"></textarea></div>
+      <div class="mfoot"><button class="btn soft" data-c>直接进画布</button><button class="btn" data-ok>说需求 · 装配助手推荐</button></div>`);
+    m.ov.querySelector('[data-c]').addEventListener('click',()=>{m.close();ui.go('cc-canvas')});
+    m.ov.querySelector('[data-ok]').addEventListener('click',()=>{m.close();
+      ui.toast('装配助手：已推荐 4 块认证积木并生成连线草案（候选逐项带实测通过率）');ui.go('cc-canvas')});
+  });
+  $('#blk-search').addEventListener('input',function(){renderBlkList(this.value.trim())});
+  $('#btn-save-flow').addEventListener('click',saveFlow);
+  $('#btn-break-confirm').addEventListener('click',()=>{
+    const n6=canvasState.nodes.find(n=>n.id==='n6');
+    n6.hidden=true;canvasState.confirmOn=false;renderCanvas();
+    ui.toast('已断开 confirm——现在点击「保存流程」观察拦截','err');
+  });
+  $('#btn-pack').addEventListener('click',openPack);
+  $('#btn-rec-stop').addEventListener('click',()=>ui.toast('录制已停止 · 轨迹 47 步 · DOM 快照 47 · 进入参数化'));
+  $('#btn-dryrun-run').addEventListener('click',function(){this.disabled=true;this.textContent='干跑中…';
+    setTimeout(()=>{this.disabled=false;this.innerHTML=`${ico('i-refresh')}重新干跑`;
+      ui.toast('干跑完成：19/19 步骤通过（回归口径 · 非统计值）')},1400)});
+  $('#btn-cert-start').addEventListener('click',startCert);
+  $('#btn-cert-more').addEventListener('click',()=>ui.toast('已加入补测队列：5 次真实运行（并入批次礼仪，预计 24h 内完成）'));
+  $('#btn-to-review').addEventListener('click',()=>{ui.toast('认证报告已关联发布向导——继续配置应用信息与信任字段');ui.go('cc-publish')});
+  $('#btn-chain').addEventListener('click',function(){this.disabled=true;this.textContent='整链验证中…';
+    setTimeout(()=>{this.textContent='开始整链验证';this.disabled=false;
+      $('#chain-done').style.display='';ui.toast('整链验证通过（N=1 · 非统计值）· 签名报告已生成')},1500)});
+  $$('[data-pnext]').forEach(b=>b.addEventListener('click',()=>pstep(b.dataset.pnext)));
+  $$('#pub-steps .stp').forEach(b=>b.addEventListener('click',()=>pstep(b.dataset.pstep)));
+  $$('input[name="dtype"]').forEach(r=>r.addEventListener('change',()=>{
+    $('#three-flag').style.display=document.querySelector('input[name="dtype"]:checked').value==='personal'?'':'none';
+  }));
+  $('#btn-submit-review').addEventListener('click',()=>{
+    if(!$('#dec-1').checked||!$('#dec-3').checked){ui.toast('请先完成全部合规声明勾选','err');return}
+    ui.toast('已提审：进入 in_review · 三要素叠加将进入人工重点审核');
+    ui.setRole('admin');ui.go('admin-review');
+  });
+}
+/* ================= 启动 ================= */
+renderNav('user');
+ui.go('store');
+renderStore();
+renderDetail();
+renderLibrary();
+renderRun();
+setTask('t482');
+renderCCHome();
+initCanvas();
+renderBlkList();
+$('#usage-chart').innerHTML=chartBars([
+  {v:.6,label:'一'},{v:.9,label:'二'},{v:.7,label:'三'},{v:1.4,label:'四'},{v:1.1,label:'五'},{v:.8,label:'六'},{v:.92,label:'日'}],{w:300,hh:120,unit:'¥',hi:6});
+$('#price-dist').innerHTML=chartBars([
+  {v:29,label:'29'},{v:39,label:'39'},{v:49,label:'49'},{v:68,label:'68'},{v:88,label:'88'},{v:128,label:'128'}],{w:280,hh:120,unit:'¥',hi:3});
+const CREDS=[
+  {site:'xiaohongshu.com',kind:'cookie + token（站点适配器）',st:'active',last:'2 小时前'},
+  {site:'zhihu.com',kind:'cookie',st:'expiring',last:'3 天前'},
+  {site:'1688.com',kind:'cookie + local_storage（站点适配器）',st:'revoked',last:'—'},
+];
+function renderCreds(){
+  $('#cred-table tbody').innerHTML=CREDS.map((c,i)=>{
+    const st=c.st==='active'?'<span class="badge ok">有效</span>':c.st==='expiring'?'<span class="badge warn">即将过期</span>':'<span class="badge mute">已撤销</span>';
+    return `<tr><td class="mono"><b>${c.site}</b></td><td class="small">${c.kind}</td><td>${st}</td><td class="small num">${c.last}</td>
+      <td>${c.st!=='revoked'?`<button class="btn soft sm" data-revoke="${i}">撤销</button>`:'<span class="hint">—</span>'}</td></tr>`;
+  }).join('');
+  $$('#cred-table [data-revoke]').forEach(b=>b.addEventListener('click',()=>{
+    const c=CREDS[+b.dataset.revoke];
+    ui.confirmDialog({title:`撤销 ${c.site} 的凭证？`,danger:true,okText:'立即撤销',
+      body:'Handle 全部失效、密文删除、无可恢复副本；引用该凭证的运行将挂起并引导重新登录。',
+      onOk:()=>{c.st='revoked';renderCreds();ui.toast('凭证已撤销（即时生效）')}});
+  }));
+}
+const DRYRUN=[
+  ['1','打开搜索页','nav xiaohongshu.com','nav ok',1,'0.8s'],
+  ['2','输入「露营灯」','input #search-input','input 命中',1,'0.3s'],
+  ['3','点击搜索按钮','click .search-btn','click 命中',1,'0.6s'],
+  ['4','等待结果列表','wait 1.2s','完成',1,'1.2s'],
+  ['5','提取字段 ×3','title / likes / author','全部提取',1,'0.4s'],
+  ['6','点击笔记卡片（循环首轮）','click .note-card:nth(1)','click 命中',1,'0.5s'],
+  ['7','点击笔记卡片（循环次轮）','click .note-card:nth(2)','selector 未命中',0,'—'],
+  ['8','写入 Excel','excel_write 3.1.0','写入 12 行',1,'0.2s'],
+];
+function renderDryrun(){
+  $('#dryrun-table tbody').innerHTML=DRYRUN.map(r=>`
+    <tr ${r[4]?'':'style="background:rgba(247,232,226,.5)"'}>
+      <td class="mono">${r[0]}</td><td><b>${r[1]}</b></td>
+      <td class="mono small">${r[2]}</td><td class="mono small">${r[3]}</td>
+      <td>${r[4]?'<span class="badge ok">通过</span>':'<span class="badge st-fail">脆弱</span>'}</td>
+      <td class="num small">${r[5]}</td></tr>`).join('');
+}
+renderDryrun();
+renderCreds();
+bindGlobal();
+renderAdmin();
+/* 72h 恢复窗口倒计时 */
+const SUSPEND_DEADLINE=Date.now()+(68*3600+12*60+33)*1000;
+setInterval(()=>{
+  const s=Math.max(0,Math.floor((SUSPEND_DEADLINE-Date.now())/1000));
+  const txt=`${Math.floor(s/3600)}:${String(Math.floor(s%3600/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
+  $$('[data-cd]').forEach(n=>n.textContent=txt);
+},1000);
+</script>
+</body>
+</html>
