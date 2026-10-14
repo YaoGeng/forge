@@ -46,3 +46,36 @@
 - 「变更频率」稳定性信号未实现（需多点快照，阶段 1 M06-b 范围）；
 - robots 匹配取 `User-Agent: *` 组；dom_digest 为整页原文哈希（身份标识，非稳定性度量）；
 - 验证码启发式仅三标记（文案/iframe/cf-输入），正式版随 M06 细化。
+
+---
+
+# MS-1A 验收证据索引（Windows 半边）
+
+> 计划：`docs/08-MS1A执行计划.md`；执行日期：2026-10-15；环境：Windows 11 build 26200 / Python 3.12.10 / 零新增依赖。
+> 报告：`t1.01_report.md`（M05 §2.3 属性表 L2 行 Windows 列逐项实测）。
+
+## 验收命令与结果
+
+| 卡 | 验收命令 | 结果 | 证据文件 |
+|---|---|---|---|
+| T1.01-a | `python -m pytest spikes/test_egress_fw.py -v` | 7 passed | `t1.01a_unit.log` |
+| T1.01-b | 同上（累计） | 14 passed | `t1.01b_unit.log` |
+| T1.01-c | `python spikes/run_t101_windows.py`（管理员） | **exit 0：VP1/VP2/VP4 全部成立，VP3 逐项成立，restored=true，窗口 117s** | `t1.01_windows.log`、`t1.01_restore_check.log` |
+| T1.01-c 诊断 | `diag_t101_allow.py` / `diag_t101_allow2.py`（管理员） | 定位 R8（程序放行规则对 venv launcher 镜像不匹配） | `t1.01_diag_allow.log`、`t1.01_diag_allow2.log` |
+| T1.01-d | `python -m pytest spikes/ -q` | **29 passed**（MS-0 11 + MS-1A 18） | `t1.01_full.log` |
+| T1.02 | macOS PF 规程交付 | **未实测（待 macOS 硬件）**：anchor 规则 + setup/teardown/verify 脚本就绪 | `egress_pf/`（README 有未实测横幅与 runbook） |
+| T1.03 | 复核记录写入 05 附录 A.8 | 已写入 | `docs/05-开发计划.md` 附录 A.8 |
+
+## MS-1A Gate 状态
+
+**gate = 双平台报告。Windows 半边完整达成（四验证点实测 + §2.3 L2 行逐项结论 + 不触发回退链）；macOS 半边规程就绪、执行 blocked-on-hardware。** 状态已如实上报产品负责人；MS-1B（组 B/C：SDK 与轨迹）按里程碑图不被 MS-1A 阻塞，可并行开工。
+
+## 执行裁定（R2-R8；R1 编号未使用）
+
+- **R2**：计划 T1.01-b 测试计数笔误（8→7 新增 / 15→14 总数），已随卡内注记更正；
+- **R3**：`policy_matches` 测试夹具改用 `snapshot_profiles(CANNED)` 生成完整快照（快照全等语义要求完整 profile 集），计划正文已留注记；
+- **R4**：提权进程无管道——驱动自归档 transcript 至 evidence 日志，验收命令不再 `tee`；
+- **R5**：`NetSecurity.Action` 枚举被 ConvertTo-Json 序列化为数字（0/2/4）——`snapshot_profiles` 源头 `ToString()` 归一；失败轮留档 `t1.01_windows_run1_serbug.log`；
+- **R6**：PowerShell cmdlet 错误默认不置退出码——`_ps` 前置 `$ErrorActionPreference='Stop'` + 放行规则在场校验；生成代码片段内路径一律 posix 斜杠（`\U` unicode 转义事故）；失败轮留档 `t1.01_windows_run2_norule.log`；
+- **R7**：本机防火墙阻断签名 = connect() 即时 WSAEACCES(10013)——判定口径「非 connected 即阻断」（对照组策略前实测必为 connected）；窗口加 600s 硬预算看门狗 + 逐样本容错 + 连续 3 采样失败快速失败（第 3 轮窗口曾失控 26 分钟的整改）；
+- **R8**：venv launcher 镜像的程序放行规则在 WFP 不匹配（诊断矩阵 v2/v3 定位；同形态规则对基础安装镜像/curl 即时生效，端口-only 放行则放行一切）——sidecar 角色改用基础安装 `pythonw.exe`；**生产部署前提：sidecar 必须运行在平台私有解释器安装的镜像上**（详见 `t1.01_report.md` §4）。
