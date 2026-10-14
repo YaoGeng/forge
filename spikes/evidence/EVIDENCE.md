@@ -32,6 +32,15 @@
 5. **Patchright 组合可用性**：Chromium 1243 直驱 hn.algolia.com 全程无验证码、无风控页（10+ 次访问）；T0.1a 截图正常。Agent 层组合留待结论 A/B 补验。
 6. **机器人礼仪实测**：robots.txt 404（无文件）→ 按允许处理；频次上限 5/host/小时在 site_inspect 入口强制。
 
+## 执行裁定与计划偏差清单（gate 确认前必读；详情见执行台账，其要点已并入本节）
+
+1. **live 目标切换**：计划钉死的 `news.ycombinator.com` 在本机网络不可达（无代理，curl 000×2），全部 live 验收由 `hn.algolia.com` 承载（T0.1a/T0.2/T0.3）。后续执行者勿照计划原文的 URL/选择器（`.titleline > a`）重放——现状以本仓库代码为准。
+2. **查询词**：T0.3 由 `patchright`（全站 5 条 < limit 10）改 `python`（30 条）。
+3. **测试语义等价改写**：`test_hn_front_report` → `test_live_front_report`（断言结构不变）；证据文件名 `t0.2_hn_*.json` → `t0.2_*.json`。
+4. **依赖安装事实**：Chromium 经 npmmirror 镜像下载（直连 CDN 挂起）；Python 3.12.10 经 winget 安装，Git Bash 的 `python` 为 WindowsApps 存根需用绝对路径（README 已记）。
+5. **最终评审（独立评审员，全新上下文）**：0 Critical / 1 Important / 8 Minor，结论**可合并**。Important（证据脚本可静默归档空候选报告）已修复：`run_t02_evidence.ensure_candidates` 归档门，回归测试 `test_empty_candidates_rejected` RED→GREEN，修复后全量 **11/11 passed**。
+6. **缓办 Minor（8 项中 6 项待清理，随 MS-1 处理）**：test_browser_link 重复 `_goto_with_retry` 语义弱化版（应改 import site_inspect 版）；G9 措辞残留两处（browser.py 注释"指纹定制"、本文件历史版"风控页"）及 docs/07 G9 锚应为 01 §16.4；run_t02 逐目标 reset 使频次守卫在证据路径失效；关键校验裸 assert（`python -O` 下失效）；agent_smoke `done=False` 时仍打印"结论 A/B"；robots 禁止分支无测试。其余 2 项（计划偏差清单、台账要点归档）已随本节落实。
+
 ## Spike 裁剪备案
 
 - 「变更频率」稳定性信号未实现（需多点快照，阶段 1 M06-b 范围）；

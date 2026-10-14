@@ -3,16 +3,18 @@ platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\yg\Desk
 cachedir: .pytest_cache
 rootdir: C:\Users\yg\Desktop\forge
 plugins: anyio-4.12.1
-collecting ... collected 9 items
+collecting ... collected 11 items
 
-spikes/test_browser_link.py::test_patchright_open_read_screenshot PASSED [ 11%]
-spikes/test_browser_link.py::test_chromium_missing_raises_environment_error PASSED [ 22%]
-spikes/test_manual_block.py::test_search_to_excel_report PASSED          [ 33%]
-spikes/test_site_inspect.py::test_etiquette_rejects_undeclared_domain PASSED [ 44%]
-spikes/test_site_inspect.py::test_rate_limit_enforced PASSED             [ 55%]
-spikes/test_site_inspect.py::test_retry_once_then_transient_error PASSED [ 66%]
-spikes/test_site_inspect.py::test_retry_exhausted PASSED                 [ 77%]
-spikes/test_site_inspect.py::test_live_front_report PASSED               [ 88%]
+spikes/test_browser_link.py::test_patchright_open_read_screenshot PASSED [  9%]
+spikes/test_browser_link.py::test_chromium_missing_raises_environment_error PASSED [ 18%]
+spikes/test_manual_block.py::test_search_to_excel_report PASSED          [ 27%]
+spikes/test_run_t02_evidence.py::test_empty_candidates_rejected PASSED   [ 36%]
+spikes/test_run_t02_evidence.py::test_nonempty_candidates_accepted PASSED [ 45%]
+spikes/test_site_inspect.py::test_etiquette_rejects_undeclared_domain PASSED [ 54%]
+spikes/test_site_inspect.py::test_rate_limit_enforced PASSED             [ 63%]
+spikes/test_site_inspect.py::test_retry_once_then_transient_error PASSED [ 72%]
+spikes/test_site_inspect.py::test_retry_exhausted PASSED                 [ 81%]
+spikes/test_site_inspect.py::test_live_front_report PASSED               [ 90%]
 spikes/test_site_inspect.py::test_live_search_page_report PASSED         [100%]
 
-============================= 9 passed in 32.65s ==============================
+============================= 11 passed in 34.62s =============================
