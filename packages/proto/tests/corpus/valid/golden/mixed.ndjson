@@ -1,0 +1,3 @@
+{"environment_fingerprint": "fp-x", "captured_at": "2026-10-15T01:00:00+00:00", "source_cert_run_id": "run_9"}
+{"seq": 1, "action": "click", "target_selector": "#go", "dom_anchor": null, "wait_condition": null, "ts_offset": 500}
+{"url": "https://x/api", "method": "POST", "status": 200, "mime_type": "application/json", "request_body": "<golden:placeholder>", "response_body": "<golden:placeholder>"}

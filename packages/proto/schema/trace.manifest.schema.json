@@ -1,0 +1,27 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "trace manifest.yaml（M07 §4 冻结编码，C1）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format_version", "site"],
+  "properties": {
+    "format_version": {"type": "string", "pattern": "^[0-9]+(\\.[0-9]+)?$"},
+    "site": {"type": "string", "minLength": 1},
+    "login_steps": {
+      "type": "array",
+      "items": {"type": "integer", "minimum": 1}
+    },
+    "time_sensitive_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["seq"],
+        "properties": {
+          "seq": {"type": "integer", "minimum": 1},
+          "tolerance_ms": {"type": ["integer", "null"], "minimum": 0}
+        }
+      }
+    }
+  }
+}

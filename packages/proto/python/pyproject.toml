@@ -1,0 +1,13 @@
+[project]
+name = "forge-proto"
+version = "1.0.0"
+description = "Forge 接口冻结清单的类型化定义（轨迹格式 v1，M07 §4 冻结编码）"
+requires-python = ">=3.12"
+dependencies = ["PyYAML>=6.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["forge_proto*"]

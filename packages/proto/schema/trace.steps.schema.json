@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "trace steps.ndjson 单行对象（M07 §4 冻结编码，C2）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["seq", "action", "ts_offset"],
+  "properties": {
+    "seq": {"type": "integer", "minimum": 1},
+    "action": {"type": "string", "enum": ["click", "input", "scroll", "wait", "nav"]},
+    "target_selector": {"type": ["string", "null"], "minLength": 1},
+    "dom_anchor": {"type": ["string", "null"], "minLength": 1},
+    "value": {"type": ["string", "null"]},
+    "wait_condition": {"type": ["string", "null"], "minLength": 1},
+    "ts_offset": {"type": "integer", "minimum": 0}
+  }
+}

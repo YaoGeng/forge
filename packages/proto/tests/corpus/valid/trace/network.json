@@ -1,0 +1,7 @@
+{
+  "captured_at": "2026-10-15T01:00:00+00:00",
+  "entries": [
+    {"url": "https://hn.algolia.com/api/v1/search?query=python", "method": "GET", "status": 200,
+     "mime_type": "application/json", "request_body": null, "response_body": "<golden:placeholder>"}
+  ]
+}

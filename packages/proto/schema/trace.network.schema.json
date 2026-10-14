@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "trace network.json（M07 §4 冻结编码，C4；占位符格式归 M09）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["captured_at", "entries"],
+  "properties": {
+    "captured_at": {"type": "string", "format": "date-time"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["url", "method", "status"],
+        "properties": {
+          "url": {"type": "string", "minLength": 1},
+          "method": {"type": "string", "pattern": "^[A-Z]+$"},
+          "status": {"type": "integer", "minimum": 100},
+          "mime_type": {"type": ["string", "null"]},
+          "request_body": {"type": ["string", "null"]},
+          "response_body": {"type": ["string", "null"]}
+        }
+      }
+    }
+  }
+}

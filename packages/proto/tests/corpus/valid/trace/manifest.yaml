@@ -1,0 +1,6 @@
+format_version: "1.0"
+site: hn.algolia.com
+login_steps: []
+time_sensitive_steps:
+  - seq: 3
+    tolerance_ms: 1500

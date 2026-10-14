@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "golden run_meta.json（M07 §4 冻结编码，C5）",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["environment_fingerprint", "captured_at"],
+  "properties": {
+    "environment_fingerprint": {"type": "string", "minLength": 1},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "source_cert_run_id": {"type": ["string", "null"]}
+  }
+}
