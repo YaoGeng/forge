@@ -64,10 +64,15 @@ def apply_outbound_block(snapshot: dict[str, dict[str, str]], runner: Runner) ->
         )
 
 
+def _q(value: str) -> str:
+    """PowerShell 单引号串转义（路径含撇号时不被截断）。"""
+    return "'" + value.replace("'", "''") + "'"
+
+
 def add_sidecar_allow(program: str, runner: Runner) -> None:
     _ps(
         f"New-NetFirewallRule -Name {RULE_NAME} -DisplayName {RULE_NAME} "
-        f"-Direction Outbound -Action Allow -Program '{program}'",
+        f"-Direction Outbound -Action Allow -Program {_q(program)}",
         runner,
     )
 

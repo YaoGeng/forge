@@ -215,7 +215,7 @@ def test_add_sidecar_allow_command_shape():
     assert "New-NetFirewallRule" in joined
     assert "Forge-Spike-Allow-Sidecar" in joined
     assert "Outbound" in joined and "Allow" in joined
-    assert r"C:\v\.venv\Scripts\pythonw.exe" in joined
+    assert f"-Program '{r'C:\\v\\.venv\\Scripts\\pythonw.exe'}'" in joined
     assert "*" not in joined.replace("Forge-Spike-*", "")
 
 
