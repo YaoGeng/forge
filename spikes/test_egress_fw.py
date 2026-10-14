@@ -210,12 +210,13 @@ def test_add_sidecar_allow_command_shape():
     from egress_fw.firewall import add_sidecar_allow
 
     r = fake_runner("")
-    add_sidecar_allow(r"C:\v\.venv\Scripts\pythonw.exe", r)
+    program = r"C:\v\.venv\Scripts\pythonw.exe"
+    add_sidecar_allow(program, r)
     joined = " ".join(r.calls[0])
     assert "New-NetFirewallRule" in joined
     assert "Forge-Spike-Allow-Sidecar" in joined
     assert "Outbound" in joined and "Allow" in joined
-    assert f"-Program '{r'C:\\v\\.venv\\Scripts\\pythonw.exe'}'" in joined
+    assert f"-Program '{program}'" in joined
     assert "*" not in joined.replace("Forge-Spike-*", "")
 
 
