@@ -27,11 +27,18 @@ else
   sudo chown _forge_comp /var/forge-comp
 fi
 
-echo "== 2) 装载 anchor 规则（forge-spike：出站默认阻断，仅放行 loopback）"
-sudo pfctl -a forge-spike -f "$DIR/com.forge-spike.pf.conf"
+echo "== 2) 以实际代理端口生成 anchor 规则并装载（forge-spike）"
+sed "s/__PROXY_PORT__/${PORT}/" "$DIR/com.forge-spike.pf.conf" > "$DIR/forge-spike-generated.conf"
+sudo pfctl -a forge-spike -f "$DIR/forge-spike-generated.conf"
 
-echo "== 3) 确认 PF 已启用（如未启用则启用）"
-sudo pfctl -E 2>/dev/null || true
+echo "== 3) 确认 PF 已启用（记录原状态，teardown 回退）"
+if sudo pfctl -s info 2>/dev/null | head -1 | grep -q "Enabled"; then
+  echo "0" > "$DIR/.pf_was_enabled"
+  echo "   PF 原本已启用，无需变更"
+else
+  echo "1" > "$DIR/.pf_was_enabled"
+  sudo pfctl -E
+fi
 
 echo "== 4) 校验规则在场"
 sudo pfctl -a forge-spike -s rules

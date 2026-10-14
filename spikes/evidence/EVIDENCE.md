@@ -78,4 +78,9 @@
 - **R5**：`NetSecurity.Action` 枚举被 ConvertTo-Json 序列化为数字（0/2/4）——`snapshot_profiles` 源头 `ToString()` 归一；失败轮留档 `t1.01_windows_run1_serbug.log`；
 - **R6**：PowerShell cmdlet 错误默认不置退出码——`_ps` 前置 `$ErrorActionPreference='Stop'` + 放行规则在场校验；生成代码片段内路径一律 posix 斜杠（`\U` unicode 转义事故）；失败轮留档 `t1.01_windows_run2_norule.log`；
 - **R7**：本机防火墙阻断签名 = connect() 即时 WSAEACCES(10013)——判定口径「非 connected 即阻断」（对照组策略前实测必为 connected）；窗口加 600s 硬预算看门狗 + 逐样本容错 + 连续 3 采样失败快速失败（第 3 轮窗口曾失控 26 分钟的整改）；
-- **R8**：venv launcher 镜像的程序放行规则在 WFP 不匹配（诊断矩阵 v2/v3 定位；同形态规则对基础安装镜像/curl 即时生效，端口-only 放行则放行一切）——sidecar 角色改用基础安装 `pythonw.exe`；**生产部署前提：sidecar 必须运行在平台私有解释器安装的镜像上**（详见 `t1.01_report.md` §4）。
+- **R8**：venv launcher 镜像的程序放行规则在 WFP 不匹配（诊断矩阵 v2/v3 定位；同形态规则对基础安装镜像/curl 即时生效，端口-only 放行则放行一切）——sidecar 角色改用基础安装 `pythonw.exe`；**生产部署前提：sidecar 必须运行在平台私有解释器安装的镜像上**（详见 `t1.01_report.md` §4）；
+- **R9**：终审 M3 采纳——exit 门加入 `proxy_saw_targets`（M05 §2.1② 的「代理收到原始目标」原仅展示）；计划 Step 8 公式已同步。
+
+## 最终整分支评审（独立评审员，全新上下文，2026-10-15）
+
+复跑验收 29 passed；抽查确认报告 §2 数据与判定 JSON 逐项吻合、恢复核验一致、R5/R6 失败轮与诊断链自洽、无夸大声明。**0 Critical / 4 Important / 7 Minor**，初裁「不可合并」；Important 4 条已全部修复：①生产 runner 加 30s 超时（防 PowerShell 挂起卡死看门狗与恢复路径）；②`_is_blocked` 收紧为三类网络阻断签名（基础设施故障不判阻断）+ VP1 对照组显式校验 `control_ok`；③DNS/UDP-53「实测优于预期」降级为「推定（未设 UDP 探针）」（报告 §3 与 05 附录 A.8 同步），run3 留档补 git 指针；④PF anchor 收窄到代理端口（conf 模板 + setup 注入实际端口）+ PF 启用态回退。Minor 已修 5 项（计划计数 15→18、exit 门 R9、worker 资源 finally 兜底、verify_pf 真实 bind 尝试与 `host@ip` 防呆、setup_pf 端口注入）；缓办 2 项（verify_pf docstring 措辞随 macOS 实测一并校正、proxy stop 在途 task 噪声——spike 可接受）。修复后回归 **29/29 passed**，裁决改判**可合并**。

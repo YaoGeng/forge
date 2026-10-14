@@ -269,13 +269,14 @@ def test_allow_rule_present_parses_count():
 
 
 def test_is_blocked_signature():
-    # R7：本机（Win11 26200）防火墙阻断签名 = WSAEACCES 即时拒绝，非静默超时；
-    # 判定口径 = 非 connected 即阻断（对照组 pre-policy 必为 connected）
+    # R7 + 终审 Important-2：仅三类网络阻断观测计入；基础设施故障不计阻断
     from run_t101_windows import _is_blocked
 
     assert _is_blocked("timeout") is True
     assert _is_blocked("refused") is True
     assert _is_blocked("error:PermissionError") is True
+    assert _is_blocked("error:TimeoutExpired") is False
+    assert _is_blocked("error:OSError") is False
     assert _is_blocked("connected") is False
     assert _is_blocked(None) is False
 

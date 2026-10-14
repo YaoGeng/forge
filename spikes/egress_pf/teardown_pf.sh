@@ -6,6 +6,12 @@ set -euo pipefail
 echo "== 1) 清空 forge-spike anchor 规则"
 sudo pfctl -a forge-spike -F all || echo "!! anchor 清理失败，请人工执行: sudo pfctl -a forge-spike -F all"
 
+echo "== 1b) 回退 PF 启用态（仅当 setup 曾启用过）"
+if [ -f .pf_was_enabled ] && [ "$(cat .pf_was_enabled)" = "1" ]; then
+  sudo pfctl -d
+  rm -f .pf_was_enabled
+fi
+
 echo "== 2) 删除专用用户 _forge_comp"
 if dscl . -read /Users/_forge_comp >/dev/null 2>&1; then
   sudo dscl . -delete /Users/_forge_comp

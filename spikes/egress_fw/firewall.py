@@ -16,7 +16,12 @@ RULE_WILDCARD = "Forge-Spike-*"
 
 def _make_runner() -> Runner:
     def run(args: list[str]) -> subprocess.CompletedProcess:
-        return subprocess.run(args, capture_output=True, text=True)
+        # 终审 Important-1：无超时的 PowerShell 调用会让 G14 看门狗与 finally
+        # 恢复一起卡死；run 超时会 kill 子进程后抛 TimeoutExpired
+        try:
+            return subprocess.run(args, capture_output=True, text=True, timeout=30)
+        except subprocess.TimeoutExpired as exc:
+            return subprocess.CompletedProcess(args, returncode=124, stdout="", stderr=str(exc))
 
     return run
 

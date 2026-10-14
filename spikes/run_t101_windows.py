@@ -53,11 +53,13 @@ def _tick() -> None:
 
 
 def _is_blocked(result: str | None) -> bool:
-    """R7：本机阻断签名是 WSAEACCES 即时拒绝；口径 = 非 connected 即阻断。
+    """R7：本机阻断签名是 connect() 即时 WSAEACCES；口径 = 命中网络阻断签名。
 
-    对照组（策略前）实测必为 connected，因此「非 connected」不引入假阳性。
+    终审 Important-2：仅认三类网络阻断观测（timeout/refused/error:PermissionError）；
+    其余 error:*（子进程超时/派生失败等基础设施故障）与 None 一律不算阻断——
+    宁可判「未成立」也不引入假阳性。对照组（策略前）须另行校验为 connected。
     """
-    return result is not None and result != "connected"
+    return result in ("timeout", "refused", "error:PermissionError")
 
 
 def log(msg: str) -> None:
@@ -245,9 +247,11 @@ def _battery(
             lines = {"child": f"error:{exc}", "grandchild": "-"}
         child_res = lines.get("child")
         grand_res = lines.get("grandchild")
-        blocked = _is_blocked(child_res) and _is_blocked(grand_res)
+        control_ok = pre_ctrl[ip] == "connected"  # 终审 Important-2：对照组失效则不判阻断
+        blocked = control_ok and _is_blocked(child_res) and _is_blocked(grand_res)
         results["vp1"][host] = {
             "pre_policy": pre_ctrl[ip],
+            "control_ok": control_ok,
             "child": child_res,
             "grandchild": grand_res,
             "blocked": blocked,
@@ -391,39 +395,42 @@ def main() -> int:
             return 7
         log(f"sidecar 就绪: {endpoint}")
 
-        # ⑤ 防火墙变更（快照先行；finally 恢复）
-        snapshot = firewall.snapshot_profiles(runner)
-        log(f"快照: {json.dumps(snapshot)}")
+        # ⑤-⑦ 防火墙变更 + 电池 + 恢复（外层 finally 兜底 worker 资源，终审 M4）
         restored = False
         restore_errors: list[str] = []
         results: dict | None = None
         failure: str | None = None
         try:
-            firewall.apply_outbound_block(snapshot, runner)
-            firewall.add_sidecar_allow(str(SIDECAR_PYW), runner)
-            if not firewall.allow_rule_present(runner):
-                raise RuntimeError("放行规则未在场（New-NetFirewallRule 未生效）")
-            now = firewall.snapshot_profiles(runner)
-            if any(v["out"] != "Block" for v in now.values()):
-                raise RuntimeError(f"出站策略未生效: {now}")
-            log("防火墙已变更: 各 profile 出站默认 Block，仅放行 sidecar。")
+            # 防火墙变更（快照先行；finally 恢复）
+            snapshot = firewall.snapshot_profiles(runner)
+            log(f"快照: {json.dumps(snapshot)}")
+            try:
+                firewall.apply_outbound_block(snapshot, runner)
+                firewall.add_sidecar_allow(str(SIDECAR_PYW), runner)
+                if not firewall.allow_rule_present(runner):
+                    raise RuntimeError("放行规则未在场（New-NetFirewallRule 未生效）")
+                now = firewall.snapshot_profiles(runner)
+                if any(v["out"] != "Block" for v in now.values()):
+                    raise RuntimeError(f"出站策略未生效: {now}")
+                log("防火墙已变更: 各 profile 出站默认 Block，仅放行 sidecar。")
 
-            # ⑥ 验证电池
-            results = _battery(targets, endpoint, baseline, pre_ctrl, curl_ctrl, connect_log_file)
-        except Exception as exc:
-            failure = f"{type(exc).__name__}: {exc}"
-            log(f"电池执行异常: {failure}")
+                # ⑥ 验证电池
+                results = _battery(targets, endpoint, baseline, pre_ctrl, curl_ctrl, connect_log_file)
+            except Exception as exc:
+                failure = f"{type(exc).__name__}: {exc}"
+                log(f"电池执行异常: {failure}")
+            finally:
+                restored, restore_errors = _safe_restore(snapshot, runner)
+                log(f"防火墙恢复: restored={restored} errors={restore_errors}")
+                if not restored:
+                    for line in _manual_restore_lines(snapshot):
+                        log(line)
         finally:
-            restored, restore_errors = _safe_restore(snapshot, runner)
             worker.terminate()
             try:
                 worker.wait(timeout=5)
             except subprocess.TimeoutExpired:
                 worker.kill()
-            log(f"防火墙恢复: restored={restored} errors={restore_errors}")
-            if not restored:
-                for line in _manual_restore_lines(snapshot):
-                    log(line)
             shutil.rmtree(tmpdir, ignore_errors=True)
 
         # ⑧ 汇总判定
@@ -446,7 +453,13 @@ def main() -> int:
 
         if not restored:
             return 8
-        if failure or not (verdict["vp1_block"] and verdict["vp2_proxy"] and verdict["vp4"]["pass"]):
+        # R9：M05 §2.1② 的「代理收到原始目标」入 exit 门（终审 M3）
+        if failure or not (
+            verdict["vp1_block"]
+            and verdict["vp2_proxy"]
+            and verdict["proxy_saw_targets"]
+            and verdict["vp4"]["pass"]
+        ):
             return 7
         return 0
     finally:

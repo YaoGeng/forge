@@ -94,6 +94,25 @@ def tcp_attempt(ip: str, port: int = 443, timeout: float = ATTEMPT_TIMEOUT_S) ->
         sock.close()
 
 
+def bound_attempt(source_ip: str, ip: str, port: int = 443,
+                  timeout: float = ATTEMPT_TIMEOUT_S) -> str:
+    """从指定本机源地址发起直连（多网卡绕过观测）。"""
+    sock = socket.socket()
+    sock.settimeout(timeout)
+    try:
+        sock.bind((source_ip, 0))
+        sock.connect((ip, port))
+        return "connected"
+    except socket.timeout:
+        return "timeout"
+    except PermissionError:
+        return "blocked-eacces"
+    except OSError as exc:
+        return f"error:{type(exc).__name__}"
+    finally:
+        sock.close()
+
+
 def local_ipv4s() -> list[str]:
     found: set[str] = set()
     try:
@@ -115,8 +134,11 @@ def cmd_baseline(args: argparse.Namespace) -> int:
 
 def cmd_in_policy(args: argparse.Namespace) -> int:
     out: dict = {"phase": "in-policy", "per_target": {}, "bypass": {}}
-    for host in args.hosts:
-        ip = socket.gethostbyname(host)
+    # host 参数支持 "host@ip" 形式：DNS 被策略阻断时用 --baseline 输出的 IP 直连
+    for spec in args.hosts:
+        host, _, ip = spec.partition("@")
+        if not ip:
+            ip = socket.gethostbyname(host)  # 预期在策略下失败（DNS 被阻）——用 @ip 传参
         ok, samples = 0, []
         for _ in range(SAMPLES):
             try:
@@ -132,7 +154,10 @@ def cmd_in_policy(args: argparse.Namespace) -> int:
         }
         out["bypass"][ip] = tcp_attempt(ip)  # 预期非 connected
     alt = local_ipv4s()
-    out["alt_nic"] = {a: "见 bypass 口径" for a in alt} if alt else "single-nic N/A"
+    ip0 = next(iter(out["bypass"]))
+    out["alt_nic"] = (
+        {src: bound_attempt(src, ip0) for src in alt[:3]} if alt else "single-nic N/A"
+    )
     print(json.dumps(out, ensure_ascii=False))
     return 0
 
