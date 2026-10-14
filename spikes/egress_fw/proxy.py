@@ -38,10 +38,18 @@ class EgressProxy:
             raise RuntimeError(f"proxy failed to start: {self._start_error!r}")
 
     def stop(self) -> None:
-        if self._loop is not None and self._loop.is_running():
-            self._loop.call_soon_threadsafe(self._loop.stop)
+        loop = self._loop
+        if loop is not None:
+            try:
+                loop.call_soon_threadsafe(loop.stop)
+            except RuntimeError:
+                pass  # loop 已停或已关，无需再停
         if self._thread is not None:
             self._thread.join(timeout=5)
+            if self._thread.is_alive():
+                raise RuntimeError("proxy thread did not stop within 5s")
+        if loop is not None:
+            loop.close()
         if self._server is not None:
             self._server.close()
             self._server = None

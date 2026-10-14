@@ -27,6 +27,13 @@ def remove_endpoint_file(path: Path) -> None:
     path.unlink(missing_ok=True)
 
 
+def write_log_snapshot(path: Path, entries: list[str]) -> None:
+    """原子快照（tmp+replace），消费方并发读不会看到半截 JSON。"""
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(json.dumps(entries), encoding="utf-8")
+    tmp.replace(path)
+
+
 def main(argv: list[str]) -> int:
     if len(argv) < 2:
         print("usage: proxy_worker.py <endpoint_file> [connect_log_file]", file=sys.stderr)
@@ -37,10 +44,12 @@ def main(argv: list[str]) -> int:
     try:
         proxy.start()
         write_endpoint_file(endpoint_file, proxy.endpoint)
+        if log_file is not None:
+            write_log_snapshot(log_file, proxy.connect_log)
         while True:
             time.sleep(1)
             if log_file is not None:
-                log_file.write_text(json.dumps(proxy.connect_log), encoding="utf-8")
+                write_log_snapshot(log_file, proxy.connect_log)
     except KeyboardInterrupt:
         return 0
     finally:
