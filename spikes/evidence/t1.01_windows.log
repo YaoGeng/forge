@@ -1,29 +1,136 @@
-01:03:26 [G14] 告知：本机出网将临时全局阻断约 2-4 分钟，结束后自动恢复。
-01:03:26 窗口开始时间: 2026-10-15T01:03:26
-01:03:26 目标不可达，跳过: hn.algolia.com ([Errno 11001] getaddrinfo failed)
-01:03:27 目标可达: www.baidu.com (183.2.172.177) 首样 165ms
-01:03:28 目标可达: example.com (104.20.23.154) 首样 1001ms
-01:03:32 基线完成: www.baidu.com n=30 p95=168ms
-01:04:06 基线完成: example.com n=30 p95=1911ms
-01:04:10 对照（策略前）: 直连={'183.2.172.177': 'connected', '104.20.23.154': 'connected'} curl_rc={'www.baidu.com': 0, 'example.com': 0}
-01:04:10 sidecar 就绪: 127.0.0.1:52660
-01:04:14 快照: {"Domain": {"in": 0, "out": 0}, "Private": {"in": 0, "out": 0}, "Public": {"in": 0, "out": 0}}
-01:04:23 电池执行异常: RuntimeError: 出站策略未生效: {'Domain': {'in': 0, 'out': 4}, 'Private': {'in': 0, 'out': 4}, 'Public': {'in': 0, 'out': 4}}
-01:04:33 防火墙恢复: restored=True errors=[]
-01:04:33 判定 JSON:
-01:04:33 {
+01:07:35 [G14] 告知：本机出网将临时全局阻断约 2-4 分钟，结束后自动恢复。
+01:07:35 窗口开始时间: 2026-10-15T01:07:35
+01:07:38 目标可达: hn.algolia.com (34.160.168.181) 首样 2792ms
+01:07:38 目标可达: www.baidu.com (183.2.172.177) 首样 150ms
+01:08:21 基线完成: hn.algolia.com n=30 p95=1866ms
+01:08:25 基线完成: www.baidu.com n=30 p95=163ms
+01:08:28 对照（策略前）: 直连={'34.160.168.181': 'connected', '183.2.172.177': 'connected'} curl_rc={'hn.algolia.com': 0, 'www.baidu.com': 0}
+01:08:28 sidecar 就绪: 127.0.0.1:49159
+01:08:30 快照: {"Domain": {"in": "NotConfigured", "out": "NotConfigured"}, "Private": {"in": "NotConfigured", "out": "NotConfigured"}, "Public": {"in": "NotConfigured", "out": "NotConfigured"}}
+01:08:39 防火墙已变更: 各 profile 出站默认 Block，仅放行 sidecar。
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 hn.algolia.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:39   采样失败 www.baidu.com: proxy CONNECT failed: b'HTTP/1.1 502 Bad Gateway'
+01:08:50 防火墙恢复: restored=True errors=[]
+01:08:50 判定 JSON:
+01:08:50 {
   "targets": [
-    "www.baidu.com(183.2.172.177)",
-    "example.com(104.20.23.154)"
+    "hn.algolia.com(34.160.168.181)",
+    "www.baidu.com(183.2.172.177)"
   ],
   "vp1_block": false,
-  "vp1_detail": null,
+  "vp1_detail": {
+    "hn.algolia.com": {
+      "pre_policy": "connected",
+      "child": null,
+      "grandchild": null,
+      "blocked": false
+    },
+    "www.baidu.com": {
+      "pre_policy": "connected",
+      "child": null,
+      "grandchild": null,
+      "blocked": false
+    }
+  },
   "vp2_proxy": false,
-  "proxy_saw_targets": false,
-  "vp3": null,
-  "vp4": null,
-  "failure": "RuntimeError: 出站策略未生效: {'Domain': {'in': 0, 'out': 4}, 'Private': {'in': 0, 'out': 4}, 'Public': {'in': 0, 'out': 4}}",
+  "proxy_saw_targets": true,
+  "vp3": {
+    "raw_socket_direct": {
+      "34.160.168.181": "error:PermissionError",
+      "183.2.172.177": "error:PermissionError"
+    },
+    "curl_direct": {
+      "pre_policy_rc": 0,
+      "in_policy_rc": 7,
+      "note": "非 0 即未连通（6=DNS 失败 7=连接失败 28=超时）"
+    },
+    "borrowed_whitelist_demo": {
+      "note": "白名单按程序路径生效：pythonw（sidecar 角色）放行。生产缓解=sidecar 二进制签名 pin+安装目录 ACL（M05 §2.3 补偿控制）",
+      "result": "error:PermissionError"
+    },
+    "alt_nic": {
+      "192.168.0.101": "error:PermissionError"
+    }
+  },
+  "vp4": {
+    "per_target": {
+      "hn.algolia.com": {
+        "direct_p95_ms": 1866.1,
+        "proxy_p95_ms": null,
+        "delta_pct": null,
+        "samples_ok": "0/30",
+        "pass": false
+      },
+      "www.baidu.com": {
+        "direct_p95_ms": 162.8,
+        "proxy_p95_ms": null,
+        "delta_pct": null,
+        "samples_ok": "0/30",
+        "pass": false
+      }
+    },
+    "pass": false
+  },
+  "failure": null,
   "restored": true,
-  "window_seconds": 67
+  "window_seconds": 75
 }
-01:04:33 窗口结束时间: 2026-10-15T01:04:33（历时 67s）
+01:08:50 窗口结束时间: 2026-10-15T01:08:50（历时 75s）

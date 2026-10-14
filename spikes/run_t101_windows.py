@@ -123,15 +123,17 @@ def _bound_attempt(source_ip: str, ip: str, timeout: float = 5.0) -> str:
 
 
 def _tree_snippet() -> str:
-    # 组件子进程与孙进程各做一次直连判定（进程树继承阻断的子/孙两级证据）
+    # 组件子进程与孙进程各做一次直连判定（进程树继承阻断的子/孙两级证据）。
+    # 路径一律 posix 斜杠：非 raw 字符串里 \U 会被当 unicode 转义（R6 前车之鉴）
+    base = BASE.as_posix()
     return (
         "import subprocess, sys\n"
-        f"sys.path.insert(0, r'{BASE}')\n"
+        f"sys.path.insert(0, '{base}')\n"
         "from egress_fw.probe import tcp_attempt\n"
         "ip = sys.argv[1]\n"
         "child = tcp_attempt(ip, 443, timeout=5)\n"
         "code = (\n"
-        f"    \"import sys; sys.path.insert(0, r'{BASE}');\"\n"
+        f"    \"import sys; sys.path.insert(0, '{base}');\"\n"
         "    \"from egress_fw.probe import tcp_attempt;\"\n"
         "    \"print(tcp_attempt(sys.argv[1], 443, timeout=5))\"\n"
         ")\n"
@@ -143,9 +145,10 @@ def _tree_snippet() -> str:
 
 
 def _single_attempt_snippet() -> str:
+    base = BASE.as_posix()
     return (
         "import sys\n"
-        f"sys.path.insert(0, r'{BASE}')\n"
+        f"sys.path.insert(0, '{base}')\n"
         "from egress_fw.probe import tcp_attempt\n"
         "print(tcp_attempt(sys.argv[1], 443, timeout=5))\n"
     )
@@ -358,6 +361,8 @@ def main() -> int:
         try:
             firewall.apply_outbound_block(snapshot, runner)
             firewall.add_sidecar_allow(str(PYTHONW), runner)
+            if not firewall.allow_rule_present(runner):
+                raise RuntimeError("放行规则未在场（New-NetFirewallRule 未生效）")
             now = firewall.snapshot_profiles(runner)
             if any(v["out"] != "Block" for v in now.values()):
                 raise RuntimeError(f"出站策略未生效: {now}")

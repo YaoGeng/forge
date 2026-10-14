@@ -249,3 +249,46 @@ def test_ps_raises_on_nonzero():
 
     with pytest.raises(RuntimeError):
         _ps("anything", fake_runner("", rc=1))
+
+
+def test_ps_surfaces_cmdlet_errors():
+    # R6：powershell -Command 的 cmdlet 错误默认不置退出码——脚本必须前置
+    # $ErrorActionPreference='Stop'，否则规则创建失败会被静默吞掉
+    from egress_fw.firewall import is_admin
+
+    r = fake_runner("True")
+    is_admin(r)
+    assert "ErrorActionPreference" in " ".join(r.calls[0])
+
+
+def test_allow_rule_present_parses_count():
+    from egress_fw.firewall import allow_rule_present
+
+    assert allow_rule_present(fake_runner("1")) is True
+    assert allow_rule_present(fake_runner("0")) is False
+
+
+def test_tree_snippet_produces_two_levels():
+    # 离线可跑：对 127.0.0.1 探测只要求两级输出成形（R6 前 \U 转义曾致子进程 SyntaxError）
+    import subprocess as sp
+    import sys
+    from pathlib import Path
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from run_t101_windows import _single_attempt_snippet, _tree_snippet
+
+    out = sp.run(
+        [sys.executable, "-c", _tree_snippet(), "127.0.0.1"],
+        capture_output=True, text=True, timeout=60, cwd=str(Path(__file__).resolve().parent),
+    )
+    assert out.returncode == 0, out.stderr[:400]
+    lines = out.stdout.splitlines()
+    assert lines[0].startswith("child:")
+    assert lines[1].startswith("grandchild:")
+
+    out2 = sp.run(
+        [sys.executable, "-c", _single_attempt_snippet(), "127.0.0.1"],
+        capture_output=True, text=True, timeout=30, cwd=str(Path(__file__).resolve().parent),
+    )
+    assert out2.returncode == 0, out2.stderr[:400]
+    assert out2.stdout.strip()

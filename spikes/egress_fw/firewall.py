@@ -22,7 +22,8 @@ def _make_runner() -> Runner:
 
 
 def _ps(script: str, runner: Runner) -> str:
-    proc = runner(["powershell", "-NoProfile", "-Command", script])
+    # cmdlet 错误默认不改变退出码（R6）——前置 EAP=Stop 让失败可被 rc 捕获
+    proc = runner(["powershell", "-NoProfile", "-Command", "$ErrorActionPreference='Stop'; " + script])
     if proc.returncode != 0:
         raise RuntimeError(
             f"powershell failed rc={proc.returncode}: {proc.stdout!r} {proc.stderr!r}"
@@ -83,6 +84,15 @@ def add_sidecar_allow(program: str, runner: Runner) -> None:
 
 def delete_spike_rules(runner: Runner) -> None:
     _ps(f"Remove-NetFirewallRule -Name '{RULE_WILDCARD}' -ErrorAction SilentlyContinue", runner)
+
+
+def allow_rule_present(runner: Runner) -> bool:
+    out = _ps(
+        f"(Get-NetFirewallRule -Name {RULE_NAME} -ErrorAction SilentlyContinue | "
+        "Measure-Object).Count",
+        runner,
+    )
+    return out.strip() == "1"
 
 
 def restore_profiles(snapshot: dict[str, dict[str, str]], runner: Runner) -> None:
