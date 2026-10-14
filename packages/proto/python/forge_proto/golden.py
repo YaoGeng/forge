@@ -11,12 +11,12 @@ from pathlib import Path
 from .format import (
     FormatError,
     opt_str,
-    read_ndjson,
+    parse_json_object,
     reject_extra_fields,
     require_iso8601,
     require_str,
 )
-from .trace import load_steps, load_network
+from .trace import load_network, load_steps
 
 
 @dataclass(frozen=True)
@@ -27,12 +27,8 @@ class RunMeta:
 
 
 def load_run_meta(path: str | Path) -> RunMeta:
-    import json
-
     where = str(path)
-    doc = json.loads(Path(path).read_text(encoding="utf-8"))
-    if not isinstance(doc, dict):
-        raise FormatError(f"{where}: run_meta.json 必须是 JSON 对象")
+    doc = parse_json_object(Path(path).read_text(encoding="utf-8"), where)
     reject_extra_fields(doc, {"environment_fingerprint", "captured_at", "source_cert_run_id"}, where)
     return RunMeta(
         environment_fingerprint=require_str(doc, "environment_fingerprint", where),

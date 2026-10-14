@@ -34,6 +34,30 @@ def write_ndjson(path: str | Path, docs: list[dict]) -> None:
             fh.write(json.dumps(doc, ensure_ascii=False) + "\n")
 
 
+def parse_json_object(text: str, where: str) -> dict:
+    """JSON 文本 → 对象；解析失败统一为 FormatError（终审 Important-1）。"""
+    try:
+        doc = json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise FormatError(f"{where}: JSON 解析失败: {exc}") from exc
+    if not isinstance(doc, dict):
+        raise FormatError(f"{where}: 必须是 JSON 对象")
+    return doc
+
+
+def parse_yaml_object(text: str, where: str) -> dict:
+    """YAML 文本 → 对象；解析失败统一为 FormatError（终审 Important-1）。"""
+    import yaml
+
+    try:
+        doc = yaml.safe_load(text)
+    except yaml.YAMLError as exc:
+        raise FormatError(f"{where}: YAML 解析失败: {exc}") from exc
+    if not isinstance(doc, dict):
+        raise FormatError(f"{where}: 必须是 YAML 映射")
+    return doc
+
+
 def require_iso8601(value, where: str) -> str:
     if not isinstance(value, str):
         raise FormatError(f"{where}: 时间戳必须是字符串")
@@ -52,12 +76,14 @@ def require_str(doc: dict, key: str, where: str) -> str:
     return value
 
 
-def opt_str(doc: dict, key: str, where: str) -> str | None:
+def opt_str(doc: dict, key: str, where: str, *, allow_empty: bool = True) -> str | None:
     value = doc.get(key)
     if value is None:
         return None
     if not isinstance(value, str):
         raise FormatError(f"{where}: 字段 {key} 必须是字符串或 null")
+    if not allow_empty and not value:
+        raise FormatError(f"{where}: 字段 {key} 为空串（Schema minLength 1）")
     return value
 
 

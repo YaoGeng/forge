@@ -1,18 +1,19 @@
 """trace/ 目录四件套（manifest.yaml / steps.ndjson / snapshots/ / network.json）的类型与校验。
 
 冻结基线：M07 §4（docs/03-模块设计/M07-BlockSDK与测试框架.md）。
-表达细节裁定：docs/09-MS1B执行计划.md §3（C1-C4）——变更走 minor + 四方适配评审。
+表达细节裁定：docs/09-MS1B执行计划.md §3（C1-C4、C8）——变更走 minor + 四方适配评审。
 """
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass
 from pathlib import Path
-
-import yaml
 
 from .format import (
     FormatError,
     opt_str,
+    parse_json_object,
+    parse_yaml_object,
     read_ndjson,
     reject_extra_fields,
     require_int,
@@ -76,25 +77,34 @@ def _parse_major(version: str, where: str) -> str:
 
 
 def load_manifest(source: str | Path) -> Manifest:
-    """source 为 YAML 文本或文件路径（C1 裁定字段）。"""
-    where = str(source)
-    if isinstance(source, Path) or ("\n" not in str(source) and Path(source).exists()):
-        doc = yaml.safe_load(Path(source).read_text(encoding="utf-8"))
+    """source 为 YAML 文本（str）或文件路径（Path）；解析失败统一 FormatError。"""
+    if isinstance(source, Path):
+        if not source.exists():
+            raise FormatError(f"{source}: 文件不存在")
         where = str(source)
+        doc = parse_yaml_object(source.read_text(encoding="utf-8"), where)
     else:
-        doc = yaml.safe_load(source)
-    if not isinstance(doc, dict):
-        raise FormatError(f"{where}: manifest 必须是 YAML 映射")
+        where = "<text>"
+        doc = parse_yaml_object(source, where)
     reject_extra_fields(doc, {"format_version", "site", "login_steps", "time_sensitive_steps"}, where)
-    major = _parse_major(doc.get("format_version"), where)
-    _ = major  # 完整性在 is_compatible；此处仅做格式校验
-    manifest = Manifest(
+    _parse_major(doc.get("format_version"), where)
+    return Manifest(
         format_version=doc["format_version"],
         site=require_str(doc, "site", where),
         login_steps=_load_login_steps(doc, where),
         time_sensitive_steps=_load_time_sensitive(doc, where),
     )
-    return manifest
+
+
+def _load_login_steps(doc: dict, where: str) -> tuple[int, ...]:
+    raw = doc.get("login_steps")
+    if raw is None:
+        return ()
+    if not isinstance(raw, list) or any(isinstance(v, bool) or not isinstance(v, int) for v in raw):
+        raise FormatError(f"{where}: login_steps 必须是整数数组")
+    if any(v < 1 for v in raw):
+        raise FormatError(f"{where}: login_steps 的 seq 必须 ≥1（Schema minimum 1）")
+    return tuple(raw)
 
 
 def _load_login_steps(doc: dict, where: str) -> tuple[int, ...]:
@@ -136,7 +146,7 @@ def load_steps(path: str | Path) -> tuple[Step, ...]:
         raise FormatError(f"{path}: steps.ndjson 不能为空")
     steps: list[Step] = []
     prev_seq = 0
-    prev_ts = -1
+    prev_ts: int | None = None
     for lineno, doc in rows:
         where = f"{path}:{lineno}"
         reject_extra_fields(
@@ -147,19 +157,21 @@ def load_steps(path: str | Path) -> tuple[Step, ...]:
         seq = require_int(doc, "seq", where)
         action = require_str(doc, "action", where)
         if seq != prev_seq + 1:
-            raise FormatError(f"{where}: seq 必须 from 1 连续递增，得到 {seq}（前一行 {prev_seq}）")
+            raise FormatError(f"{where}: seq 必须 from 1 连续递增（+1），得到 {seq}（前一行 {prev_seq}）")
         if action not in ACTIONS:
             raise FormatError(f"{where}: action {action!r} 不在 {ACTIONS}")
         ts = require_int(doc, "ts_offset", where)
-        if ts < prev_ts:
+        if ts < 0:
+            raise FormatError(f"{where}: ts_offset 不能为负（Schema minimum 0）")
+        if prev_ts is not None and ts < prev_ts:
             raise FormatError(f"{where}: ts_offset 必须非递减（{ts} < {prev_ts}）")
         steps.append(Step(
             seq=seq,
             action=action,
-            target_selector=opt_str(doc, "target_selector", where),
-            dom_anchor=opt_str(doc, "dom_anchor", where),
+            target_selector=opt_str(doc, "target_selector", where, allow_empty=False),
+            dom_anchor=opt_str(doc, "dom_anchor", where, allow_empty=False),
             value=opt_str(doc, "value", where),
-            wait_condition=opt_str(doc, "wait_condition", where),
+            wait_condition=opt_str(doc, "wait_condition", where, allow_empty=False),
             ts_offset=ts,
         ))
         prev_seq, prev_ts = seq, ts
@@ -168,11 +180,7 @@ def load_steps(path: str | Path) -> tuple[Step, ...]:
 
 def load_network(path: str | Path) -> NetworkLog:
     where = str(path)
-    import json
-
-    doc = json.loads(Path(path).read_text(encoding="utf-8"))
-    if not isinstance(doc, dict):
-        raise FormatError(f"{where}: network.json 必须是 JSON 对象")
+    doc = parse_json_object(Path(path).read_text(encoding="utf-8"), where)
     reject_extra_fields(doc, {"captured_at", "entries"}, where)
     captured_at = require_iso8601(doc.get("captured_at"), f"{where}: captured_at")
     raw_entries = doc.get("entries")
@@ -192,6 +200,8 @@ def load_network(path: str | Path) -> NetworkLog:
         if not method.isupper() or not method.isalpha():
             raise FormatError(f"{w}: method 必须全大写字母，得到 {method!r}")
         status = require_int(item, "status", w)
+        if status < 100:
+            raise FormatError(f"{w}: status 必须 ≥100（Schema minimum 100）")
         entries.append(NetworkEntry(
             url=require_str(item, "url", w),
             method=method,
@@ -240,6 +250,9 @@ def validate_trace_dir(trace_dir: str | Path) -> list[str]:
     elif steps:
         expected = {f"{s.seq:06d}.html" for s in steps}
         actual = {p.name for p in snapshots_dir.iterdir() if p.is_file()}
+        subdirs = [p.name for p in snapshots_dir.iterdir() if p.is_dir()]
+        for name in subdirs:
+            errors.append(f"快照目录内不应有子目录: snapshots/{name}/")
         for missing in sorted(expected - actual):
             errors.append(f"缺少快照 snapshots/{missing}")
         for extra in sorted(actual - expected):

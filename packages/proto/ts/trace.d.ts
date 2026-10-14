@@ -25,15 +25,16 @@ export interface Manifest {
 }
 
 export interface Step {
-  /** 从 1 连续递增 */
+  /** 从 1 连续递增（+1）——C2 终审裁定 */
   seq: number;
   action: TraceAction;
-  target_selector: string | null;
-  dom_anchor: string | null;
+  /** 允许缺省或 null（wait/nav 步无目标）；非空时不得为空串 */
+  target_selector?: string | null;
+  dom_anchor?: string | null;
   /** M07 §4 `value?`：可缺省（input 步携带） */
   value?: string | null;
-  wait_condition: string | null;
-  /** 毫秒；非递减 */
+  wait_condition?: string | null;
+  /** 毫秒；≥0 且非递减 */
   ts_offset: number;
 }
 

@@ -122,8 +122,8 @@ def load_steps_text(text: str):
 
 def test_steps_ndjson_malformed_line():
     text = _step_line(seq=1) + "\n{not json\n"
-    with pytest.raises(FormatError, match="2"):
-        load_steps_text(text)  # 错误消息含行号 2
+    with pytest.raises(FormatError, match=":2:"):
+        load_steps_text(text)  # 错误消息含「文件:行号」且行号=2
 
 
 def test_steps_ndjson_blank_lines_tolerated():
@@ -133,10 +133,12 @@ def test_steps_ndjson_blank_lines_tolerated():
 
 def test_steps_invalid_fields():
     cases = [
-        [_step_line(seq=1), _step_line(seq=3)],                        # seq 跳号（须连续递增）
+        [_step_line(seq=1), _step_line(seq=3)],                        # seq 跳号（须连续递增，C2 终审裁定）
         [_step_line(seq=1), _step_line(seq=2, ts_offset=50)],          # ts_offset 递减
         [_step_line(seq=1), _step_line(seq=2, action="type")],         # 动作不在枚举
         [json.dumps({"seq": 0, "action": "click", "ts_offset": 0})],   # seq 从 1 起
+        [json.dumps({"seq": 1, "action": "click", "ts_offset": -1})],  # ts_offset 为负（Schema minimum 0）
+        [_step_line(seq=1, target_selector="")],                       # 空选择器（Schema minLength 1）
     ]
     for lines in cases:
         with pytest.raises(FormatError):
@@ -293,3 +295,51 @@ def test_schema_and_python_agree_on_manifest(tmp_path):
     assert schema_validate(bad, schema) != []
     with pytest.raises(FormatError):
         load_manifest(yaml.dump(bad))
+
+
+# ---------- 语料即验收：corpus 目录本身必须被校验器承认/拒绝（终审 Important-4） ----------
+
+def test_corpus_valid_trace_dir():
+    errors = validate_trace_dir(CORPUS / "valid" / "trace")
+    assert errors == []
+    steps = load_steps(CORPUS / "valid" / "trace" / "steps.ndjson")
+    assert [s.seq for s in steps] == [1, 2, 3]
+
+
+def test_corpus_valid_golden_dir():
+    assert validate_golden_dir(CORPUS / "valid" / "golden") == []
+
+
+def test_corpus_invalid_fragments_rejected():
+    inv = CORPUS / "invalid"
+    with pytest.raises(FormatError):
+        load_steps(inv / "steps_bad_action.ndjson")
+    with pytest.raises(FormatError):
+        load_manifest(inv / "manifest_bad_version.yaml")
+    with pytest.raises(FormatError):
+        load_network(inv / "network_bad_status.json")
+    with pytest.raises(FormatError):
+        load_run_meta(inv / "golden_bad_meta.json")
+
+
+def test_corrupt_files_surface_as_errors_not_exceptions(tmp_path):
+    """终审 Important-1：目录校验中损坏文件必须进错误列表，不得抛裸异常。"""
+    t = _build_trace_dir(tmp_path)
+    (t / "network.json").write_text("{broken", encoding="utf-8")
+    (t / "manifest.yaml").write_text("::: not yaml [", encoding="utf-8")
+    errors = validate_trace_dir(t)
+    assert any("network.json" in e for e in errors)
+    assert any("manifest.yaml" in e for e in errors)
+    g = tmp_path / "golden"
+    g.mkdir()
+    (g / "run_meta.json").write_text("{oops", encoding="utf-8")
+    gerrors = validate_golden_dir(g)
+    assert any("run_meta.json" in e for e in gerrors)
+
+
+def test_schema_and_python_agree_on_corpus():
+    """正例语料双向通过：manifest 文档同时满足 Schema 与 Python 加载。"""
+    schema = _schema("trace.manifest.schema.json")
+    doc = yaml.safe_load((CORPUS / "valid" / "trace" / "manifest.yaml").read_text(encoding="utf-8"))
+    assert schema_validate(doc, schema) == []
+    load_manifest(CORPUS / "valid" / "trace" / "manifest.yaml")

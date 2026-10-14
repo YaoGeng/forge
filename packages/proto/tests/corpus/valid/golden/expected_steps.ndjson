@@ -1,0 +1,1 @@
+{"seq": 1, "action": "click", "target_selector": "#go", "dom_anchor": null, "wait_condition": null, "ts_offset": 500}
