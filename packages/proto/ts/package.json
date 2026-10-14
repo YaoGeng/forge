@@ -1,0 +1,12 @@
+{
+  "name": "@forge/proto-ts",
+  "private": true,
+  "version": "1.0.0",
+  "description": "轨迹格式 v1 TS 类型（M07 §4 冻结编码；typescript 仅 devDependency，类型门用）",
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

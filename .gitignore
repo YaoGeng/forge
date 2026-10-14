@@ -6,3 +6,4 @@ spikes/.venv/
 spikes/evidence/*.png
 __pycache__/
 *.py[cod]
+packages/proto/ts/node_modules/
