@@ -1,0 +1,21 @@
+01:46:49 [G14] 告知：诊断窗口，出网临时全局阻断，预算 240s，结束自动恢复。
+01:47:16 恢复: restored=True errors=[]
+01:47:16 诊断矩阵 JSON:
+01:47:16 {
+  "errors": [
+    "stepD_storage_dump: RuntimeError: powershell failed rc=1: None ''"
+  ],
+  "stepA_program_allow": {
+    "pythonw_connect": "error:PermissionError",
+    "python_connect": "error:PermissionError"
+  },
+  "stepB_port_allow": {
+    "pythonw_connect": "connected",
+    "python_connect": "connected"
+  },
+  "stepC_netsh_variant": {
+    "pythonw_connect": "connected"
+  },
+  "restored": true,
+  "window_seconds": 27
+}

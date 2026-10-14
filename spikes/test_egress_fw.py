@@ -268,6 +268,18 @@ def test_allow_rule_present_parses_count():
     assert allow_rule_present(fake_runner("0")) is False
 
 
+def test_is_blocked_signature():
+    # R7：本机（Win11 26200）防火墙阻断签名 = WSAEACCES 即时拒绝，非静默超时；
+    # 判定口径 = 非 connected 即阻断（对照组 pre-policy 必为 connected）
+    from run_t101_windows import _is_blocked
+
+    assert _is_blocked("timeout") is True
+    assert _is_blocked("refused") is True
+    assert _is_blocked("error:PermissionError") is True
+    assert _is_blocked("connected") is False
+    assert _is_blocked(None) is False
+
+
 def test_tree_snippet_produces_two_levels():
     # 离线可跑：对 127.0.0.1 探测只要求两级输出成形（R6 前 \U 转义曾致子进程 SyntaxError）
     import subprocess as sp

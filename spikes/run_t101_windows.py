@@ -32,13 +32,32 @@ from egress_fw.probe import delta_pct, handshake_ttfb_ms, percentile, tcp_attemp
 TARGET_CANDIDATES = ("hn.algolia.com", "www.baidu.com", "example.com")
 SAMPLES = 30
 PYTHON = Path(sys.executable).resolve()
-PYTHONW = PYTHON.with_name("pythonw.exe")
+# R8：venv launcher 镜像（.venv/Scripts/pythonw.exe）的程序放行规则在 WFP 不匹配
+# （diag v2/v3 实证：同规则对基础安装镜像/curl 生效）；sidecar 角色改用基础安装
+# pythonw.exe（E4 实证放行生效）。生产注记：平台应自带私有解释器安装，使被放行
+# 镜像不与用户共享。
+SIDECAR_PYW = (Path(sys.base_prefix) / "pythonw.exe").resolve()
 EVIDENCE_LOG = BASE / "evidence" / "t1.01_windows.log"
 
 PROXY_WAIT_S = 10
 CONNECT_TIMEOUT_S = 15
+WINDOW_BUDGET_S = 600  # G14：窗口硬预算，超时立即中止电池并走恢复
 
 _log_fh = None
+_deadline = float("inf")
+
+
+def _tick() -> None:
+    if time.time() > _deadline:
+        raise TimeoutError("window budget exceeded（G14 看门狗触发，立即恢复）")
+
+
+def _is_blocked(result: str | None) -> bool:
+    """R7：本机阻断签名是 WSAEACCES 即时拒绝；口径 = 非 connected 即阻断。
+
+    对照组（策略前）实测必为 connected，因此「非 connected」不引入假阳性。
+    """
+    return result is not None and result != "connected"
 
 
 def log(msg: str) -> None:
@@ -216,6 +235,7 @@ def _battery(
         want_hosts.append(f"{host}:443")
 
         # VP1 进程树继承阻断（子/孙两级，对照 pre_ctrl 的 connected）
+        _tick()
         try:
             out = _run_snippet(PYTHON, tree, ip, timeout_s=90)
             lines = dict(
@@ -223,24 +243,33 @@ def _battery(
             )
         except Exception as exc:
             lines = {"child": f"error:{exc}", "grandchild": "-"}
-        blocked = lines.get("child") == "timeout" and lines.get("grandchild") == "timeout"
+        child_res = lines.get("child")
+        grand_res = lines.get("grandchild")
+        blocked = _is_blocked(child_res) and _is_blocked(grand_res)
         results["vp1"][host] = {
             "pre_policy": pre_ctrl[ip],
-            "child": lines.get("child"),
-            "grandchild": lines.get("grandchild"),
+            "child": child_res,
+            "grandchild": grand_res,
             "blocked": blocked,
         }
         if not blocked:
             results["vp1_block"] = False
 
-        # VP4 经代理采样（窗口内；成败同时供 VP2 判定）
+        # VP4 经代理采样（窗口内；成败同时供 VP2 判定；连续 3 失败快速失败省窗口）
         samples: list[float | None] = []
-        for _ in range(SAMPLES):
+        consec_fail = 0
+        for i in range(SAMPLES):
+            _tick()
             try:
                 samples.append(handshake_ttfb_ms(host, proxy_endpoint=endpoint, timeout=CONNECT_TIMEOUT_S))
+                consec_fail = 0
             except OSError as exc:
                 samples.append(None)
-                log(f"  采样失败 {host}: {exc}")
+                consec_fail += 1
+                log(f"  采样失败 {host}({i + 1}/{SAMPLES}): {exc}")
+                if consec_fail >= 3:
+                    log(f"  快速失败: {host} 连续 3 次采样失败，跳过剩余样本")
+                    break
         ok = [s for s in samples if s is not None]
         d_p95 = percentile(baseline[host], 0.95)
         target_ok = len(ok) == SAMPLES
@@ -251,6 +280,7 @@ def _battery(
             "proxy_p95_ms": round(percentile(ok, 0.95), 1) if ok else None,
             "delta_pct": round(delta, 2) if delta is not None else None,
             "samples_ok": f"{len(ok)}/{SAMPLES}",
+            "fast_fail": consec_fail >= 3,
             "pass": passed,
         }
         if not passed:
@@ -276,8 +306,8 @@ def _battery(
             "note": "非 0 即未连通（6=DNS 失败 7=连接失败 28=超时）",
         },
         "borrowed_whitelist_demo": {
-            "note": "白名单按程序路径生效：pythonw（sidecar 角色）放行。生产缓解=sidecar 二进制签名 pin+安装目录 ACL（M05 §2.3 补偿控制）",
-            "result": _run_snippet(PYTHONW, single, ip0, timeout_s=30),
+            "note": "白名单按镜像路径生效：sidecar 镜像（基础安装 pythonw.exe，生产应为平台私有解释器安装）放行，组件镜像不放行（R8）",
+            "result": _run_snippet(SIDECAR_PYW, single, ip0, timeout_s=30),
         },
         "alt_nic": (
             {src: _bound_attempt(src, ip0) for src in alt_ips[:3]}
@@ -289,9 +319,10 @@ def _battery(
 
 
 def main() -> int:
-    global _log_fh
+    global _log_fh, _deadline
     window_start = time.time()
-    log("[G14] 告知：本机出网将临时全局阻断约 2-4 分钟，结束后自动恢复。")
+    _deadline = window_start + WINDOW_BUDGET_S
+    log(f"[G14] 告知：本机出网将临时全局阻断，硬预算 {WINDOW_BUDGET_S}s，结束自动恢复。")
     log(f"窗口开始时间: {time.strftime('%Y-%m-%dT%H:%M:%S')}")
 
     try:
@@ -302,8 +333,8 @@ def main() -> int:
             log(f"  cd /d {Path.cwd()} && \"{PYTHON}\" \"{Path(__file__).resolve()}\"")
             log("或启用 系统设置 > 开发者选项 > sudo 后重试。")
             return 5
-        if not PYTHONW.exists():
-            log(f"[exit 9] sidecar 解释器缺失: {PYTHONW}")
+        if not SIDECAR_PYW.exists():
+            log(f"[exit 9] sidecar 解释器缺失: {SIDECAR_PYW}")
             return 9
 
         # ② 选目标（策略未变，兼作可达性预检与 DNS 预解析）
@@ -322,12 +353,21 @@ def main() -> int:
             log("[exit 6] 全部候选目标不可达。")
             return 6
 
-        # ③ 基线与对照（策略未变）
+        # ③ 基线与对照（策略未变；网络劣化时逐样本容错，坏样计入 direct_ok）
         baseline: dict[str, list[float]] = {}
         for host, _ in targets:
-            samples = [handshake_ttfb_ms(host, timeout=CONNECT_TIMEOUT_S) for _ in range(SAMPLES)]
+            samples: list[float] = []
+            for _ in range(SAMPLES):
+                _tick()
+                try:
+                    samples.append(handshake_ttfb_ms(host, timeout=8))
+                except OSError as exc:
+                    log(f"  基线采样失败 {host}: {exc}")
+            if not samples:
+                log(f"[exit 6] 基线全失败: {host}")
+                return 6
             baseline[host] = samples
-            log(f"基线完成: {host} n={SAMPLES} p95={percentile(samples, 0.95):.0f}ms")
+            log(f"基线完成: {host} ok={len(samples)}/{SAMPLES} p95={percentile(samples, 0.95):.0f}ms")
         pre_ctrl = {ip: tcp_attempt(ip) for _, ip in targets}
         curl_ctrl = {host: _curl_direct(host) for host, _ in targets}
         log(f"对照（策略前）: 直连={pre_ctrl} curl_rc={curl_ctrl}")
@@ -338,7 +378,7 @@ def main() -> int:
         connect_log_file = tmpdir / "connect_log.json"
         worker = subprocess.Popen(
             [
-                str(PYTHONW),
+                str(SIDECAR_PYW),
                 str(BASE / "egress_fw" / "proxy_worker.py"),
                 str(endpoint_file),
                 str(connect_log_file),
@@ -360,7 +400,7 @@ def main() -> int:
         failure: str | None = None
         try:
             firewall.apply_outbound_block(snapshot, runner)
-            firewall.add_sidecar_allow(str(PYTHONW), runner)
+            firewall.add_sidecar_allow(str(SIDECAR_PYW), runner)
             if not firewall.allow_rule_present(runner):
                 raise RuntimeError("放行规则未在场（New-NetFirewallRule 未生效）")
             now = firewall.snapshot_profiles(runner)

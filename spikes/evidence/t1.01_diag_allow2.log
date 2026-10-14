@@ -1,0 +1,30 @@
+01:49:46 [G14] 告知：诊断窗口 v3，出网临时全局阻断，预算 240s，结束自动恢复。
+01:50:14 恢复: restored=True errors=[]
+01:50:14 诊断矩阵 v3 JSON:
+01:50:14 {
+  "errors": [],
+  "E1_program_tcp_venv": {
+    "venv_pythonw": "error:PermissionError"
+  },
+  "E2_program_plus_port_venv": {
+    "venv_pythonw": "error:PermissionError"
+  },
+  "E3_program_curl": {
+    "curl": "rc=60"
+  },
+  "E4_program_base_pythonw": {
+    "base_pythonw": "connected"
+  },
+  "E5_port_control": {
+    "venv_pythonw": "connected",
+    "curl": "rc=60"
+  },
+  "D_storage_dump": {
+    "profiles": "[{\"Name\":\"Domain\",\"Enabled\":1,\"DefaultOutboundAction\":4,\"AllowLocalFirewallRules\":2,\"AllowLocalIPsecRules\":2},{\"Name\":\"Private\",\"Enabled\":1,\"DefaultOutboundAction\":4,\"AllowLocalFirewallRules\":2,\"AllowLocalIPsecRules\":2},{\"Name\":\"Public\",\"Enabled\":1,\"DefaultOutboundAction\":4,\"AllowLocalFirewallRules\":2,\"AllowLocalIPsecRules\":2}]",
+    "rules": "[{\"Name\":\"Forge-Spike-E1\",\"Enabled\":1,\"Direction\":2,\"Action\":2,\"Profile\":0},{\"Name\":\"Forge-Spike-E2\",\"Enabled\":1,\"Direction\":2,\"Action\":2,\"Profile\":0},{\"Name\":\"Forge-Spike-E3\",\"Enabled\":1,\"Direction\":2,\"Action\":2,\"Profile\":0},{\"Name\":\"Forge-Spike-E4\",\"Enabled\":1,\"Direction\":2,\"Action\":2,\"Profile\":0},{\"Name\":\"Forge-Spike-E5\",\"Enabled\":1,\"Direction\":2,\"Action\":2,\"Profile\":0}]",
+    "app_filters": "[{\"Name\":\"\",\"Program\":\"C:\\\\Users\\\\yg\\\\AppData\\\\Local\\\\Programs\\\\Python\\\\Python312\\\\pythonw.exe\"},{\"Name\":\"\",\"Program\":\"C:\\\\Users\\\\yg\\\\Desktop\\\\forge\\\\spikes\\\\.venv\\\\Scripts\\\\pythonw.exe\"},{\"Name\":\"\",\"Program\":\"Any\"},{\"Name\":\"\",\"Program\":\"C:\\\\Windows\\\\System32\\\\curl.exe\"},{\"Name\":\"\",\"Program\":\"C:\\\\Users\\\\yg\\\\Desktop\\\\forge\\\\spikes\\\\.venv\\\\Scripts\\\\pythonw.exe\"}]",
+    "conn_profile": "{\"Name\":\"yeager 5\",\"InterfaceAlias\":\"以太网\",\"NetworkCategory\":0}"
+  },
+  "restored": true,
+  "window_seconds": 28
+}
