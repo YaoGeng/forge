@@ -19,7 +19,18 @@ from .recorder import RecordingSession, Recorder
 from .replayer import ConsistencyReport, ReplayResult, StepResult, assert_consistent, replay
 from .selectors import ElementFp, forge_selector
 from .store import Annotation, RecordingsStore, Recording
-from .similarity import SIMILARITY_THRESHOLD, cosine, embed, structural_similarity
+from .similarity import (
+    SIMILARITY_THRESHOLD,
+    AssertVerdict,
+    FieldVerdict,
+    SimilarityVerdict,
+    TestRunner,
+    cosine,
+    embed,
+    fieldwise,
+    golden_similarity,
+    structural_similarity,
+)
 
 __all__ = [
     "INPUT_FLUSH_MS",
@@ -27,23 +38,29 @@ __all__ = [
     "SCROLL_FLUSH_MS",
     "SIMILARITY_THRESHOLD",
     "Annotation",
+    "AssertVerdict",
     "BrowserEvent",
     "BrowserPort",
     "ConsistencyReport",
     "ElementFp",
+    "FieldVerdict",
     "RecordingsStore",
     "Recording",
     "RecordingSession",
     "RedactionMap",
     "ReplayResult",
     "Recorder",
+    "SimilarityVerdict",
     "StepResult",
+    "TestRunner",
     "aggregate",
     "assert_consistent",
     "collect_golden",
     "cosine",
     "embed",
+    "fieldwise",
     "forge_selector",
+    "golden_similarity",
     "redact",
     "redact_body",
     "redact_url",
