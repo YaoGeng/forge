@@ -12,16 +12,12 @@ from pathlib import Path
 
 import yaml
 
-from .model import BlockSpec, InteractionSpec
+from .model import FAMILIES, BlockSpec, InteractionSpec, has_capability
 
 NETWORK_MODULES = {"requests", "urllib", "httpx", "socket", "http"}
 BROAD_EXCEPTIONS = {"Exception", "BaseException"}
 PUBLISH_VERBS = ("publish", "submit", "pay", "purchase", "checkout", "order")
 EXFIL_WORDS = ("url", "uri", "body", "query", "param", "payload", "header", "token")
-FAMILIES = (
-    "browser", "file", "office", "ai", "code", "data",
-    "api", "credential", "confirm", "interact", "probe",
-)
 ASSERTIONS = ("schema", "golden_similarity")
 _REQUIREMENT_NAME = re.compile(r"^([A-Za-z0-9][A-Za-z0-9._-]*)")
 
@@ -86,10 +82,6 @@ def _iter_runtime_calls(tree: ast.Module, aliases: dict[str, str]):
             if chain and chain.startswith("runtime."):
                 segs = chain.split(".")
                 yield segs[1] if len(segs) > 1 else "", node, chain
-
-
-def _has_capability(spec: BlockSpec, family: str) -> bool:
-    return any(c == family or c.startswith(family + "_") for c in spec.capabilities)
 
 
 # ---- R1 禁止裸调用 ----
@@ -174,7 +166,7 @@ def rule_capability_consistency(ctx: LintContext) -> list[dict]:
             if family not in FAMILIES:
                 continue
             # credential 家族由 permissions{type:credential} 把门（TDD §2.1 示例即无 credential capability）
-            if family != "credential" and not _has_capability(ctx.spec, family):
+            if family != "credential" and not has_capability(ctx.spec, family):
                 out.append(_v("capability_consistency", "error",
                               f"runtime.{family}.* 调用未在 capabilities 声明", rel, call.lineno))
             if family == "credential":

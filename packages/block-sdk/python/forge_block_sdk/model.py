@@ -56,3 +56,14 @@ class BlockSpec:
 
 
 BLOCK_FIELDS = frozenset(f.name for f in dataclasses.fields(BlockSpec))
+
+# M05 §4 / 架构 §6.4 Capability 家族面（lint R4 静态门与 runtime 运行时门共用单一来源）
+FAMILIES = (
+    "browser", "file", "office", "ai", "code", "data",
+    "api", "credential", "confirm", "interact", "probe",
+)
+
+
+def has_capability(spec: BlockSpec, family: str) -> bool:
+    """capability 家族或家族_变体匹配（ai_fast → ai）。"""
+    return any(c == family or c.startswith(family + "_") for c in spec.capabilities)

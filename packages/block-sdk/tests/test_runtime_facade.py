@@ -111,3 +111,10 @@ def test_cross_lint_component_error(demo_block_dir):
     result = lint(overlay(demo_block_dir, {"main.py": src}))
     assert not hits(result, "bare_except")
     assert result.ok
+
+
+def test_for_block_rejects_bad_interactions():
+    with pytest.raises(TypeError):
+        for_block(demo_spec(), "ab")
+    with pytest.raises(TypeError):
+        for_block(demo_spec(), 42)

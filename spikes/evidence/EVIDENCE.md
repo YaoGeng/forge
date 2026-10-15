@@ -84,3 +84,29 @@
 ## 最终整分支评审（独立评审员，全新上下文，2026-10-15）
 
 复跑验收 29 passed；抽查确认报告 §2 数据与判定 JSON 逐项吻合、恢复核验一致、R5/R6 失败轮与诊断链自洽、无夸大声明。**0 Critical / 4 Important / 7 Minor**，初裁「不可合并」；Important 4 条已全部修复：①生产 runner 加 30s 超时（防 PowerShell 挂起卡死看门狗与恢复路径）；②`_is_blocked` 收紧为三类网络阻断签名（基础设施故障不判阻断）+ VP1 对照组显式校验 `control_ok`；③DNS/UDP-53「实测优于预期」降级为「推定（未设 UDP 探针）」（报告 §3 与 05 附录 A.8 同步），run3 留档补 git 指针；④PF anchor 收窄到代理端口（conf 模板 + setup 注入实际端口）+ PF 启用态回退。Minor 已修 5 项（计划计数 15→18、exit 门 R9、worker 资源 finally 兜底、verify_pf 真实 bind 尝试与 `host@ip` 防呆、setup_pf 端口注入）；缓办 2 项（verify_pf docstring 措辞随 macOS 实测一并校正、proxy stop 在途 task 噪声——spike 可接受）。修复后回归 **29/29 passed**，裁决改判**可合并**。
+
+---
+
+# MS-1C 验收证据索引（SDK+lint）
+
+> 计划：`docs/10-MS1C执行计划.md`；执行日期：2026-10-15；环境：Windows 11 build 26200 / Python 3.12.10（spikes/.venv）/ 零新增依赖（PyYAML 为 D-M1B.1 既有）。
+> 交付：`packages/block-sdk`（block.yaml v2 + interactions.yaml 校验器、lint 十规则、ComponentError + runtime 外观桩、合规示例积木 corpus/valid/demo_block）。
+
+## 验收命令与结果
+
+| 卡 | 验收命令 | 结果 |
+|---|---|---|
+| T1.10 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_block_model.py -q` | **34 passed**（含评审修复轮 6 个复现测试） |
+| T1.11 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_lint_rules.py -q` | **31 passed**（十规则逐条正反 + 修复轮 8 个复现测试） |
+| T1.12 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_runtime_facade.py -q` | **11 passed** |
+| T1.13 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests -q` | **77 passed**（含 test_full_chain_validation） |
+
+## MS-1C Gate 状态
+
+**gate = lint 十规则正反用例全绿 + 合规示例积木通过全链校验。两条件达成**（每规则 ≥1 正 1 反；demo_block 依次过 validate_block_dir → lint(ok=True, 0 violation) → for_block 构造）。
+
+## 评审与裁定
+
+- 三卡 A4 评审各一轮（code-reviewer 子代理，全新上下文）：T1.10 首轮不通过（1C/3I：adapter 非字符串崩溃、未知键类型混淆、entry 相对路径未实现、恒真断言）→ 修复轮通过；T1.11 首轮不通过（C5 %/format 形态缺失、AnnAssign 别名绕过 R8、lint() 两条异常路径）→ 修复轮通过；T1.12 首轮通过（0 阻断，4 建议项随 T1.13 处理）。
+- 具体化裁定 C1-C15 见 `docs/10-MS1C执行计划.md` §3（含 T1.10-T1.12 评审登记的 C3 澄清/C13 网络禁区扩围/C14 PermissionDenied/C15 for_block 签名）。
+- 已登记静态局限（M05 运行时兜底）：两层以上别名、动态导入/getattr/lambda 间接不做追踪——M07 §6 防意外口径，出口代理 + PermissionBroker 为运行时主防线。

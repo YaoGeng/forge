@@ -5,22 +5,13 @@ import uuid
 from dataclasses import dataclass, field
 
 from .errors import BackendNotWired, PermissionDenied
-from .model import BlockSpec
-
-FAMILIES = (
-    "browser", "file", "office", "ai", "code", "data",
-    "api", "credential", "confirm", "interact", "probe",
-)
+from .model import FAMILIES, BlockSpec, has_capability
 
 
 @dataclass(frozen=True)
 class CredentialHandle:
     """不透明凭证句柄（token 随机生成，不携带明文名）。"""
     token: str = field(default_factory=lambda: uuid.uuid4().hex)
-
-
-def _has_capability(spec: BlockSpec, family: str) -> bool:
-    return any(c == family or c.startswith(family + "_") for c in spec.capabilities)
 
 
 def _declared_credentials(spec: BlockSpec) -> set[str]:
@@ -32,24 +23,18 @@ class RuntimeFacade:
 
     def __init__(self, spec: BlockSpec, interactions: tuple = ()):
         self._spec = spec
-        self._interactions = interactions
+        try:
+            self._interaction_types = {i.type for i in interactions}
+        except (TypeError, AttributeError) as exc:
+            raise TypeError("interactions 应为 InteractionSpec 序列") from exc
         for family in FAMILIES:
             setattr(self, family, _FamilyEndpoint(self, family))
         self.credential = _CredentialEndpoint(self)
         self.interact = _InteractEndpoint(self)
 
     def _gate_family(self, family: str) -> None:
-        if not _has_capability(self._spec, family):
+        if not has_capability(self._spec, family):
             raise PermissionDenied(f"runtime.{family}.* 未在 capabilities 声明")
-
-    def _declared_interaction_types(self) -> set[str]:
-        return {i.type for i in self._interactions}
-
-    def request(self, spec: dict) -> None:
-        """runtime.confirm 请求面：门后未接线。"""
-        self._gate_family("confirm")
-        _require_mapping(spec)
-        raise BackendNotWired("confirm.request 后端未接线（MS-1C 桩）")
 
 
 class _FamilyEndpoint:
@@ -92,7 +77,7 @@ class _InteractEndpoint:
         itype = spec.get("type")
         if not isinstance(itype, str):
             raise TypeError("interact.ask spec 缺少字符串 type")
-        if itype not in self._facade._declared_interaction_types():
+        if itype not in self._facade._interaction_types:
             raise PermissionDenied(f"交互类型 {itype} 未在 interactions.yaml 声明")
         raise BackendNotWired("interact.ask 后端未接线（MS-1C 桩）")
 
