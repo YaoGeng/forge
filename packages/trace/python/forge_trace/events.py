@@ -20,7 +20,11 @@ _Actions = ("click", "input", "scroll", "wait", "nav")
 
 @dataclass(frozen=True)
 class BrowserEvent:
-    """适配器上报的原始事件；anchor 为该元素的 dom_anchor（selectors 锻造产物）。"""
+    """适配器上报的原始事件；anchor 为该元素的 dom_anchor（selectors 锻造产物）。
+
+    html 为事件时点页面快照（真实适配器由 JS 随事件自带；FakeBrowser/测试
+    可缺省由 Recorder 经端口主线程快照兜底）。
+    """
 
     kind: str  # click | input | scroll | nav | keystroke | blur
     selector: str | None = None
@@ -29,6 +33,7 @@ class BrowserEvent:
     delta: int | None = None  # scroll 增量
     url: str | None = None  # nav 目标
     ts_ms: int = 0
+    html: str | None = None  # 事件时点页面快照（聚合不消费）
 
 
 @dataclass

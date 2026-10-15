@@ -114,3 +114,46 @@
 ## 整分支终审（独立评审员，全新上下文，2026-10-15）
 
 复跑验收 77 passed（修复后 82）；Review Focus 五条确认被真实测试钉住；三处口径（capability/credential/interaction）同源核验通过；裁定 C1-C15 与代码逐条比对无冲突；工程纪律干净。**0 Critical / 1 Important / 7 Minor**，初裁「不可合并」。Important 1 条已修复：非 UTF-8 声明文件三条读取路径（validate._resolve / R2 requirements / R3 test.yaml）使 lint() 抛 UnicodeDecodeError——全部短路为 ValidationError/对应 violation（GBK 复现测试 RED→GREEN）。Minor 处置：M-1 R6 误报面走 C8 修订（仅 side_effects=true 生效）已修；M-3 ComponentError 补 __reduce__ 已修；M-5 CAPABILITY_RE 收敛到 FAMILIES 单一来源已修；M-6 README golden 过度声明已改；M-7 工程卫生（conftest 死常量、转发包装、死面、公开面漏列、fail-closed 缺钉）已修；M-2 tests/ 全扫误报面与 M-4 facade 开式 __getattr__ 维持登记（M09/M05 落地时处理）。修复后回归 **82/82 passed**，裁决改判可合并。
+
+---
+
+# MS-1D 录制回放（docs/11，2026-10-16）
+
+## 交付物
+
+`packages/trace`（forge_trace）：Recorder（定案时点快照对齐 + annotate）、`replay.run` 唯一入口（local/golden；structured 显式 NotImplementedError）、回放一致性比较器（exact/tolerant/similarity/mismatch）、golden 采集与值脱敏（`⟦R:n⟧` 占位符、route 匹配键不含值、拒收校验）、golden_similarity 断言与 TestRunner（路径计数广义 Jaccard，C7-R1）、BrowserPort 三面端口 + patchright 真实适配器 + FakeBrowser 不触网单测基建。
+
+## 验收命令与输出
+
+| 卡 | 验收命令 | 结果 |
+|---|---|---|
+| T1.21a | `spikes/.venv/Scripts/python -m pytest packages/trace/tests/test_selectors.py packages/trace/tests/test_events.py packages/trace/tests/test_store.py -q` | **14 passed**（含自审修复轮 2 个复现测试） |
+| T1.21b | `spikes/.venv/Scripts/python -m pytest packages/trace/tests/test_recorder.py -q` | **29 passed**（评审修复轮：快照定案时点、网络尾部收口、假体 keystroke 形态等 5 项 RED→GREEN） |
+| T1.22 | `spikes/.venv/Scripts/python -m pytest packages/trace/tests/test_replayer.py packages/trace/tests/test_compare.py -q` | **17 passed**（评审修复轮：比较器前置校验、异常/anchor 分列等 6 项） |
+| T1.23 | `spikes/.venv/Scripts/python -m pytest packages/trace/tests/test_golden_redact.py -q` | **14 passed**（评审修复轮：userinfo 剥离、空串放行、first-wins 等多项） |
+| T1.24 | `spikes/.venv/Scripts/python -m pytest packages/trace/tests/test_similarity.py packages/trace/tests/test_full_chain_trace.py -q` | **30 passed**（评审两轮：广义 Jaccard、void 即闭、组合判定等） |
+| T1.25 全链 | `spikes/.venv/Scripts/python -m pytest packages/trace/tests -q` | **76 passed**（单测全不触网；全仓 196/196） |
+| T1.25 gate | `spikes/.venv/Scripts/python spikes/run_ms1d_gate.py --site A|B|C` | **三站点 gate: PASS**（证据：`t1.25_A_example_com.json` / `t1.25_B_hn_algolia_com.json` / `t1.25_C_cn_bing_com.json`） |
+
+## MS-1D Gate 状态
+
+**gate = 3 种子站点（含 1 高变更）录制→回放 10 次一致 + 脱敏后无原始值。两条件达成**：
+
+| 站点 | 等级 | 一致性 | 脆弱步 | 脱敏 |
+|---|---|---|---|---|
+| A example.com | standard | **exact**（10/10） | 0 | 零泄漏 |
+| B hn.algolia.com | medium | **similarity**（10/10） | 0 | 零泄漏 |
+| C cn.bing.com | high | **similarity**（10/10，fill+Enter 交互） | 0 | 零泄漏 |
+
+## Gate 实证与裁定登记
+
+- **换站登记（C1 修订 R2，计划预授权）**：baidu.com 改版 AI 对话式首页（经典 #kw/#su 隐藏，fill 不可用；sogou 反爬）→ C 站换 **cn.bing.com**（fill+Enter 交互保留）；B 站亦走 similarity 通道（C6 判据本意：动态内容 digest 必异）。
+- **适配器铁律（gate 实证得出，写死在 patchright_browser.py 文档串）**：patchright 屏蔽 add_init_script（每文档 load 后 evaluate 重注入）；**派发处理器内零 playwright 调用**（commit 时点 content() 阻塞到浏览器关闭、binding 内 wait_for_load_state 死锁）；nav 由主线程 _flush_nav 泵出（framenavigated 只登记 pending，重入/同 URL 去重）；SPA pushState 不产生 nav 步（v1 边界）。
+- similarity 通道在真实动态站点（B/C）10/10 接住结构相似度 ≥0.85；A 站纯静态 exact。
+
+## 评审与裁定
+
+- 五卡 A4 评审（code-reviewer 子代理，全新上下文）各一轮 + 修复轮：T1.21a 子代理三次派发被平台拦截改自审（2 项修复）；T1.21b（3I+5M+proto 基线缺陷 1，全修）；T1.22（2I+6M，全修）；T1.23（可合入，1 登记项+8M）；T1.24（1C+3I+4M，两轮修复定稿 C7-R1）。
+- 基线外修复：packages/proto `_load_login_steps` 重复定义遮蔽 seq≥1 校验（MS-1B 遗留，独立提交 cb58de6）。
+- 计划修订：C7-R1（路径计数+广义 Jaccard）、C8-R1（selector/anchor 文本通道豁免登记 + userinfo 剥离 + 空串放行，协同修订随 docs/12 T1.33）、C1-R2（换站 + B 站 similarity 通道）。
+- 缓办登记：response body 采集/脱敏上传、mode=structured（M06）、端口 close 面、selector/anchor 文本通道脱敏（C8-R1）、SPA pushState nav。

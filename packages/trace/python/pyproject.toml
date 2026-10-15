@@ -1,0 +1,9 @@
+[project]
+name = "forge-trace"
+version = "0.1.0"
+description = "Forge 录制回放包：Recorder/Replayer/golden/TestRunner（M07 §4/§5 编码，docs/11）"
+requires-python = ">=3.12"
+dependencies = [
+    "PyYAML>=6.0",
+    "patchright>=1.49",
+]

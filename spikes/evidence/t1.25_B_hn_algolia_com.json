@@ -1,0 +1,151 @@
+{
+  "site": "hn.algolia.com",
+  "tier": "medium",
+  "replays": 10,
+  "started_at": "2026-10-16T03:36:02+0800",
+  "trace_ref": "tr_20261015193641_aaeef6ee",
+  "trace_errors": [],
+  "consistency": "similarity",
+  "diff": [
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '5879bd39551d658d'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '46cd4ae53bb703b6'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'e63e6670151ef264'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'b675b27ea304a6cb'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '22b5e6bedd6eb6fd'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '2b2e9bee5d48483f'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'e077e0fc37f6fa09'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'e477ba9df50824c6'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '813ac15a07362f9b'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '5879bd39551d658d'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '46cd4ae53bb703b6'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'e63e6670151ef264'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'b675b27ea304a6cb'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '22b5e6bedd6eb6fd'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '2b2e9bee5d48483f'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'e077e0fc37f6fa09'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != 'e477ba9df50824c6'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '5a510e5e515464d3' != '813ac15a07362f9b'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != '4bcf43d33f8ab8a0'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != 'a797241ec361f746'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != 'f46f32ca9747ab1a'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != '2a14a9a3222a28d8'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != 'a57fb76d463ac1d7'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != 'e7eea4c1c31e3bd5'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != 'bab7347ff2e2f7bd'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != 'b0f452cc387c1fcb'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'ac4cbf2828bf0697' != 'f78604c599340b6f'"
+    }
+  ],
+  "fragile_steps": [],
+  "redaction_errors": [],
+  "golden_dir": "C:\\Users\\yg\\Desktop\\forge\\spikes\\evidence\\ms1d_store\\golden\\tr_20261015193641_aaeef6ee",
+  "gate": "PASS",
+  "finished_at": "2026-10-16T03:38:08+0800"
+}

@@ -1,0 +1,196 @@
+{
+  "site": "cn.bing.com",
+  "tier": "high",
+  "replays": 10,
+  "started_at": "2026-10-16T03:40:18+0800",
+  "trace_ref": "tr_20261015194026_756d3b9e",
+  "trace_errors": [],
+  "consistency": "similarity",
+  "diff": [
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '468538bcc3deb51c'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != 'f1b2ecafeec184e7'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '2113bd95d1aa8ee5'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '8adfd20289cdfd22'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '31604b8528827534'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != 'afec816bc781589a'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '9db9c8ebe5047bbf'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '441ef6f96bd35eb5'"
+    },
+    {
+      "seq": 1,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '623475aebdb9d5e0'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '468538bcc3deb51c'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != 'f1b2ecafeec184e7'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '2113bd95d1aa8ee5'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '8adfd20289cdfd22'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '31604b8528827534'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != 'afec816bc781589a'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '9db9c8ebe5047bbf'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '441ef6f96bd35eb5'"
+    },
+    {
+      "seq": 2,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: '1c7c5f460e19b6f1' != '623475aebdb9d5e0'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != 'b032612f10bfba8c'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != 'f14fa6c81fc9dd50'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != 'c650613c660b32cc'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != '0deb61e7b487fb88'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != '013a3e338a7c928f'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != 'da761f112115be16'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != 'd21d11e6c51ece0e'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != '13b884f566c26712'"
+    },
+    {
+      "seq": 3,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'b1d63541d0d3866e' != 'c7f36391f3aa8e1b'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != 'e3e382b21ffd3b7f'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != '6c0826f3eb2cab66'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != '52053b85916a14d4'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != '39b18858c942cc9b'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != '104b500c24876a3a'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != '0ec0c60de799a537'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != 'c805f436bedf21df'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != '9c0a09a3b6f88090'"
+    },
+    {
+      "seq": 4,
+      "kind": "similarity",
+      "detail": "结构相似（digest 异）: snapshot_digest: 'd0e2732d8bdb3bac' != '5a8dbd3dc347a11f'"
+    }
+  ],
+  "fragile_steps": [],
+  "redaction_errors": [],
+  "golden_dir": "C:\\Users\\yg\\Desktop\\forge\\spikes\\evidence\\ms1d_store\\golden\\tr_20261015194026_756d3b9e",
+  "gate": "PASS",
+  "finished_at": "2026-10-16T03:43:03+0800"
+}

@@ -1,0 +1,15 @@
+{
+  "site": "example.com",
+  "tier": "standard",
+  "replays": 10,
+  "started_at": "2026-10-16T03:27:55+0800",
+  "trace_ref": "tr_20261015192808_ad61b05b",
+  "trace_errors": [],
+  "consistency": "exact",
+  "diff": [],
+  "fragile_steps": [],
+  "redaction_errors": [],
+  "golden_dir": "C:\\Users\\yg\\Desktop\\forge\\spikes\\evidence\\ms1d_store\\golden\\tr_20261015192808_ad61b05b",
+  "gate": "PASS",
+  "finished_at": "2026-10-16T03:29:16+0800"
+}

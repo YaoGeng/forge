@@ -62,20 +62,24 @@ class Recorder:
         assert self._port is not None
         self._events.append(event)
         self._network.extend(self._port.drain_network())
-        self._htmls.append(self._port.snapshot_html())
+        # 优先事件自带快照（真实适配器 JS 随事件提供，事件处理器内零 CDP——
+        # commit 时点调 page.content() 会阻塞到浏览器关闭，gate 实证）；
+        # 缺省时回退端口主线程快照（FakeBrowser/测试路径）
+        html = event.html if event.html is not None else self._port.snapshot_html()
+        self._htmls.append(html)
 
     def _stop(self) -> str:
         if self._port is None:
             raise RuntimeError("record.stop 需先 record.start")
         try:
+            # 先收口 pending nav（主线程 drain 会触发适配器 flush 并派发积压事件）
+            self._network.extend(self._port.drain_network())
             events = self._events
             htmls = self._htmls
             steps = aggregate(events)
             if not steps:
                 raise RuntimeError("录制未产生任何步骤，不生成轨迹")
             snapshots = _snapshots_at_finalize(events, htmls, steps)
-            # 末次事件后仍可能有网络到达（如最后 click 的 XHR 迟到），stop 时收口
-            self._network.extend(self._port.drain_network())
             manifest = Manifest(
                 format_version=TRACE_FORMAT_VERSION,
                 site=self._host or "",
