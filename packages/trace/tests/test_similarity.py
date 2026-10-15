@@ -92,10 +92,11 @@ def test_testrunner_schema_pass_fail(tmp_path):
 
 
 def test_testrunner_golden_channel(tmp_path):
+    from forge_trace.similarity import AssertVerdict
     test_yaml = tmp_path / "test.yaml"
     test_yaml.write_text("assertion: golden_similarity\nthreshold: 0.85\n", encoding="utf-8")
     v = TestRunner.check({"html_a": PAGE_10, "html_b": PAGE_TEXT_NOISE}, test_yaml)
-    assert isinstance(v, type(TestRunner.check({"html_a": PAGE_10, "html_b": PAGE_TEXT_NOISE}, test_yaml)))
+    assert isinstance(v, AssertVerdict)
     assert v.ok and v.assertion == "golden_similarity"
     bad = TestRunner.check({"html_a": PAGE_10, "html_b": PAGE_5}, test_yaml)
     assert not bad.ok
@@ -106,3 +107,56 @@ def test_testrunner_unknown_assertion(tmp_path):
     test_yaml.write_text("assertion: magic\n", encoding="utf-8")
     with pytest.raises(ValueError):
         TestRunner.check({}, test_yaml)
+
+
+def test_similarity_rejects_identical_dup_half_deletion():
+    # 评审 Critical：同构重复节点删半（presence/计数余弦均盲）必须被拒绝
+    unit = "<section><h2>标题</h2><p>段落正文内容完全相同</p></section>"
+    page10 = "<html><body><main>" + unit * 10 + "</main></body></html>"
+    page5 = "<html><body><main>" + unit * 5 + "</main></body></html>"
+    v = golden_similarity(page10, page5)
+    assert v.score < 0.85 and not v.passed
+
+
+def test_similarity_accepts_minor_count_drift():
+    # 动态内容：10 → 9 同构项（比例 0.9）应放行，拒绝线只砍结构性缺失
+    unit = "<section><h2>标题</h2><p>段落正文内容完全相同</p></section>"
+    page10 = "<html><body><main>" + unit * 10 + "</main></body></html>"
+    page9 = "<html><body><main>" + unit * 9 + "</main></body></html>"
+    assert golden_similarity(page10, page9).passed
+
+
+def test_similarity_tolerates_void_tag_flip():
+    # 评审 Important：void 标签不入栈——单侧 <br> 不得污染子树路径；
+    # 真实页规模下（数十路径）单节点差异应在阈上（小页粒度见 C7-R1 说明）
+    body = "".join(f"<section><h2>标题{i}</h2><p>段落{i}的正文内容</p></section>" for i in range(10))
+    a = f"<html><body><form><input>{body}<button>go</button></form></body></html>"
+    b = f"<html><body><form><input><br>{body}<button>go</button></form></body></html>"
+    v = golden_similarity(a, b)
+    assert v.passed and v.score >= 0.95
+
+
+def test_fieldwise_unhashable_set_items():
+    # 评审 Important：列表元素为 dict（JSON 常态）不得 TypeError 崩溃
+    same = fieldwise({"items": [{"a": 1}]}, {"items": [{"a": 1}]})
+    assert same.ok
+    diff = fieldwise({"items": [{"a": 1}]}, {"items": [{"a": 2}]})
+    assert not diff.ok and diff.failures
+
+
+def test_golden_similarity_combined_verdict():
+    # 评审 Important：结构过 ∧ 字段超差 → 不得通过（组合判定覆盖）
+    fields_bad = golden_similarity(
+        PAGE_10, PAGE_TEXT_NOISE, fields_a={"count": 10}, fields_b={"count": 999}
+    )
+    assert fields_bad.fields_ok is False and not fields_bad.passed
+    fields_ok = golden_similarity(
+        PAGE_10, PAGE_TEXT_NOISE, fields_a={"count": 98}, fields_b={"count": 100}
+    )
+    assert fields_ok.passed
+
+
+def test_fieldwise_bool_vs_number_distinct():
+    # 评审 Minor：True 与 1 不得混同（bool/int 类型混淆）
+    assert not fieldwise({"flag": True}, {"flag": 1}).ok
+    assert fieldwise({"flag": True}, {"flag": True}).ok

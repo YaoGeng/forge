@@ -1,9 +1,11 @@
 """golden_similarity 断言与 TestRunner（docs/11 §3 C7 v1：确定性结构嵌入，无 AI 调用）。
 
-结构嵌入 = 标签**路径**计数向量（根→节点标签链，深度≤8，小写化）。
-修订 R1（T1.24）：全局标签计数对删半/换主标签不敏感（余弦 ≈0.99），
-满足不了 Review Focus 5 的结构变更拒绝线；路径计数使结构差异显影，
-同模板异文本仍 ≈1.0（文本不进嵌入）。
+结构嵌入 = 标签**路径计数**向量（根→节点标签链，深度≤8，小写化，void 元素即闭不入栈）；
+相似度 = 广义 Jaccard（Σmin/Σmax，幅值敏感）。
+修订 R1（T1.24，评审后二次修订）：余弦（方向度量）对重复路径删半不敏感
+（计数 0.99 / 存在性 1.0），拒绝不了 Review Focus 5；广义 Jaccard 下
+删半 ≈0.55、换主标签 ≈0.06、文本噪声 =1.0、10→9 同构项 0.91 放行——
+结构缺失按比例显影，动态内容小幅漂移不误伤。
 阈值 0.85 为 v1 初值（M07 §3.2「初值 TBD」→ docs/11 §3 C7 钉死）。
 """
 from __future__ import annotations
@@ -16,18 +18,28 @@ import yaml
 
 SIMILARITY_THRESHOLD = 0.85
 _EMBED_MAX_DEPTH = 8
+# HTML void 元素：无闭合标签，不入栈（评审 Important：单侧 <br> 不得污染子树路径）
+_VOID_TAGS = frozenset({
+    "area", "base", "br", "col", "embed", "hr", "img", "input",
+    "link", "meta", "param", "source", "track", "wbr",
+})
 
 
 class _PathCollector(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self.paths: set[str] = set()
+        self.counts: dict[str, int] = {}
         self._stack: list[str] = []
 
     def handle_starttag(self, tag, attrs) -> None:
         t = tag.lower()
+        if t in _VOID_TAGS:
+            path = "/".join((*self._stack[-_EMBED_MAX_DEPTH:], t))
+            self.counts[path] = self.counts.get(path, 0) + 1
+            return
         self._stack.append(t)
-        self.paths.add("/".join(self._stack[-_EMBED_MAX_DEPTH:]))
+        path = "/".join(self._stack[-_EMBED_MAX_DEPTH:])
+        self.counts[path] = self.counts.get(path, 0) + 1
 
     def handle_endtag(self, tag) -> None:
         t = tag.lower()
@@ -38,18 +50,14 @@ class _PathCollector(HTMLParser):
 
 
 def embed(html: str) -> dict[str, float]:
-    """html → 标签路径**存在性**向量（path → 1.0；解析失败按空文档处理，不抛）。
-
-    二值存在性而非计数：重复路径的点积会掩盖节点删半（计数余弦 ≈0.97）；
-    结构形状由 presence 表达，数量差异归 fieldwise 数值容差通道（C7-R1）。
-    """
+    """html → 标签路径计数向量（解析失败按空文档处理，不抛）。"""
     collector = _PathCollector()
     try:
         collector.feed(html)
         collector.close()
     except Exception:
         return {}
-    return {k: 1.0 for k in collector.paths}
+    return {k: float(v) for k, v in collector.counts.items()}
 
 
 def cosine(a: dict[str, float], b: dict[str, float]) -> float:
@@ -66,9 +74,21 @@ def cosine(a: dict[str, float], b: dict[str, float]) -> float:
     return dot / (na * nb)
 
 
+def generalized_jaccard(a: dict[str, float], b: dict[str, float]) -> float:
+    """Σmin/Σmax（幅值敏感）；两空向量视为全同（空页对空页不误报）。"""
+    if not a and not b:
+        return 1.0
+    if not a or not b:
+        return 0.0
+    keys = set(a) | set(b)
+    num = sum(min(a.get(k, 0.0), b.get(k, 0.0)) for k in keys)
+    den = sum(max(a.get(k, 0.0), b.get(k, 0.0)) for k in keys)
+    return num / den if den else 1.0
+
+
 def structural_similarity(html_a: str, html_b: str) -> float:
-    """结构嵌入余弦（C7 修订 R1）；计数向量非负故恒 ≥0。"""
-    return max(0.0, cosine(embed(html_a), embed(html_b)))
+    """结构相似度（C7 修订 R1）：路径计数向量上的广义 Jaccard。"""
+    return max(0.0, min(1.0, generalized_jaccard(embed(html_a), embed(html_b))))
 
 
 @dataclass(frozen=True)
@@ -85,14 +105,19 @@ def fieldwise(
     abs_tol: float = 0.5,
     set_jaccard_min: float = 0.8,
 ) -> FieldVerdict:
-    """字段级容差（C7）：数值 ±num_tol 相对或 ±abs_tol 绝对（取宽）；集合 Jaccard；字符串须等。"""
+    """字段级容差（C7，平铺字段）：数值 ±num_tol 相对或 ±abs_tol 绝对（取宽）；
+    集合 Jaccard；bool 与数字分型；字符串须等。嵌套 dict 值按严格相等（v1 不递归）。
+    """
     failures: list[str] = []
     for key in sorted(set(a) | set(b)):
         if key not in a or key not in b:
             failures.append(f"{key}: 单侧缺失")
             continue
         x, y = a[key], b[key]
-        if isinstance(x, bool) or isinstance(y, bool):
+        x_bool, y_bool = isinstance(x, bool), isinstance(y, bool)
+        if x_bool != y_bool:
+            failures.append(f"{key}: bool 与数值分型混淆 {x!r} vs {y!r}")
+        elif x_bool:
             if x != y:
                 failures.append(f"{key}: {x!r} != {y!r}")
         elif isinstance(x, (int, float)) and isinstance(y, (int, float)):
@@ -100,7 +125,12 @@ def fieldwise(
             if not (abs(x - y) / denom <= num_tol or abs(x - y) <= abs_tol):
                 failures.append(f"{key}: 数值超差 {x} vs {y}")
         elif isinstance(x, (list, set)) and isinstance(y, (list, set)):
-            sx, sy = set(x), set(y)
+            try:
+                sx, sy = set(x), set(y)
+            except TypeError:  # 元素不可哈希（JSON dict 项常态）：按整体相等兜底
+                if x != y:
+                    failures.append(f"{key}: 列表不等（含不可哈希元素）")
+                continue
             union = sx | sy
             jaccard = len(sx & sy) / len(union) if union else 1.0
             if jaccard < set_jaccard_min:
