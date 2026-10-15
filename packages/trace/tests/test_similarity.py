@@ -160,3 +160,13 @@ def test_fieldwise_bool_vs_number_distinct():
     # 评审 Minor：True 与 1 不得混同（bool/int 类型混淆）
     assert not fieldwise({"flag": True}, {"flag": 1}).ok
     assert fieldwise({"flag": True}, {"flag": True}).ok
+
+
+def test_similarity_rejects_two_distinct_text_only_pages():
+    # 终审 Important-2：零标签纯文本页（错误页形态）嵌入为空向量，
+    # 两个不同文案不得互判 1.0（digest 相同的空页本就走 exact 通道）
+    # 终审 Important-2：零标签纯文本页（错误页直出形态）嵌入为空向量，
+    # 两个不同文案不得互判 1.0（digest 相同的空页本就走 exact 通道）；
+    # 对照：有标签的同结构异文本页仍判全同（文本不进嵌入，设计行为）
+    assert structural_similarity("404 Not Found", "503 Service Unavailable") == 0.0
+    assert structural_similarity("<p>404 not found</p>", "<p>503 unavailable</p>") >= 0.85

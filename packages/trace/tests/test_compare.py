@@ -111,3 +111,29 @@ def test_compare_requires_same_trace_ref():
             [_run([_step(1, "nav")], trace_ref="tr_a"), _run([_step(1, "nav")], trace_ref="tr_b")],
             _manifest(),
         )
+
+
+def test_similarity_channel_checks_each_run(root):
+    # 终审 Important-1：第 3..N 跑的 digest 差异必须各自过相似度，
+    # 不得借用首两跑的判定放行（第 3 跑结构迥异 → mismatch）
+    from forge_proto.trace import Manifest
+    good_a = "<html><body><main><p>x</p><p>y</p></main></body></html>"
+    good_b = "<html><body><main><p>1</p><p>2</p></main></body></html>"
+    alien = "<html><body><table><tr><td>z</td></tr></table></body></html>"
+    r1 = _run([_step(1, "nav", digest="aa")])
+    r2 = _run([_step(1, "nav", digest="bb")])
+    r3 = _run([_step(1, "nav", digest="cc")])
+    report = assert_consistent([r1, r2, r3], _manifest(), htmls={1: (good_a, good_b, alien)})
+    assert report.kind == "mismatch"
+
+
+def test_similarity_channel_per_run_pass():
+    from forge_proto.trace import Manifest
+    good_a = "<html><body><main><p>x</p><p>y</p></main></body></html>"
+    good_b = "<html><body><main><p>1</p><p>2</p></main></body></html>"
+    good_c = "<html><body><main><p>3</p><p>4</p></main></body></html>"
+    r1 = _run([_step(1, "nav", digest="aa")])
+    r2 = _run([_step(1, "nav", digest="bb")])
+    r3 = _run([_step(1, "nav", digest="cc")])
+    report = assert_consistent([r1, r2, r3], _manifest(), htmls={1: (good_a, good_b, good_c)})
+    assert report.kind == "similarity"

@@ -194,7 +194,7 @@ def assert_consistent(
     htmls = htmls or {}
     diff: list[dict] = []
     for i, base_step in enumerate(base.step_results):
-        for other in runs[1:]:
+        for ri, other in enumerate(runs[1:], start=1):
             other_step = other.step_results[i]
             detail = _first_diff(base_step, other_step)
             if detail is None:
@@ -207,8 +207,8 @@ def assert_consistent(
             if (
                 detail.startswith("snapshot_digest")
                 and pair is not None
-                and len(pair) >= 2
-                and structural_similarity(pair[0], pair[1]) >= SIMILARITY_THRESHOLD
+                and len(pair) > ri
+                and structural_similarity(pair[0], pair[ri]) >= SIMILARITY_THRESHOLD
             ):
                 diff.append({"seq": base_step["seq"], "kind": "similarity",
                              "detail": f"结构相似（digest 异）: {detail}"})

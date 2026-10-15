@@ -87,8 +87,15 @@ def generalized_jaccard(a: dict[str, float], b: dict[str, float]) -> float:
 
 
 def structural_similarity(html_a: str, html_b: str) -> float:
-    """结构相似度（C7 修订 R1）：路径计数向量上的广义 Jaccard。"""
-    return max(0.0, min(1.0, generalized_jaccard(embed(html_a), embed(html_b))))
+    """结构相似度（C7 修订 R1）：路径计数向量上的广义 Jaccard。
+
+    任一侧解析出零标签（纯文本错误页形态）→ 0.0：两个不同文案的文本页
+    不得经空向量互判全同（终审 Important-2；digest 相同的空页本就走 exact）。
+    """
+    ea, eb = embed(html_a), embed(html_b)
+    if not ea or not eb:
+        return 0.0
+    return max(0.0, min(1.0, generalized_jaccard(ea, eb)))
 
 
 @dataclass(frozen=True)

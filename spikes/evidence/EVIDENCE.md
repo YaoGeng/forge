@@ -157,3 +157,18 @@
 - 基线外修复：packages/proto `_load_login_steps` 重复定义遮蔽 seq≥1 校验（MS-1B 遗留，独立提交 cb58de6）。
 - 计划修订：C7-R1（路径计数+广义 Jaccard）、C8-R1（selector/anchor 文本通道豁免登记 + userinfo 剥离 + 空串放行，协同修订随 docs/12 T1.33）、C1-R2（换站 + B 站 similarity 通道）。
 - 缓办登记：response body 采集/脱敏上传、mode=structured（M06）、端口 close 面、selector/anchor 文本通道脱敏（C8-R1）、SPA pushState nav。
+
+## 整分支终审（独立评审员，全新上下文，2026-10-16）
+
+复跑验收 199 passed（修复后）；Review Focus 五失败面确认被真实测试钉住；G10 唯一入口、裁定 C1-R2/C7-R1/C8-R1 落地核验、适配器派发零 CDP 铁律、脱敏端到端、proto 冻结基线全部通过。**0 Critical / 2 Important / 8 Minor**，初裁「需修改后合入」。Important 2 条已修复（各 RED→GREEN）：①assert_consistent similarity 通道按跑逐比对（原固定取首两跑 html，第 3..N 跑借用判定放行）——test_similarity_channel_checks_each_run/…_per_run_pass；②零标签纯文本页空向量互判 1.0 的漏报——structural_similarity 空侧即 0.0（digest 相同的空页走 exact），test_similarity_rejects_two_distinct_text_only_pages。修复后回归 **199/199**。Minor 8 条全部登记缓办（见下）。裁决改判可合并。
+
+### 终审缓办 Minor 清单（M09/M05/docs-12 消费时处理）
+
+1. validate_golden_no_raw 不查 netloc userinfo（C8-R1 剥离只在 collect 侧）——docs/12 T1.33 服务端同规则落地时一并补
+2. tolerance_ms 全豁免（声明步任何差异判 tolerant）——已有 ledger ruling，数值强制随 M07-c golden 模式细化
+3. patchright _pending_nav 单槽（快速连续导航少记 nav 步）——v1 边界
+4. forge_selector 对 id 无 CSS 转义（非法 selector 误标 fragile）——selectors.py 后续卡
+5. RecordingsStore 无 close()（Windows 长驻句柄）——随端口 close 面一并收口
+6. _snapshots_at_finalize O(n²)——已有 ledger ruling（T1.21b），超长会话 stop 变慢
+7. proto test_trace_types.py:349 死代码行（本里程碑修复轮引入的测试卫生）
+8. golden_similarity docstring 措辞（「结构余弦」→ 广义 Jaccard）+ gate 运行器死 finally/session
