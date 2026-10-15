@@ -5,6 +5,8 @@
 回放唯一入口 replay.run（M07 §5）；Recorder 产物必须过 proto 校验零错误。
 """
 from .events import INPUT_FLUSH_MS, IDLE_WAIT_MS, SCROLL_FLUSH_MS, BrowserEvent, aggregate
+from .port import BrowserPort
+from .recorder import RecordingSession, Recorder
 from .selectors import ElementFp, forge_selector
 from .store import Annotation, RecordingsStore, Recording
 
@@ -14,9 +16,12 @@ __all__ = [
     "SCROLL_FLUSH_MS",
     "Annotation",
     "BrowserEvent",
+    "BrowserPort",
     "ElementFp",
     "RecordingsStore",
     "Recording",
+    "RecordingSession",
+    "Recorder",
     "aggregate",
     "forge_selector",
 ]
