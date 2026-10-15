@@ -97,9 +97,9 @@
 | 卡 | 验收命令 | 结果 |
 |---|---|---|
 | T1.10 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_block_model.py -q` | **34 passed**（含评审修复轮 6 个复现测试） |
-| T1.11 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_lint_rules.py -q` | **31 passed**（十规则逐条正反 + 修复轮 8 个复现测试） |
-| T1.12 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_runtime_facade.py -q` | **11 passed** |
-| T1.13 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests -q` | **77 passed**（含 test_full_chain_validation） |
+| T1.11 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_lint_rules.py -q` | **34 passed**（十规则逐条正反 + 两轮修复复现测试） |
+| T1.12 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests/test_runtime_facade.py -q` | **13 passed** |
+| T1.13 | `spikes/.venv/Scripts/python -m pytest packages/block-sdk/tests -q` | **82 passed**（含 test_full_chain_validation；终审修复轮后回归） |
 
 ## MS-1C Gate 状态
 
@@ -110,3 +110,7 @@
 - 三卡 A4 评审各一轮（code-reviewer 子代理，全新上下文）：T1.10 首轮不通过（1C/3I：adapter 非字符串崩溃、未知键类型混淆、entry 相对路径未实现、恒真断言）→ 修复轮通过；T1.11 首轮不通过（C5 %/format 形态缺失、AnnAssign 别名绕过 R8、lint() 两条异常路径）→ 修复轮通过；T1.12 首轮通过（0 阻断，4 建议项随 T1.13 处理）。
 - 具体化裁定 C1-C15 见 `docs/10-MS1C执行计划.md` §3（含 T1.10-T1.12 评审登记的 C3 澄清/C13 网络禁区扩围/C14 PermissionDenied/C15 for_block 签名）。
 - 已登记静态局限（M05 运行时兜底）：两层以上别名、动态导入/getattr/lambda 间接不做追踪——M07 §6 防意外口径，出口代理 + PermissionBroker 为运行时主防线。
+
+## 整分支终审（独立评审员，全新上下文，2026-10-15）
+
+复跑验收 77 passed（修复后 82）；Review Focus 五条确认被真实测试钉住；三处口径（capability/credential/interaction）同源核验通过；裁定 C1-C15 与代码逐条比对无冲突；工程纪律干净。**0 Critical / 1 Important / 7 Minor**，初裁「不可合并」。Important 1 条已修复：非 UTF-8 声明文件三条读取路径（validate._resolve / R2 requirements / R3 test.yaml）使 lint() 抛 UnicodeDecodeError——全部短路为 ValidationError/对应 violation（GBK 复现测试 RED→GREEN）。Minor 处置：M-1 R6 误报面走 C8 修订（仅 side_effects=true 生效）已修；M-3 ComponentError 补 __reduce__ 已修；M-5 CAPABILITY_RE 收敛到 FAMILIES 单一来源已修；M-6 README golden 过度声明已改；M-7 工程卫生（conftest 死常量、转发包装、死面、公开面漏列、fail-closed 缺钉）已修；M-2 tests/ 全扫误报面与 M-4 facade 开式 __getattr__ 维持登记（M09/M05 落地时处理）。修复后回归 **82/82 passed**，裁决改判可合并。
