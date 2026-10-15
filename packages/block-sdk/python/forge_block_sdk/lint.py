@@ -71,12 +71,12 @@ def lint(block_dir: str | Path) -> LintResult:
         rel = p.relative_to(d).as_posix()
         try:
             tree = ast.parse(p.read_text(encoding="utf-8"))
-        except SyntaxError as exc:
-            return _invalid(f"Python 语法错误：{exc}", rel, exc.lineno or 0)
+        except (SyntaxError, UnicodeDecodeError, ValueError) as exc:
+            return _invalid(f"Python 源码不可解析：{exc}", rel, getattr(exc, "lineno", 0) or 0)
         py_sources.append((rel, tree))
-    entry_tree = next(
-        (t for r, t in py_sources if r == spec.runtime.entry), ast.parse("")
-    )
+    entry_tree = next((t for r, t in py_sources if r == spec.runtime.entry), None)
+    if entry_tree is None:
+        return _invalid(f"entry 文件不存在：{spec.runtime.entry}", "block.yaml")
 
     ctx = LintContext(
         spec=spec, interactions=interactions, block_dir=d,

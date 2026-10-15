@@ -14,7 +14,8 @@ import yaml
 
 from .model import BlockSpec, InteractionSpec
 
-NETWORK_MODULES = {"requests", "urllib", "httpx"}
+NETWORK_MODULES = {"requests", "urllib", "httpx", "socket", "http"}
+BROAD_EXCEPTIONS = {"Exception", "BaseException"}
 PUBLISH_VERBS = ("publish", "submit", "pay", "purchase", "checkout", "order")
 EXFIL_WORDS = ("url", "uri", "body", "query", "param", "payload", "header", "token")
 FAMILIES = (
@@ -52,17 +53,18 @@ def _dotted(node: ast.expr) -> str | None:
 
 
 def _collect_aliases(tree: ast.Module) -> dict[str, str]:
-    """C6：仅跟踪 `X = runtime` / `X = runtime.<家族>` 一层赋值别名。"""
+    """C6：仅跟踪 `X = runtime` / `X = runtime.<家族>` 一层赋值别名（含注解赋值）。"""
     aliases: dict[str, str] = {}
     for node in ast.walk(tree):
-        if (
-            isinstance(node, ast.Assign)
-            and len(node.targets) == 1
-            and isinstance(node.targets[0], ast.Name)
-        ):
+        target = None
+        if isinstance(node, ast.Assign) and len(node.targets) == 1:
+            target = node.targets[0]
+        elif isinstance(node, ast.AnnAssign) and node.value is not None:
+            target = node.target
+        if isinstance(target, ast.Name):
             chain = _dotted(node.value)
             if chain is not None and (chain == "runtime" or chain.startswith("runtime.")):
-                aliases[node.targets[0].id] = chain
+                aliases[target.id] = chain
     return aliases
 
 
@@ -208,6 +210,11 @@ def rule_interaction_consistency(ctx: LintContext) -> list[dict]:
                             literal_type = v.value
                         break
             if literal_type is None:
+                for kw in call.keywords:
+                    if kw.arg == "type" and isinstance(kw.value, ast.Constant) and isinstance(kw.value.value, str):
+                        literal_type = kw.value.value
+                        break
+            if literal_type is None:
                 out.append(_v("interaction_consistency", "error",
                               "interact.ask spec 非字面量或缺少字面量 type，无法静态判定", rel, call.lineno))
             elif literal_type not in declared:
@@ -248,42 +255,80 @@ def rule_side_effect_idempotency_key(ctx: LintContext) -> list[dict]:
 # ---- R8 凭证外传 ----
 
 
+def _is_credential_call(node: ast.expr, aliases: dict[str, str]) -> bool:
+    return isinstance(node, ast.Call) and (
+        _resolve_chain(node.func, aliases) or ""
+    ).startswith("runtime.credential.")
+
+
+def _collect_handles(tree: ast.Module, aliases: dict[str, str]) -> set[str]:
+    """登记承接 runtime.credential.* 结果的变量名（含注解赋值/元组解包/walrus/多目标）。"""
+    handles: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.Assign, ast.AnnAssign)) and not (
+            isinstance(node, ast.AnnAssign) and node.value is None
+        ):
+            value = node.value
+            targets = (
+                node.targets if isinstance(node, ast.Assign) else [node.target]
+            )
+            if _is_credential_call(value, aliases):
+                for t in targets:
+                    for n in ast.walk(t):
+                        if isinstance(n, ast.Name):
+                            handles.add(n.id)
+            elif isinstance(value, ast.Tuple) and isinstance(targets[0], ast.Tuple):
+                for t, elem in zip(targets[0].elts, value.elts):
+                    if _is_credential_call(elem, aliases) and isinstance(t, ast.Name):
+                        handles.add(t.id)
+        elif isinstance(node, ast.NamedExpr) and _is_credential_call(node.value, aliases):
+            if isinstance(node.target, ast.Name):
+                handles.add(node.target.id)
+    return handles
+
+
 def rule_credential_exfiltration(ctx: LintContext) -> list[dict]:
     out: list[dict] = []
     for rel, tree in ctx.py_sources:
         aliases = _collect_aliases(tree)
-        handles: set[str] = set()
-        for node in ast.walk(tree):
-            if isinstance(node, ast.Assign) and isinstance(node.value, ast.Call):
-                chain = _resolve_chain(node.value.func, aliases)
-                if chain and chain.startswith("runtime.credential."):
-                    handles.update(
-                        t.id for t in node.targets if isinstance(t, ast.Name)
-                    )
+        handles = _collect_handles(tree, aliases)
         if not handles:
             continue
+
+        def has_handle(node: ast.expr) -> bool:
+            return any(
+                isinstance(n, ast.Name) and n.id in handles for n in ast.walk(node)
+            )
+
         for node in ast.walk(tree):
+            template = None
+            payload: list[ast.expr] = []
             if isinstance(node, ast.JoinedStr):
-                names = {n.id for n in ast.walk(node) if isinstance(n, ast.Name)}
-                literal = "".join(
+                template = "".join(
                     v.value for v in node.values
                     if isinstance(v, ast.Constant) and isinstance(v.value, str)
-                ).lower()
-                if names & handles and any(w in literal for w in EXFIL_WORDS):
+                )
+                payload = list(node.values)
+            elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mod):
+                if isinstance(node.left, ast.Constant) and isinstance(node.left.value, str):
+                    template = node.left.value
+                payload = [node.right]
+            elif isinstance(node, ast.Call) and isinstance(node.func, ast.Attribute) and node.func.attr == "format":
+                if isinstance(node.func.value, ast.Constant) and isinstance(node.func.value.value, str):
+                    template = node.func.value.value
+                payload = list(node.args) + [kw.value for kw in node.keywords]
+            if template is not None:
+                if any(w in template.lower() for w in EXFIL_WORDS) and any(has_handle(p) for p in payload):
                     out.append(_v("credential_exfiltration", "error",
                                   "凭证句柄经格式化进入 URL/请求语义模板", rel, node.lineno))
-            elif isinstance(node, ast.Call):
-                chain = _resolve_chain(node.func, aliases)
-                if chain and (chain.startswith("runtime.api.") or chain.startswith("runtime.browser.")):
-                    arg_names = {
-                        n.id
-                        for arg in list(node.args) + [kw.value for kw in node.keywords]
-                        for n in ast.walk(arg)
-                        if isinstance(n, ast.Name)
-                    }
-                    if arg_names & handles:
-                        out.append(_v("credential_exfiltration", "error",
-                                      "凭证句柄流入 runtime 网络/浏览器调用实参", rel, node.lineno))
+                continue
+            if not isinstance(node, ast.Call):
+                continue
+            chain = _resolve_chain(node.func, aliases)
+            if chain and (chain.startswith("runtime.api.") or chain.startswith("runtime.browser.")):
+                if any(has_handle(arg) for arg in list(node.args) + [kw.value for kw in node.keywords]):
+                    out.append(_v("credential_exfiltration", "error",
+                                  "凭证句柄流入 runtime 网络/浏览器调用实参", rel, node.lineno))
     return out
 
 
@@ -307,13 +352,16 @@ def rule_bare_except(ctx: LintContext) -> list[dict]:
         for node in ast.walk(tree):
             if not isinstance(node, ast.ExceptHandler):
                 continue
-            bare = node.type is None
-            broad = (
-                isinstance(node.type, ast.Name) and node.type.id == "Exception"
-            ) or (
-                isinstance(node.type, ast.Attribute) and node.type.attr == "Exception"
-            )
-            if (bare or broad) and not any(isinstance(n, ast.Raise) for n in ast.walk(node)):
+            if node.type is None:
+                is_broad = True
+            else:
+                exc_names = {
+                    n.attr if isinstance(n, ast.Attribute) else n.id
+                    for n in ast.walk(node.type)
+                    if isinstance(n, (ast.Name, ast.Attribute))
+                }
+                is_broad = bool(exc_names & BROAD_EXCEPTIONS)
+            if is_broad and not any(isinstance(n, ast.Raise) for n in ast.walk(node)):
                 out.append(_v("bare_except", "warning",
                               "裸/宽 except 且未重新抛出（异常须转 ComponentError 上抛）", rel, node.lineno))
     return out

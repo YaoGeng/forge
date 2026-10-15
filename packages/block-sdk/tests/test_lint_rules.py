@@ -56,8 +56,7 @@ def test_lint_uses_sdk_loader(write_block):
     assert [v["rule_id"] for v in result.violations] == ["manifest_invalid"]
 
 
-def test_adapter_unsupported(write_block, demo_block_dir):
-    overlay(demo_block_dir, {"main.py": "import requests\nrequests.get('https://x.example.com')\n"})
+def test_adapter_unsupported(write_block):
     base = (CORPUS / "block.yaml").read_text(encoding="utf-8")
     d = write_block(
         base.replace("adapter: python", "adapter: node"),
@@ -271,3 +270,110 @@ def test_reraise_positive(demo_block_dir):
     )
     result = lint(overlay(demo_block_dir, {"main.py": src}))
     assert not hits(result, "bare_except")
+
+
+# ---- T1.11 评审修复轮（A4 首轮：C5 形态补全 / AnnAssign 别名 / lint() 契约路径） ----
+
+
+def test_one_level_alias_tracked(demo_block_dir):
+    cases = [
+        "rt = runtime\n\n\ndef run(p):\n    rt.file.read('/tmp/x')\n",
+        "fam = runtime.file\n\n\ndef run(p):\n    fam.read('/tmp/x')\n",
+    ]
+    for src in cases:
+        result = lint(overlay(demo_block_dir, {"main.py": src}))
+        assert hits(result, "capability_consistency"), src
+    result = lint(overlay(demo_block_dir, {
+        "main.py": "fam = runtime.browser\n\n\ndef run(p):\n    fam.open('https://www.xiaohongshu.com')\n",
+    }))
+    assert not hits(result, "capability_consistency")
+
+
+def test_annassign_alias_tracked(demo_block_dir):
+    result = lint(overlay(demo_block_dir, {
+        "main.py": "h: object = runtime\n\n\ndef run(p):\n    h.file.read('/tmp/x')\n",
+    }))
+    assert hits(result, "capability_consistency")
+    src = (
+        "def run(p):\n"
+        "    cred: str = runtime.credential.get('xhs_login')\n"
+        "    url = f\"https://api.example.com?token={cred}\"\n"
+    )
+    result = lint(overlay(demo_block_dir, {"main.py": src}))
+    assert hits(result, "credential_exfiltration")
+
+
+def test_c5_percent_and_format_exfiltration(demo_block_dir):
+    cases = [
+        "def run(p):\n    cred = runtime.credential.get('xhs_login')\n    url = 'https://api.example.com?token=%s' % cred\n",
+        "def run(p):\n    cred = runtime.credential.get('xhs_login')\n    url = 'https://api.example.com?token={}'.format(cred)\n",
+    ]
+    for src in cases:
+        result = lint(overlay(demo_block_dir, {"main.py": src}))
+        assert hits(result, "credential_exfiltration"), src
+
+
+def test_walrus_tuple_and_multiassign_handles(demo_block_dir):
+    walrus = (
+        "def run(p):\n"
+        "    if (cred := runtime.credential.get('xhs_login')):\n"
+        "        url = f\"https://api.example.com?token={cred}\"\n"
+    )
+    assert hits(lint(overlay(demo_block_dir, {"main.py": walrus})), "credential_exfiltration")
+    tup = (
+        "def run(p):\n"
+        "    cred, _ = runtime.credential.get('xhs_login'), None\n"
+        "    runtime.api.call(cred)\n"
+    )
+    assert hits(lint(overlay(demo_block_dir, {"main.py": tup})), "credential_exfiltration")
+    multi = (
+        "def run(p):\n"
+        "    a = b = runtime.credential.get('xhs_login')\n"
+        "    runtime.api.call(b)\n"
+    )
+    assert hits(lint(overlay(demo_block_dir, {"main.py": multi})), "credential_exfiltration")
+
+
+def test_socket_and_http_client_banned(demo_block_dir):
+    cases = [
+        "import socket\n\n\ndef run(p):\n    socket.create_connection(('x.example.com', 80))\n",
+        "import http.client\n\n\ndef run(p):\n    http.client.HTTPConnection('x.example.com')\n",
+    ]
+    for src in cases:
+        result = lint(overlay(demo_block_dir, {"main.py": src}))
+        assert hits(result, "no_direct_network"), src
+
+
+def test_lint_non_utf8_source_is_manifest_invalid(demo_block_dir):
+    (demo_block_dir / "main.py").write_bytes("x = '中文'\n".encode("gbk"))
+    result = lint(demo_block_dir)
+    assert not result.ok
+    assert [v["rule_id"] for v in result.violations] == ["manifest_invalid"]
+
+
+def test_lint_entry_missing_or_mismatch_is_manifest_invalid(write_block):
+    base = (CORPUS / "block.yaml").read_text(encoding="utf-8")
+    d = write_block(base.replace("entry: main.py", "entry: gone.py"), files={"interactions.yaml": "[]\n"})
+    result = lint(d)
+    assert not result.ok and result.violations[0]["rule_id"] == "manifest_invalid"
+    d2 = write_block(base.replace("entry: main.py", "entry: main.txt"), files={"main.txt": "x\n", "interactions.yaml": "[]\n"})
+    result2 = lint(d2)
+    assert not result2.ok and result2.violations[0]["rule_id"] == "manifest_invalid"
+
+
+def test_r5_kwargs_literal_type(demo_block_dir):
+    result = lint(overlay(demo_block_dir, {
+        "main.py": 'def run(p):\n    runtime.interact.ask(type="confirm", title="确认")\n',
+        "interactions.yaml": "- { id: c1, type: confirm, title: 确认 }\n",
+    }))
+    assert not hits(result, "interaction_consistency")
+
+
+def test_r10_tuple_and_baseexception_broad(demo_block_dir):
+    cases = [
+        "def run(p):\n    try:\n        runtime.browser.open('https://www.xiaohongshu.com')\n    except (Exception, ValueError):\n        return None\n",
+        "def run(p):\n    try:\n        runtime.browser.open('https://www.xiaohongshu.com')\n    except BaseException:\n        return None\n",
+    ]
+    for src in cases:
+        result = lint(overlay(demo_block_dir, {"main.py": src}))
+        assert hits(result, "bare_except"), src
