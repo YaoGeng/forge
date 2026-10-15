@@ -43,8 +43,12 @@ class _Atom:
 
 
 def aggregate(
-    events, *, flush_ms: int = INPUT_FLUSH_MS, idle_ms: int = IDLE_WAIT_MS
+    events, *, flush_ms: int = INPUT_FLUSH_MS, idle_ms: int = IDLE_WAIT_MS,
+    end_flush: bool = True,
 ) -> tuple[Step, ...]:
+    """事件流 → steps。end_flush=False 时不收口尾部待定缓冲（输入/滚动）——
+    供前缀聚合判定步骤真实定案时点（Recorder 快照对齐，docs/11 §5 T1.21b 评审裁定）。
+    """
     events = list(events)
     if not events:
         return ()
@@ -139,8 +143,9 @@ def aggregate(
             ))
         else:
             raise ValueError(f"未知事件 kind: {kind!r}")
-    flush_input()
-    close_scroll()
+    if end_flush:
+        flush_input()
+        close_scroll()
 
     # 缓冲冲刷可能晚于后到原子入列；稳定排序保证 ts_offset 非递减（冻结约束）
     atoms.sort(key=lambda a: a.start_ts)

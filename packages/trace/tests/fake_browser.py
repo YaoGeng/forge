@@ -94,7 +94,10 @@ class FakeBrowser:
         return self.emit("click", selector=selector, anchor=anchor)
 
     def emit_input(self, selector: str, anchor: str, value: str) -> BrowserEvent:
-        return self.emit("input", selector=selector, anchor=anchor, value=value)
+        """模拟真实注入脚本形态：逐字符 keystroke 后跟 blur（冲刷由 blur 触发）。"""
+        for ch in value:
+            self.emit("keystroke", selector=selector, anchor=anchor, value=ch)
+        return self.emit_blur(selector)
 
     def emit_scroll(self, selector: str | None, delta: int) -> BrowserEvent:
         return self.emit("scroll", selector=selector, delta=delta)
@@ -146,3 +149,7 @@ class FakeBrowser:
         else:
             self.route_hits.append((method, url))
         return stub
+
+    def feed_network(self, entry: NetworkEntry) -> None:
+        """模拟「无对应录制事件的网络到达」（如最后一次 click 触发的 XHR 迟到）。"""
+        self._net.append(entry)

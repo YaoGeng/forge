@@ -118,3 +118,84 @@ def test_stop_with_no_steps_rejected(root):
     rec.record.start("example.com")
     with pytest.raises(RuntimeError):
         rec.record.stop()
+
+
+def test_input_snapshot_at_flush_trigger_not_first_keystroke(root):
+    # Review Focus 1（评审 Important-1）：keystroke 逐步到达、input 在后续 click 定案；
+    # 快照必须取定案事件（click）时点的页面，而非首个 keystroke 时的页面
+    browser = FakeBrowser()
+    rec = _recorder(root, browser)
+    rec.record.start("example.com")
+    browser.emit_nav("https://example.com/")
+    browser.html = "<html>before-typing</html>"
+    browser.emit("keystroke", selector="#q", anchor="input||/q", value="h")
+    browser.emit("keystroke", selector="#q", anchor="input||/q", value="i")
+    browser.html = "<html>flush-moment</html>"
+    browser.emit_click("#go", "b||/g")  # 异元素 click 冲刷 input —— 定案时点
+    ref = rec.record.stop()
+    d = root / "traces" / ref
+    steps = load_steps(d / "steps.ndjson")
+    input_seq = next(s.seq for s in steps if s.action == "input")
+    input_snap = (d / "snapshots" / f"{input_seq:06d}.html").read_text(encoding="utf-8")
+    assert "flush-moment" in input_snap
+    assert "before-typing" not in input_snap
+
+
+def test_network_tail_drained_at_stop(root):
+    # 评审 Important-3：最后事件之后到达的网络必须经 stop 收口入 network.json
+    from forge_proto.trace import NetworkEntry
+    browser = FakeBrowser()
+    rec = _recorder(root, browser)
+    rec.record.start("example.com")
+    browser.emit_nav("https://example.com/")
+    browser.emit_click("#go", "b||/g")
+    browser.feed_network(NetworkEntry(
+        url="https://cdn.example.com/late.js", method="GET", status=200,
+        mime_type="application/javascript", request_body=None, response_body=None,
+    ))
+    ref = rec.record.stop()
+    log = load_network(root / "traces" / ref / "network.json")
+    urls = [e.url for e in log.entries]
+    assert "https://cdn.example.com/late.js" in urls
+
+
+def test_emit_input_delegates_to_keystrokes_and_blur():
+    # 评审 Minor-4：假体的 emit_input 应模拟真实注入脚本形态（keystroke* + blur），
+    # 使 Recorder 的延迟冲刷路径经门面被走到
+    browser = FakeBrowser()
+    seen = []
+    browser.install_hook(seen.append)
+    browser.emit_input("#q", "input||/q", "hi")
+    assert [e.kind for e in seen] == ["keystroke", "keystroke", "blur"]
+    assert "".join(e.value or "" for e in seen if e.kind == "keystroke") == "hi"
+
+
+def test_start_rejects_empty_host(root):
+    # 评审 Minor-6：空 host 应在 start 即拒绝，而非落盘时才报
+    rec = _recorder(root, FakeBrowser())
+    with pytest.raises(ValueError):
+        rec.record.start("")
+
+
+def test_hook_firing_during_install(root):
+    # 评审 Minor-7：端口在 install_hook 内同步回放队列事件时不应崩溃
+    from forge_trace.events import BrowserEvent
+
+    class EagerBrowser(FakeBrowser):
+        def install_hook(self, on_event):
+            super().install_hook(on_event)
+            on_event(BrowserEvent(kind="nav", url="https://example.com/", ts_ms=0))
+
+    browser = EagerBrowser()
+    rec = _recorder(root, browser)
+    rec.record.start("example.com")
+    browser.emit_click("#a", "a||/a")
+    ref = rec.record.stop()
+    steps = load_steps(root / "traces" / ref / "steps.ndjson")
+    assert [s.action for s in steps] == ["nav", "click"]
+
+
+def test_fake_browser_satisfies_port_protocol():
+    # 评审 Minor-8：假体与端口面的漂移应显式失败
+    from forge_trace import BrowserPort
+    assert isinstance(FakeBrowser(), BrowserPort)
