@@ -78,3 +78,16 @@ def test_mark_fragile_accumulates(root):
     store.mark_fragile(ref, [2])
     store.mark_fragile(ref, [2, 5])
     assert store.get(ref).fragile_steps == (2, 5)
+
+
+def test_save_trace_failure_leaves_no_directory(root):
+    store = RecordingsStore(root)
+    ref = store.allocate("example.com")
+    # 步数 2 但只给 1 张快照 → proto 校验必失败
+    try:
+        store.save_trace(ref, _manifest(), _steps(), {1: "<html>one</html>"}, _network())
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("save_trace 应当抛出 ValueError")
+    assert not (root / "traces" / ref).exists()

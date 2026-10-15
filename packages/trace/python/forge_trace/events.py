@@ -142,6 +142,9 @@ def aggregate(
     flush_input()
     close_scroll()
 
+    # 缓冲冲刷可能晚于后到原子入列；稳定排序保证 ts_offset 非递减（冻结约束）
+    atoms.sort(key=lambda a: a.start_ts)
+
     return _to_steps(atoms, base_ts, idle_ms)
 
 

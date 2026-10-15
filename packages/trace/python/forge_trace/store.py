@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import secrets
+import shutil
 import sqlite3
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -147,6 +148,7 @@ class RecordingsStore:
             (d / "snapshots" / f"{seq:06d}.html").write_text(html, encoding="utf-8")
         errors = validate_trace_dir(d)
         if errors:
+            shutil.rmtree(d, ignore_errors=True)
             raise ValueError("trace 目录自检失败: " + "; ".join(errors))
         self._conn.execute(
             "INSERT INTO recordings(trace_ref, site, created_at) VALUES (?, ?, ?)",

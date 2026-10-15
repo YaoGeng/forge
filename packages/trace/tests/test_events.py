@@ -86,3 +86,18 @@ def test_seq_and_ts_invariants(tmp_path):
     assert [s.seq for s in loaded] == list(range(1, len(loaded) + 1))
     ts = [s.ts_offset for s in loaded]
     assert ts == sorted(ts)
+
+
+def test_pending_flush_keeps_chronological_order():
+    # 同元素 scroll 不冲刷 input 缓冲；scroll 间隙先行关闭 scroll 原子，
+    # blur 再冲刷 input——原子须按时间重排，否则 ts_offset 递减违反冻结约束
+    evs = [
+        BrowserEvent(kind="keystroke", selector="#q", value="x", ts_ms=0),
+        BrowserEvent(kind="scroll", selector="#q", delta=10, ts_ms=100),
+        BrowserEvent(kind="scroll", selector="#q", delta=20, ts_ms=1000),
+        BrowserEvent(kind="blur", selector="#q", ts_ms=1100),
+    ]
+    steps = aggregate(evs)
+    ts = [s.ts_offset for s in steps]
+    assert ts == sorted(ts)
+    assert [s.action for s in steps] == ["input", "scroll", "scroll"]
