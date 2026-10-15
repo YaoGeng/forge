@@ -1,0 +1,29 @@
+schema_version: 2
+kind: block
+name: xhs_note_fetch_demo
+version: 1.0.0
+title: 小红书笔记抓取（演示）
+site_change_tier: high
+side_effects: false
+capabilities:
+  - browser
+  - ai_fast
+  - interact_input
+  - interact_login
+permissions:
+  - { type: domain, value: "xiaohongshu.com", required: true }
+  - { type: credential, value: "xhs_login", required: true }
+  - { type: ai, value: "fast", required: true }
+  - { type: interact, value: "input", required: true }
+  - { type: interact, value: "login", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 300
+reliability:
+  level: C1
+  pass_rate: 0.90
+  samples: 20
+  measured_at: 2026-10-12
+  environment: creator-local
+ai_description: 根据主题抓取某站点首页相关笔记内容

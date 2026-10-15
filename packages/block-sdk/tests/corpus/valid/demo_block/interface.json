@@ -1,0 +1,11 @@
+{
+  "input": {
+    "type": "object",
+    "properties": {"topic": {"type": "string"}, "limit": {"type": "integer"}},
+    "required": ["topic"]
+  },
+  "output": {
+    "type": "object",
+    "properties": {"titles": {"type": "array", "items": {"type": "string"}}, "summary": {"type": "string"}}
+  }
+}

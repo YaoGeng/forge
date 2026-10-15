@@ -1,0 +1,13 @@
+[project]
+name = "forge-block-sdk"
+version = "0.1.0"
+description = "Forge 积木 SDK：block.yaml v2 校验器 / lint 十规则 / runtime 外观（M07）"
+requires-python = ">=3.12"
+dependencies = ["PyYAML>=6.0"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["forge_block_sdk*"]

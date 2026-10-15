@@ -1,0 +1,10 @@
+- id: topic_input
+  type: input
+  title: 输入主题
+  schema: { type: string }
+  optional: false
+- id: xhs_login
+  type: login
+  title: 登录小红书
+  site: xiaohongshu.com
+  optional: true
