@@ -62,6 +62,13 @@ def _copy_tree(src: Path, dst: Path) -> None:
 
 
 @pytest.fixture
+def demo_block_dir(tmp_path):
+    """corpus demo_block 的 tmp 同源副本（lint/facade 正例基线）。"""
+    d = tmp_path / "demo_block"
+    return make_demo_block(d)
+
+
+@pytest.fixture
 def write_block(tmp_path):
     """写一个积木目录：block.yaml 缺省取 corpus 基线，可整体替换或附加文件。"""
 
