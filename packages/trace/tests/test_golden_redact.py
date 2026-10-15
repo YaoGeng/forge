@@ -153,3 +153,52 @@ def test_replay_golden_uses_routes(root):
     assert browser.route_hit("POST", "https://example.com/api") is not None
     assert browser.route_hits
     assert browser.direct_requests == []
+
+
+def test_redact_url_strips_userinfo():
+    # 评审 Minor：userinfo 凭据不得留在脱敏 URL 的 netloc
+    m = RedactionMap()
+    out = redact_url("https://user:secret@x.com/p?a=1", m)
+    assert "secret" not in out and "user" not in out
+    assert out == "https://x.com/p?a=⟦R:0⟧"
+
+
+def test_collect_empty_value_stays_empty(root):
+    # 评审 Minor：空串值 = 「或为空」放行（与 docs/12 措辞对齐），不得占位符化
+    browser = FakeBrowser()
+    store = RecordingsStore(root)
+    rec = Recorder(store, lambda: browser)
+    rec.record.start("example.com")
+    browser.emit_nav("https://example.com/")
+    browser.emit("input", selector="#q", anchor="input||/q", value="")
+    browser.emit_click("#go", "b||/g")
+    ref = rec.record.stop()
+    golden = collect_golden(ref, store=store, environment_fingerprint="fp")
+    rows = [json.loads(l) for l in (golden / "expected_steps.ndjson").read_text(encoding="utf-8").splitlines() if l.strip()]
+    input_row = next(r for r in rows if r["action"] == "input")
+    assert input_row["value"] == ""
+    assert validate_golden_no_raw(golden) == []
+
+
+def test_stub_matcher_duplicate_key_first_wins():
+    from forge_trace.golden import stub_matcher
+    stubs = [
+        {"url": "https://x.com/p?a=1", "method": "GET", "status": 200, "mime_type": None,
+         "request_body": None, "response_body": None},
+        {"url": "https://x.com/p?a=2", "method": "GET", "status": 404, "mime_type": None,
+         "request_body": None, "response_body": None},
+    ]
+    matcher = stub_matcher(stubs)
+    entry = NetworkEntry(url="x", method="GET", status=0, mime_type=None,
+                         request_body=None, response_body=None)
+    assert matcher(entry, "GET", "https://x.com/p?a=9")["status"] == 200
+
+
+def test_stub_matcher_host_case_normalized(root):
+    from forge_trace.golden import load_stubs, stub_matcher
+    ref, store = _record_sensitive(root)
+    golden = collect_golden(ref, store=store, environment_fingerprint="fp")
+    matcher = stub_matcher(load_stubs(golden))
+    entry = NetworkEntry(url="x", method="GET", status=0, mime_type=None,
+                         request_body=None, response_body=None)
+    assert matcher(entry, "GET", "https://EXAMPLE.com/search?q=z&lang=en&page=3") is not None

@@ -18,7 +18,7 @@ from urllib.parse import unquote_plus, urlsplit, urlunsplit
 from forge_proto.format import write_ndjson
 from forge_proto.trace import NetworkEntry, load_network, load_steps
 
-PLACEHOLDER_RE = re.compile(r"^⟦R:\d+⟧$")
+PLACEHOLDER_RE = re.compile(r"⟦R:\d+⟧\Z")
 
 
 def _utc_now_iso() -> str:
@@ -55,10 +55,12 @@ def redact_url(url: str, mapping: RedactionMap) -> str:
 
     占位符原样写入不做 percent 编码：脱敏 URL 只作比对数据，golden 路由
     匹配仅用键不含值（C8），原样形态保证跨文件同值同占位符可比对。
+    userinfo 段一并剥离（评审修订 R1：凭据不入 golden）。
     """
     parts = urlsplit(url)
+    netloc = parts.netloc.rsplit("@", 1)[1] if "@" in parts.netloc else parts.netloc
     if not parts.query:
-        return url
+        return urlunsplit((parts.scheme, netloc, parts.path, parts.query, parts.fragment))
     out: list[str] = []
     for pair in parts.query.split("&"):
         key_raw, sep, value_raw = pair.partition("=")
@@ -67,7 +69,7 @@ def redact_url(url: str, mapping: RedactionMap) -> str:
             out.append(f"{key_raw}={mapping.placeholder(value)}")
         else:
             out.append(pair)
-    return urlunsplit((parts.scheme, parts.netloc, parts.path, "&".join(out), parts.fragment))
+    return urlunsplit((parts.scheme, netloc, parts.path, "&".join(out), parts.fragment))
 
 
 def redact_body(body: str, mapping: RedactionMap) -> str:
@@ -104,8 +106,8 @@ def collect_golden(
 
     golden_rows: list[dict] = []
     for s in steps:
-        if s.value is None:
-            value = None
+        if not s.value:  # None / 空串（「或为空」，修订 R1）
+            value = s.value
         elif s.action == "nav":
             value = redact_url(s.value, mapping)
         else:
@@ -155,6 +157,11 @@ def collect_golden(
 
     errors = validate_golden_dir(golden_dir)
     if errors:
+        # 与 store.save_trace 同款失败清理：不留半成品覆盖既有 golden
+        import shutil
+
+        shutil.rmtree(golden_dir, ignore_errors=True)
+        (store.redaction_dir / f"{trace_ref}.json").unlink(missing_ok=True)
         raise ValueError("golden 目录自检失败: " + "; ".join(errors))
     return golden_dir
 
@@ -165,15 +172,20 @@ def load_stubs(golden_dir: str | Path) -> tuple[dict, ...]:
 
 
 def stub_match_key(method: str, url: str) -> tuple:
-    """golden mock 匹配键：(method, host, path, sorted(query keys))——不含值（C8）。"""
+    """golden mock 匹配键：(method, host(小写), path(空归 "/"), sorted(query keys))——不含值（C8）。"""
     parts = urlsplit(url)
     keys = tuple(sorted(unquote_plus(p.partition("=")[0]) for p in parts.query.split("&") if p))
-    return (method.upper(), parts.netloc, parts.path, keys)
+    return (method.upper(), parts.netloc.lower(), parts.path or "/", keys)
 
 
 def stub_matcher(stubs: t.Sequence[dict]) -> t.Callable[[NetworkEntry, str, str], dict | None]:
-    """构建 golden 路由匹配器：(entry, method, url) -> stub | None。"""
-    by_key = {stub_match_key(s["method"], s["url"]): s for s in stubs}
+    """构建 golden 路由匹配器：(entry, method, url) -> stub | None。
+
+    同键多条 stub 时 first-wins（值盲键下冲突不可避免，取先录者，确定化可诊断）。
+    """
+    by_key: dict[tuple, dict] = {}
+    for s in stubs:
+        by_key.setdefault(stub_match_key(s["method"], s["url"]), s)
 
     def match(entry: NetworkEntry, method: str, url: str) -> dict | None:
         return by_key.get(stub_match_key(method, url))
@@ -193,7 +205,7 @@ def validate_golden_no_raw(golden_dir: str | Path) -> list[str]:
                 continue
             row = json.loads(line)
             value = row.get("value")
-            if value is None:
+            if not value:  # None / 空串放行（「或为空」）
                 continue
             if row.get("action") == "nav":
                 errors.extend(_check_url(value, f"expected_steps.ndjson:{lineno}"))
@@ -208,7 +220,7 @@ def validate_golden_no_raw(golden_dir: str | Path) -> list[str]:
             errors.extend(_check_url(entry.get("url", ""), where))
             for field in ("request_body", "response_body"):
                 body = entry.get(field)
-                if body is None:
+                if not body:  # None / 空串放行（「或为空」）
                     continue
                 errors.extend(_check_body(body, f"{where}.{field}"))
     return errors
@@ -259,4 +271,8 @@ def apply_routes(port, store_root: Path, trace_ref: str) -> None:
     golden_dir = Path(store_root) / "golden" / trace_ref
     if not golden_dir.is_dir():
         raise ValueError(f"golden 未采集: {golden_dir}")
-    port.set_routes(stub_matcher(load_stubs(golden_dir)))
+    try:
+        stubs = load_stubs(golden_dir)
+    except (OSError, ValueError, KeyError) as exc:
+        raise ValueError(f"golden stubs 不可用 {golden_dir}: {exc}") from exc
+    port.set_routes(stub_matcher(stubs))
