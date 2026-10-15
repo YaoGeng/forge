@@ -28,6 +28,8 @@ class RuntimeFacade:
         except (TypeError, AttributeError) as exc:
             raise TypeError("interactions 应为 InteractionSpec 序列") from exc
         for family in FAMILIES:
+            if family in ("credential", "interact"):
+                continue  # 专用端点在下方装配，不先挂通用桩
             setattr(self, family, _FamilyEndpoint(self, family))
         self.credential = _CredentialEndpoint(self)
         self.interact = _InteractEndpoint(self)

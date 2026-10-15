@@ -118,3 +118,17 @@ def test_for_block_rejects_bad_interactions():
         for_block(demo_spec(), "ab")
     with pytest.raises(TypeError):
         for_block(demo_spec(), 42)
+
+
+def test_component_error_pickle_roundtrip():
+    import pickle
+
+    e = ComponentError("selector_missing", "未命中", detail={"selector": ".a"})
+    e2 = pickle.loads(pickle.dumps(e))
+    assert (e2.code, e2.message, e2.detail) == (e.code, e.message, e.detail)
+
+
+def test_for_block_default_interactions_fail_closed():
+    f = for_block(demo_spec())
+    with pytest.raises(PermissionDenied):
+        f.interact.ask({"type": "input", "title": "输入主题"})

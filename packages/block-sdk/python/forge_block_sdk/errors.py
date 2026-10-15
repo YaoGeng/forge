@@ -22,6 +22,9 @@ class ComponentError(RuntimeError):
         self.message = message
         self.detail = detail
 
+    def __reduce__(self):
+        return (self.__class__, (self.code, self.message, self.detail))
+
 
 class PermissionDenied(RuntimeError):
     """PermissionBroker 域拒绝（声明级门）；运行时映射附录 D permission_denied。"""

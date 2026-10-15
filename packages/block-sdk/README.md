@@ -17,7 +17,7 @@ Forge 积木 SDK：block.yaml v2 校验器、lint 十规则、ComponentError、r
 
 ## 公开面（Python）
 
-`BlockSpec / PermissionSpec / RuntimeSpec / ReliabilitySpec / InteractionSpec`、`load_block / load_interactions / validate_block_dir / ValidationError`、`lint / LintResult / Violation / LintContext`、`ComponentError / COMPONENT_ERROR_CODES / PermissionDenied / BackendNotWired`、`RuntimeFacade / CredentialHandle / for_block`
+`BLOCK_FIELDS / BlockSpec / PermissionSpec / RuntimeSpec / ReliabilitySpec / InteractionSpec`、`load_block / load_interactions / validate_block_dir / ValidationError`、`lint / LintResult / Violation / LintContext`、`ComponentError / COMPONENT_ERROR_CODES / PermissionDenied / BackendNotWired`、`RuntimeFacade / CredentialHandle / for_block`
 
 ## 消费方
 
@@ -27,7 +27,7 @@ Forge 积木 SDK：block.yaml v2 校验器、lint 十规则、ComponentError、r
 
 ## 版本纪律与裁定
 
-字段语义冻结自 `docs/02-技术架构.md` §2.1 与 `docs/03-模块设计/M07`；表达细节裁定 C1-C15 见 `docs/10-MS1C执行计划.md` §3，变更走计划修订登记。**golden 不随积木包分发、幂等键强制等不变量由 lint 静态保证**（M07 §1）。
+字段语义冻结自 `docs/02-技术架构.md` §2.1 与 `docs/03-模块设计/M07`；表达细节裁定 C1-C15 见 `docs/10-MS1C执行计划.md` §3，变更走计划修订登记。**幂等键强制由 lint 静态保证（R7）**；golden 不随积木包分发的防线在打包/上传链路（M07 §8.4、M10），不在本包 lint 范围。
 
 ## 复跑
 

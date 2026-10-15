@@ -9,6 +9,7 @@ from forge_block_sdk import RuntimeSpec, lint, load_block
 from forge_block_sdk.lint import LintContext
 from forge_block_sdk.rules import (
     rule_dependency_whitelist,
+    rule_require_tests,
     rule_side_effect_idempotency_key,
     rule_timeout_declared,
 )
@@ -172,20 +173,8 @@ def test_interaction_consistency_positive(demo_block_dir):
 # ---- R6 发布类必须 confirm ----
 
 
-def test_publish_requires_confirm(demo_block_dir):
-    result = lint(overlay(demo_block_dir, {"main.py": 'ACTION = "publish"\n'}))
-    assert hits(result, "publish_requires_confirm")
 
 
-def test_publish_with_confirm_positive(demo_block_dir):
-    result = lint(overlay(demo_block_dir, {
-        "main.py": 'ACTION = "submit order"\n',
-        "interactions.yaml": "- { id: c1, type: confirm, title: 确认提交 }\n",
-    }))
-    assert not hits(result, "publish_requires_confirm")
-
-
-# ---- R7 副作用幂等键 ----
 
 
 def test_side_effect_idempotency_key_pure():
@@ -377,3 +366,60 @@ def test_r10_tuple_and_baseexception_broad(demo_block_dir):
     for src in cases:
         result = lint(overlay(demo_block_dir, {"main.py": src}))
         assert hits(result, "bare_except"), src
+
+
+# ---- 终审修复轮（I-1 非 UTF-8 声明路径 / M-1 R6 仅副作用生效 / M-7 卫生） ----
+
+
+def test_lint_non_utf8_block_and_interactions_short_circuit(write_block):
+    base = (CORPUS / "block.yaml").read_text(encoding="utf-8")
+    d = write_block(base)
+    (d / "interactions.yaml").write_bytes("- { id: a, type: input, title: 主题 }\n".encode("gbk"))
+    result = lint(d)
+    assert not result.ok
+    assert [v["rule_id"] for v in result.violations] == ["manifest_invalid"]
+    (d / "block.yaml").write_bytes(base.encode("gbk"))
+    (d / "interactions.yaml").unlink()
+    result2 = lint(d)
+    assert not result2.ok
+    assert [v["rule_id"] for v in result2.violations] == ["manifest_invalid"]
+
+
+def test_lint_non_utf8_requirements_and_testyaml_violate(demo_block_dir):
+    (demo_block_dir / "requirements.txt").write_bytes("# 依赖说明：无\nflask==3.0.0\n".encode("gbk"))
+    result = lint(demo_block_dir)
+    assert hits(result, "dependency_whitelist")
+    (demo_block_dir / "tests" / "test.yaml").write_bytes("# 断言：结构校验\nassertion: schema\n".encode("gbk"))
+    result2 = lint(demo_block_dir)
+    assert hits(result2, "require_tests")
+
+
+def test_publish_requires_confirm(demo_block_dir):
+    base = (CORPUS / "block.yaml").read_text(encoding="utf-8")
+    result = lint(overlay(demo_block_dir, {
+        "block.yaml": base.replace(
+            "side_effects: false",
+            "side_effects: true\ndefault_response: { action: confirm_twice }",
+        ),
+        "main.py": 'ACTION = "publish"\n',
+    }))
+    assert hits(result, "publish_requires_confirm")
+
+
+def test_publish_with_confirm_positive(demo_block_dir):
+    base = (CORPUS / "block.yaml").read_text(encoding="utf-8")
+    result = lint(overlay(demo_block_dir, {
+        "block.yaml": base.replace(
+            "side_effects: false",
+            "side_effects: true\ndefault_response: { action: confirm_twice }",
+        ),
+        "main.py": 'ACTION = "submit order"\n',
+        "interactions.yaml": "- { id: c1, type: confirm, title: 确认提交 }\n",
+    }))
+    assert not hits(result, "publish_requires_confirm")
+
+
+def test_publish_readonly_not_gated(demo_block_dir):
+    src = 'DOC = """Sort records in order by title."""\n'
+    result = lint(overlay(demo_block_dir, {"main.py": src}))
+    assert not hits(result, "publish_requires_confirm")

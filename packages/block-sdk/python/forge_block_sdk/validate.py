@@ -9,6 +9,7 @@ import yaml
 
 from .model import (
     BLOCK_FIELDS,
+    FAMILIES,
     BlockSpec,
     InteractionSpec,
     PermissionSpec,
@@ -26,10 +27,7 @@ RELIABILITY_LEVELS = ("C0", "C1", "C2")
 NAME_RE = re.compile(r"^[a-z][a-z0-9_]*$")
 SEMVER_RE = re.compile(r"^(0|[1-9]\d{0,2})\.(0|[1-9]\d{0,2})\.(0|[1-9]\d{0,2})$")
 DOMAIN_RE = re.compile(r"^([a-z0-9-]+\.)+[a-z]{2,}$")
-CAPABILITY_RE = re.compile(
-    r"^(browser|file|office|ai|code|data|api|credential|confirm|interact|probe)"
-    r"(_[a-z0-9_]+)?$"
-)
+CAPABILITY_RE = re.compile(r"^(%s)(_[a-z0-9_]+)?$" % "|".join(FAMILIES))
 
 
 class ValidationError(ValueError):
@@ -70,7 +68,9 @@ def _resolve(source: str | Path, default_name: str) -> tuple[str, str]:
         return target.read_text(encoding="utf-8"), str(target)
     except OSError as exc:
         _fail(f"文件不存在或不可读：{exc}", str(target))
-        raise  # 不可达
+    except UnicodeDecodeError as exc:
+        _fail(f"文件非 UTF-8 编码：{exc}", str(target))
+    raise  # 不可达；安抚类型检查
 
 
 def _parse_yaml(text: str, label: str) -> object:

@@ -12,38 +12,6 @@ import pytest
 
 CORPUS_BLOCK = Path(__file__).resolve().parent / "corpus" / "valid" / "demo_block"
 
-DEMO_MAIN_PY = '''\
-"""demo_block 入口：按 interface 输入抓取笔记标题列表（演示用，全部经 runtime 外观）。"""
-from forge_block_sdk import runtime
-
-
-def run(params: dict) -> dict:
-    runtime.browser.open("https://www.xiaohongshu.com/search_result?keyword=" + params["topic"])
-    titles = runtime.browser.extract(".note-list .title", limit=params.get("limit", 10))
-    summary = runtime.ai.generate_text(f"总结以下笔记标题：{titles}")
-    return {"titles": titles, "summary": summary}
-'''
-
-DEMO_INTERFACE_JSON = '''\
-{
-  "input": {
-    "type": "object",
-    "properties": {"topic": {"type": "string"}, "limit": {"type": "integer"}},
-    "required": ["topic"]
-  },
-  "output": {
-    "type": "object",
-    "properties": {"titles": {"type": "array", "items": {"type": "string"}}, "summary": {"type": "string"}}
-  }
-}
-'''
-
-DEMO_REQUIREMENTS_TXT = "# demo 无第三方依赖：能力全部经 runtime 外观，不直连任何库\n"
-
-DEMO_TEST_YAML = "assertion: schema\n"
-
-DEMO_SAMPLE_INPUT_JSON = '{\n  "topic": "咖啡",\n  "limit": 5\n}\n'
-
 
 def make_demo_block(root: Path) -> Path:
     """在 root 下落一个完整合规的 demo_block 目录（corpus 的程序化同源副本）。"""

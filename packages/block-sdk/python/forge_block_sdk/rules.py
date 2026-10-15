@@ -124,7 +124,11 @@ def rule_dependency_whitelist(ctx: LintContext) -> list[dict]:
     req = ctx.block_dir / "requirements.txt"
     if not req.is_file():
         return out
-    for lineno, raw in enumerate(req.read_text(encoding="utf-8").splitlines(), 1):
+    try:
+        lines = req.read_text(encoding="utf-8").splitlines()
+    except UnicodeDecodeError:
+        return [_v("dependency_whitelist", "error", "requirements.txt 非 UTF-8 编码", "requirements.txt", 0)]
+    for lineno, raw in enumerate(lines, 1):
         line = raw.strip()
         if not line or line.startswith("#"):
             continue
@@ -146,8 +150,8 @@ def rule_require_tests(ctx: LintContext) -> list[dict]:
         return [_v("require_tests", "error", "缺少 tests/test.yaml（断言未声明）", "tests/test.yaml", 0)]
     try:
         data = yaml.safe_load(tests.read_text(encoding="utf-8"))
-    except yaml.YAMLError as exc:
-        return [_v("require_tests", "error", f"test.yaml 解析失败：{exc}", "tests/test.yaml", 0)]
+    except (yaml.YAMLError, UnicodeDecodeError) as exc:
+        return [_v("require_tests", "error", f"test.yaml 不可解析：{exc}", "tests/test.yaml", 0)]
     assertion = data.get("assertion") if isinstance(data, dict) else None
     if assertion not in ASSERTIONS:
         return [_v("require_tests", "error",
@@ -219,6 +223,10 @@ def rule_interaction_consistency(ctx: LintContext) -> list[dict]:
 
 
 def rule_publish_requires_confirm(ctx: LintContext) -> list[dict]:
+    # C8 终审修订：仅副作用积木受此规则约束——只读积木的动词字面量
+    # （docstring/普通文案）不判；副作用声明不实由认证实测兜底
+    if not ctx.spec.side_effects:
+        return []
     if any(i.type == "confirm" for i in ctx.interactions):
         return []
     for rel, tree in ctx.py_sources:
