@@ -9,16 +9,19 @@ digest 不等且有快照 → 结构相似度通道；否则 mismatch。duration
 from __future__ import annotations
 
 import hashlib
+import logging
 import time
 import typing as t
 from dataclasses import dataclass
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import quote, unquote_plus, urlsplit, urlunsplit
 
 from forge_proto.trace import Manifest, Step, load_manifest, load_steps
 
 from .port import BrowserPort
 from .similarity import SIMILARITY_THRESHOLD, structural_similarity
 from .store import RecordingsStore
+
+_LOG = logging.getLogger(__name__)
 
 MODES = ("local", "golden", "structured")
 # 回放锚定等待超时（v1 常量；FakeBrowser 即时返回，真实适配器消费）
@@ -53,55 +56,66 @@ def _digest(html: str) -> str:
 
 
 def _override_query(url: str, overrides: dict[str, str]) -> str:
-    """C9：q:<name> 覆盖 nav URL 的同名 query 值（仅替换既有键，不新增）。"""
+    """C9：q:<name> 覆盖 nav URL 的同名 query 值（仅替换既有键，不新增）。
+
+    未命中的键值对按原文保留（不做整体重编码，避免改动录制字面量的编码形态）。
+    """
     if not overrides:
         return url
     parts = urlsplit(url)
-    rebuilt: list[tuple[str, str]] = []
+    if not parts.query:
+        return url
+    out: list[str] = []
     changed = False
-    for k, v in parse_qsl(parts.query, keep_blank_values=True):
-        if k in overrides:
-            rebuilt.append((k, overrides[k]))
+    for pair in parts.query.split("&"):
+        key_raw, _, value_raw = pair.partition("=")
+        if unquote_plus(key_raw) in overrides:
+            out.append(f"{key_raw}={quote(overrides[unquote_plus(key_raw)], safe='')}")
             changed = True
         else:
-            rebuilt.append((k, v))
+            out.append(pair)
     if not changed:
         return url
-    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(rebuilt), parts.fragment))
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, "&".join(out), parts.fragment))
 
 
-def _execute(port: BrowserPort, step: Step, params: dict[str, str]) -> tuple[bool, bool]:
-    """执行单步 → (ok, anchor_matched)。目标元素缺失时不执行动作（fail-fast）。"""
+def _execute(port: BrowserPort, step: Step, params: dict[str, str]) -> tuple[bool, bool, str | None]:
+    """执行单步 → (ok, anchor_matched, error)。
+
+    目标元素缺失时不执行动作（fail-fast，anchor_matched=False）；
+    动作执行异常与 anchor 缺失分列——异常时 anchor 保持等待结果，
+    不写入 fragile（重录提示只对真实脆弱步骤，评审 Important-2）。
+    """
     if step.action == "wait":
         anchor = step.wait_condition or ""
         if anchor.startswith(_ANCHOR_PREFIX):
             matched = port.wait_selector(anchor[len(_ANCHOR_PREFIX):], WAIT_TIMEOUT_MS)
-            return matched, matched
-        return True, True
-    if step.target_selector and not port.wait_selector(step.target_selector, WAIT_TIMEOUT_MS):
-        return False, False
-    if step.action == "nav":
-        url = step.value or ""
-        query_overrides = {
-            k[2:]: v for k, v in params.items() if k.startswith("q:") and len(k) > 2
-        }
-        port.goto(_override_query(url, query_overrides))
-        return True, True
-    if step.action == "click":
-        port.click(step.target_selector or "")
-        return True, True
-    if step.action == "input":
-        value = params.get(str(step.seq), step.value or "")
-        port.fill(step.target_selector or "", value)
-        return True, True
-    if step.action == "scroll":
-        try:
-            delta = int(step.value or "0")
-        except ValueError:
-            delta = 0
-        port.scroll_by(delta)
-        return True, True
-    raise ValueError(f"未知 action: {step.action!r}")
+            return matched, matched, None
+        return True, True, None
+    anchor_matched = True
+    if step.target_selector:
+        anchor_matched = port.wait_selector(step.target_selector, WAIT_TIMEOUT_MS)
+        if not anchor_matched:
+            return False, False, None
+    try:
+        if step.action == "nav":
+            url = step.value or ""
+            query_overrides = {
+                k[2:]: v for k, v in params.items() if k.startswith("q:") and len(k) > 2
+            }
+            port.goto(_override_query(url, query_overrides))
+        elif step.action == "click":
+            port.click(step.target_selector or "")
+        elif step.action == "input":
+            value = params.get(str(step.seq), step.value or "")
+            port.fill(step.target_selector or "", value)
+        elif step.action == "scroll":
+            port.scroll_by(int(step.value or "0"))
+        else:
+            raise ValueError(f"未知 action: {step.action!r}")
+    except Exception as exc:
+        return False, anchor_matched, f"{type(exc).__name__}: {exc}"
+    return True, anchor_matched, None
 
 
 def run(
@@ -122,16 +136,20 @@ def run(
     steps = load_steps(rec.trace_dir / "steps.ndjson")
     port = browser_factory()
     if mode == "golden":
-        from .golden import apply_routes  # 延迟导入避免 T1.22 未建模块时的循环
-
+        try:
+            from .golden import apply_routes
+        except ImportError as exc:
+            raise NotImplementedError("mode=golden 随 T1.23 交付") from exc
         apply_routes(port, rec.trace_dir.parent.parent, trace_ref)
     results: list[StepResult] = []
     for step in steps:
         t0 = time.perf_counter()
         try:
-            ok, anchor_matched = _execute(port, step, params)
-        except Exception:
-            ok, anchor_matched = False, False
+            ok, anchor_matched, error = _execute(port, step, params)
+        except Exception as exc:  # 端口实现缺陷兜底：不误标 fragile，保留诊断
+            ok, anchor_matched, error = False, True, f"{type(exc).__name__}: {exc}"
+        if error:
+            _LOG.warning("回放步执行失败 trace=%s seq=%s: %s", trace_ref, step.seq, error)
         duration_ms = int((time.perf_counter() - t0) * 1000)
         results.append(StepResult(
             seq=step.seq,
@@ -153,22 +171,37 @@ def assert_consistent(
     manifest: Manifest,
     htmls: dict[int, tuple[str, ...]] | None = None,
 ) -> ConsistencyReport:
-    """M07 §8.3 一致判据：基准=首跑，逐 seq 比对（duration 永不进判据）。"""
+    """M07 §8.3 一致判据：基准=首跑，逐 seq 比对（duration 永不进判据）。
+
+    前置校验：同 trace_ref（不同轨迹是调用方错误）；步数不齐产出 mismatch
+    而非越界（评审 Important-1）。
+    """
     if len(runs) < 2:
         raise ValueError("assert_consistent 需要至少两次回放结果")
+    refs = {r.trace_ref for r in runs}
+    if len(refs) > 1:
+        raise ValueError(f"assert_consistent 仅比对同一 trace_ref，得到 {sorted(refs)}")
     base = runs[0]
+    for other in runs[1:]:
+        if len(other.step_results) != len(base.step_results):
+            return ConsistencyReport(
+                kind="mismatch",
+                diff=({
+                    "seq": 0,
+                    "kind": "mismatch",
+                    "detail": f"步数不一致: {len(base.step_results)} != {len(other.step_results)}",
+                },),
+            )
     declared = {t.seq for t in manifest.time_sensitive_steps}
     htmls = htmls or {}
     diff: list[dict] = []
     for i, base_step in enumerate(base.step_results):
-        kind = "exact"
         for other in runs[1:]:
             other_step = other.step_results[i]
             detail = _first_diff(base_step, other_step)
             if detail is None:
                 continue
             if base_step["seq"] in declared:
-                kind = max(kind, "tolerant", key=_kind_rank)
                 diff.append({"seq": base_step["seq"], "kind": "tolerant",
                              "detail": f"时间敏感步容差: {detail}"})
                 continue
@@ -179,11 +212,9 @@ def assert_consistent(
                 and len(pair) >= 2
                 and structural_similarity(pair[0], pair[1]) >= SIMILARITY_THRESHOLD
             ):
-                kind = max(kind, "similarity", key=_kind_rank)
                 diff.append({"seq": base_step["seq"], "kind": "similarity",
                              "detail": f"结构相似（digest 异）: {detail}"})
                 continue
-            kind = "mismatch"
             diff.append({"seq": base_step["seq"], "kind": "mismatch", "detail": detail})
     overall = "exact"
     for d in diff:
@@ -196,6 +227,8 @@ _KIND_RANK = {"exact": 0, "tolerant": 1, "similarity": 2, "mismatch": 3}
 
 def _kind_rank(kind: str) -> int:
     return _KIND_RANK[kind]
+
+
 _COMPARE_FIELDS = ("action", "ok", "anchor_matched", "snapshot_digest")
 
 

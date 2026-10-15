@@ -76,3 +76,50 @@ def test_mode_structured_not_implemented(root):
     ref, store = _record(root, _script_standard)
     with pytest.raises(NotImplementedError):
         replay.run(ref, mode="structured", store=store, browser_factory=FakeBrowser)
+
+
+def test_action_exception_not_marked_fragile(root, monkeypatch):
+    # 评审 Important-2：动作执行异常 ≠ anchor 缺失——不写 fragile，anchor 保持 True
+    ref, store = _record(root, _script_standard)
+    browser = FakeBrowser()
+
+    def boom(selector):
+        raise RuntimeError("adapter boom")
+
+    monkeypatch.setattr(browser, "click", boom)
+    result, _ = _replay(root, ref, store, browser=browser)
+    clicks = [r for r in result.step_results if r["action"] == "click"]
+    assert clicks and all(r["ok"] is False for r in clicks)
+    assert all(r["anchor_matched"] is True for r in clicks)
+    assert store.get(ref).fragile_steps == ()
+
+
+def test_scroll_bad_value_fails_step(root):
+    # 评审 Minor-5：scroll value 非整数应按步失败，而非静默归零
+    from forge_proto.trace import Manifest, NetworkEntry, NetworkLog, Step
+    store = RecordingsStore(root)
+    ref = store.allocate("example.com")
+    steps = (
+        Step(seq=1, action="nav", target_selector=None, dom_anchor=None,
+             value="https://example.com/", wait_condition=None, ts_offset=0),
+        Step(seq=2, action="scroll", target_selector=None, dom_anchor=None,
+             value="abc", wait_condition=None, ts_offset=100),
+    )
+    store.save_trace(
+        ref, Manifest(format_version="1.0", site="example.com", login_steps=(),
+                      time_sensitive_steps=()),
+        steps, {1: "<html>a</html>", 2: "<html>b</html>"},
+        NetworkLog(captured_at="2026-10-16T00:00:00Z", entries=(
+            NetworkEntry(url="https://example.com/", method="GET", status=200,
+                         mime_type=None, request_body=None, response_body=None),)),
+    )
+    result, browser = _replay(root, ref, store)
+    assert result.step_results[1]["ok"] is False
+    assert browser.scrolls == []
+
+
+def test_query_override_no_hit_and_duplicate_keys(root):
+    # 评审 Minor-7/8：未命中键原样保留；同名多值键全替换
+    ref, store = _record(root, _script_standard)
+    _, browser = _replay(root, ref, store, params={"q:absent": "x"})
+    assert browser.gotos == ["https://example.com/?q=old"]

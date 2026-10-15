@@ -93,3 +93,21 @@ def test_duration_never_compared():
 def test_compare_requires_two_runs():
     with pytest.raises(ValueError):
         assert_consistent([_run([_step(1, "nav")])], _manifest())
+
+
+def test_compare_step_count_mismatch_is_mismatch_not_crash():
+    # 评审 Important-1：步数不齐应产出 mismatch，而非 IndexError / 假 exact
+    report = assert_consistent(
+        [_run([_step(1, "nav"), _step(2, "click")]), _run([_step(1, "nav")])],
+        _manifest(),
+    )
+    assert report.kind == "mismatch"
+    assert report.diff
+
+
+def test_compare_requires_same_trace_ref():
+    with pytest.raises(ValueError):
+        assert_consistent(
+            [_run([_step(1, "nav")], trace_ref="tr_a"), _run([_step(1, "nav")], trace_ref="tr_b")],
+            _manifest(),
+        )
