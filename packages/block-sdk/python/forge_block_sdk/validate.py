@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import datetime
 import re
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 
 import yaml
 
@@ -89,12 +89,13 @@ def load_block(source: str | Path) -> BlockSpec:
 
 
 def _build_block(data: dict, root: str) -> BlockSpec:
-    unknown = sorted(set(data) - BLOCK_FIELDS)
+    unknown = sorted(repr(k) for k in data if not isinstance(k, str) or k not in BLOCK_FIELDS)
     if unknown:
         _fail(f"未知字段：{', '.join(unknown)}", root)
 
-    if data.get("schema_version") != 2 or isinstance(data.get("schema_version"), bool):
-        _fail("必须为 2", f"{root}.schema_version")
+    sv = data.get("schema_version")
+    if isinstance(sv, bool) or not isinstance(sv, int) or sv != 2:
+        _fail("必须为整数 2", f"{root}.schema_version")
     kind = _nonempty_str(data.get("kind"), root, "kind")
     if kind == "composite_block":
         _fail("composite_block 不在本 SDK 版本范围（支持随 M02 画布卡）", f"{root}.kind")
@@ -118,8 +119,8 @@ def _build_block(data: dict, root: str) -> BlockSpec:
         _fail("必须为布尔值", f"{root}.side_effects")
 
     caps_raw = data.get("capabilities")
-    if not isinstance(caps_raw, list) or not caps_raw:
-        _fail("应为非空字符串列表", f"{root}.capabilities")
+    if not isinstance(caps_raw, list):
+        _fail("应为字符串列表", f"{root}.capabilities")
     capabilities = []
     for i, cap in enumerate(caps_raw):
         if not isinstance(cap, str) or not CAPABILITY_RE.match(cap):
@@ -127,8 +128,8 @@ def _build_block(data: dict, root: str) -> BlockSpec:
         capabilities.append(cap)
 
     perms_raw = data.get("permissions")
-    if not isinstance(perms_raw, list) or not perms_raw:
-        _fail("应为非空声明列表", f"{root}.permissions")
+    if not isinstance(perms_raw, list):
+        _fail("应为声明列表", f"{root}.permissions")
     permissions = []
     for i, item in enumerate(perms_raw):
         perm_path = f"{root}.permissions[{i}]"
@@ -151,9 +152,18 @@ def _build_block(data: dict, root: str) -> BlockSpec:
     if set(rt) != {"adapter", "entry", "timeout_sec"}:
         _fail("字段必须恰为 adapter/entry/timeout_sec", f"{root}.runtime")
     adapter = rt["adapter"]
-    if adapter not in ADAPTER_SUFFIXES:
+    if not isinstance(adapter, str) or adapter not in ADAPTER_SUFFIXES:
         _fail(f"必须为 {'/'.join(ADAPTER_SUFFIXES)} 之一", f"{root}.runtime.adapter")
     entry = _nonempty_str(rt["entry"], f"{root}.runtime", "entry")
+    entry_norm = entry.replace("\\", "/")
+    entry_abs = (
+        entry_norm.startswith("/")
+        or entry_norm.startswith("//")
+        or re.match(r"^[A-Za-z]:", entry_norm)
+        or ".." in PurePosixPath(entry_norm).parts
+    )
+    if entry_abs:
+        _fail("entry 必须是积木目录内相对路径（禁止绝对路径与 .. 分量）", f"{root}.runtime.entry")
     timeout_sec = _int_in(rt["timeout_sec"], f"{root}.runtime", "timeout_sec", 1)
 
     reliability = None
@@ -169,12 +179,14 @@ def _build_block(data: dict, root: str) -> BlockSpec:
             _fail("应为 [0,1] 内数值", f"{root}.reliability.pass_rate")
         measured = rel["measured_at"]
         if isinstance(measured, datetime.datetime):
-            measured = measured.date()
+            _fail("应为 ISO 日期（YYYY-MM-DD），不接受时间戳", f"{root}.reliability.measured_at")
         if isinstance(measured, datetime.date):
             measured = measured.isoformat()
         if not isinstance(measured, str):
             _fail("应为 ISO 日期", f"{root}.reliability.measured_at")
         try:
+            if len(measured) != 10:
+                raise ValueError
             datetime.date.fromisoformat(measured)
         except ValueError:
             _fail("应为 ISO 日期（YYYY-MM-DD）", f"{root}.reliability.measured_at")
@@ -214,9 +226,9 @@ def load_interactions(source: str | Path) -> tuple[InteractionSpec, ...]:
         path = f"{label}[{i}]"
         raw = _mapping(item, path)
         allowed = {"id", "type", "title", "schema", "optional", "site"}
-        extra = set(raw) - allowed
+        extra = sorted(repr(k) for k in raw if not isinstance(k, str) or k not in allowed)
         if extra:
-            _fail(f"未知字段：{', '.join(sorted(extra))}", path)
+            _fail(f"未知字段：{', '.join(extra)}", path)
         iid = _nonempty_str(raw.get("id"), path, "id")
         if not NAME_RE.match(iid):
             _fail("必须匹配 ^[a-z][a-z0-9_]*$", f"{path}.id")

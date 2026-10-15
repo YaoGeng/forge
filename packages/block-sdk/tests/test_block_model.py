@@ -85,11 +85,12 @@ def test_semver_gate(write_block):
     "schema_version", "kind", "name", "version", "title", "site_change_tier",
     "side_effects", "capabilities", "permissions", "runtime", "ai_description",
 ])
-def test_required_fields_missing(write_block, drop_line, key):
-    text = drop_line((CORPUS / "block.yaml").read_text(encoding="utf-8"), key)
+def test_required_fields_missing(write_block, drop_line, drop_block, key):
+    base = (CORPUS / "block.yaml").read_text(encoding="utf-8")
+    text = drop_block(base, key) if key in ("capabilities", "permissions", "runtime") else drop_line(base, key)
     with pytest.raises(ValidationError) as ei:
         load_block(write_block(text))
-    assert key in str(ei.value) or ei.value.path
+    assert ei.value.path.endswith("." + key)
 
 
 def test_enum_gates(write_block):
@@ -225,3 +226,62 @@ def test_validate_block_dir_entry_gates(write_block, tmp_path):
     )
     with pytest.raises(ValidationError):
         validate_block_dir(d2)
+
+
+# ---- T1.10 评审修复轮（A4 首轮：1 Critical / 3 Important / Minor 收敛） ----
+
+
+def _base() -> str:
+    return (CORPUS / "block.yaml").read_text(encoding="utf-8")
+
+
+def test_adapter_unhashable_rejected(write_block):
+    with pytest.raises(ValidationError):
+        load_block(write_block(_base().replace("adapter: python", "adapter: [python]")))
+
+
+def test_nonstr_unknown_keys_rejected(write_block):
+    with pytest.raises(ValidationError):
+        load_block(write_block(_base() + "1: x\n"))
+    d = write_block(files={"interactions.yaml": "- { id: a, type: input, title: A, 1: x }\n"})
+    with pytest.raises(ValidationError):
+        load_interactions(d / "interactions.yaml")
+
+
+def test_entry_must_be_relative(write_block, tmp_path):
+    outside = tmp_path / "evil.py"
+    outside.write_text("x = 1\n", encoding="utf-8")
+    for bad in (str(outside).replace("\\", "/"), "../evil.py"):
+        d = write_block(_base().replace("entry: main.py", f"entry: \"{bad}\""))
+        with pytest.raises(ValidationError):
+            load_block(d / "block.yaml")
+        with pytest.raises(ValidationError):
+            validate_block_dir(d)
+
+
+def test_schema_version_float_rejected(write_block):
+    with pytest.raises(ValidationError):
+        load_block(write_block(_base().replace("schema_version: 2", "schema_version: 2.0")))
+
+
+def test_measured_at_datetime_rejected(write_block):
+    with pytest.raises(ValidationError):
+        load_block(write_block(_base().replace(
+            "measured_at: 2026-10-12", "measured_at: 2026-10-12T15:30:00"
+        )))
+
+
+def test_empty_capabilities_and_permissions_allowed(write_block):
+    text = _base().replace(
+        "capabilities:\n  - browser\n  - ai_fast\n  - interact_input\n  - interact_login",
+        "capabilities: []",
+    ).replace(
+        "permissions:\n  - { type: domain, value: \"xiaohongshu.com\", required: true }\n"
+        "  - { type: credential, value: \"xhs_login\", required: true }\n"
+        "  - { type: ai, value: \"fast\", required: true }\n"
+        "  - { type: interact, value: \"input\", required: true }\n"
+        "  - { type: interact, value: \"login\", required: true }",
+        "permissions: []",
+    )
+    spec = load_block(write_block(text))
+    assert spec.capabilities == () and spec.permissions == ()
