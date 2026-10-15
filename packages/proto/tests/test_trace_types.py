@@ -343,3 +343,13 @@ def test_schema_and_python_agree_on_corpus():
     doc = yaml.safe_load((CORPUS / "valid" / "trace" / "manifest.yaml").read_text(encoding="utf-8"))
     assert schema_validate(doc, schema) == []
     load_manifest(CORPUS / "valid" / "trace" / "manifest.yaml")
+
+
+def test_manifest_login_steps_minimum_one():
+    doc = valid_manifest_doc() if "valid_manifest_doc" in dir() else None
+    # 直接以最小 manifest 文本构造：login_steps 含 0 必须拒绝（Schema minimum 1）
+    from forge_proto.trace import load_manifest
+    import pytest
+    with pytest.raises(Exception) as ei:
+        load_manifest("format_version: \"1.0\"\nsite: x.com\nlogin_steps: [0, 2]\n")
+    assert "≥1" in str(ei.value)

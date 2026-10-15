@@ -107,15 +107,6 @@ def _load_login_steps(doc: dict, where: str) -> tuple[int, ...]:
     return tuple(raw)
 
 
-def _load_login_steps(doc: dict, where: str) -> tuple[int, ...]:
-    raw = doc.get("login_steps")
-    if raw is None:
-        return ()
-    if not isinstance(raw, list) or any(isinstance(v, bool) or not isinstance(v, int) for v in raw):
-        raise FormatError(f"{where}: login_steps 必须是整数数组")
-    return tuple(raw)
-
-
 def _load_time_sensitive(doc: dict, where: str) -> tuple[TimeSensitiveStep, ...]:
     raw = doc.get("time_sensitive_steps")
     if raw is None:
