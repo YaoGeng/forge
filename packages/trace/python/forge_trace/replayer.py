@@ -136,10 +136,8 @@ def run(
     steps = load_steps(rec.trace_dir / "steps.ndjson")
     port = browser_factory()
     if mode == "golden":
-        try:
-            from .golden import apply_routes
-        except ImportError as exc:
-            raise NotImplementedError("mode=golden 随 T1.23 交付") from exc
+        from .golden import apply_routes
+
         apply_routes(port, rec.trace_dir.parent.parent, trace_ref)
     results: list[StepResult] = []
     for step in steps:
