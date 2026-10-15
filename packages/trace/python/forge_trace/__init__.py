@@ -7,21 +7,32 @@
 from .events import INPUT_FLUSH_MS, IDLE_WAIT_MS, SCROLL_FLUSH_MS, BrowserEvent, aggregate
 from .port import BrowserPort
 from .recorder import RecordingSession, Recorder
+from .replayer import ConsistencyReport, ReplayResult, StepResult, assert_consistent, replay
 from .selectors import ElementFp, forge_selector
 from .store import Annotation, RecordingsStore, Recording
+from .similarity import SIMILARITY_THRESHOLD, cosine, embed, structural_similarity
 
 __all__ = [
     "INPUT_FLUSH_MS",
     "IDLE_WAIT_MS",
     "SCROLL_FLUSH_MS",
+    "SIMILARITY_THRESHOLD",
     "Annotation",
     "BrowserEvent",
     "BrowserPort",
+    "ConsistencyReport",
     "ElementFp",
     "RecordingsStore",
     "Recording",
     "RecordingSession",
+    "ReplayResult",
     "Recorder",
+    "StepResult",
     "aggregate",
+    "assert_consistent",
+    "cosine",
+    "embed",
     "forge_selector",
+    "replay",
+    "structural_similarity",
 ]

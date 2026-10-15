@@ -31,6 +31,7 @@ class FakeBrowser:
         self.scrolls: list[int] = []
         self.waits: list[tuple[str, int]] = []
         self.presses: list[str] = []
+        self.hidden: set[str] = set()  # 测试模拟元素缺失（wait_selector 判 False）
 
     # —— 录制面 ——
     def install_hook(self, on_event: EventHook) -> None:
@@ -122,7 +123,7 @@ class FakeBrowser:
 
     def wait_selector(self, selector: str, timeout_ms: int = 5000) -> bool:
         self.waits.append((selector, timeout_ms))
-        return True
+        return selector not in self.hidden
 
     def press(self, key: str) -> None:
         self.presses.append(key)
