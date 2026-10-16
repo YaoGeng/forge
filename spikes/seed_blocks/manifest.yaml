@@ -1,0 +1,77 @@
+# 种子积木库 manifest（docs/13 §5 T1.60 备案的可机读镜像；05 附录 A.9 为备案正本）
+schema_version: 1
+
+scenarios:
+  - {id: s1_search_digest, title: 搜索聚合读取}
+  - {id: s2_login_inventory, title: 登录态数据读取}
+  - {id: s3_catalog_read, title: 目录/书目读取}
+  - {id: s4_text_extract, title: 文本抽取}
+  - {id: s5_public_api, title: 公开 API 数据拉取}
+  - {id: s6_repo_meta, title: 仓库元数据查询}
+  - {id: s7_home_watch, title: 高变更首页监控}
+  - {id: s8_data_export, title: 数据导出}
+  - {id: s9_text_digest, title: 文本汇总整理}
+  - {id: s10_numeric_calc, title: 数值计算}
+
+sites:
+  hn.algolia.com: {tier: medium}       # 既有（MS-1E C2 seed）
+  saucedemo.com: {tier: standard}      # 既有（MS-1E C1 seed；平台自持公开测试账号）
+  baidu.com: {tier: high}              # C4 高变更例外（MS-1D C1-R2 改版实证）
+  cn.bing.com: {tier: standard}
+  books.toscrape.com: {tier: standard} # 公开爬虫练习站（官方供抓取）
+  quotes.toscrape.com: {tier: standard}
+  registry.npmmirror.com: {tier: standard}      # 公开 registry API
+  httpbin.org: {tier: standard}        # 公开 HTTP 测试服务
+  api.github.com: {tier: standard}     # 公开 REST API
+  jsonplaceholder.typicode.com: {tier: standard} # 公开假数据 API
+
+blocks:
+  # ── 批次一：场景 1/3/4/7 + 既有两块（48h 时钟最早起跑）──
+  - {name: bing_search, site: cn.bing.com, scenario: s1_search_digest, level: C2,
+     script: site_scripts.bing_search:browse, params: {q: browser automation}, batch: 1, adapter: trace}
+  - {name: hn_search_probe, site: hn.algolia.com, scenario: s1_search_digest, level: C2,
+     script: site_scripts.hn_search_probe:browse, params: {q: python}, batch: 1, adapter: trace,
+     exists: true, legacy_state_key: c2}
+  - {name: books_list, site: books.toscrape.com, scenario: s3_catalog_read, level: C2,
+     script: site_scripts.books_list:browse, params: {}, batch: 1, adapter: trace}
+  - {name: book_detail, site: books.toscrape.com, scenario: s3_catalog_read, level: C2,
+     script: site_scripts.book_detail:browse, params: {}, batch: 1, adapter: trace}
+  - {name: quotes_list, site: quotes.toscrape.com, scenario: s4_text_extract, level: C2,
+     script: site_scripts.quotes_list:browse, params: {}, batch: 1, adapter: trace}
+  - {name: quotes_paged, site: quotes.toscrape.com, scenario: s4_text_extract, level: C2,
+     script: site_scripts.quotes_paged:browse, params: {tag: love}, batch: 1, adapter: trace}
+  - {name: baidu_home_watch, site: baidu.com, scenario: s7_home_watch, level: C2,
+     script: site_scripts.baidu_home_watch:browse, params: {}, batch: 1, adapter: trace}
+  - {name: login_demo_probe, site: saucedemo.com, scenario: s2_login_inventory, level: C1,
+     script: site_scripts.login_demo_probe:browse, params: {}, batch: 1, adapter: trace,
+     exists: true, legacy_state_key: c1}
+
+  # ── 批次二：场景 5/6/8/9/10 ──
+  - {name: npm_pkg_meta, site: registry.npmmirror.com, scenario: s5_public_api, level: C2,
+     script: null, params: {pkg: pytest}, batch: 2, adapter: python}
+  - {name: httpbin_echo, site: httpbin.org, scenario: s5_public_api, level: C2,
+     script: null, params: {echo: hello-forge}, batch: 2, adapter: python}
+  - {name: jsonplaceholder_posts, site: jsonplaceholder.typicode.com, scenario: s5_public_api, level: C2,
+     script: null, params: {post_id: "1"}, batch: 2, adapter: python}
+  - {name: github_repo_read, site: api.github.com, scenario: s6_repo_meta, level: C2,
+     script: null, params: {repo: microsoft/vscode}, batch: 2, adapter: python}
+  - {name: github_search, site: api.github.com, scenario: s6_repo_meta, level: C2,
+     script: null, params: {q: playwright, per_page: "5"}, batch: 2, adapter: python}
+  - {name: excel_export, site: null, scenario: s8_data_export, level: C2,
+     script: null, params: {rows: "[]", out: report.xlsx}, batch: 2, adapter: python}
+  - {name: csv_export, site: null, scenario: s8_data_export, level: C2,
+     script: null, params: {rows: "[]", out: report.csv}, batch: 2, adapter: python}
+  - {name: markdown_export, site: null, scenario: s8_data_export, level: C2,
+     script: null, params: {rows: "[]", out: report.md}, batch: 2, adapter: python}
+  - {name: text_digest, site: null, scenario: s9_text_digest, level: C2,
+     script: null, params: {lines: "alpha;beta;gamma"}, batch: 2, adapter: python}
+  - {name: text_clean, site: null, scenario: s9_text_digest, level: C2,
+     script: null, params: {text: "  Hello   World  "}, batch: 2, adapter: python}
+  - {name: text_stats, site: null, scenario: s9_text_digest, level: C2,
+     script: null, params: {text: the quick brown fox}, batch: 2, adapter: python}
+  - {name: price_calc, site: null, scenario: s10_numeric_calc, level: C2,
+     script: null, params: {price: "199.0", qty: "3"}, batch: 2, adapter: python}
+  - {name: stats_summary, site: null, scenario: s10_numeric_calc, level: C2,
+     script: null, params: {nums: "1,2,3,4,5"}, batch: 2, adapter: python}
+  - {name: unit_convert, site: null, scenario: s10_numeric_calc, level: C2,
+     script: null, params: {cm: "180"}, batch: 2, adapter: python}

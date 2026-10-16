@@ -1,0 +1,105 @@
+{
+  "probed_at": "2026-10-16T13:28:19+00:00",
+  "results": [
+    {
+      "host": "hn.algolia.com",
+      "tier": "medium",
+      "status": 200,
+      "title": "Hacker News Search powered by Algolia",
+      "final_url": "https://hn.algolia.com/",
+      "ms": 3844,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "saucedemo.com",
+      "tier": "standard",
+      "status": 200,
+      "title": "Swag Labs",
+      "final_url": "https://www.saucedemo.com/",
+      "ms": 4358,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "baidu.com",
+      "tier": "high",
+      "status": 200,
+      "title": "百度一下，你就知道",
+      "final_url": "https://www.baidu.com/",
+      "ms": 3905,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "cn.bing.com",
+      "tier": "standard",
+      "status": 200,
+      "title": "搜索 - Microsoft 必应",
+      "final_url": "https://www.bing.com/?mkt=zh-CN",
+      "ms": 4266,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "books.toscrape.com",
+      "tier": "standard",
+      "status": 200,
+      "title": "All products | Books to Scrape - Sandbox",
+      "final_url": "https://books.toscrape.com/",
+      "ms": 5046,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "quotes.toscrape.com",
+      "tier": "standard",
+      "status": 200,
+      "title": "Quotes to Scrape",
+      "final_url": "https://quotes.toscrape.com/",
+      "ms": 3922,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "registry.npmmirror.com",
+      "tier": "standard",
+      "status": 200,
+      "title": null,
+      "final_url": "https://registry.npmmirror.com/",
+      "ms": 2264,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "httpbin.org",
+      "tier": "standard",
+      "status": 200,
+      "title": "httpbin.org",
+      "final_url": "https://httpbin.org/",
+      "ms": 3297,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "api.github.com",
+      "tier": "standard",
+      "status": 200,
+      "title": null,
+      "final_url": "https://api.github.com/",
+      "ms": 2937,
+      "reachable": true,
+      "error": null
+    },
+    {
+      "host": "jsonplaceholder.typicode.com",
+      "tier": "standard",
+      "status": 200,
+      "title": "JSONPlaceholder - Free Fake REST API",
+      "final_url": "https://jsonplaceholder.typicode.com/",
+      "ms": 5358,
+      "reachable": true,
+      "error": null
+    }
+  ]
+}
