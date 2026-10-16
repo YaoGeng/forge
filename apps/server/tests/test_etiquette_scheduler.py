@@ -27,27 +27,6 @@ from forge_server.scheduler import SegmentRunOutcome, best_effort, compute_verdi
 START = datetime(2026, 10, 16, 9, 0, 0)  # 与 conftest.FrozenClock 默认起点一致（naive UTC）
 
 
-def drain(sched, clock, limit=200):
-    """推时钟逐 tick 执行全部到期 run：到点执行，不做真实等待。"""
-    for _ in range(limit):
-        sched.tick()
-        nxt = sched.next_due()
-        if nxt is None:
-            return
-        if nxt > clock.now():
-            clock.advance_to(nxt)
-
-
-def drain_until(sched, clock, until):
-    """同 drain，但 next_due 越过 until 即停（用于只推进时段一）。"""
-    while True:
-        sched.tick()
-        nxt = sched.next_due()
-        if nxt is None or nxt > until:
-            return
-        clock.advance_to(nxt)
-
-
 def make_all_ok_hook(live_fails=(), failure_class="anchor_mismatch"):
     def hook(run_id, segment, index):
         ok = index not in live_fails
@@ -58,11 +37,6 @@ def make_all_ok_hook(live_fails=(), failure_class="anchor_mismatch"):
         )
 
     return hook
-
-
-def get_row(sched, run_id) -> CertificationRun:
-    with sched.session_factory() as s:
-        return s.get(CertificationRun, run_id)
 
 
 def plan_of_n(requests_n, *, batch_id="b1", site="example.com", interval_s=None):
@@ -82,7 +56,7 @@ def plan_of_n(requests_n, *, batch_id="b1", site="example.com", interval_s=None)
 # --- 排期与礼仪 -------------------------------------------------------------------
 
 
-def test_submit_creates_two_segments(make_scheduler):
+def test_submit_creates_two_segments(make_scheduler, get_row):
     sched = make_scheduler()
     run_id = sched.submit("block", "baidu_search", "1.0.0", "C2")
 
@@ -120,11 +94,11 @@ def test_etiquette_caps_visits(make_scheduler, clock):
     assert d3.allowed
 
 
-def test_etiquette_span_enforced(make_scheduler, clock):
+def test_etiquette_span_enforced(make_scheduler, clock, get_row, drain):
     sched = make_scheduler(hook=make_all_ok_hook())
     run_id = sched.submit("block", "probe", "1.0.0", "C2")
 
-    drain_until(sched, clock, START + timedelta(hours=MIN_BATCH_SPAN_H - 1))
+    drain(sched, clock, until=START + timedelta(hours=MIN_BATCH_SPAN_H - 1))
     assert get_row(sched, run_id).n == SEGMENT_RUNS  # 时段一完成
 
     # 计划层：47h 间隔的两时段计划被 enforce 拒绝
@@ -221,7 +195,7 @@ def test_verdict_by_tier():
     assert compute_verdict("standard", 0.89, 0.0, frozenset()) == "below_threshold"
 
 
-def test_storage_never_conflates(make_app, clock):
+def test_storage_never_conflates(make_app, clock, drain):
     hook = make_all_ok_hook(live_fails=(18, 19))
     app = make_app(hook=hook)
     sched = app.state.scheduler
@@ -243,7 +217,7 @@ def test_storage_never_conflates(make_app, clock):
             assert not re.search(r"combin|overall|total_pass|merged|union_pass", name, re.I), name
 
 
-def test_rate_fields_carry_n_and_window(make_app, clock):
+def test_rate_fields_carry_n_and_window(make_app, clock, drain):
     app = make_app(hook=make_all_ok_hook())
     sched = app.state.scheduler
     run_id = sched.submit("block", "probe", "1.0.0", "C2")
@@ -290,7 +264,7 @@ def test_submit_api_roundtrip(api):
     assert api.client.get("/api/v1/certifications/99999").status_code == 404
 
 
-def test_tick_executes_segments(make_scheduler, clock):
+def test_tick_executes_segments(make_scheduler, clock, get_row, drain):
     calls = []
 
     def hook(run_id, segment, index):

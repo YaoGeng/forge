@@ -16,8 +16,11 @@ MIN_BATCH_SPAN_H = 48  # 跨 ≥48h
 MIN_REQUEST_INTERVAL_S = 5  # 同站点相邻请求限频
 EPHEMERAL_SESSION_PER_RUN = True  # 单会话：每 run 独立一次性浏览器会话
 
-# verdict 阈值按站点等级（PRD §9.3 逐字：标准 ≥90% / 中等变更 ≥85% / 高变更·受防护不设下限）
-THRESHOLD_BY_TIER = MappingProxyType({"standard": 0.90, "medium": 0.85, "high": None})
+# verdict 阈值按站点等级（PRD §9.3 逐字：标准 ≥90% / 中等变更 ≥85% /
+# 高变更频率·受防护不设下限 + 强制 best-effort 标注；键名对齐 block.yaml SITE_CHANGE_TIERS）
+THRESHOLD_BY_TIER = MappingProxyType(
+    {"standard": 0.90, "medium": 0.85, "high": None, "protected": None}
+)
 
 
 class Clock(Protocol):

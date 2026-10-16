@@ -7,9 +7,10 @@ from pathlib import Path
 _HERE = Path(__file__).resolve().parent
 for rel in (
     "..",  # apps/server（forge_server 包根）
-    "../../packages/trace/python",
-    "../../packages/block-sdk/python",
-    "../../packages/proto/python",
+    "../../../packages/trace/python",
+    "../../../packages/trace/tests",  # FakeBrowser 假体（T1.31 起复用）
+    "../../../packages/block-sdk/python",
+    "../../../packages/proto/python",
 ):
     p = (_HERE / rel).resolve()
     if str(p) not in sys.path:
@@ -85,3 +86,35 @@ def api(make_app) -> SimpleNamespace:
         yield SimpleNamespace(app=app, client=client)
     finally:
         client.close()
+
+
+@pytest.fixture
+def root(tmp_path):
+    """RecordingsStore 根目录（与 packages/trace 测试同名夹具同语义）。"""
+    return tmp_path
+
+
+@pytest.fixture
+def drain():
+    """推时钟逐 tick 执行全部到期 run：到点执行，不做真实等待。"""
+
+    def _drain(sched, clock, until=None, limit=200):
+        while True:
+            sched.tick()
+            nxt = sched.next_due()
+            if nxt is None or (until is not None and nxt > until):
+                return
+            clock.advance_to(nxt)
+
+    return _drain
+
+
+@pytest.fixture
+def get_row():
+    from forge_server.models import CertificationRun
+
+    def _get(sched, run_id) -> CertificationRun:
+        with sched.session_factory() as s:
+            return s.get(CertificationRun, run_id)
+
+    return _get
