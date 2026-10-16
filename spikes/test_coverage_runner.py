@@ -7,9 +7,13 @@ import pytest
 
 from spikes.coverage_runner import (
     KNOWN_DOMAINS,
+    check_shape,
     load_pool,
     load_sample,
+    run_one,
     select_sample,
+    tally,
+    write_report,
 )
 
 
@@ -179,3 +183,129 @@ class TestRealArtifacts:
                 assert a["category"] in cats and a["reason"]
             else:
                 assert a["kind"] == "chain" and a["steps"]
+
+
+# ---------- T1.65d run_one / tally / write_report ----------
+
+def _chain_entry(eid="c1", must=None, blocks=("text_clean", "markdown_export")):
+    return {
+        "id": eid, "domains": ["s8"], "title": "t", "url": "u", "excerpt": "e",
+        "posted_at": "2025-01-01T00:00:00Z", "community": "c",
+        "expected_shape": {"format": "markdown", "checked": True,
+                           "must": must or {"title_row": True, "min_point_rows": 3}},
+        "shape_digest": "sha256:abc",
+        "attempt": {"kind": "chain", "steps": [
+            {"block": b, "params": {"text": "x"}} for b in blocks]},
+    }
+
+
+class TestRunOne:
+    def test_chain_executes_exactly_once(self):
+        calls = []
+
+        def exec_chain(steps):
+            calls.append(steps)
+            return {"ok": True, "steps": [], "context": {"markdown_export": {"ok": True, "file": "a.md", "rows": 5}}}
+
+        rec = run_one(_chain_entry(), exec_chain, registry={"text_clean", "markdown_export"})
+        assert len(calls) == 1  # C9 单次运行，不重试
+        assert rec["verdict"] == "covered"
+
+    def test_unregistered_block_refuses_to_run(self):
+        # Review Focus 3：未注册块绝不执行，也绝不落产线脚本直跑
+        calls = []
+
+        def exec_chain(steps):
+            calls.append(steps)
+            return {"ok": True, "steps": [], "context": {}}
+
+        rec = run_one(_chain_entry(), exec_chain, registry={"text_clean"})
+        assert calls == []
+        assert rec["verdict"] == "uncovered"
+        assert rec["category"] == "registry_missing"
+        assert "text_clean" not in rec.get("executed_via", "spikes-direct")  # 不出现直跑通道
+
+    def test_uncoverable_never_runs(self):
+        entry = {
+            "id": "u1", "domains": ["s7"], "title": "t", "url": "u", "excerpt": "e",
+            "posted_at": "2025-01-01T00:00:00Z", "community": "c",
+            "expected_shape": {"format": "alert", "checked": False},
+            "shape_digest": "sha256:abc",
+            "attempt": {"kind": "uncoverable", "category": "site_not_covered", "reason": "x"},
+        }
+        calls = []
+
+        def exec_chain(steps):
+            calls.append(steps)
+            return {"ok": True, "steps": [], "context": {}}
+
+        rec = run_one(entry, exec_chain, registry=set())
+        assert calls == []
+        assert rec["verdict"] == "uncovered" and rec["category"] == "site_not_covered"
+
+    def test_run_failure_marks_run_failed(self):
+        def exec_chain(steps):
+            return {"ok": False, "steps": [{"index": 0, "block": "text_clean", "ok": False}], "context": {}}
+
+        rec = run_one(_chain_entry(), exec_chain, registry={"text_clean", "markdown_export"})
+        assert rec["verdict"] == "uncovered" and rec["category"] == "run_failed"
+
+    def test_shape_mismatch_marks_uncovered(self):
+        def exec_chain(steps):
+            # 实际只产出 1 行（无拆行/标题能力）——预期形状要求标题+3 要点 → 形状不符
+            return {"ok": True, "steps": [], "context": {"markdown_export": {"ok": True, "file": "a.md", "rows": 1}}}
+
+        rec = run_one(_chain_entry(), exec_chain, registry={"text_clean", "markdown_export"})
+        assert rec["verdict"] == "uncovered" and rec["category"] == "shape_mismatch"
+
+    def test_run_record_carries_expected_shape_hash(self):
+        # Review Focus 2：判定记录携带预登记形状摘要——事后改样本与记录对不上即露馅
+        def exec_chain(steps):
+            return {"ok": True, "steps": [], "context": {"markdown_export": {"ok": True, "rows": 5, "file": "a.md"}}}
+
+        rec = run_one(_chain_entry(), exec_chain, registry={"text_clean", "markdown_export"})
+        assert rec["shape_digest"] == "sha256:abc"
+        assert rec["expected_must"] == {"title_row": True, "min_point_rows": 3}
+
+    def test_binding_error_is_run_failed_not_crash(self):
+        def exec_chain(steps):
+            raise KeyError("text_clean.text")
+
+        rec = run_one(_chain_entry(), exec_chain, registry={"text_clean", "markdown_export"})
+        assert rec["verdict"] == "uncovered" and rec["category"] == "run_failed"
+
+
+class TestCheckShape:
+    def test_markdown_rows_account_for_title(self):
+        assert check_shape({"rows": 4}, {"title_row": True, "min_point_rows": 3})
+        assert not check_shape({"rows": 3}, {"title_row": True, "min_point_rows": 3})
+        assert check_shape({"rows": 3}, {"min_point_rows": 3})
+        assert not check_shape({"rows": 2}, {"min_point_rows": 3})
+
+
+class TestTallyReport:
+    def _records(self):
+        return [
+            {"id": "a", "verdict": "uncovered", "category": "site_not_covered"},
+            {"id": "b", "verdict": "uncovered", "category": "site_not_covered"},
+            {"id": "c", "verdict": "uncovered", "category": "capability_missing"},
+            {"id": "d", "verdict": "uncovered", "category": "shape_mismatch"},
+            {"id": "e", "verdict": "covered"},
+        ]
+
+    def test_tally_counts(self):
+        t = tally(self._records())
+        assert t["denominator"] == 5 and t["covered"] == 1
+        assert t["rate"] == 0.2
+        assert t["categories"]["site_not_covered"] == 2
+
+    def test_report_contents(self, tmp_path):
+        t = tally(self._records())
+        out = tmp_path / "report.md"
+        write_report(out, self._records(), t, out_of_domain={"total": 56, "top": [("管理/防护工具", 9)]},
+                     sample_meta={"pool_ref": "sha256:x"})
+        text = out.read_text(encoding="utf-8")
+        assert "5" in text and "20.0%" in text
+        assert "site_not_covered" in text and "域外" in text
+        assert "人工复核" in text  # C10 复核列
+        assert "sha256:x" in text  # 池快照引用可追溯

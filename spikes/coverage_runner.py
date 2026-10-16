@@ -84,3 +84,119 @@ def load_sample(sample_path: str, pool_path: str) -> list[dict]:
             entry["attempt"] = s["attempt"]
         out.append(entry)
     return out
+
+
+# ---------- T1.65d 执行器（单次整链经产品路径；判定记录落盘） ----------
+
+UNCOVERABLE_CATEGORIES = ("site_not_covered", "capability_missing", "needs_genericization")
+
+
+def check_shape(final_output: dict, must: dict) -> bool:
+    """结构化形状核对（C10）：markdown 行数核对（title_row 计 1 行）。严格判定。"""
+    if not must:
+        return True
+    rows = final_output.get("rows")
+    if not isinstance(rows, int):
+        return False
+    need = must.get("min_point_rows", 0)
+    if must.get("title_row"):
+        need += 1
+    return rows >= need
+
+
+def run_one(entry: dict, execute_chain, *, registry: set[str]) -> dict:
+    """单样本判定（恰一次执行，不重试）。execute_chain = ChainRunner.execute 同形可调用。
+
+    verdict ∈ covered | uncovered；uncovered 归因 category ∈
+    预登记三类 | registry_missing | run_failed | shape_mismatch。
+    """
+    attempt = entry["attempt"]
+    record = {
+        "id": entry["id"],
+        "shape_digest": entry["shape_digest"],
+        "expected_must": entry["expected_shape"].get("must") or {},
+    }
+    if attempt["kind"] == "uncoverable":
+        record.update(verdict="uncovered", category=attempt["category"],
+                      reason=attempt["reason"], ran=False)
+        return record
+
+    missing = [st["block"] for st in attempt["steps"] if st["block"] not in registry]
+    if missing:
+        record.update(verdict="uncovered", category="registry_missing",
+                      reason=f"块未注册（覆盖运行只走产品路径，不落产线脚本直跑）：{', '.join(missing)}",
+                      ran=False)
+        return record
+
+    try:
+        result = execute_chain(attempt["steps"])  # 恰一次（C9）
+    except Exception as exc:  # noqa: BLE001 —— 单步异常如实归因
+        record.update(verdict="uncovered", category="run_failed", ran=True,
+                      error=f"{type(exc).__name__}: {exc}")
+        return record
+    record["ran"] = True
+    record["steps_view"] = result.get("steps", [])
+    if not result.get("ok"):
+        record.update(verdict="uncovered", category="run_failed")
+        return record
+    final_step = attempt["steps"][-1]["block"]
+    final_output = (result.get("context") or {}).get(final_step) or {}
+    record["final_output"] = final_output
+    if entry["expected_shape"].get("checked") and not check_shape(final_output, record["expected_must"]):
+        record.update(verdict="uncovered", category="shape_mismatch",
+                      reason="产出不符预登记预期形状（结构核对严格判定，不放宽）")
+        return record
+    record.update(verdict="covered")
+    return record
+
+
+def tally(records: list[dict]) -> dict:
+    n = len(records)
+    covered = sum(1 for r in records if r["verdict"] == "covered")
+    categories: dict[str, int] = {}
+    for r in records:
+        if r["verdict"] == "uncovered":
+            categories[r["category"]] = categories.get(r["category"], 0) + 1
+    return {"denominator": n, "covered": covered,
+            "rate": (covered / n) if n else 0.0, "categories": categories}
+
+
+def write_report(path, records: list[dict], t: dict, *, out_of_domain: dict,
+                 sample_meta: dict) -> None:
+    """C12 报告：只呈报数据（分母/分子/覆盖率/未覆盖分类/域外旁证/记录索引/复核列）。"""
+    lines = [
+        "# MS-1G 覆盖率实验报告（T1.65e 产出）",
+        "",
+        f"- 池快照引用：{sample_meta.get('pool_ref', 'n/a')}；样本量 30（A.4 区间下限）",
+        f"- 分母 {t['denominator']}｜覆盖 {t['covered']}｜覆盖率 **{t['rate'] * 100:.1f}%**（判定口径：A.4/A.10——单次整链运行产出正确结果即计覆盖）",
+        "",
+        "## 未覆盖分类（D-4 呈报数据）",
+        "",
+        "| 归因 | 条数 |",
+        "| --- | --- |",
+    ]
+    for cat, cnt in sorted(t["categories"].items(), key=lambda kv: -kv[1]):
+        lines.append(f"| {cat} | {cnt} |")
+    lines += [
+        "",
+        "## 域外旁证（池快照内不入分母的需求分布）",
+        "",
+        f"- 域外/排除条目总数：{out_of_domain.get('total', 'n/a')}",
+    ]
+    for label, cnt in out_of_domain.get("top", []):
+        lines.append(f"- {label}：{cnt}")
+    lines += [
+        "",
+        "## 判定记录（索引；运行证据见 runs/ 同名文件）",
+        "",
+        "| id | 判定 | 归因 | 人工复核 |",
+        "| --- | --- | --- | --- |",
+    ]
+    for r in records:
+        lines.append(f"| {r['id']} | {r['verdict']} | {r.get('category', '—')} | （留空） |")
+    lines += [
+        "",
+        "> 报告只呈报数据，不写结论行；D-4 判定为人工决策点（A.10 可否决性条款适用于本规程整体）。",
+        "",
+    ]
+    pathlib.Path(path).write_text("\n".join(lines), encoding="utf-8")
