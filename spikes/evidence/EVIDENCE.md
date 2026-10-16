@@ -172,3 +172,15 @@
 6. _snapshots_at_finalize O(n²)——已有 ledger ruling（T1.21b），超长会话 stop 变慢
 7. proto test_trace_types.py:349 死代码行（本里程碑修复轮引入的测试卫生）
 8. golden_similarity docstring 措辞（「结构余弦」→ 广义 Jaccard）+ gate 运行器死 finally/session
+
+## MS-1F 种子积木库+自制应用（docs/13，2026-10-16 开工；进行中）
+
+- **T1.60 选站备案**：10 场景 / 10 站点 / 22 块清单（manifest `spikes/seed_blocks/manifest.yaml`，正本 docs/05 附录 A.9）；探活 10/10 全可达（`t1.60_probe.json`）；C4 高变更例外恰 1 块（baidu_home_watch，high 档 best-effort）。
+- **T1.61 产线**：`spikes/seedline.py`（manifest 校验/脚手架过 SDK 门/录制幂等+3 次重试/输出快照 golden）——5/5。
+- **T1.62 驱动器**：`router_hook`（按 run_id 分发，两 run 两块不串）+ `AdapterRunner`（python 块 local 真执行/golden 输出对拍）+ `cert_batch`（submit 幂等/drive 逐块汇总缺计划 reattach/单块故障不阻塞/register）——apps/server 48/48 + spikes 4/4。
+- **T1.62 前置修复（T1.30 遗留缺陷）**：调度计划仅存内存，gate seg2 换进程将空转超时——`plan_json` 落行 + `reattach`（旧行 started_at+n 确定性回退）+ create_app 旧库补列（RED→GREEN；gate 脚本已接 reattach）。
+- **T1.63 批次一 seg1 PASS**：6 新块（bing_search/books_list/book_detail/quotes_list/quotes_paged/baidu_home_watch）n=10 pass=10 live=1.0（`t1.63_drive_seg1_batch1.json`）。quotes_paged 首录「点 Next」被推导为文本锚回放全败——换双 goto 重录，旧 run7 台账弃用。
+- **T1.63 批次二**：9 本地 python 块（excel/csv/markdown_export、text_digest/clean/stats、price_calc/stats_summary/unit_convert）真实实现+golden 快照；5 公开 API 块经浏览器 trace（裁定：runtime 网络后端为 MS-1C 桩且 lint R1 禁直连——浏览器是阶段 1 唯一合规网络路径）。
+- **T1.64a 最小 Registry + chain**：blocks/block_versions/apps/app_versions/block_refs + /apps*（M10 §5 逐字）+ C0 拦截（版本层 422）+ reliability 快照带 N/窗口/C1 标注 + chain N=1 非统计（含 C1 应用拒同步整链）+ ChainRunner 上下文绑定——7/7。
+- **T1.64b Creator Center 最小版**：九步会话（自动保存/恢复 ?session=）、副作用规则与 C0 拦截服务端强制、G12 全口径读侧、单文件零依赖 UI（双色系）——7/7 + 冒烟截图 `t1.64b_ui_step1/step7_report.png`。
+- **待真实时钟**：批次一 seg2 窗口 2026-10-18T14:25Z 后；批次二 seg1 驱动完成后其 seg2 ≈10-18T15:00Z 后；MS-1E seg2 2026-10-18T05:31Z 后（先行）。seg2 全出 verdict → register 全库 → T1.64c 3-5 应用组装/整链/提审 → 库汇总 gate。
