@@ -80,7 +80,8 @@ def submit(store_dir: Path, manifest, *, batch: int | None, client) -> dict:
         r = client.post(
             "/api/v1/certifications",
             json={"subject_type": "block", "subject_id": b.name,
-                  "version": "1.0.0", "level": "C2", "site_tier": tier_of(manifest, b)},
+                  "version": "1.0.0", "level": "C2", "site_tier": tier_of(manifest, b),
+                  "site_host": b.site},
         )
         if r.status_code not in (200, 201):
             raise RuntimeError(f"提交失败 {b.name}: {r.status_code} {r.text}")
@@ -126,18 +127,28 @@ def build_routes(store_dir: Path, manifest, *, batch: int | None = None,
 
 
 def drive(store_dir: Path, manifest, segment: int, *, app, routes: dict,
-          poll_s: float = 2.0, timeout_s: float = DRIVE_TIMEOUT_S) -> dict:
-    """tick 驱动至全块 n=SEGMENT_RUNS*segment；缺计划先 reattach；逐块汇总。"""
+          batch: int | None = None, poll_s: float = 2.0,
+          timeout_s: float = DRIVE_TIMEOUT_S) -> dict:
+    """tick 驱动至全块 n=SEGMENT_RUNS*segment；缺计划先 reattach（tier 按 manifest 传入）；逐块汇总。
+
+    终审 Critical 修复：batch 过滤必须同时作用于 targets 与 reattach 范围——
+    否则他批 run 被重建后无路由可派，KeyError→env_error 计数污染真实通过率。
+    """
     sched = app.state.scheduler
     state = load_state(store_dir)
     run_ids = state.get("run_ids", {})
+    scoped = {b.name: b for b in c2_new_blocks(manifest, batch=batch)}
     targets = {name: SEGMENT_RUNS * segment
-               for name, rid in run_ids.items()
-               if name in {b.name for b in c2_new_blocks(manifest)}}
-    for name, rid in run_ids.items():
-        if name in targets and sched.plan_for(rid) is None:
-            if not sched.reattach(rid):
+               for name, rid in run_ids.items() if name in scoped}
+    scoped_rids = {run_ids[n] for n in targets}
+    for name in targets:
+        rid = run_ids[name]
+        if sched.plan_for(rid) is None:
+            if not sched.reattach(rid, site_tier=tier_of(manifest, scoped[name])):
                 raise RuntimeError(f"reattach 失败：{name} run_id={rid}")
+    for rid in list(sched._plans):  # 范围外计划摘除：tick 不执行本批之外的 run
+        if rid not in scoped_rids:
+            sched.detach(rid)
     sched.executor_hook = router_hook(routes)
 
     t0 = time.monotonic()
@@ -239,7 +250,8 @@ def main() -> int:
         if not args.segment:
             parser.error("drive 需要 --segment {1,2}")
         routes = build_routes(STORE, manifest, batch=args.batch)
-        result = drive(STORE, manifest, args.segment, app=app, routes=routes)
+        result = drive(STORE, manifest, args.segment, app=app, routes=routes,
+                       batch=args.batch)
         suffix = f"_batch{args.batch}" if args.batch else ""
         out = EVIDENCE / f"t1.63_drive_seg{args.segment}{suffix}.json"
         out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")

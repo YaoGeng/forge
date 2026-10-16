@@ -22,6 +22,7 @@ class CertificationSubmit(BaseModel):
     version: str
     level: Literal["C1", "C2", "chain"]
     site_tier: Literal["standard", "medium", "high", "protected"] = "standard"
+    site_host: str | None = None  # 同站点跨 run 限频归组键（终审 Important#2）
 
 
 class ReportUpload(BaseModel):
@@ -43,7 +44,8 @@ def register_certification_routes(app):
     @app.post("/api/v1/certifications", status_code=201)
     def submit_certification(body: CertificationSubmit):
         run_id = scheduler.submit(
-            body.subject_type, body.subject_id, body.version, body.level, site_tier=body.site_tier
+            body.subject_type, body.subject_id, body.version, body.level,
+            site_tier=body.site_tier, site_host=body.site_host
         )
         return {"run_id": run_id}
 

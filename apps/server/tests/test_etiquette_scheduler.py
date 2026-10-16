@@ -350,3 +350,42 @@ def test_create_app_migrates_legacy_db_adds_plan_json(tmp_path):
     assert "plan_json" in names
     # 二次启动幂等
     create_app(f"sqlite:///{db.as_posix()}")
+
+
+def test_reattach_legacy_row_uses_provided_site_tier(make_scheduler, clock, drain, get_row):
+    """终审 Important#3：旧行回退的 tier 不得静默降档——调用方传入真实 site_tier。
+
+    17/20=0.85：medium 阈值应 pass；若静默按 standard（0.90）则错落 below_threshold。
+    """
+    sched = make_scheduler(make_all_ok_hook(live_fails={10, 11, 12}))
+    run_id = sched.submit("block", "tierblock", "1.0.0", "C2", site_tier="medium")
+    drain(sched, clock, until=START + timedelta(seconds=60))
+    with sched.session_factory() as s:
+        row = s.get(CertificationRun, run_id)
+        row.plan_json = None  # 模拟旧行
+        s.commit()
+
+    sched2 = make_scheduler(make_all_ok_hook(live_fails={10, 11, 12}))
+    assert sched2.reattach(run_id, site_tier="medium") is True
+    clock.advance_to(START + timedelta(hours=48) - timedelta(seconds=1))
+    drain(sched2, clock)
+    row = get_row(sched2, run_id)
+    assert row.n == 20 and row.live_pass_rate == 0.85
+    assert row.verdict == "pass", "medium 阈值被静默降档为 standard"
+
+
+def test_same_site_requests_spaced_across_runs(make_scheduler, clock, get_row):
+    """终审 Important#2：同站点跨 run 限频——同一 tick 内同 host 至多执行一个请求。"""
+    sched = make_scheduler(make_all_ok_hook())
+    a = sched.submit("block", "site_a1", "1.0.0", "C2", site_tier="standard",
+                     site_host="example.com")
+    b = sched.submit("block", "site_a2", "1.0.0", "C2", site_tier="standard",
+                     site_host="example.com")
+    clock.advance(seconds=1)  # 两计划首请求均已到点
+    report = sched.tick()
+    executed = list(report.executed)
+    assert len(executed) == 1, "同 host 两请求在同一 tick 背靠背执行（违反 5s 同站限频）"
+    clock.advance(seconds=3)  # 仍未满 5s
+    assert len(list(sched.tick().executed)) == 0, "同 host 间隔 <5s 即放行"
+    clock.advance(seconds=3)  # 距上次同站执行 ≥5s
+    assert len(list(sched.tick().executed)) == 1

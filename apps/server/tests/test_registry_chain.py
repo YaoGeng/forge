@@ -181,3 +181,61 @@ def test_submit_rejects_uncertified_block(api):
     })
     assert r.status_code == 422
     assert "认证" in r.json()["detail"]
+
+
+def test_register_rejects_mismatched_run(api):
+    """#6：块注册校验 run 归属——chain 级 run / 名字不符的 run 不得注册成块。"""
+    app, client = api
+    rid = _pass_run(app, "probe_a")
+    assert _register(client, "probe_a", rid).status_code == 200
+
+    # 名字不符：A 块的 pass 报告挂 B 块名下 → 422
+    r = _register(client, "other_block", rid)
+    assert r.status_code == 422 and "subject" in r.json()["detail"]
+
+    # chain 级 run（app_version 主题）→ 422
+    app_id = client.post("/api/v1/apps", json={"name": "cx", "title": "t"}).json()["app_id"]
+    client.post(f"/api/v1/apps/{app_id}/versions", json={
+        "version": "1.0.0",
+        "composition_json": [{"block": "probe_a", "params": {}}],
+        "user_input_schema_json": {}})
+    with app.state.session_factory() as s:
+        chain_run = CertificationRun(subject_type="app_version", subject_id=str(app_id),
+                                     version="1.0.0", level="chain", n=1, pass_count=1,
+                                     live_pass_rate=1.0, batch_id="ch", verdict="pass")
+        s.add(chain_run)
+        s.commit()
+        chain_id = chain_run.id
+    r = _register(client, "chain_as_block", chain_id)
+    assert r.status_code == 422
+
+
+def test_duplicate_version_rejected(api):
+    """#7：同应用重复 version 字符串 → 422（防旧 chain verdict 被新组合复用）。"""
+    app, client = api
+    rid = _pass_run(app, "probe_a")
+    _register(client, "probe_a", rid)
+    app_id = client.post("/api/v1/apps", json={"name": "dv", "title": "t"}).json()["app_id"]
+    body = {"version": "1.0.0",
+            "composition_json": [{"block": "probe_a", "params": {}}],
+            "user_input_schema_json": {}}
+    assert client.post(f"/api/v1/apps/{app_id}/versions", json=body).status_code == 200
+    r = client.post(f"/api/v1/apps/{app_id}/versions", json=body)
+    assert r.status_code == 422 and "版本" in r.json()["detail"]
+
+
+def test_reliability_snapshot_matches_c13_fields(api):
+    """#10b：快照字段 = C13 钉死清单（level/n/live_pass_rate/window/best_effort），
+    不含 regression_pass_rate（详情页读侧仅 live 口径，M09 §5）。"""
+    app, client = api
+    rid = _pass_run(app, "probe_a")
+    _register(client, "probe_a", rid)
+    app_id = client.post("/api/v1/apps", json={"name": "c13", "title": "t"}).json()["app_id"]
+    client.post(f"/api/v1/apps/{app_id}/versions", json={
+        "version": "1.0.0",
+        "composition_json": [{"block": "probe_a", "params": {}}],
+        "user_input_schema_json": {}})
+    view = client.get(f"/api/v1/apps/{app_id}").json()
+    rel = view["versions"][0]["blocks"][0]["reliability"]
+    assert set(rel) == {"level", "n", "live_pass_rate",
+                        "window_start", "window_end", "best_effort"}

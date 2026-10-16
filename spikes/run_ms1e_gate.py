@@ -180,12 +180,13 @@ def run_c2_segment(segment: int, state: dict) -> dict:
         r = TestClient(app).post(
             "/api/v1/certifications",
             json={"subject_type": "block", "subject_id": "hn_search_probe",
-                  "version": "1.0.0", "level": "C2", "site_tier": "medium"},
+                  "version": "1.0.0", "level": "C2", "site_tier": "medium",
+                  "site_host": "hn.algolia.com"},
         )
         run_id = r.json()["run_id"]
         state.setdefault("run_ids", {})["c2"] = run_id
         save_state(state)
-    elif not app.state.scheduler.reattach(run_id):
+    elif not app.state.scheduler.reattach(run_id, site_tier="medium"):
         raise RuntimeError(f"C2 run_id={run_id} 无法重建调度态（reattach 失败）")
 
     result = {"segment": segment, "run_id": run_id, "submitted_at": now_iso()}

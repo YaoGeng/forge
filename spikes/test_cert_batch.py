@@ -171,3 +171,35 @@ def test_register_uses_pass_run_and_manifest_meta(store):
         s.commit()
     r = register_block(store, manifest, "probe_a", client=client)
     assert r.status_code == 200 and r.json()["registered"] is True
+
+
+def test_drive_batch_filter_does_not_touch_other_batch(store):
+    """Critical 终审修复：drive --batch N 只驱动本批——批次过滤必须同时作用于
+    targets 与 routes，否则另一批被 reattach 后错路由 env_error 计数污染真实通过率。"""
+    from fastapi.testclient import TestClient
+
+    from cert_batch import drive, submit
+
+    import dataclasses
+
+    manifest = make_manifest()
+    manifest = dataclasses.replace(
+        manifest,
+        blocks=tuple(dataclasses.replace(b, batch=1) if b.name == "probe_a" else
+                     (dataclasses.replace(b, batch=2) if b.name == "excel_export" else b)
+                     for b in manifest.blocks))
+    app = _make_app(f"sqlite:///{(store / 'server.db').as_posix()}")
+    client = TestClient(app)
+    run_ids = submit(store, manifest, batch=None, client=client)  # 两批都提交
+
+    from forge_server.sandbox import RunOutcome
+
+    ok_runner = lambda ref, params=None, *, mode="local", browser_factory=None: RunOutcome(mode=mode, ok=True)  # noqa: E731
+    routes = {run_ids["probe_a"]: (FakeRunner(ok_runner), "probe_a", {})}  # 只路由批次一
+    result = drive(store, manifest, 1, app=app, routes=routes, batch=1,
+                   poll_s=0.0, timeout_s=10.0)
+    assert set(result["blocks"]) == {"probe_a"}
+    with app.state.session_factory() as s:
+        from forge_server.models import CertificationRun
+        other = s.get(CertificationRun, run_ids["excel_export"])
+        assert other.n == 0, "批次二 run 被本批驱动污染（reattach/错路由计数）"

@@ -70,23 +70,18 @@ def register_creator_routes(app) -> None:
             raise HTTPException(
                 status_code=422,
                 detail=f"含未认证积木 {', '.join(missing)}：先完成 C1/C2 认证并注册（转正路径：录制→认证→注册）")
-        # 副作用规则（M02 不变量 1）：side_effects 块后必须有 confirm 交互步
-        has_confirm_after = False
-        pending_side_effect = False
-        for st in composition:
-            if st.get("interaction") == "confirm":
-                has_confirm_after = True
-                pending_side_effect = False
+        # 副作用规则（M02 不变量 1 措辞：后置 confirm）：每个 side_effects 块之后
+        # 存在纯交互 confirm 步即可保存；副作用块自带 confirm 标记不得自确认（终审 #4）
+        confirm_at = [i for i, st in enumerate(composition)
+                      if st.get("interaction") == "confirm" and st.get("block") is None]
+        for i, st in enumerate(composition):
+            if st.get("block") is None:
                 continue
-            bv = reg.get(st.get("block"))
-            if bv is not None and bv.side_effects:
-                if pending_side_effect:
-                    break  # 连续两个副作用块且中间无 confirm → 违规
-                pending_side_effect = True
-        if pending_side_effect:
-            raise HTTPException(
-                status_code=422,
-                detail="副作用积木（发布/提交/支付类）后必须紧跟 confirm 交互步才可保存")
+            bv = reg.get(st["block"])
+            if bv is not None and bv.side_effects and not any(c > i for c in confirm_at):
+                raise HTTPException(
+                    status_code=422,
+                    detail="副作用积木（发布/提交/支付类）后必须有 confirm 交互步才可保存")
         return reg
 
     # --- 块目录（第 1 步：搜积木） ------------------------------------------------
@@ -142,7 +137,7 @@ def register_creator_routes(app) -> None:
             if row is None:
                 raise HTTPException(status_code=404, detail="会话不存在")
             cur = row.step
-            allowed = {cur - 1, cur, cur + 1} | ({4} if cur == 2 else set())
+            allowed = ({cur - 1, cur, cur + 1} | ({4} if cur == 2 else set())) & set(range(1, len(STEPS) + 1))
             if target not in allowed:
                 raise HTTPException(
                     status_code=422,
@@ -213,12 +208,18 @@ def register_creator_routes(app) -> None:
                 raise HTTPException(
                     status_code=422,
                     detail="含 C1 积木的应用须走创作者本机整链（M09 §3.3 下行）")
-            app_row = App(name=draft.get("app_name") or f"app-session-{sid}",
-                          title=draft.get("title") or f"会话 {sid} 应用",
-                          created_at=_now())
-            s.add(app_row)
-            s.flush()
-            av = AppVersion(app_id=app_row.id, version="1.0.0",
+            if draft.get("app_id") is not None:  # 重认证：复用 App，版本递增（终审 #5）
+                app_row = s.get(App, draft["app_id"])
+                n_versions = s.query(AppVersion).filter_by(app_id=app_row.id).count()
+                version = f"1.0.{n_versions}" if n_versions else "1.0.0"
+            else:
+                app_row = App(name=draft.get("app_name") or f"app-session-{sid}",
+                              title=draft.get("title") or f"会话 {sid} 应用",
+                              created_at=_now())
+                s.add(app_row)
+                s.flush()
+                version = "1.0.0"
+            av = AppVersion(app_id=app_row.id, version=version,
                             composition_json=composition,
                             user_input_schema_json=draft.get("user_input_schema") or {},
                             created_at=_now())
@@ -230,9 +231,10 @@ def register_creator_routes(app) -> None:
                                       base_version=reg[st["block"]].version))
             draft["app_id"] = app_row.id
             draft["app_name"] = app_row.name
+            draft["version"] = version
             row.draft_json = draft
             _save(s, row)  # autosave_at 变更置脏整行——JSON 列同对象赋值不触发 UPDATE
-            app_id, version = app_row.id, "1.0.0"
+            app_id = app_row.id
         return _run_chain_cert(app_id, version)
 
     def _run_chain_cert(app_id: int, version: str):
@@ -296,7 +298,7 @@ def register_creator_routes(app) -> None:
             if app_id is not None:
                 cr = (s.query(CertificationRun)
                       .filter_by(subject_type="app_version", subject_id=str(app_id),
-                                 version="1.0.0", level="chain")
+                                 version=draft.get("version", "1.0.0"), level="chain")
                       .order_by(CertificationRun.id.desc()).first())
                 if cr is not None:
                     chain = {"verdict": cr.verdict, "n": cr.n,
@@ -313,8 +315,6 @@ def register_creator_routes(app) -> None:
                 raise HTTPException(status_code=404, detail="会话不存在")
             draft = dict(row.draft_json or {})  # 拷贝再改：同对象赋值不置脏（SQLAlchemy JSON 列）
             draft["title"] = body.get("title") or draft.get("title")
-            domains = sorted({d for st in (draft.get("composition") or [])
-                              for d in []})  # 域清单自注册元数据聚合（下方补）
             with_domain_meta = []
             for st in draft.get("composition") or []:
                 if not st.get("block"):
@@ -345,9 +345,9 @@ def register_creator_routes(app) -> None:
                 raise HTTPException(status_code=422, detail="先完成认证步（无应用可提审）")
             cr = (s.query(CertificationRun)
                   .filter_by(subject_type="app_version", subject_id=str(app_id),
-                             version="1.0.0", level="chain")
+                             level="chain")
                   .order_by(CertificationRun.id.desc()).first())
-            if cr is None or cr.verdict != "pass":
+            if cr is None or cr.verdict != "pass" or cr.version != draft.get("version", "1.0.0"):
                 raise HTTPException(status_code=422, detail="整链认证未通过，不可提审")
             av = (s.query(AppVersion).filter_by(app_id=app_id)
                   .order_by(AppVersion.id.desc()).first())

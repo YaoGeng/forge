@@ -182,3 +182,106 @@ def test_creator_blocks_catalog_carries_n_and_window(api):
         s.commit()
     rows2 = client.get("/api/v1/creator/blocks").json()
     assert all(b["reliability"] == {"label": "数据不足"} for b in rows2)
+
+
+# ── 终审修复轮（Important #4/#5/#7/#8/#10b/#13/#16）──
+
+
+def test_canvas_confirm_rules_per_m02(api):
+    """#4：副作用块自带 confirm 标记不得自确认；confirm 只需「后置」存在（M02 措辞）。"""
+    app, client = api
+    _register_block(client, app, "publish_x", side_effects=True)
+    _register_block(client, app, "probe_a")
+    sid = _open_session(client)
+    client.post(f"/api/v1/creator/sessions/{sid}/goto", json={"step": 2})
+    # 自确认：副作用块 + interaction 标记 → 422
+    r = client.put(f"/api/v1/creator/sessions/{sid}/canvas", json={
+        "composition": [{"block": "publish_x", "params": {}, "interaction": "confirm"}]})
+    assert r.status_code == 422 and "confirm" in r.json()["detail"]
+    # 两个副作用块 + 末尾一个 confirm（后置，不必紧跟）→ 200
+    r = client.put(f"/api/v1/creator/sessions/{sid}/canvas", json={
+        "composition": [
+            {"block": "publish_x", "params": {}},
+            {"block": "publish_x", "params": {}},
+            {"interaction": "confirm"},
+        ]})
+    assert r.status_code == 200
+    # 副作用块后置普通块再 confirm → 200
+    r = client.put(f"/api/v1/creator/sessions/{sid}/canvas", json={
+        "composition": [
+            {"block": "publish_x", "params": {}},
+            {"block": "probe_a", "params": {}},
+            {"interaction": "confirm"},
+        ]})
+    assert r.status_code == 200
+
+
+def test_certify_retry_reuses_app_without_500(api):
+    """#5：认证失败→修画布→重认证 不得 500（App 重名唯一约束）；复用同一 app_id。"""
+    app, client = api
+    _register_block(client, app, "probe_a")
+    calls = {"n": 0}
+
+    def flaky(composition, params):
+        calls["n"] += 1
+        ok = calls["n"] >= 2
+        return {"ok": ok, "steps": [{"block": s.get("block"), "ok": ok} for s in composition]}
+
+    app.state.chain_runner = flaky
+    sid = _open_session(client)
+    client.post(f"/api/v1/creator/sessions/{sid}/goto", json={"step": 2})
+    client.put(f"/api/v1/creator/sessions/{sid}/canvas", json={
+        "composition": [{"block": "probe_a", "params": {}}]})
+    client.post(f"/api/v1/creator/sessions/{sid}/goto", json={"step": 6})
+    first = client.post(f"/api/v1/creator/sessions/{sid}/certify")
+    assert first.status_code == 200 and first.json()["verdict"] == "rejected"
+    second = client.post(f"/api/v1/creator/sessions/{sid}/certify")
+    assert second.status_code == 200, second.text
+    assert second.json()["verdict"] == "pass"
+    view = client.get(f"/api/v1/creator/sessions/{sid}").json()
+    assert view["draft"]["app_id"] == first.json().get("app_id", view["draft"]["app_id"])
+
+
+def test_interaction_steps_consistent_across_layers(api):
+    """#8：confirm 交互步在版本创建/整链执行/应用视图三层一致处理。"""
+    app, client = api
+    _register_block(client, app, "probe_a")
+    seen = []
+
+    def recorder(composition, params):
+        seen.append([s.get("block") for s in composition])
+        return {"ok": True, "steps": [{"block": s.get("block"), "ok": True}
+                                      for s in composition]}
+
+    app.state.chain_runner = recorder
+    sid = _open_session(client)
+    client.post(f"/api/v1/creator/sessions/{sid}/goto", json={"step": 2})
+    r = client.put(f"/api/v1/creator/sessions/{sid}/canvas", json={
+        "composition": [{"block": "probe_a", "params": {}},
+                        {"interaction": "confirm"}]})
+    assert r.status_code == 200
+    client.post(f"/api/v1/creator/sessions/{sid}/goto", json={"step": 6})
+    cert = client.post(f"/api/v1/creator/sessions/{sid}/certify")
+    assert cert.status_code == 200 and cert.json()["verdict"] == "pass"
+    assert seen[-1] == ["probe_a"], "整链执行应过滤交互步（confirm 非可执行块）"
+    app_id = client.get(f"/api/v1/creator/sessions/{sid}").json()["draft"]["app_id"]
+    view = client.get(f"/api/v1/apps/{app_id}").json()
+    names = [b["name"] for b in view["versions"][0]["blocks"]]
+    assert names == ["probe_a"], "应用视图不得把交互步渲染成块行"
+
+
+def test_goto_rejects_out_of_range(api):
+    """#13：goto 越界（10）→ 422。"""
+    _, client = api
+    sid = _open_session(client)
+    r = client.post(f"/api/v1/creator/sessions/{sid}/goto", json={"step": 10})
+    assert r.status_code == 422
+
+
+def test_create_app_duplicate_name_409(api):
+    """#16：重名应用 → 409 而非 500；缺 name → 422。"""
+    _, client = api
+    assert client.post("/api/v1/apps", json={"name": "dup"}).status_code == 200
+    r = client.post("/api/v1/apps", json={"name": "dup"})
+    assert r.status_code == 409
+    assert client.post("/api/v1/apps", json={}).status_code == 422

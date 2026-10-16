@@ -104,11 +104,14 @@ class CertScheduler:
         self._live_fail_rows: dict[int, list[dict]] = {}
         self._reg_ok: dict[int, int] = {}
         self._last_exec: dict[int, datetime] = {}
+        self._site_hosts: dict[int, str | None] = {}
+        self._site_last: dict[str, datetime] = {}  # 同站点跨 run 限频（终审 Important#2）
 
     # --- 排期入口 ---------------------------------------------------------------
 
     def submit(
-        self, subject_type: str, subject_id: str, version: str, level: str, *, site_tier: str = "standard"
+        self, subject_type: str, subject_id: str, version: str, level: str, *,
+        site_tier: str = "standard", site_host: str | None = None
     ) -> int:
         now = self.clock.now()
         batch_id = uuid.uuid4().hex
@@ -140,13 +143,15 @@ class CertScheduler:
                 version=version,
                 level=level,
                 batch_id=batch_id,
-                plan_json=self._plan_state(plan, set(range(len(requests))), site_tier, 0, set()),
+                plan_json=self._plan_state(plan, set(range(len(requests))), site_tier, 0,
+                                       set(), site_host=site_host),
             )
             s.add(row)
             s.commit()
             run_id = row.id
         self._plans[run_id] = plan
         self._tiers[run_id] = site_tier
+        self._site_hosts[run_id] = site_host
         self._pending[run_id] = set(range(len(requests)))
         return run_id
 
@@ -173,10 +178,15 @@ class CertScheduler:
                     continue
                 last = self._last_exec.get(run_id)
                 if last is not None and (now - last).total_seconds() < MIN_REQUEST_INTERVAL_S:
-                    continue  # 限频：同站点相邻 run 不足间隔，等下一 tick
+                    continue  # 限频：同 run 相邻请求不足间隔，等下一 tick
+                site_key = self._site_hosts.get(run_id) or plan.site
+                site_last = self._site_last.get(site_key)
+                if site_last is not None and (now - site_last).total_seconds() < MIN_REQUEST_INTERVAL_S:
+                    continue  # 限频：同站点跨 run 相邻请求不足 5s（终审 Important#2）
                 outcome = self.executor_hook(run_id, req.segment, req.index)
                 self._apply(run_id, plan, nxt, outcome, now)
                 self._last_exec[run_id] = now
+                self._site_last[site_key] = now
                 executed.append(RunExecution(run_id, req.segment, req.index, ts=now, outcome=outcome))
                 if not self._pending[run_id]:
                     completed.append(run_id)
@@ -190,11 +200,13 @@ class CertScheduler:
                 due.append(min(plan.requests[i].ts for i in pending))
         return min(due) if due else None
 
-    def reattach(self, run_id: int) -> bool:
+    def reattach(self, run_id: int, *, site_tier: str | None = None) -> bool:
         """跨进程重建调度态（gate seg2/批次驱动器换进程续跑的前置）。
 
         优先读行上 plan_json（计划时间戳与进度精确）；旧行（T1.30 版本，无 plan_json）
         按 started_at + n 确定性重建：执行序 = ts 序 = index 序，时段跨度按礼仪下限 48h。
+        旧行的 tier 无法从行内恢复——调用方必须以 site_tier 传入真实档位
+        （终审 Important#3：静默默认 standard 会把 medium(0.85) 错降到 0.90 阈值）。
         """
         with self.session_factory() as s:
             row = s.get(CertificationRun, run_id)
@@ -213,9 +225,10 @@ class CertScheduler:
                 segment_starts=tuple(datetime.fromisoformat(t) for t in pj["segment_starts"]),
             )
             pending = set(pj["pending"])
-            tier = pj.get("tier", "standard")
+            tier = pj.get("tier") or site_tier or "standard"
             reg_ok = int(pj.get("reg_ok", 0))
             partials = set(pj.get("partials", ()))
+            self._site_hosts[run_id] = pj.get("site_host")
         else:
             if row.started_at is None:
                 return False  # 未起跑且无计划：无从重建
@@ -237,7 +250,7 @@ class CertScheduler:
                 segment_starts=(seg0, seg1),
             )
             pending = set(range(row.n, total))
-            tier = self._tiers.get(run_id, "standard")
+            tier = site_tier or self._tiers.get(run_id) or "standard"
             reg_ok = round((row.regression_pass_rate or 0.0) * row.n)
             partials = set()
             with self.session_factory() as s:  # 回写重建结果，后续重启走精确路径
@@ -251,6 +264,18 @@ class CertScheduler:
         self._partials[run_id] = partials
         self._live_fail_rows[run_id] = fail_rows
         return True
+
+    def detach(self, run_id: int) -> None:
+        """仅摘内存计划（持久态不动；reattach 可恢复）——批次驱动器范围隔离用。
+
+        终审 Critical#1 补：tick 遍历全部内存计划，范围外计划若不摘除，
+        其到点请求会以错路由 env_error 计入 n，污染真实通过率。
+        """
+        self._plans.pop(run_id, None)
+        self._pending.pop(run_id, None)
+        self._tiers.pop(run_id, None)
+        self._site_hosts.pop(run_id, None)
+        self._last_exec.pop(run_id, None)
 
     # --- 查询面 -----------------------------------------------------------------
 
@@ -291,12 +316,13 @@ class CertScheduler:
 
     @staticmethod
     def _plan_state(plan: BatchPlan, pending: set[int], tier: str, reg_ok: int,
-                    partials: set[str]) -> dict:
+                    partials: set[str], *, site_host: str | None = None) -> dict:
         """批次计划+进度的可序列化形态（行上 plan_json，reattach 消费）。"""
         return {
             "requests": [[r.ts.isoformat(), r.segment, r.index] for r in plan.requests],
             "segment_starts": [t.isoformat() for t in plan.segment_starts],
             "site": plan.site,
+            "site_host": site_host,
             "tier": tier,
             "pending": sorted(pending),
             "reg_ok": reg_ok,
@@ -324,6 +350,7 @@ class CertScheduler:
             row.plan_json = self._plan_state(
                 plan, self._pending[run_id], self.tier_of(run_id),
                 self._reg_ok.get(run_id, 0), self._partials.get(run_id, set()),
+                site_host=self._site_hosts.get(run_id),
             )
             if row.n >= len(plan.requests):
                 row.verdict = compute_verdict(

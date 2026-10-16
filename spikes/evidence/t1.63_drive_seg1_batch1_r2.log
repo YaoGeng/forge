@@ -1,0 +1,56 @@
+{
+  "segment": 1,
+  "driven_at": "2026-10-16T15:54:08+00:00",
+  "blocks": {
+    "bing_search": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    },
+    "books_list": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    },
+    "quotes_list": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    },
+    "baidu_home_watch": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    },
+    "quotes_paged": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    },
+    "book_detail": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    }
+  },
+  "reached_all": true
+}
+drive: PASS → C:\Users\yg\Desktop\forge\spikes\evidence\t1.63_drive_seg1_batch1.json

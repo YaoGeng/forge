@@ -29,11 +29,10 @@ def _now() -> datetime:
 
 def _reliability_snapshot(run: CertificationRun) -> dict:
     tier = ((run.plan_json or {}).get("tier")) or "standard"
-    return {
+    return {  # C13 钉死字段清单：详情页读侧仅 live 口径（M09 §5），不含 regression
         "level": run.level,
         "n": run.n,
         "live_pass_rate": run.live_pass_rate,
-        "regression_pass_rate": run.regression_pass_rate,
         "window_start": run.started_at.isoformat() if run.started_at else None,
         "window_end": run.finished_at.isoformat() if run.finished_at else None,
         "best_effort": tier == "high",
@@ -59,6 +58,14 @@ def register_registry_routes(app) -> None:
             run = s.get(CertificationRun, body.get("certification_run_id"))
             if run is None:
                 raise HTTPException(status_code=404, detail="认证 run 不存在")
+            if run.subject_type != "block" or run.level not in ("C1", "C2"):
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"仅块级 C1/C2 认证可注册（subject_type={run.subject_type} level={run.level}）")
+            if run.subject_id != body.get("name"):
+                raise HTTPException(
+                    status_code=422,
+                    detail=f"认证 run 归属不符（subject={run.subject_id}，注册名={body.get('name')}）")
             if run.verdict != "pass":
                 raise HTTPException(
                     status_code=422,
@@ -85,9 +92,13 @@ def register_registry_routes(app) -> None:
 
     @router.post("/apps")
     def create_app(body: dict):
+        name = body.get("name")
+        if not name:
+            raise HTTPException(status_code=422, detail="应用名不能为空")
         with session_factory() as s:
-            row = App(name=body.get("name"), title=body.get("title", ""),
-                      created_at=_now())
+            if s.query(App).filter_by(name=name).one_or_none() is not None:
+                raise HTTPException(status_code=409, detail=f"应用名已存在：{name}")
+            row = App(name=name, title=body.get("title", ""), created_at=_now())
             s.add(row)
             s.commit()
             return {"app_id": row.id}
@@ -109,6 +120,8 @@ def register_registry_routes(app) -> None:
         blocks_view = []
         for step in (av.composition_json or []):
             name = step.get("block")
+            if name is None:  # 交互步不渲染为块行（终审 #8）
+                continue
             bv = (s.query(BlockVersion).join(Block, Block.id == BlockVersion.block_id)
                   .filter(Block.name == name)
                   .order_by(BlockVersion.id.desc()).first())
@@ -151,9 +164,16 @@ def register_registry_routes(app) -> None:
         if not composition:
             raise HTTPException(status_code=422, detail="组合不能为空")
         with session_factory() as s:
+            if (s.query(AppVersion).filter_by(app_id=app_id,
+                                              version=body.get("version", "1.0.0"))
+                    .one_or_none() is not None):
+                raise HTTPException(status_code=422,
+                                    detail="版本号已存在：换新 version（防旧 chain verdict 被新组合复用）")
             missing = []
             for step in composition:
                 name = step.get("block")
+                if name is None:  # 交互步（confirm）非可执行块，不参与注册检查
+                    continue
                 bv = (s.query(BlockVersion).join(Block, Block.id == BlockVersion.block_id)
                       .filter(Block.name == name)
                       .order_by(BlockVersion.id.desc()).first())
@@ -170,6 +190,8 @@ def register_registry_routes(app) -> None:
             s.add(av)
             s.flush()
             for step in composition:
+                if step.get("block") is None:
+                    continue
                 bv = (s.query(BlockVersion).join(Block, Block.id == BlockVersion.block_id)
                       .filter(Block.name == step.get("block"))
                       .order_by(BlockVersion.id.desc()).first())
@@ -186,7 +208,7 @@ def register_registry_routes(app) -> None:
                   .order_by(AppVersion.id.desc()).first())
             if av is None:
                 raise HTTPException(status_code=404, detail="应用版本不存在")
-            composition = av.composition_json or []
+            composition = [st for st in (av.composition_json or []) if st.get("block")]
             levels = {}
             for step in composition:
                 bv = (s.query(BlockVersion).join(Block, Block.id == BlockVersion.block_id)
