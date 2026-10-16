@@ -90,6 +90,11 @@ def register_certification_routes(app):
 
         runs = body.report.get("runs", [])
         n = len(runs)
+        if row.level != "C1":
+            reasons.append("上传通道仅限 C1 run（M09 §5）；C2/chain 由调度器与执行器落库")
+        if body.attestation.get("report_hash") != attestation.report_hash(body.report):
+            reasons.append("report_hash 与报告不符（签名未覆盖该报告内容，C7 绑定失败）")
+
         dev = None
         with session_factory() as s:
             dev = s.execute(
@@ -137,7 +142,8 @@ def register_certification_routes(app):
         if reasons:
             with session_factory() as s:
                 attached = s.get(CertificationRun, row.id)
-                attached.verdict = "rejected"
+                if attached.verdict is None and attached.attestation_sig is None:
+                    attached.verdict = "rejected"  # 仅首判落 rejected；既判不被失败重传降级
                 s.commit()
             return {"verdict": "rejected", "reasons": reasons,
                     "live_pass_rate": None, "regression_pass_rate": None}

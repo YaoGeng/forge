@@ -217,6 +217,59 @@ def test_min_duration_floor(make_app):
     assert any("时长" in r for r in body["reasons"])
 
 
+def test_report_hash_binding_enforced(make_app):
+    """C7 绑定：attestation.report_hash 必须等于上传报告的 sha256（签名保护的是报告内容）。"""
+    app = make_app()
+    client = TestClient(app)
+    key = register_key(client)
+    run_id = submit_c1_run(client)
+
+    report = make_report(n=5)
+    payload = signed_payload(key, get_nonce(client, key), report)
+    payload["attestation"]["report_hash"] = "0" * 16  # 与报告脱钩的哈希
+    payload["golden"] = GOOD_GOLDEN
+    body = upload(client, run_id, payload).json()
+    assert body["verdict"] == "rejected"
+    assert any("report_hash" in r for r in body["reasons"])
+
+
+def test_rejected_resubmit_keeps_accepted_verdict(make_app):
+    """已受理（pass）的报告不被后续校验失败的重传降级为 rejected。"""
+    app = make_app()
+    client = TestClient(app)
+    key = register_key(client)
+    run_id = submit_c1_run(client)
+
+    good = signed_payload(key, get_nonce(client, key), make_report(n=5))
+    good["golden"] = GOOD_GOLDEN
+    assert upload(client, run_id, good).json()["verdict"] == "pass"
+
+    stale = signed_payload(key, "deadnonce", make_report(n=5, durations_ms=[6001] * 5))
+    stale["golden"] = GOOD_GOLDEN
+    assert upload(client, run_id, stale).json()["verdict"] == "rejected"  # nonce 已消费
+
+    data = client.get(f"/api/v1/certifications/{run_id}").json()
+    assert data["verdict"] == "pass"  # 既判不被覆写
+
+
+def test_report_channel_requires_c1(make_app):
+    """上传通道仅限 C1 run（M09 §5）：C2 run 的调度器数据不被外部报告覆写（G6 分列）。"""
+    app = make_app()
+    client = TestClient(app)
+    key = register_key(client)
+    r = client.post(
+        "/api/v1/certifications",
+        json={"subject_type": "block", "subject_id": "c2probe", "version": "1.0.0", "level": "C2"},
+    )
+    run_id = r.json()["run_id"]
+
+    payload = signed_payload(key, get_nonce(client, key), make_report(n=5))
+    payload["golden"] = GOOD_GOLDEN
+    body = upload(client, run_id, payload).json()
+    assert body["verdict"] == "rejected"
+    assert any("C1" in rr for rr in body["reasons"])
+
+
 def test_golden_raw_value_rejected(make_app):
     app = make_app()
     client = TestClient(app)
