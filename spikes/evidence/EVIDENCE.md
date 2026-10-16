@@ -184,3 +184,7 @@
 - **T1.64a 最小 Registry + chain**：blocks/block_versions/apps/app_versions/block_refs + /apps*（M10 §5 逐字）+ C0 拦截（版本层 422）+ reliability 快照带 N/窗口/C1 标注 + chain N=1 非统计（含 C1 应用拒同步整链）+ ChainRunner 上下文绑定——7/7。
 - **T1.64b Creator Center 最小版**：九步会话（自动保存/恢复 ?session=）、副作用规则与 C0 拦截服务端强制、G12 全口径读侧、单文件零依赖 UI（双色系）——7/7 + 冒烟截图 `t1.64b_ui_step1/step7_report.png`。
 - **待真实时钟**：批次一 seg2 窗口 2026-10-18T14:25Z 后；批次二 seg1 驱动完成后其 seg2 ≈10-18T15:00Z 后；MS-1E seg2 2026-10-18T05:31Z 后（先行）。seg2 全出 verdict → register 全库 → T1.64c 3-5 应用组装/整链/提审 → 库汇总 gate。
+
+### MS-1F 整分支终审（code-reviewer 子代理，2026-10-16 提前轮）
+
+子代理通道恢复（上会话 reasoning-level-missing），评审范围 463ba81..2767302：**1 Critical + 9 Important + 7 Minor**。修复轮 fea90b3（各 RED→GREEN，291/291）：drive 批次过滤三处贯通（否则 seg2 窗口重叠时错路由 env_error 污染他批真实通过率）、同站点跨 run 5s 限频（site_host 归组）、reattach 旧行 tier 显式传入（medium 不再静默降档 0.90）、副作用自确认拒绝+M02 后置语义、certify 重试复用 App、注册校验 run 归属、版本号唯一、交互步三层一致、book_detail 重录（golden 回归 0.0→1.0，run5 弃用登记）、快照字段收敛 C13。decline 1 项（reliability 端点自 MS-1E 已存在）；minor 6 项缓办（台账）。修复后待 seg2 的 21 run 全部 live=1.0 且 regression=1.0。
