@@ -49,10 +49,13 @@ def build_server(store_dir: Path):
 
 
 def wire_chain_runner(app, store_dir: Path, names, *, browser_factory=None,
-                      adapters: dict[str, str] | None = None) -> dict[str, tuple[object, str]]:
+                      adapters: dict[str, str] | None = None,
+                      trace_runner_factory=None) -> dict[str, tuple[object, str]]:
     """按块名装配路由并挂到 app.state.chain_runner；返回 routes（测试可复用）。
 
     adapters: {name: "trace"|"python"}（缺省从 manifest 推导）。
+    trace_runner_factory: callable(trace_dirs) → RunnerPort——离线彩排/单测注入假件；
+    缺省用真实 TraceRunner（构造不触网，执行才起浏览器）。
     """
     state_path = Path(store_dir) / "state.json"
     state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
@@ -72,10 +75,13 @@ def wire_chain_runner(app, store_dir: Path, names, *, browser_factory=None,
 
     routes: dict[str, tuple[object, str]] = {}
     if trace_dirs:
-        from forge_trace import RecordingsStore
+        if trace_runner_factory is not None:
+            tr = trace_runner_factory(trace_dirs)
+        else:
+            from forge_trace import RecordingsStore
 
-        tr = TraceRunner(RecordingsStore(Path(store_dir)), browser_factory,
-                         block_dirs=trace_dirs)
+            tr = TraceRunner(RecordingsStore(Path(store_dir)), browser_factory,
+                             block_dirs=trace_dirs)
         for name, ref in name_to_ref.items():
             routes[name] = (tr, ref)
     if py_dirs:

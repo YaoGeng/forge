@@ -197,3 +197,7 @@
 - **结构性事实（归因依据，评审员独立核验）**：全部站点块 `run()` 仅返回 `{"ok": True}`（导航可复现性探针，TraceRunner 无数据输出通道——「HN 每日摘要」类需求无法把站点内容接入链上下文）；本地 python 块仅 excel/csv/markdown 导出与基础转换（无 JSON/XML、无拆行/结构化块）。该事实主导不可组合归因，T1.65e 报告将按分类呈报。
 - **执行器**：coverage_runner TDD 27/27（不触网）——单次运行不重试、未注册块拒绝执行只走产品路径、形状核对严格判定、判定记录携带预登记形状摘要、报告只呈报数据。
 - **评审**：code-reviewer 子代理独立复算选样/实跑块代码/比对落盘产物与 git 时序——1C+3I+8M；修复轮 R1（C1 链式尝试改直连接线 + I1 真实选样断言 + I2 构成披露登记 + I3 fetched_at 全量补齐 + pool_ref 全量哈希加强；1 Minor decline 登记）；产物再生成选样 id 逐条不变。
+
+### 时钟日彩排（2026-10-17，ms1e_store 副本，离线）
+
+副本内 block run 强制 verdict=pass 模拟 seg2 完成，真 state/真积木目录/真 trace_refs 预演全链：register 22/22 新块通过（遗留 c1/c2 两键按手册走手动 POST，注册名≠subject 的 422 符合预期）；五应用 5/5 published（C1 登录态报表走 C8-R1：certify 422 证据 + 本机整链恰一次 + 链行设备签名）；覆盖实验 1/30 covered（hn-44955461 rows=5 过形状核对）、未覆盖分类 17/7/5 与样本裁定逐条一致——D-4 呈报预测值（3.3%）就位。彩排产物仅存本地（含 store 副本，golden 边界不进 git）；`spikes/rehearse_clock_day.py` 可重跑。
