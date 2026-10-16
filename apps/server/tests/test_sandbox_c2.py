@@ -124,6 +124,35 @@ def make_fake_runner(captcha_at=frozenset(), partial_at=frozenset(), golden_ok=T
 # --- 执行器 -------------------------------------------------------------------------
 
 
+def test_runner_closes_browser_after_run(tmp_path, root):
+    """端口用后即闭：泄漏的 sync playwright 循环会毒化同线程后续浏览器创建（gate 实证）。"""
+    ref, store = make_recording(root)
+    collect_golden(ref, store=store, environment_fingerprint="fp-close")
+    block = make_block_dir(tmp_path, with_tests=True)
+
+    made = []
+
+    class ClosingBrowser(FakeBrowser):
+        def __init__(self):
+            super().__init__()
+            self.closed = False
+
+        def close(self):
+            self.closed = True
+
+    def factory():
+        b = ClosingBrowser()
+        made.append(b)
+        return b
+
+    runner = TraceRunner(store, factory, block_dirs={ref: block})
+    runner.run_once(ref, {}, mode="local")
+    runner.run_once(ref, {}, mode="golden")
+
+    assert len(made) == 2
+    assert all(b.closed for b in made), "replay 端口未关闭"
+
+
 def test_preflight_lint_gate(tmp_path, root):
     ref, store = make_recording(root)
     block = make_block_dir(tmp_path, with_tests=False)  # 缺 tests/test.yaml

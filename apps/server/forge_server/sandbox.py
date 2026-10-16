@@ -81,9 +81,12 @@ class TraceRunner:
         self._timeout_s = run_timeout_s
         self._last_port = None
 
-    def _wrapped_factory(self):
+    def _capture_factory(self, base):
+        """包装工厂捕获端口：replay 自身不关端口，泄漏的 sync playwright 循环会
+        毒化同线程后续浏览器创建（gate 实证），故 Runner 用后即闭。"""
+
         def make():
-            port = self._browser_factory()
+            port = base()
             self._last_port = port
             return port
 
@@ -119,15 +122,28 @@ class TraceRunner:
 
         self._last_port = None
         t0 = time.perf_counter()
-        result = replay.run(
-            block_ref, dict(params or {}), mode=mode, store=self._store,
-            browser_factory=browser_factory or self._wrapped_factory(),
-        )
+        port = None
+        try:
+            result = replay.run(
+                block_ref, dict(params or {}), mode=mode, store=self._store,
+                browser_factory=self._capture_factory(browser_factory or self._browser_factory),
+            )
+        finally:
+            port, self._last_port = self._last_port, None
+            if port is not None and hasattr(port, "drain_network"):
+                try:
+                    shape_drained = _network_shape(port.drain_network())
+                except Exception:
+                    shape_drained = frozenset()
+            else:
+                shape_drained = frozenset()
+            if port is not None and hasattr(port, "close"):
+                try:
+                    port.close()
+                except Exception:
+                    pass
         timed_out = (time.perf_counter() - t0) > self._timeout_s
-        shape = frozenset()
-        port = self._last_port
-        if port is not None and hasattr(port, "drain_network"):
-            shape = _network_shape(port.drain_network())
+        shape = shape_drained
         failure = classify_failure(result.step_results, timed_out=timed_out)
         return RunOutcome(
             mode=mode,
