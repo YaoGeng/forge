@@ -1,0 +1,513 @@
+{
+ "query": "export to excel",
+ "params": {
+  "query": "export to excel",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 199,
+ "hits": [
+  {
+   "objectID": "48753465",
+   "title": "Show HN: ExpenseSpy – AI receipt scanner that exports to Excel, built solo",
+   "url": "https://expensespy.com",
+   "author": "cdogukank",
+   "created_at": "2026-07-01T21:36:40Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "46088109",
+   "title": "Ask HN: I want to build my own query language",
+   "url": null,
+   "author": "bewal416",
+   "created_at": "2025-11-29T15:10:46Z",
+   "points": 3,
+   "num_comments": 11,
+   "story_text": "Our product is starting to get more and more requests for custom reports. I’ve built some basic tables with filters and exports to Excel&#x2F;PDF, but they fall short of the nuance our customers need, especially those in regulated markets.<p>One customer needs full first names but only the first letter of the last name. Another needs a very specific JOIN with an entity almost no other customer cares about. To accommodate, I’ve been building custom Looker reports for each customer, which won&#x27;t scale well.<p>I started looking into how other SaaS companies solved this. Many built their own S"
+  },
+  {
+   "objectID": "45146018",
+   "title": "Show HN: A Chrome extension to export structured data from any website using AI",
+   "url": "https://chromewebstore.google.com/detail/exforma/ifmdjhggfjpofomdpkllkgongegpamem",
+   "author": "hikerell",
+   "created_at": "2025-09-06T02:18:58Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "No more copy-pasting! Extract any website content in one click, let AI organize it for you, and export to Excel or CSV.\nPerfect for study, work, and research — making data collection effortless."
+  },
+  {
+   "objectID": "45662011",
+   "title": "Show HN: GraceLitRev (Research Assistant Tool)",
+   "url": "https://www.gracelitrev.com/",
+   "author": "luckysibanda",
+   "created_at": "2025-10-21T21:33:59Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "During my doctoral journey and article writing as a researcher (including systematic literature reviews), reviewing literature by themes was always challenging. So, we developed GraceLitRev, an AI-powered research assistant tool that lets users upload research papers, extracts 28 metadata variables, generates downloadable graphs, and exports data to MS Excel and RIS files.<p>GraceLitRev helps researchers quickly identify gaps in theory, methodology, data analysis, and future studies. Unlike other research tools that search the internet without user control, our tool gives users full control: u"
+  },
+  {
+   "objectID": "49657142",
+   "title": "Show HN: Number Checker for WA – Check and Verify WhatsApp Numbers",
+   "url": "https://chromewebstore.google.com/detail/number-checker-for-wa-che/iiblpglkglfmefhlcdlcibphegpjfgpo",
+   "author": "qwikhost",
+   "created_at": "2026-09-11T12:15:34Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Check WhatsApp registration in bulk. Import phone numbers and export results to CSV, Excel, or JSON."
+  },
+  {
+   "objectID": "45537796",
+   "title": "Show HN: Budgetist – local-first personal finance app (+budgeting, double-entry)",
+   "url": "https://www.budgetist.app/en/",
+   "author": "valsinats",
+   "created_at": "2025-10-10T11:45:31Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hey HN!<p>I&#x27;m Stan, and I built Budgetist because I couldn&#x27;t find a personal finance app that checked all my boxes: own my data, be able to express any transaction using a principled approach, use envelope budgeting for planning out my liquid funds, and track investments in their native units. Now, I&#x27;m also hoping to turn it into a successful small business.<p>Here are some of the key features:<p>- Local-first PWA - your complete financial history lives on your devices &amp; the app can work fully offline<p>- Optional budget data sync between all user devices through our interme"
+  },
+  {
+   "objectID": "46899334",
+   "title": "Ask HN: Route Optimization Software",
+   "url": null,
+   "author": "AstroNutt",
+   "created_at": "2026-02-05T13:19:45Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "I&#x27;m trying to find a good paid software solution to optimize routes for about 25 people. I&#x27;ve found several online, but I was hoping to find someone with first hand experience using one before I commit. I couldn&#x27;t think of a better online community than HN to ask my question.<p>Ideally, it would be helpful if we could copy blocks of addresses from Excel, paste the addresses into the software, optimize route and export back to Excel.<p>We have a project with 25 contractors and 3900 stops across the lower 48. I really don&#x27;t want to manually enter these using a free online ser"
+  },
+  {
+   "objectID": "44445222",
+   "title": "Show HN: I built a tool that extracts structured financial data from PDFs",
+   "url": "https://assess.finance",
+   "author": "igor_strelkov",
+   "created_at": "2025-07-02T15:50:31Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "As a founder working with financial models, I was spending way too much time copy-pasting numbers from PDF balance sheets and income statements into Excel.<p>So I built Assess Finance — a tool that extracts financial data from any PDF (even scanned ones), and automatically generates clean, standardized:<p>Income Statements<p>Balance Sheets<p>Cash Flow Reports<p>It’s fast, works with multi-year reports, and exports to Excel&#x2F;CSV. No AI hype—just real time saved.<p>Would love your feedback. I also wrote a breakdown of how it works under the hood (OCR + financial structure mapping) if anyone’"
+  },
+  {
+   "objectID": "49814330",
+   "title": "Show HN: Online Google Maps Scraper",
+   "url": "https://gmapscrawl.com",
+   "author": "qwikhost",
+   "created_at": "2026-09-23T11:17:23Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Find businesses by keyword and location. Save your results and export to CSV, Excel, or JSON on eligible plans."
+  },
+  {
+   "objectID": "47336945",
+   "title": "Show HN: Another SQLite editor in browser powered by WASM and AI",
+   "url": "https://sql.computelite.com/",
+   "author": "akhil977",
+   "created_at": "2026-03-11T15:32:53Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hey HN,<p>I guess this is just another SQLITE editor powered by WASM, I created this to help me write queries faster with AI like we have autocomplete in VS Code. I also added few features which are important to me as data scientist:<p>Copy results to clipboard, I dont want to always export to excel&#x2F;csv, sometimes just copy to clipboard is way handier.<p>Quickly select a table but not all rows<p>Quickly check number of records in a table<p>Export a large table to CSV, I have tested a table &gt; 1 M rows, and it could export it all in browser.<p>Look at historical queries<p>Added AI to qui"
+  },
+  {
+   "objectID": "47274059",
+   "title": "Show HN: DataQueryAI – Turn plain text into SQL locally",
+   "url": "https://www.dataqueryai.app/",
+   "author": "powerwild",
+   "created_at": "2026-03-06T12:16:16Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I built DataQueryAI to let people run queries on their databases using plain language — no SQL knowledge required.<p>Key points:\n- *Local-first AI*: runs on your machine using the Ollama engine, no data leaves your device.\n- Supports Postgres, MySQL, and SQL Server.\n- Exports results to CSV, Excel, or HTML.\n- Supports English, Vietnamese, German, French, Italian, Portuguese, Hindi, Spanish, and Thai.\n- Windows x86&#x2F;x64, macOS ARM64&#x2F;x64, Linux coming soon.<p>Pricing:\n- Free Forever: single DB profile, CSV export.\n- Pro Monthly: $16&#x2F;mo, multiple DBs, Excel&#x2F;HTML export"
+  },
+  {
+   "objectID": "46041405",
+   "title": "Show HN: WhatsApp Chat Exporter",
+   "url": "https://chromewebstore.google.com/detail/whatsapp-chat-exporter/delkacehnlfpfmodhbgnnnabngeaoeoh",
+   "author": "qwikhost",
+   "created_at": "2025-11-25T01:32:49Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "WhatsApp Chat Exporter - Export Messages to CSV, Excel, JSON and Download Videos, Images, Audio, Documents"
+  },
+  {
+   "objectID": "45172237",
+   "title": "Show HN: Production Manager App – Offline Payroll and Job Tracker (.exe)",
+   "url": "https://github.com/BirdDawg305/production-manager-app",
+   "author": "autoinnoai",
+   "created_at": "2025-09-08T18:50:51Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I built a secure offline app to modernize fiberglass insulation workflows.\nMost construction companies—especially in fiberglass insulation—still rely on paper forms and manual data entry to process installer payroll. It’s slow, error-prone, and wastes time, energy, and paper.\nThe Production Manager App is a closed-source Windows .exe that runs locally, enforces license keys via Gumroad, and auto-generates Excel reports based on job entries. No cloud sync, no external dependencies—just hardened logic built for real-world use.\nKey features:\n•  Weekly payroll calculation based on square footage, "
+  },
+  {
+   "objectID": "38336410",
+   "title": "Show HN: Discover the web services used by the top 50k websites",
+   "url": "https://enterprisetechstacks.pages.dev/",
+   "author": "CLIML",
+   "created_at": "2023-11-19T19:00:24Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN!<p>I got inspired by a submission a couple of weeks ago about finding services companies via their TXT records (<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=38066034\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=38066034</a>) and decided to build a free tool!<p>Enterprise Tech Stacks lets you easily explore how the top 50k websites in the world are using over 200 web services, such as DocuSign, Miro, and Ahrefs. You can export results to Excel&#x2F;CSV. Hopefully it can be useful for market&#x2F;competitor research or finding B2B leads."
+  },
+  {
+   "objectID": "46517126",
+   "title": "Show HN: Bull.sh: Financial Modeling Agent CLI",
+   "url": "https://github.com/alex-duria/bull.sh",
+   "author": "workworkwork71",
+   "created_at": "2026-01-06T19:17:26Z",
+   "points": 7,
+   "num_comments": 0,
+   "story_text": "Built a free open source agentic CLI tool for financial modeling &amp; analysis. Hadn&#x27;t played around with real equity valuation modeling for awhile and wanted to build tooling to get myself back into the game.<p>Bull.sh lets you query &amp; store 10-Qs, 10-K in a local vector store to chat with them, build investment thesis from scratch or build full framework models through the CLI to export into excel.<p>It&#x27;s open source, just requires your own Anthropic API key and (optionally) AlphaVantage Free API key if you want save some tokens from scraping. Feel free to play around with it."
+  },
+  {
+   "objectID": "46081502",
+   "title": "Show HN: Aviation calculators I built while learning",
+   "url": "https://joseflys.com",
+   "author": "jfroma",
+   "created_at": "2025-11-28T18:45:43Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "I&#x27;m a software developer from Argentina, currently working on my private pilot license. As I progressed through ground school, I kept building tools to help me understand and practice the concepts, and it turned into this.<p>joseflys.com is a collection of aviation calculators that run entirely in the browser. Everything works offline as a PWA.<p>I know most pilots use ForeFlight, SkyDemon, or similar apps, and I&#x27;m not trying to compete with those. This started as a learning project to really understand the math behind flight planning, and I figured others might find it useful too.<p"
+  },
+  {
+   "objectID": "42465388",
+   "title": "Ask HN: Simple Milage Tracking App for iOS or Android?",
+   "url": null,
+   "author": "brudgers",
+   "created_at": "2024-12-19T20:27:57Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "I want a stupid simple app to record milage and location when I drive for business.<p>Like hit a start button, drive, hit a end button to log the trip.<p>Since I drive the same vehicle, even dedicated hardware might be good enough.<p>Export logs to CSV or Excel or similar generic format for tax purposes.<p>Please let me know your experience.<p>Thanks."
+  },
+  {
+   "objectID": "46754977",
+   "title": "Show HN: FlowScope – Fast, sophisticated SQL lineage that runs in the browser",
+   "url": "https://flowscope.pondpilot.io/",
+   "author": "melonamin",
+   "created_at": "2026-01-25T15:37:45Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I built FlowScope because existing lineage tools either required uploading SQL to external servers or couldn&#x27;t handle real-world query complexity. FlowScope does both: it&#x27;s a  serious lineage engine that happens to run entirely client-side.<p>The engine is genuinely powerful:<p>- Full multi-statement analysis tracks lineage across CTEs, subqueries, temp tables, and cross-file references<p>- Column-level lineage with expression decomposition (not just &quot;column A depends on table B&quot;)<p>- Backward inference — figures out SELECT * columns from downstream usage even without schem"
+  },
+  {
+   "objectID": "41827194",
+   "title": "Show HN: I got tired of manual property research,so I built Z-Scraper,free trial",
+   "url": "https://zillowscraper.site",
+   "author": "Alan_Swift",
+   "created_at": "2024-10-13T11:52:28Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Tired of manual Zillow searches, I built a web-based scraper.<p>As a real estate investor, I found myself constantly sifting through Zillow listings, manually copying data into spreadsheets. It was mind-numbing work that ate up hours of my time. I knew there had to be a more efficient way.<p>I realized this wasn&#x27;t just my problem. Many real estate professionals – from agents to investors to market analysts – were likely facing the same tedious task. We all needed a quick, reliable way to gather property data at scale.<p>Over six weeks of intense coding (and more coffee than I care to admi"
+  },
+  {
+   "objectID": "46565903",
+   "title": "Show HN: Airbnb Search Exporter",
+   "url": "https://chromewebstore.google.com/detail/airbnb-search-exporter/nabopfienioeeikdgglhcpdncnjdpmfa",
+   "author": "qwikhost",
+   "created_at": "2026-01-10T14:16:43Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Airbnb Search Exporter – Export Airbnb Search Results to CSV, Excel, or JSON in One Click."
+  },
+  {
+   "objectID": "44621206",
+   "title": "Show HN: Amazon Review Scraper",
+   "url": "https://chromewebstore.google.com/detail/amazon-review-scraper/jlinclkdniakbjdnpmdjojdkdhbnlfeo",
+   "author": "qwikhost",
+   "created_at": "2025-07-20T01:51:48Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "One-click Amazon review scraper - export reviews to CSV, JSON, or Excel for easy product research and analysis."
+  },
+  {
+   "objectID": "44004159",
+   "title": "ImportExcel-PowerShell module to import/export Excel spreadsheets, without Excel",
+   "url": "https://github.com/dfinke/ImportExcel",
+   "author": "smartmic",
+   "created_at": "2025-05-16T11:39:42Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "26024912",
+   "title": "Launch HN: Feroot (YC W21) – security scanner for front-end JavaScript code",
+   "url": null,
+   "author": "ivan_tsarynny",
+   "created_at": "2021-02-04T12:55:30Z",
+   "points": 47,
+   "num_comments": 10,
+   "story_text": "Hi HN! I&#x27;m Ivan, the co-founder of Feroot Security (YC W21) (<a href=\"https:&#x2F;&#x2F;www.feroot.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.feroot.com&#x2F;</a>). Feroot Inspector is a security scanner for the client-side javascript code of web apps made for app sec teams.<p>If you&#x27;re not testing the security of the client-side code of your web app, there’s a good chance you could be exposed to Magecart skimmers, malware and spyware loaded with third-party scripts - css, pixels, tags, trackers, and more. We use synthetic users (i.e. bots—good ones!) to detect keyloggers, spywa"
+  },
+  {
+   "objectID": "48535569",
+   "title": "CoCoMS (Construction Correspondence Management System)",
+   "url": null,
+   "author": "cmina",
+   "created_at": "2026-06-15T01:47:59Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I released yesterday version 2 of CoCoMS, a F&#x2F;OSS licensed (GNU GPL) Laravel PHP document management app.<p>CoCoMS is a modern Laravel 12 application for managing construction project correspondence, documents, and communications. It provides role-based access control, file management, full-text search, and organized tagging of documents.<p>Why CoCoMS came to life? Simply because I wanted to scratch an itch! I wanted to create a simple yet powerful web-based document management system specifically for the management of correspondence generated during the execution of a construction projec"
+  },
+  {
+   "objectID": "47789650",
+   "title": "Show HN: Job Scraper for LinkedIn",
+   "url": "https://chromewebstore.google.com/detail/job-scraper-for-linkedin/kkafipickfibnamoijjgamklecmmbbmf",
+   "author": "qwikhost",
+   "created_at": "2026-04-16T07:06:47Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "LinkedIn Job Scraper &amp; Export Tool | Extract Listings to CSV, JSON, Excel Quickly"
+  },
+  {
+   "objectID": "48746227",
+   "title": "IG Follow – Export Instagram Followers and Following to CSV and Excel",
+   "url": "https://chromewebstore.google.com/detail/ig-follow/fhhgnhhpacaobakdiljfiioenjnnhcjf",
+   "author": "qwikhost",
+   "created_at": "2026-07-01T13:15:30Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "44871219",
+   "title": "Show HN: Twitter Post Exporter – Download Twitter / X Posts",
+   "url": "https://chromewebstore.google.com/detail/twitter-post-exporter-dow/jdegdcamkndlebppmdlkgolkknkbjcne",
+   "author": "qwikhost",
+   "created_at": "2025-08-12T01:03:11Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Bulk export Twitter&#x2F;X posts to CSV, JSON, or Excel with Twitter Post Exporter. Quick, easy social media backup &amp; analytics."
+  },
+  {
+   "objectID": "45862480",
+   "title": "Show HN: Xleak – Terminal Excel viewer with interactive TUI and search",
+   "url": "https://github.com/bgreenwell/xleak",
+   "author": "w108bmg",
+   "created_at": "2025-11-09T02:56:19Z",
+   "points": 6,
+   "num_comments": 0,
+   "story_text": "Hi HN! I just released xleak, a terminal-based Excel viewer written in Rust.<p>I was inspired by working with spreadsheets and word documents on the command line and wanted something faster than opening Excel&#x2F;LibreOffice. It supports .xlsx, .xls, .xlsm, .xlsb, and .ods files.<p>Key features:\n- Interactive TUI with full keyboard navigation (vim-style search with &#x2F; and n&#x2F;N)\n- View Excel formulas in cells\n- Copy cells&#x2F;rows to clipboard\n- Export to CSV, JSON, or text\n- Lazy loading for large files (1000+ rows)\n- Jump to any cell (e.g., &quot;A100&quot;, &quot;500&quot;, or &quo"
+  },
+  {
+   "objectID": "46034257",
+   "title": "Show HN: I made a tool to export TikTok comments",
+   "url": "https://exporttok.com",
+   "author": "jackemerson",
+   "created_at": "2025-11-24T14:06:51Z",
+   "points": 5,
+   "num_comments": 2,
+   "story_text": "Hey HN!<p>I&#x27;m Jack, the maker of ExportTok.<p>I built this tool because I spent hours manually copy-pasting TikTok comments for market research and wanted an easier way. With ExportTok, you can quickly export all comments from any TikTok video to CSV or Excel for analysis.<p>You do need to sign up to use it, but you don&#x27;t need a TikTok account or credentials. The data includes usernames, timestamps, and engagement metrics. So far, users have exported over 500,000 comments.<p>Would love feedback:<p>1. What other data fields would be helpful?\n2. Any privacy concerns?\n3. Suggestions for"
+  },
+  {
+   "objectID": "44178202",
+   "title": "Show HN: A free online tool to export all PDF annotations",
+   "url": "https://www.pdfhighlightextractor.com/",
+   "author": "abagh999",
+   "created_at": "2025-06-04T07:46:24Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Hello<p>I built this free online tool because I was frustrated with the lack of quick, no install, no signup options for exporting annotations from PDFs.<p>So I made something simple, upload your PDF and extract highlights, comments, and notes, all to CSV.<p>Since this is an MVP, export is currently limited to CSV but I&#x27;m working on adding OCR support and additional export formats like Markdown, Excel, and Word soon.<p>Would love your feedback and suggestions. Thanks for checking it out!"
+  },
+  {
+   "objectID": "47218707",
+   "title": "Show HN: I built a 100% client-side tool to automate Excel-to-PDF filling",
+   "url": "https://formfill.space/",
+   "author": "Oscardeng",
+   "created_at": "2026-03-02T14:52:48Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I noticed people manually copy-pasting data from Excel into PDF forms, but existing solutions require uploading sensitive data (employee info, invoices) to third-party cloud servers.<p>I built FormFill to do all the heavy lifting entirely in the browser using pdf-lib. It parses the Excel file, maps the columns to your created PDF fields, and generates a .zip of filled PDFs locally.<p>Because it&#x27;s 100% client-side:<p>1. User data never leaves their device.<p>2. Server computing costs are essentially $0.<p>You get a few free batch exports just by visiting (no sign-up required). I&#"
+  },
+  {
+   "objectID": "46851238",
+   "title": "Suggestion for a tool exceptionally needed for an excellent program",
+   "url": null,
+   "author": "heyitsmoot",
+   "created_at": "2026-02-02T01:17:45Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I want to express appreciation for how much better the experience has become with restored handlers and improved continuity.<p>It meaningfully changed how usable the system feels over time.<p>I have one concrete product suggestion that I believe would help a large number of long term users.<p>There should be a simple way to export and import chat history between accounts.<p>Ideally this would be a one click export to an archive file, with a corresponding import option that allows the archive to be attached to a new account and indexed automatically.<p>Right now the only option is manual copyin"
+  },
+  {
+   "objectID": "46956517",
+   "title": "Show HN: Business card scanner with frame selection, dedupe, and vCard export",
+   "url": "https://github.com/vassiliylakhonin/bizcard-ai-scanner",
+   "author": "_dquq",
+   "created_at": "2026-02-10T07:38:28Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN, I built BizCard AI Scanner, a small web app that digitizes business cards.<p>You can upload multiple photos or a single video of cards. For videos, it extracts frames in the browser, lets you select&#x2F;deselect frames, then uses Google Gemini (schema-constrained JSON) to extract structured fields (name&#x2F;title&#x2F;company&#x2F;email&#x2F;phone&#x2F;website&#x2F;address). Results are editable, deduplicated, and exportable to Excel, CSV, and vCard (.vcf).<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;vassiliylakhonin&#x2F;bizcard-ai-scanner\" rel=\"nofollow\">https:&#x2F;&#x2F;git"
+  },
+  {
+   "objectID": "41503251",
+   "title": "Show HN: Visual DB – Web front end for your database",
+   "url": "https://visualdb.com/",
+   "author": "sandhya6",
+   "created_at": "2024-09-10T17:25:00Z",
+   "points": 171,
+   "num_comments": 52,
+   "story_text": "If you have a cloud-hosted database, read on: Visual DB was designed for you.<p>Visual DB is the fastest way to create data entry forms for your database: Starting with an Excel spreadsheet, you can import your data into the database and create a great-looking form in under 10 minutes. Watch this video: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;6rVD5rmrjN8\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;6rVD5rmrjN8</a><p>Visual DB is a comprehensive SaaS frontend for your database. In addition to data entry forms, Visual DB also has a spreadsheet-like interface for inserting and updating data i"
+  },
+  {
+   "objectID": "43852771",
+   "title": "Show HN: Convert Large CSV/XLSX to JSON or XML in Browser",
+   "url": "https://csvforge.com",
+   "author": "Botlabs",
+   "created_at": "2025-05-01T01:31:19Z",
+   "points": 41,
+   "num_comments": 13,
+   "story_text": "Hello HN,\nI&#x27;m excited to share a project I&#x27;ve been working on: A simple, fast way to process huge CSV and XLSX files directly in your browser and export them as clean JSON or XML<p>Here&#x27;s a few things that makes this converter different: - runs in the browser - all parsing and conversion is client side can handle data any size data - automatically detects delimiters, encodings, and data types as it parses - Live preview with column renaming, search&#x2F;replace, and data cleanup - Export to JSON or XML — clean, structured output that can be used for API or Databases<p>backstory:"
+  },
+  {
+   "objectID": "45692353",
+   "title": "Show HN: Inspec – Specification scheduling software for interior designers",
+   "url": "https://inspec.design",
+   "author": "nick_cook",
+   "created_at": "2025-10-24T08:41:05Z",
+   "points": 13,
+   "num_comments": 0,
+   "story_text": "Hi HN, I&#x27;m Nick and I built Inspec with my partner Caitlin (she&#x27;s the interior designer, I&#x27;m the developer).<p>Inspec lets interior designers create and manage FF&amp;E schedules - basically spec sheets listing everything that goes in a room before the furniture: flooring, paint, countertops, lighting, fixtures, etc.<p>This process is currently exclusively done using Excel, and while this works to some degree, it comes with a lot of manual work and clunkiness. When Caitlin started working remotely, I watched her deal with these issues daily. So I spent the past 9 months building"
+  },
+  {
+   "objectID": "44160055",
+   "title": "Show HN: DataKit – Complete data analysis platform now self-hostable",
+   "url": "https://datakit.page",
+   "author": "aminkhorrami",
+   "created_at": "2025-06-02T15:47:22Z",
+   "points": 4,
+   "num_comments": 2,
+   "story_text": "DataKit started as my solution to Excel crashing on large files, but it&#x27;s grown into a full browser-based data platform that handles CSV&#x2F;Parquet&#x2F;XLSXL&#x2F;JSON files up to 20GB+ entirely client-side.\nWhat it does:<p>Drag files → instant SQL querying (joins, aggregations, everything)\nAutomatic data profiling (quality issues, null values, duplicates)\nSmart visualizations for every column type\nExport transformed&#x2F;filtered results<p>Now self-hostable: After requests from teams needing this behind firewalls, the entire platform can run on your infrastructure via pip&#x2F;Docker&"
+  },
+  {
+   "objectID": "46481461",
+   "title": "Show HN: Happymail – Make email great again",
+   "url": "https://happymail.tech/",
+   "author": "samset7",
+   "created_at": "2026-01-03T20:58:03Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Eight years ago, I was job hunting and felt embarrassed by my Gmail address. I tried registering firstname.lastname — taken everywhere. So I thought: &quot;I&#x27;m in IT, I&#x27;ll set up my own domain with my own IMAP&#x2F;SMTP. How hard could it be?&quot;\nA lot went wrong. Forgotten renewals. rocky DNS mistakes. I ended migrating toward Google Workspace, but in the end it felt overkill, having a subscription there plus the whole registrar subscription, and the whole GAFAM sticker on it. Moreover, the final price was way too high for me at the time.\nSix months ago, someone approached me and "
+  },
+  {
+   "objectID": "46666947",
+   "title": "Show HN: I built a real estate deal analyzer that handles hard money loan math",
+   "url": "https://re.rtn.capital",
+   "author": "AdityaPatwa07",
+   "created_at": "2026-01-18T11:36:13Z",
+   "points": 3,
+   "num_comments": 3,
+   "story_text": "Hello HN,<p>I’m the developer behind RunTheNumbers. It’s a free suite of tools to analyze real estate deals (BRRRR, Fix &amp; Flip, and Rentals).<p>I noticed that most new investors rely on complex Excel sheets that are brittle and prone to breaking—especially when you try to factor in &quot;Hard Money&quot; loans, bridge financing, or variable holding costs. The existing web calculators were often too simple or behind a paywall.<p>I built a dedicated engine that handles the messy logic of hard money loans (points, interest-only periods, etc.) and allows you to export &quot;Lender-Ready&quot; "
+  },
+  {
+   "objectID": "49242140",
+   "title": "Show HN: Working on gym weight progress calculator",
+   "url": "https://gymcalc.no/",
+   "author": "xtremi",
+   "created_at": "2026-08-10T11:08:27Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "TL;DR: I made a weight lifting progression planner (no ads&#x2F;subscription): <a href=\"https:&#x2F;&#x2F;www.gymcalc.no\" rel=\"nofollow\">https:&#x2F;&#x2F;www.gymcalc.no</a><p>I like to plan my progress either for whole workout programs or for specific exercises for some weeks at the time. I also like to start with a bit high rep&#x2F;low weight, while decreasing reps and steadily increasing the estimated 1RM.<p>I messed around a lot with Excel to make different &quot;rep&#x2F;set schemes&quot; and calculated weights. After experimenting a bit, I ended up making a little web based tool for thi"
+  },
+  {
+   "objectID": "44485632",
+   "title": "Show HN: WhatsApp Contact Exporter",
+   "url": "https://chromewebstore.google.com/detail/whatsapp-contact-exporter/dlplljmhphnabhmlhjplfgpakefmfhho",
+   "author": "qwikhost",
+   "created_at": "2025-07-07T00:55:13Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "Export WhatsApp contacts with WhatsApp Contact Exporter. Save numbers and names to CSV, Excel, or JSON for easy backup.<p>WhatsApp Contact Exporter – Extract &amp; Save WhatsApp Contacts Easily!<p>Transform how you manage and download your WhatsApp contacts with WhatsApp Contact Exporter – the ultimate Chrome extension for seamless contact extraction and export. Perfect for individuals, marketers, and businesses wanting to organize or back up their WhatsApp data with ease."
+  },
+  {
+   "objectID": "48549225",
+   "title": "Show HN: Bing Maps Leads Extractor",
+   "url": "https://chromewebstore.google.com/detail/maps-leads-extractor/omnjmmkpblpilcjbdadamlaajdndjnnj",
+   "author": "qwikhost",
+   "created_at": "2026-06-16T00:59:17Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Export Bing Maps Business Leads, Emails, Phones &amp; Locations to CSV, Excel &amp; JSON"
+  },
+  {
+   "objectID": "46550382",
+   "title": "Show HN: An Alternative UI for DuckDB",
+   "url": null,
+   "author": "hfmsio",
+   "created_at": "2026-01-09T05:29:03Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I built an open-source SQL workbench for DuckDB that runs in two modes:<p>1. Native mode as a replacement UI for `duckdb -ui` with full local DuckDB\n2. Browser mode as a standalone DuckDB WASM app with zero install<p>Quick start<p># Option A: Use with local DuckDB\nnpx dbxlite-ui\n# then:\nexport ui_remote_url=&quot;http:&#x2F;&#x2F;localhost:8080&quot; &amp;&amp; duckdb -unsigned -ui<p>You can also point DuckDB directly at the hosted UI without installing anything:<p>export ui_remote_url=&quot;<a href=\"https:&#x2F;&#x2F;sql.dbxlite.com\" rel=\"nofollow\">https:&#x2F;&#x2F;sql.dbxlite.com</a>&quot; "
+  },
+  {
+   "objectID": "46447097",
+   "title": "Show HN: Happymail – We made email simple again",
+   "url": "https://happymail.tech/concept/",
+   "author": "samset7",
+   "created_at": "2025-12-31T18:55:46Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "Eight years ago, I was job hunting and felt embarrassed by my Gmail address. I tried registering firstname.lastname — taken everywhere. So I thought: &quot;I&#x27;m in IT, I&#x27;ll set up my own domain with my own IMAP&#x2F;SMTP. How hard could it be?&quot;<p>A lot went wrong. Forgotten renewals. rocky DNS mistakes. I ended migrating toward Google Workspace, but in the end it felt overkill, having a subscription there plus the whole registrar subscription, and the whole GAFAM sticker on it. Moreover, the final price was way too high for me at the time.<p>Six months ago, someone approached me "
+  },
+  {
+   "objectID": "49268468",
+   "title": "Show HN: WhatsApp Contact Exporter",
+   "url": "https://chromewebstore.google.com/detail/contact-exporter-for-wa/dfchifnmhmdeahedgneamifgellcajeb",
+   "author": "qwikhost",
+   "created_at": "2026-08-12T06:18:13Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Export WhatsApp contacts with WhatsApp Contact Exporter. Save numbers and names to CSV, Excel, or JSON for easy backup."
+  },
+  {
+   "objectID": "47702476",
+   "title": "Show HN: Webcellar – JavaScript (and TypeScript) in Excel Made Simple",
+   "url": "https://github.com/Acmeon/Webcellar",
+   "author": "Acmeon",
+   "created_at": "2026-04-09T11:54:02Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Webcellar simplifies the use of JavaScript (and TypeScript) in Excel.<p>The key feature is that JS module exports from &quot;<i>.xlsx.js&quot; (or &quot;</i>.xlsx.ts&quot;) files become automatically available in corresponding &quot;*.xlsx&quot; files as functions (as long as Webcellar is running).<p>Another example of a feature is that Webcellar automatically handles dimensionality and data type conversion between Excel and JS. For example, JS objects are converted into Excel entities (i.e., single cell values with properties that can be accessed).<p>Webcellar has primarily been developed to "
+  },
+  {
+   "objectID": "46666052",
+   "title": "Show HN: A fast CSV/Parquet viewer built on DuckDB-WASM",
+   "url": "https://csv-studio-plus.vercel.app",
+   "author": "imdms",
+   "created_at": "2026-01-18T08:52:09Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN!<p>There are plenty of CSV&#x2F;Parquet viewers out there, but I kept running into small frustrations that added up. After bouncing between Excel, Numbers, VS Code, and a bunch of web tools, I realized none of them quite fit how I actually work. So I decided to build one myself using DuckDB-Wasm + Svelte.<p>I built this mainly for my own workflow. A few things I really wanted:<p>1. SQL-first exploration + export.\nWhen I&#x27;m working with multiple CSVs or messy schemas, clicking around only gets me so far. Being able to write SQL (or programmatic queries) is the fastest way for me to un"
+  },
+  {
+   "objectID": "45763679",
+   "title": "Show HN: Sourcetable – Operational spreadsheets that can read/write to any API",
+   "url": "https://sourcetable.com/",
+   "author": "dioptre",
+   "created_at": "2025-10-30T18:44:48Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "We built what we&#x27;re calling &quot;operational spreadsheets&quot; – spreadsheets that can actually execute actions across external systems, not just calculate and display data.<p>The core idea: spreadsheets have been passive tools for 40 years. You put data in, formulas process it, you export it, manually move it somewhere else, repeat. We added bidirectional API integration with natural language commands, so the spreadsheet itself can send emails, update databases, orchestrate workflows across services – autonomously.<p>Think of it as the evolution from VisiCalc → Excel → Google Sheets (m"
+  },
+  {
+   "objectID": "35343677",
+   "title": "Show HN: Retorch: Connect any data, run any Python analysis in natural language",
+   "url": "https://retorch.co/about",
+   "author": "AmuVarma",
+   "created_at": "2023-03-28T16:28:43Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi everyone, \nI am the founder of Retorch. Retorch allow you to connect your data from any source including CSVs, SQL, Excel, Google Sheets etc... (and are looking at Stripe&#x2F;Market Data… integrations) and run queries on the data in natural language. We first retrieve the relevant data and convert your query into Python. We inject all of this into a Virtual Machine, and gather the output and show it to you. We have extended visualisation tools from dataframes, print logs and matplotlib into interactive visualisation tools that allow you to do more and (hopefully!) look and feel better and "
+  },
+  {
+   "objectID": "44133064",
+   "title": "Show HN: Bing Maps Leads Scraper",
+   "url": "https://chromewebstore.google.com/detail/maps-scraper-leads-extrac/mnogejnpbfjjmhedhoiinlfajigomfhl",
+   "author": "qwikhost",
+   "created_at": "2025-05-30T05:07:37Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": "Easily export contact data from Bing Maps to CSV, JSON, or Excel for lead generation and location-based market research."
+  }
+ ]
+}

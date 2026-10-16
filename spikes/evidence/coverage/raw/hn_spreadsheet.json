@@ -1,0 +1,513 @@
+{
+ "query": "spreadsheet automatically",
+ "params": {
+  "query": "spreadsheet automatically",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 85,
+ "hits": [
+  {
+   "objectID": "42400979",
+   "title": "Show HN: AutoGather – Organize Web Information into Spreadsheets, Automatically",
+   "url": "https://www.autogather.ai/",
+   "author": "rayruiwang",
+   "created_at": "2024-12-12T17:06:01Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hey HN!\nWe are excited to share AutoGather, an AI Agent that organizes the web’s information into the spreadsheets you need, automatically!<p>Problems it solves:\nScraping websites, generate leads, or gather any dataset from the web<p>How it works:\nDescribe your data targets and specify the desired columns. AutoGather’s AI agents will search, read, scrape, and organize the web—just like a human. Meanwhile, you can sit back, enjoy a cup of coffee, and let AI handle the heavy lifting for you.<p><i>Why build this</i>\nWe believe manual data collection and scraping from the web should be fully autom"
+  },
+  {
+   "objectID": "40295445",
+   "title": "Show HN: Turn spreadsheets into CRUD mobile apps(PWA) without coding",
+   "url": "https://appalloy.net",
+   "author": "peter_starion",
+   "created_at": "2024-05-08T07:52:48Z",
+   "points": 3,
+   "num_comments": 2,
+   "story_text": "Hello HN, I&#x27;m Peter, the founder of AppAlloy. Over the last year, we&#x27;ve been working on a tool that converts spreadsheets (Google Sheets, Excel, csv) into fully functional CRUD mobile apps, without the need for coding skills.<p>Our goal is to make mobile app development accessible to anyone who uses spreadsheets for business operations.<p>Our platform uses OpenAI to analyze and infer the structure of spreadsheet data, automatically generating a mobile-friendly app interface. This allows non-technical users to easily manage data directly from their mobile devices with an interface opt"
+  },
+  {
+   "objectID": "47298755",
+   "title": "Show HN: A simpler alternative to BI tools for Excel users",
+   "url": "https://www.datanestanalytics.com/",
+   "author": "skandersab",
+   "created_at": "2026-03-08T16:46:58Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "Hi HN,<p>Many small businesses run most of their operations in Excel.<p>Sales tracking, product lists, inventory, revenue reports — everything often ends up in spreadsheets.<p>The problem is that once the data grows, it becomes difficult to answer simple questions like:<p>What products actually make money?<p>Which categories are underperforming?<p>Where are we overstocked or understocked?<p>Traditional BI tools like Microsoft Power BI or Tableau Software are powerful, but for small teams they often require:<p>integrations<p>data modeling<p>dashboards to be built manually<p>I wanted something m"
+  },
+  {
+   "objectID": "45763679",
+   "title": "Show HN: Sourcetable – Operational spreadsheets that can read/write to any API",
+   "url": "https://sourcetable.com/",
+   "author": "dioptre",
+   "created_at": "2025-10-30T18:44:48Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "We built what we&#x27;re calling &quot;operational spreadsheets&quot; – spreadsheets that can actually execute actions across external systems, not just calculate and display data.<p>The core idea: spreadsheets have been passive tools for 40 years. You put data in, formulas process it, you export it, manually move it somewhere else, repeat. We added bidirectional API integration with natural language commands, so the spreadsheet itself can send emails, update databases, orchestrate workflows across services – autonomously.<p>Think of it as the evolution from VisiCalc → Excel → Google Sheets (m"
+  },
+  {
+   "objectID": "46649223",
+   "title": "Show HN: Fluent, a tiny lang for differentiable tensors and reactive programming",
+   "url": "https://github.com/mlajtos/fluent",
+   "author": "mlajtos",
+   "created_at": "2026-01-16T17:38:29Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Hello,<p>I finally pushed myself to open-source Fluent, a differentiable array-oriented language I&#x27;ve been building for the New Kind of Paper project [1-5]. Demo is available at [0].<p>Few salient features:<p>1. Every operator is user-(re)definable. Don&#x27;t like writing assignment with `:`, change it to whatever you like. Create new and whacky operators – experiment to the death with it.<p>2. Differentiability. Language is suitable for machine learning tasks using gradient descent.<p>3. Reactivity. Values can be reactive, so down-stream values are automatically recomputed as in spreads"
+  },
+  {
+   "objectID": "45704171",
+   "title": "Show HN: MailAI – Automate Any Workflow in Plain English with Gmail and Stripe",
+   "url": "https://www.mailai.live/",
+   "author": "Asquareee",
+   "created_at": "2025-10-25T14:27:04Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hey HN,<p>We built MailAI - AI agents that automate workflows in plain English by connecting Gmail and Stripe.<p>The Problem:\nFounders waste 10+ hours weekly on repetitive tasks:\n- Responding to invoice inquiries\n- Tracking payments\n- Sending payment reminders\n- Following up on late payments\n- Managing customer communication<p>Most &quot;automation&quot; tools require complex setup, coding, or learning new interfaces. We wanted something different.<p>The Solution:\nConnect Gmail and Stripe. Describe what you want in plain English. AI automates it 24&#x2F;7.<p>Real Examples:<p>&quot;When a custo"
+  },
+  {
+   "objectID": "41590682",
+   "title": "Show HN: Sourcetable – AI Spreadsheet and Data Platform",
+   "url": null,
+   "author": "mceoin",
+   "created_at": "2024-09-19T11:28:24Z",
+   "points": 188,
+   "num_comments": 88,
+   "story_text": "Hi HN! I’m Eoin, founder of Sourcetable (<a href=\"https:&#x2F;&#x2F;sourcetable.com\" rel=\"nofollow\">https:&#x2F;&#x2F;sourcetable.com</a>).<p>Sourcetable is an AI-native spreadsheet that syncs with all your data. Users pair with an AI copilot that helps them do their spreadsheet work, as well as more database-centric analysis and SQL.<p>Soucetable syncs with databases including Postgres, MySQL, and MongoDB, and over 100+ business applications including Stripe, Zendesk, Hubspot, Quickbooks and Google Analytics. That data is available in a spreadsheet, and any models you build automatically upda"
+  },
+  {
+   "objectID": "35456509",
+   "title": "Show HN: Quadratic – Open-Source Spreadsheet with Python, AI (WASM and WebGL)",
+   "url": "https://www.quadratichq.com/",
+   "author": "davidkircos",
+   "created_at": "2023-04-05T16:13:59Z",
+   "points": 224,
+   "num_comments": 68,
+   "story_text": "Hi, I am David Kircos. The Founder of Quadratic (<a href=\"https:&#x2F;&#x2F;QuadraticHQ.com\" rel=\"nofollow\">https:&#x2F;&#x2F;QuadraticHQ.com</a>), an open-source spreadsheet application that supports Python, SQL (coming soon), AI Prompts, and classic Formulas.<p>Unlike other spreadsheets, Quadratic has an infinite canvas (like Figma). As a result, you can pinch and zoom to navigate large data sets, and everything renders smoothly at 60fps.<p>Our vision is to build a place where your team can collaborate on data analysis. You can write Python, AI Prompts, and Formulas in one spreadsheet feedin"
+  },
+  {
+   "objectID": "42750917",
+   "title": "Show HN: Billion Cell Spreadsheets with Incremental Computation",
+   "url": "https://xls.feldera.io",
+   "author": "gz09",
+   "created_at": "2025-01-18T19:52:54Z",
+   "points": 15,
+   "num_comments": 1,
+   "story_text": "I figured this might be interesting for some here. This is a demo we built to showcase computation with Feldera (SQL compiled to Rust circuits that evaluate input incrementally): <a href=\"https:&#x2F;&#x2F;github.com&#x2F;feldera&#x2F;feldera\">https:&#x2F;&#x2F;github.com&#x2F;feldera&#x2F;feldera</a><p>The gist of it is that if you update a cell, we incrementally update the spreadsheet which means we will only emit a minimal amount of changes for the cells affected by your update. The nice thing about it is that this is something that Feldera does automatically (and it would do that for any S"
+  },
+  {
+   "objectID": "39187302",
+   "title": "Show HN: A spreadsheet-like program to handle any data and files of any size",
+   "url": "https://citadel5.com/gs-base.htm",
+   "author": "jpiech",
+   "created_at": "2024-01-30T07:25:49Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": "New features added recently:<p>[+]\nThe &quot;Text File Input Filters&quot; have been added to enable processing of CSV &#x2F; text files of any size   with any number of rows regardless of the amount of RAM in a computer.\nFilters can use RegEx patters, the popular relations, ranges and fuzzy filters.<p><a href=\"https:&#x2F;&#x2F;citadel5.com&#x2F;help&#x2F;gsbase&#x2F;open_text_file.png\" rel=\"nofollow\">https:&#x2F;&#x2F;citadel5.com&#x2F;help&#x2F;gsbase&#x2F;open_text_file.png</a><p>For example, in GS-Base you can load this (publicly available) NYC Yellow Taxis data set:\n<a href=\"https:&#x2F;"
+  },
+  {
+   "objectID": "46070908",
+   "title": "Show HN: In The Office Tracker – Track your RTO requirements automatically",
+   "url": "https://intheofficetracker.com",
+   "author": "jryan49",
+   "created_at": "2025-11-27T16:41:50Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Hello HN! I wanted to share my free, <i>native</i>, MacOS app that uses Wifi scanning to automatically keep track if you&#x27;re in the office or not! It let&#x27;s you keep track of your RTO requirements to make sure you don&#x27;t get in trouble :)<p>If people really like it I can make an iOS version and an Android version and a Windows version and a Linux version.<p>After RTO, we all started using spreadsheets to track our time, but I hated having to remember to go into that spreadsheet every day and mark when I was in or not. So, I decided to waste months learning Swift UI to make this app"
+  },
+  {
+   "objectID": "47126653",
+   "title": "Show HN: I built a tool track cash flow without the \"spreadsheet stress\"",
+   "url": "https://www.opboard.io/",
+   "author": "wwxoxo",
+   "created_at": "2026-02-23T18:36:05Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": "I’m a financial analyst, and for years I managed our family budget in a massive Excel sheet. I loved the control, but it eventually became an &quot;unpaid second job&quot; of fixing broken CSV formats and patching formulas.<p>The real problem: The spreadsheet was a barrier, not a bridge. It didn’t help me have better money conversations at home. Telling my wife “Dining is high” wasn&#x27;t helpful; we needed to see where we were overspending (e.g., that one specific cafe vs. grocery runs) without me having to act as a &quot;human pivot table&quot; every Sunday night.<p>I didn&#x27;t want an ap"
+  },
+  {
+   "objectID": "32090795",
+   "title": "Automatically email your database data as a spreadsheet with no code",
+   "url": "https://apispreadsheets.com/tutorials/automatically-email-your-database-data-as-a-spreadsheet-with-no-code.html",
+   "author": "asthasharma1",
+   "created_at": "2022-07-14T01:13:13Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "46204694",
+   "title": "Show HN: Coached – All-in-one platform for fitness coaches to ditch spreadsheets",
+   "url": "https://usecoached.com",
+   "author": "zham-dev",
+   "created_at": "2025-12-09T13:26:19Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hey HN,<p>I built Coached because I was tired of watching fitness coaches struggle with the same problem: spreadsheets everywhere. Programs in one doc, nutrition plans in another, check-ins scattered across emails and DMs, progress photos lost in text threads.<p>Coached brings it all together. Training programs, meal plans, check-ins, supplements, and client management in one place. Coaches get a proper toolkit, and their clients get a clean portal to view plans and submit progress updates.<p>A few things that make it different:<p>• Template-to-assignment workflow: Create a program or diet onc"
+  },
+  {
+   "objectID": "45935825",
+   "title": "I automatically track online spending (invoices) in a spreadsheet",
+   "url": "https://blog.terrydjony.com/automatic-spending-tracker-from-invoices-in-gmail/",
+   "author": "terryds",
+   "created_at": "2025-11-15T08:04:28Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "44955461",
+   "title": "Show HN: Generate polished reports/docs automatically from messy inputs",
+   "url": "https://gridfusion.ai/",
+   "author": "arjun_tejaswi_m",
+   "created_at": "2025-08-19T19:38:52Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>We’ve been working on a project to automate one of the most painful but universal tasks: turning scattered data and notes into polished, professional documents.<p>The idea is simple:<p>You upload the final document you normally produce (e.g., a monthly report, project update, or client deliverable).<p>You also upload the raw inputs you usually work from (Excel sheets, PDFs, Word notes, etc.).<p>The system learns the mapping, so next time you can just drop in the new raw inputs and instantly get the finished document.<p>Example workflow I’ve been testing:<p>Raw inputs: a spreadsheet of"
+  },
+  {
+   "objectID": "42962866",
+   "title": "Show HN: Probability-Spreadsheet – A Probabilistic Spreadsheet in Python",
+   "url": "https://github.com/Topping1/probability-spreadsheet",
+   "author": "mixtape2025-1",
+   "created_at": "2025-02-06T14:47:21Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I recently came across [this HN discussion](<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=42941143\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=42941143</a>) about probabilistic spreadsheets and learned about [Montesheet](<a href=\"https:&#x2F;&#x2F;blog.singleton.io&#x2F;posts&#x2F;2021-11-24-probabilistic-spreadsheet&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;blog.singleton.io&#x2F;posts&#x2F;2021-11-24-probabilistic-spr...</a>) ([GitHub](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;dps&#x2F;montesheet\">https:&#x2F;&#x2F;github.com&#x2F;dps&#x2F;montesheet</a>)). I thought t"
+  },
+  {
+   "objectID": "34773442",
+   "title": "Launch HN: Lago (YC S21) – Open-source usage-based billing",
+   "url": null,
+   "author": "Rafsark",
+   "created_at": "2023-02-13T14:01:29Z",
+   "points": 442,
+   "num_comments": 141,
+   "story_text": "Hi HN, we’re the cofounders of Lago: an open-source alternative to Stripe Billing, Chargebee, and Recurly. That is, we make software that helps businesses calculate how much their own customers should pay them—based on their subscription, consumption, discounts, taxes, credit notes, or negotiated terms—and then invoice them.<p>Our website is at <a href=\"https:&#x2F;&#x2F;www.getlago.com\">https:&#x2F;&#x2F;www.getlago.com</a> and our Github is here: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;getlago&#x2F;lago\">https:&#x2F;&#x2F;github.com&#x2F;getlago&#x2F;lago</a>.<p>We’re focused on composabi"
+  },
+  {
+   "objectID": "36043944",
+   "title": "Launch HN: Common Paper (YC W23) – SAFEs for Commercial Contracts",
+   "url": null,
+   "author": "jakestein",
+   "created_at": "2023-05-23T13:28:53Z",
+   "points": 431,
+   "num_comments": 167,
+   "story_text": "Hey HN, we’re Ben and Jake, founders of Common Paper (<a href=\"https:&#x2F;&#x2F;commonpaper.com\">https:&#x2F;&#x2F;commonpaper.com</a>). We provide standard, open-source contracts and a platform for getting them signed quickly.  See <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;f7maIapJpU4\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;f7maIapJpU4</a> for an overview, and <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;A1PWjWiheFk\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;A1PWjWiheFk</a> for a demo of sending and signing a contract.<p>I (Jake) was a co-founder of two B2B SaaS companies, RJMetrics "
+  },
+  {
+   "objectID": "37792507",
+   "title": "Show HN: A job application tracker with company reviews, recruiter autoresponder",
+   "url": "https://rolepad.com",
+   "author": "romanhn",
+   "created_at": "2023-10-06T16:01:12Z",
+   "points": 294,
+   "num_comments": 130,
+   "story_text": "Hey folks. Rolepad is a product born out of my dissatisfaction with hiring processes - both as a candidate and as a hiring manager. Processes that are non-transparent, inefficient, and full of frustration for both sides. This early iteration has focused on the application tracking aspects with a few extra goodies.<p>These days it is common to apply to dozens of positions (some users track over a hundred opportunities). Without a record-keeping system, it can quickly become an unmanageable mess. Even the better-organized among us often end up juggling spreadsheets, emails, and various notes. Ro"
+  },
+  {
+   "objectID": "40788648",
+   "title": "Show HN: Triplit – Open-source syncing database that runs on server and client",
+   "url": "https://github.com/aspen-cloud/triplit",
+   "author": "matlin",
+   "created_at": "2024-06-25T13:53:05Z",
+   "points": 279,
+   "num_comments": 100,
+   "story_text": "Hey HN, we’re Matt and Will, the co-founders of Triplit (<a href=\"https:&#x2F;&#x2F;www.triplit.dev\">https:&#x2F;&#x2F;www.triplit.dev</a>). Triplit is an open-source database (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;aspen-cloud&#x2F;triplit\">https:&#x2F;&#x2F;github.com&#x2F;aspen-cloud&#x2F;triplit</a>) that combines a server-side database, client-side cache, and a sync engine into one cohesive product. You can try it out with a new project by running:<p><pre><code>  (npm|bun|yarn) create triplit-app\n</code></pre>\nAs a team, we’ve worked on several projects that aspired to the user experi"
+  },
+  {
+   "objectID": "39666865",
+   "title": "Show HN: Teable – Open-Source No-Code Database Fusion of Postgres and Airtable",
+   "url": "https://github.com/teableio/teable",
+   "author": "bieberChen",
+   "created_at": "2024-03-11T11:42:03Z",
+   "points": 279,
+   "num_comments": 94,
+   "story_text": "Features<p>Spreadsheet-like interface\nAll you want is here\n • Cell Editing: Directly click and edit content within cells.<p>• Formula Support: Input mathematical and logical formulas to auto-calculate values.<p>• Data Sorting and Filtering: Sort data based on a column or multiple columns; use filters to view specific rows of data.<p>• Aggregation Function: Automatically summarize statistics for each column, providing instant calculations like sum, average, count, max, and min for streamlined data analysis.<p>• Data Formatting: formatting numbers, dates, etc.<p>• Grouping: Organize rows into co"
+  },
+  {
+   "objectID": "30855879",
+   "title": "Show HN: EnvKey 2.0 – End-To-End Encrypted Environments (now open source)",
+   "url": "https://v2.envkey.com/",
+   "author": "danenania",
+   "created_at": "2022-03-30T14:42:50Z",
+   "points": 225,
+   "num_comments": 65,
+   "story_text": "Hey HN,<p>I&#x27;m so happy to finally show you all this release after years of hard work. I posted the first version of EnvKey to HN back in 2017 (<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=15330757\" rel=\"nofollow\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=15330757</a>), then went through YC in W18 (<a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=16569534\" rel=\"nofollow\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=16569534</a>).<p>EnvKey is an end-to-end encrypted configuration and secrets manager. It protects your organization&#x27;s API keys,"
+  },
+  {
+   "objectID": "27830978",
+   "title": "Launch HN: Onfolk (YC S21) – Modern HR and Payroll in One Place (For the UK)",
+   "url": null,
+   "author": "4thstreet",
+   "created_at": "2021-07-14T08:47:55Z",
+   "points": 113,
+   "num_comments": 34,
+   "story_text": "Hey, we’re Naz and Charlie! We&#x27;re building Onfolk (<a href=\"https:&#x2F;&#x2F;onfolk.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;onfolk.com&#x2F;</a>). We’re a couple of engineers who discovered that payroll in the UK is pretty backward and that building good software can raise the bar. You can check out some pics on our Product Hunt post [1] or see a quick video [2].<p>To set the scene: we were software engineers at Monzo for 4 years. Joined at 400k customers, left at 5.5M. We took voluntary furlough in April 2020 (&quot;furlough&quot; is the UK government’s scheme for keeping workers pa"
+  },
+  {
+   "objectID": "47364116",
+   "title": "Launch HN: Spine Swarm (YC S23) – AI agents that collaborate on a visual canvas",
+   "url": "https://www.getspine.ai/",
+   "author": "a24venka",
+   "created_at": "2026-03-13T13:22:40Z",
+   "points": 109,
+   "num_comments": 69,
+   "story_text": "Hey HN! We&#x27;re Ashwin and Akshay from Spine AI (<a href=\"https:&#x2F;&#x2F;www.getspine.ai\">https:&#x2F;&#x2F;www.getspine.ai</a>). Spine Swarm is a multi-agent system that works on an infinite visual canvas to complete complex non-coding projects: competitive analysis, financial modeling, SEO audits, pitch decks, interactive prototypes, and more. Here&#x27;s a video of it in action: <a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=R_2-ggpZz0Q\" rel=\"nofollow\">https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=R_2-ggpZz0Q</a>.<p>We&#x27;ve been friends for over 13 years. We took our firs"
+  },
+  {
+   "objectID": "27823005",
+   "title": "Launch HN: Café (YC S21) – Find the best days to go to the office",
+   "url": null,
+   "author": "TomNguy",
+   "created_at": "2021-07-13T16:31:36Z",
+   "points": 95,
+   "num_comments": 62,
+   "story_text": "Hey HN, we&#x27;re Arthur and Tom, 2 brothers from France and founders of Café (<a href=\"https:&#x2F;&#x2F;at.cafe&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;at.cafe&#x2F;</a>). Our app lets you decide where to work, depending on who’ll be at the office or working remotely.<p>The world is going hybrid (mixing remote and office) faster than expected. Companies are using spreadsheets to see who’s at the offices and who’s not. People want to see each other, but they never know when and where to meet.<p>We were employees in the same French company during Covid lockdown. When going back to the office "
+  },
+  {
+   "objectID": "27435377",
+   "title": "Launch HN: Runway (YC W21) – Easier iOS and Android app releases for teams",
+   "url": null,
+   "author": "gsavit",
+   "created_at": "2021-06-08T14:06:47Z",
+   "points": 93,
+   "num_comments": 30,
+   "story_text": "Hi HN! I’m Gabriel, one of the co-founders of Runway (<a href=\"https:&#x2F;&#x2F;runway.team\" rel=\"nofollow\">https:&#x2F;&#x2F;runway.team</a>). We’re building a SaaS platform that makes it easier to coordinate your team’s mobile app releases. Runway is an integration layer that sits on top of mobile app teams’ existing project management and development tools, making it possible to understand at-a-glance the status and progress of release cycles and to communicate tasks and blockers — allowing teams to spend their time on improving their product instead of managing releases and tooling.<p>Whe"
+  },
+  {
+   "objectID": "39591972",
+   "title": "Launch HN: Just words (YC W24) – Optimize your product's copy for user growth",
+   "url": null,
+   "author": "nehagetschoice",
+   "created_at": "2024-03-04T16:03:45Z",
+   "points": 87,
+   "num_comments": 77,
+   "story_text": "Hey, HN! We’re Neha and Kunal, co-founders of Just Words (<a href=\"https:&#x2F;&#x2F;justwords.ai\">https:&#x2F;&#x2F;justwords.ai</a>). We help companies gain users through product copy optimization across any app surface or webpage, using inferences from past performance data. Here’s a demo video: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;e6PuRzHad7M\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;e6PuRzHad7M</a>, and a live playground: <a href=\"https:&#x2F;&#x2F;justwords.ai&#x2F;live-demo\">https:&#x2F;&#x2F;justwords.ai&#x2F;live-demo</a>.<p>“Copy” in this context means short-form content su"
+  },
+  {
+   "objectID": "26037816",
+   "title": "Launch HN: Text Blaze (YC W21) Programmable snippets to automate tedious typing",
+   "url": null,
+   "author": "scottfr",
+   "created_at": "2021-02-05T16:10:56Z",
+   "points": 82,
+   "num_comments": 51,
+   "story_text": "Hi HN! We’re Scott and Dan of Text Blaze (<a href=\"https:&#x2F;&#x2F;blaze.today\" rel=\"nofollow\">https:&#x2F;&#x2F;blaze.today</a>). Text Blaze lets you create programmable text snippets that you can insert anywhere in Chrome by typing a brief shortcut.<p>Before Text Blaze, we designed and built internal tools for thousands of sales and support reps at Google. As much as we tried though, our tools could never automate all repeated work for all users. We saw that there were always tech savvy reps who would build additional scripts to fill gaps and help save even more time. With Text Blaze, we w"
+  },
+  {
+   "objectID": "27981659",
+   "title": "Launch HN: Swipe (YC S21) – Simple Billing and Accounting for India",
+   "url": null,
+   "author": "sri-teja",
+   "created_at": "2021-07-28T08:50:52Z",
+   "points": 75,
+   "num_comments": 41,
+   "story_text": "Hi HN, we’re Aditya and Sri Teja, founders of Swipe (<a href=\"https:&#x2F;&#x2F;getswipe.in\" rel=\"nofollow\">https:&#x2F;&#x2F;getswipe.in</a>). We make it easy for local businesses in India to invoice their customers over WhatsApp. Instead of giving a paper invoice to their customer, Swipe users send a WhatsApp message with a link that allows them to pay instantly with a variety of payment methods.<p>We were building software and IoT for industrial automation before we started working on this. We dealt with a lot of invoices, purchase orders and estimates for different customers&#x2F;vendors o"
+  },
+  {
+   "objectID": "37238648",
+   "title": "Show HN: Gentrace – evaluation and observability for generative AI",
+   "url": "https://gentrace.ai",
+   "author": "dsaffy",
+   "created_at": "2023-08-23T16:38:13Z",
+   "points": 67,
+   "num_comments": 2,
+   "story_text": "Hi HN,<p>Gentrace is our new evaluation and observability tool for generative AI (open beta).<p>Generative pipelines are hard to evaluate because outputs are subjective. Lots of developers end up just doing “gut checks” on a few inputs before shipping changes, or they build up a spreadsheet of test cases that they manually run through the pipeline. Some companies outsource filling out the spreadsheet. However, in any of these cases, you end up with a very slow and expensive process for evaluation.<p>At one point, we did this too. Gentrace is the result of a pivot; it was an internal tool we us"
+  },
+  {
+   "objectID": "40213570",
+   "title": "Show HN: Polytomic Connect – API for two-way ETL and data syncs with customers",
+   "url": null,
+   "author": "gms",
+   "created_at": "2024-04-30T17:30:33Z",
+   "points": 65,
+   "num_comments": 33,
+   "story_text": "Hello HN, we’re Ghalib and Nathan from Polytomic. Today we’re launching our second product, Polytomic Connect: <a href=\"https:&#x2F;&#x2F;www.polytomic.com&#x2F;connect\">https:&#x2F;&#x2F;www.polytomic.com&#x2F;connect</a> (documentation here: <a href=\"https:&#x2F;&#x2F;apidocs.polytomic.com\">https:&#x2F;&#x2F;apidocs.polytomic.com</a>).<p>Connect is an API you can use in your own products to either pull your customers’ data into your own systems, or push data from your own systems to your customers’, or both. We have first-class support for data warehouses too. And there&#x27;s a self-hosted "
+  },
+  {
+   "objectID": "26264257",
+   "title": "Launch HN: Polytomic (YC W20) – Get internal data to your business teams",
+   "url": null,
+   "author": "gms",
+   "created_at": "2021-02-25T16:02:12Z",
+   "points": 59,
+   "num_comments": 18,
+   "story_text": "Hello, HN comrades!<p>I&#x27;m Ghalib, with my co-founder Nathan, and we&#x27;ve built Polytomic (<a href=\"https:&#x2F;&#x2F;&#x2F;www.polytomic.com\" rel=\"nofollow\">https:&#x2F;&#x2F;&#x2F;www.polytomic.com</a>). Polytomic is a no-code web app to sync your company&#x27;s internal data from databases and spreadsheets to business systems like Salesforce, Marketo, HubSpot, Google Sheets, and others.<p>Business teams who live in these systems often want data piped in from databases or spreadsheets. Think about the salesperson who lives in Salesforce and wants to generate a report there about which"
+  },
+  {
+   "objectID": "30514190",
+   "title": "Launch HN: Onboard (YC W22) – Better customer onboarding and implementation",
+   "url": "https://onboard.io/",
+   "author": "jeffepp",
+   "created_at": "2022-03-01T14:00:12Z",
+   "points": 56,
+   "num_comments": 31,
+   "story_text": "Hi HN, Jeff Epstein &amp; Will Stevenson here – we’re the founders of <a href=\"https:&#x2F;&#x2F;Onboard.io\" rel=\"nofollow\">https:&#x2F;&#x2F;Onboard.io</a> (YC W22). We make software for companies looking to manage, automate and streamline their customer onboarding and implementation at scale.<p>In the B2B world, many things usually need to be configured or approved before customers can actually use their new software. It’s critical that this process go well—lack of momentum right after a purchase is a primary cause of customer churn. We experienced this at a previous company (Ambassador: acq"
+  },
+  {
+   "objectID": "41514823",
+   "title": "Show HN: Auto-document your analytics setup (npx package)",
+   "url": "https://github.com/fliskdata/analyze-tracking",
+   "author": "sameenkarim",
+   "created_at": "2024-09-11T19:56:47Z",
+   "points": 17,
+   "num_comments": 5,
+   "story_text": "Hey HN, sharing an npx package that I’ve been working on to help teams automatically document their analytics setups.<p>It crawls any JS&#x2F;TS codebase and generates a YAML schema that catalogs all the events, properties, and triggers. Currently supporting GA, Amplitude, Mixpanel, Amplitude, Rudderstack, mParticle, PostHog, Pendo, Heap, Snowplow. Let me know if there’s any more I should add to the list!<p>Came out of a personal pain where I was struggling to keep tabs on all the analytics events we had implemented. The “tracking plan” spreadsheets just weren’t cutting it, and I wanted someth"
+  },
+  {
+   "objectID": "42498550",
+   "title": "Show HN: Organize Your Blood Tests into a Beautiful Health Dashboard",
+   "url": "https://www.biotracker.me",
+   "author": "essaylor",
+   "created_at": "2024-12-23T23:57:26Z",
+   "points": 15,
+   "num_comments": 4,
+   "story_text": "I&#x27;ve been really into tracking my biomarkers lately. However, I&#x27;ve found it a pain to deal with blood test reports from different healthcare providers, each with their own unique format.<p>So I built a solution - a web app that automatically extracts biomarkers from any blood test report and organizes them into a beautiful health dashboard, complete with trend graphs. No more manual data entry into spreadsheets!<p>Check it out: <a href=\"https:&#x2F;&#x2F;www.biotracker.me\" rel=\"nofollow\">https:&#x2F;&#x2F;www.biotracker.me</a><p>It&#x27;s a free web app that:\n* Automatically extracts"
+  },
+  {
+   "objectID": "42300085",
+   "title": "Show HN: Convert your text or CSV to infographics to 10x the engagement",
+   "url": "https://www.chartsnotchapters.com/",
+   "author": "lyogavin",
+   "created_at": "2024-12-02T20:31:10Z",
+   "points": 12,
+   "num_comments": 1,
+   "story_text": "Input a piece of text content or upload a excel or csv file, the AI will automatically choose the best style&#x2F;format and generate the most engaging infographic.<p>• Not based on templates: Different from a lot of existing products, the infographics are all generated by AI from scratch, not based on templates. So you are allowed to chat with AI to change everything you want.<p>• Chat with AI: Generate through conversations. Control layout, format, style, color and more.<p>• Smart Format Selection: AI automatically chooses the best format and style to present your content and data the most e"
+  },
+  {
+   "objectID": "42814930",
+   "title": "Show HN: Vigilant - Blazing fast dev-friendly logs",
+   "url": "https://www.vigilant.run/home",
+   "author": "benshumaker",
+   "created_at": "2025-01-24T16:49:39Z",
+   "points": 8,
+   "num_comments": 3,
+   "story_text": "Hey HN! We&#x27;re Ben and Izak, the cofounders of Vigilant. Vigilant is a lightweight tool for managing structured logs. It lets you centralize your logs, search them, and create alerts.<p>We used Cloudwatch for logs on our last product, and it was quite painful. Even basic searches felt tedious. We’ve used dedicated observability tools at past jobs, but most of them have a steep learning curve and require widespread integration (and some still feel clunky). With Vigilant, we&#x27;re focused on making logs feel fast and simple.<p>We operate at the application layer with an sdk. We&#x27;re try"
+  },
+  {
+   "objectID": "45534790",
+   "title": "Show HN: Indiebooks – Free bookkeeping that auto-fills CRA/IRS tax forms",
+   "url": "https://indiebooks.io",
+   "author": "maxjasper",
+   "created_at": "2025-10-10T01:59:21Z",
+   "points": 7,
+   "num_comments": 4,
+   "story_text": "Hey everyone,<p>I built Indiebooks.io . A free bookkeeping app that automatically organizes your finances and fills out CRA&#x2F;IRS tax forms for you. It’s built for freelancers, indie devs, and small business owners in Canada and the US who want to stay compliant without spending weekends in spreadsheets.<p>What it does\n- Tracks income &amp; expenses automatically\n- Handles GST&#x2F;HST, PST, QST (yes, even Quebec math)\n- Supports US taxes and state sales tax\n- Auto-fills CRA&#x2F;IRS tax forms so you can just review and file\n- Lets you ask AI things like “What’s my profit this quarter?”\n- 1"
+  },
+  {
+   "objectID": "49321046",
+   "title": "Show HN: A punch clock to help with hourly household workers",
+   "url": "https://www.punchy.live/",
+   "author": "magnetic",
+   "created_at": "2026-08-16T15:38:34Z",
+   "points": 6,
+   "num_comments": 5,
+   "story_text": "My wife &amp; I have a housekeeper who works flexible days and hours during the week. She has other commitments, so she comes to our house when it works best for her, within “agreed reasonable hours” (she doesn’t come on the weekends, or before 8am).<p>Both of us are usually working in our home offices when she shows up, so I needed a way to track her hours so I could pay her every 2 weeks. I was afraid of losing a piece of paper (especially to our dog as he is fond of those), so I started keeping track of her hours in a spreadsheet. At the end of each day, I’d scrub the driveway video from ou"
+  },
+  {
+   "objectID": "40233096",
+   "title": "Who is hiring –> Google Sheet",
+   "url": null,
+   "author": "jngiam1",
+   "created_at": "2024-05-02T05:51:06Z",
+   "points": 6,
+   "num_comments": 2,
+   "story_text": "May 2024 - Who is hiring?\nhttps:&#x2F;&#x2F;docs.google.com&#x2F;spreadsheets&#x2F;d&#x2F;1dDTY8Hw-cIayuAglcgc9Jxc3fF9pAP_BKn5AL7EXFjw&#x2F;edit?usp=sharing<p>May 2024 - Who wants to be hired?\nhttps:&#x2F;&#x2F;docs.google.com&#x2F;spreadsheets&#x2F;d&#x2F;1zc18nOkuza1-Y6PxTAAGm9E3VqWhbWefYHxxB5DZtaM&#x2F;edit?usp=sharing<p>===<p>I made an automation to convert the HN posts for hiring into google sheets! This sheet is automatically updated every hour.<p>Hope this is helpful to everyone hiring&#x2F;looking to be hired!<p>Uses LLMs to parse out the information to be put into the sheet."
+  },
+  {
+   "objectID": "35053214",
+   "title": "I created a Google Sheet Addon for Accounting, How do I get people to try it?",
+   "url": null,
+   "author": "Hannydevelop",
+   "created_at": "2023-03-07T09:01:06Z",
+   "points": 5,
+   "num_comments": 5,
+   "story_text": "I created a Spreadsheet Addon for freelancers, small and medium sized businesses. For instance, this Addon handles checkout option for online stores. When a user successfully purchases an item from a store, our Addon facilitates invoice&#x2F;receipts. Then, it automatically records items in our transaction sheet (bookkeeping).<p>For freelancers, we provide invoicing templates they can choose from. They can send invoices straight to their clients email inbox and track those invoices until they&#x27;re paid (sending reminder emails to client et al).<p>I have friends who have used this Addon and "
+  },
+  {
+   "objectID": "47141440",
+   "title": "Show HN: Vis Pro – A Formula-Based Workout Program Editor",
+   "url": "https://vis.fitness/pro",
+   "author": "strongpigeon",
+   "created_at": "2026-02-24T19:22:38Z",
+   "points": 5,
+   "num_comments": 4,
+   "story_text": "Hey HN,<p>About 5 years ago, I built a weightlifting app for 5&#x2F;3&#x2F;1 that got me on the front page of HN [0]. After that, life happened. I had kids and so decided to get a job and put that project on ice. Eventually I grew too disappointed with my job, and decided to try building something again.<p>The biggest feedback I kept getting from users was simple:\n“Let me create my own programs.”<p>That’s how Vis started.<p>The initial idea was to create a B2B platform where gyms and trainers could build programs using formulas (e.g., percentages of 1RM) and reusable blocks instead of spreadsh"
+  },
+  {
+   "objectID": "46604166",
+   "title": "Show HN: Fabi 2.0 – An AI analyst that connects to all your data sources",
+   "url": null,
+   "author": "mfdupuis",
+   "created_at": "2026-01-13T17:19:04Z",
+   "points": 5,
+   "num_comments": 1,
+   "story_text": "Hey HN!<p>Today we’re launching Fabi 2.0<p>For the past year we’ve been working with a number of product, eng, marketing and data teams, and the common issue we’ve been seeing with all these teams, especially small and growing teams, is that getting basic answers from their data requires jumping between a bunch of different tools&#x2F;copy-pasting data and spreadsheets, or building out a full BI stack.<p>With our latest release, users can not only connect Fabi to databases and data warehouses, but also to applications like HubSpot, Stripe, Shopify etc. We offer hundreds of connectors, and the "
+  },
+  {
+   "objectID": "41790903",
+   "title": "Show HN: GodmodeHQ – Using AI agents to find public info on any company",
+   "url": "https://godmodehq.com/",
+   "author": "mafiaboi",
+   "created_at": "2024-10-09T18:06:53Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": "Hi hackers, Mert from GodmodeHQ here (<a href=\"https:&#x2F;&#x2F;godmodehq.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;godmodehq.com&#x2F;</a>)<p>We are building a prospecting platform for deep research so anyone can understand their prospects deeply and send better outreach instead of spray and praying a generic message.<p>Sales landscape is pretty crowded. Most solutions focus on sending the same email or Linkedin message  to thousands of people.<p>This approach worked between 2010 to 2020 at best, however it became such a big habit that everyone started doing it. When you receive an outreac"
+  },
+  {
+   "objectID": "49785956",
+   "title": "Show HN: Accordia – Structured 1-on-1s for engineering managers",
+   "url": "https://www.getaccordia.com",
+   "author": "NotGeorgeHere",
+   "created_at": "2026-09-21T11:39:14Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Hi everyone, I&#x27;m a solo developer in Lincolnshire, UK. I&#x27;ve recently built Accordia. It is a 1-on-1 tool for engineering managers. You build a reusable agenda per report, run the meeting against it, and anything that turns into an action gets tracked and pulled into the next session automatically.<p>I built it because of the 1-on-1s I sat in as a developer, not ones I ran as a manager. The pattern was always the same. The first few were good. Then my manager got busy, the meeting quietly turned into a status update, and something I&#x27;d raised in March came back as a surprise in my"
+  },
+  {
+   "objectID": "45532974",
+   "title": "Show HN: Browser extension to analyze my son's Math Academy data",
+   "url": "https://github.com/rahimnathwani/mathacademy-stats",
+   "author": "rahimnathwani",
+   "created_at": "2025-10-09T20:55:15Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "My son uses Math Academy for his math studies. It&#x27;s a great app!<p>I wanted a better way to understand his progress and see where he might be getting stuck. As a parent trying to support his learning, I found myself wondering:<p>- Is he spending a lot of time on certain lessons? Could that signal frustration?<p>- What&#x27;s his learning efficiency? I framed this as &quot;XP per minute&quot; to see how smoothly he&#x27;s progressing through different courses.<p>- Are reviews taking him almost as long as new lessons? Maybe he needs more help with foundational concepts.<p>To get these insig"
+  },
+  {
+   "objectID": "41433486",
+   "title": "Show HN: GmailGenius – an open-source AI aided invoice management tool",
+   "url": "https://github.com/abhishekpatil4/GmailGenius",
+   "author": "sunilkumardash9",
+   "created_at": "2024-09-03T10:49:27Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Hey HN,<p>I am excited to share GmailGenius, a tool that automatically processes new emails, extracts data from attachments, and organizes everything in a spreadsheet!<p>I made this because I was having difficulty managing all the invoices manually. It can easily be a time-sink.<p>This is the tech stack I have used:<p>1. Composio for Gmail and Google Sheets integration.<p>2. Nanonets for data extraction from invoice PDFs<p>3. CrewAI for agent orchestration<p>4. React + Vite for a simple frontend.<p>How it works:<p>1. Add a few keywords to find potential emails with invoices. Also, specify the "
+  },
+  {
+   "objectID": "46708449",
+   "title": "Show HN: Burnt out and failing, I built an AI that gives a shit",
+   "url": "https://zropi.com",
+   "author": "silentorbit",
+   "created_at": "2026-01-21T17:09:55Z",
+   "points": 3,
+   "num_comments": 3,
+   "story_text": "I&#x27;m a machine learning engineer. I know how AI works. The hype, the limitations, the bullshit marketing.\nAnd I was still drowning.\nCouldn&#x27;t finish anything. Started projects at 2am, abandoned them by noon. Had a graveyard of productivity apps on my phone. Therapy waitlists were 3 months out. My girlfriend was tired of the same conversations about &quot;getting my life together.&quot;\nOne night, scrolling Reddit at 3am instead of sleeping, I thought: fuck it. What if I just built something that actually understood me?\nNot another todo app. Not another AI chatbot with canned responses."
+  },
+  {
+   "objectID": "44045602",
+   "title": "Show HN: The Money Company – Talk to your bank in plain English",
+   "url": "https://www.thecompany.money",
+   "author": "mafiaboi",
+   "created_at": "2025-05-20T20:30:58Z",
+   "points": 3,
+   "num_comments": 3,
+   "story_text": "Hey HN - I’m Mert, one of the founders of thecompany.money. We let you manage personal or company finances simply by chatting with your existing bank accounts—no spreadsheets, dashboards, or finance-speak required.<p>Most banking apps are great at showing line items but painful at answering questions:<p>“How much can I safely burn each month and still have 18 months runway?”<p>“Which vendor categories jumped the most this quarter?”<p>“If I max out my ISA, how does that change my tax bill?”<p>Founders (myself included) end up exporting CSVs, writing one-off formulas, or pestering a CFO friend o"
+  }
+ ]
+}

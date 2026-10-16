@@ -1,0 +1,71 @@
+{
+ "fetched_at": "2026-10-16T16:18:09+00:00",
+ "entries": [
+  {
+   "id": "1tehwy4",
+   "created_utc": 1778901806,
+   "created_iso": "2026-05-16T03:23:26+00:00",
+   "subreddit": "excel",
+   "title": "Copying data from website to excel?",
+   "selftext": "I am very new to excel and want to get better. I want to copy and paste a lot of data from a website onto my excel in the format that I want. Is there a fast way to do this? Or just 2 monitor look back and forth  and spend the multiple hours doing it? I don’t think macros can do it",
+   "permalink": "https://www.reddit.com/r/excel/comments/1tehwy4/copying_data_from_website_to_excel/",
+   "fetched_via": "pullpush.io",
+   "fetched_at": "2026-10-16T16:18:09+00:00"
+  },
+  {
+   "id": "1lpaq5i",
+   "created_utc": 1751397544,
+   "created_iso": "2025-07-01T19:19:04+00:00",
+   "subreddit": "excel",
+   "title": "How can I scrap some webpage data into Excel and put this data inside an Excel cell?",
+   "selftext": "Good afternoon Excel community!\n\nI want to scrap the data of \"total value locked\" from a DEX and put this data inside an Excel cell to have real time data.\n\nThis is the webpage\n\n[https://app.hydration.net/liquidity/omnipool-stablepools?id=0](https://app.hydration.net/liquidity/omnipool-stablepools?id=0)\n\nAnd using the inspect option I found where the data is located.\n\nhttps://preview.redd.it/z310zj0lbbaf1.png?width=1366&format=png&auto=webp&s=67c52eff80e216f2d24f50824bce9d3417b6778e\n\n  \nWith all",
+   "permalink": "https://www.reddit.com/r/excel/comments/1lpaq5i/how_can_i_scrap_some_webpage_data_into_excel_and/",
+   "fetched_via": "pullpush.io",
+   "fetched_at": "2026-10-16T16:18:09+00:00"
+  },
+  {
+   "id": "1jcncvx",
+   "created_utc": 1742137268.0,
+   "created_iso": "2025-03-16T15:01:08+00:00",
+   "subreddit": "n8n",
+   "title": "Help required for creating a Google Sheet entry from the Agent",
+   "selftext": "Hi All, \n\nI intend to create the following workflow on n8n:\n\n1. Pick the first URL from a Google Sheet which has 24 URLs available\n\n2. Visit that particular URL in Chrome and scrape all the names of clients available in that HTML file\n\n3. Paste the extracted data in a Google Sheet for better readability  \n4. Repeat the entire process\n\nI am getting stuck at the last step where I intend to \"create\" a new Google Sheet and then \"Append\" a row name. My n8n Agent is able to create a new Document / Spr",
+   "permalink": "https://www.reddit.com/r/n8n/comments/1jcncvx/help_required_for_creating_a_google_sheet_entry/",
+   "fetched_via": "pullpush.io",
+   "fetched_at": "2026-10-16T16:18:09+00:00"
+  },
+  {
+   "id": "1bkqbp2",
+   "created_utc": 1711079769.0,
+   "created_iso": "2024-03-22T03:56:09+00:00",
+   "subreddit": "excel",
+   "title": "Is there a way to extract data from a webpage into Excel?",
+   "selftext": "So my company has a internal webpage. There is a company directory in there the company directory has a bunch of contact info of staff. But there are over 100 pages, 10 contacts per page. There is no way to sort this lost to show all contacts.\nI am wondering if there is a way to extract the data in this directory into a simple Excel spreadsheet?\n\n",
+   "permalink": "https://www.reddit.com/r/excel/comments/1bkqbp2/is_there_a_way_to_extract_data_from_a_webpage/",
+   "fetched_via": "pullpush.io",
+   "fetched_at": "2026-10-16T16:18:09+00:00"
+  },
+  {
+   "id": "isiu8b",
+   "created_utc": 1600081724,
+   "created_iso": "2020-09-14T11:08:44+00:00",
+   "subreddit": "excel",
+   "title": "Help to scrape data from a website directly into my excel spreadsheet",
+   "selftext": "Hello,\n\nI have been maintaining a spreadsheet over time of books that I would like to (eventually) read. The process usually involves inputting the Title, Author, Goodreads Rating, LibraryThing rating, number of ratings and the Page/Word Count. \n\nThere are a number of books now that I haven't updated the rating/no. of ratings in years and my intuition tells me that there might be a better way than manually changing it on a sporadic basis. \n\nIs there someway I can set something up in Excel so tha",
+   "permalink": "https://www.reddit.com/r/excel/comments/isiu8b/help_to_scrape_data_from_a_website_directly_into/",
+   "fetched_via": "pullpush.io",
+   "fetched_at": "2026-10-16T16:18:09+00:00"
+  },
+  {
+   "id": "al7mbr",
+   "created_utc": 1548813229,
+   "created_iso": "2019-01-30T01:53:49+00:00",
+   "subreddit": "webscraping",
+   "title": "Web Scraping into Excel",
+   "selftext": "Greetings. I'm NOC Administrator and I was recently given a large task at work. There are some ~9,000 systems that we track in a monitoring tool and I need to extract data from all of them onto a spreadsheet. I have some limited experience with Python, PowerShell, and Bash, but this requires accessing a table on an intranet web page and copying two columns to an Excel spreadsheet, 'Name' and 'Status' and I've never done any kind of web scraping before so I'm not sure where to start. I assume the",
+   "permalink": "https://www.reddit.com/r/webscraping/comments/al7mbr/web_scraping_into_excel/",
+   "fetched_via": "pullpush.io",
+   "fetched_at": "2026-10-16T16:18:09+00:00"
+  }
+ ]
+}

@@ -1,0 +1,513 @@
+{
+ "query": "daily digest",
+ "params": {
+  "query": "daily digest",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 143,
+ "hits": [
+  {
+   "objectID": "42673790",
+   "title": "Show HN: A daily digest for reMarkable",
+   "url": "https://digest.ferrucc.io/",
+   "author": "0xferruccio",
+   "created_at": "2025-01-12T14:32:14Z",
+   "points": 78,
+   "num_comments": 47,
+   "story_text": ""
+  },
+  {
+   "objectID": "28143644",
+   "title": "Show HN: Rollup your emails into daily digests",
+   "url": "https://leavemealone.app/rollups/",
+   "author": "jivings",
+   "created_at": "2021-08-11T15:56:25Z",
+   "points": 21,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "49550515",
+   "title": "Show HN: Real-time AI news aggregator with daily digest",
+   "url": "https://aibriefs.news",
+   "author": "michelmi",
+   "created_at": "2026-09-03T14:39:27Z",
+   "points": 14,
+   "num_comments": 25,
+   "story_text": ""
+  },
+  {
+   "objectID": "48580986",
+   "title": "Show HN: Attagram, a tiny printer that gives kids a magical daily digest",
+   "url": "https://www.attagram.com/",
+   "author": "mvkel",
+   "created_at": "2026-06-18T04:56:34Z",
+   "points": 9,
+   "num_comments": 6,
+   "story_text": "I’m building Attagram: a small printer that lives in the kitchen and prints a daily paper digest for kids.<p>The idea came from an emerging family dynamic I kept noticing. My daughters (A, 9 and J, 8) are becoming increasingly independent, but as parents, we hold an enormous amount of invisible state in our heads and phones: what day a project is due, who needs cleats, what&#x27;s for lunch, which kid has library day, what chores need to happen before screens, how many days until the camping trip, what Grandma wanted them to know, what changed after school, etc.<p>Kids live downstream of that "
+  },
+  {
+   "objectID": "33941343",
+   "title": "Show HN: Matcha, a Local RSS Daily Digest for Markdown Readers Such as Obsidian",
+   "url": "https://github.com/piqoni/matcha",
+   "author": "lexoj",
+   "created_at": "2022-12-11T08:28:52Z",
+   "points": 6,
+   "num_comments": 0,
+   "story_text": "Wanted to check out Golang so built a simple local RSS Digest reader, using any markdown reader as its GUI. I&#x27;ve been using it for the last 4 months and I am quite content with it, especially since my markdown files are synced on all devices, I can consume my daily brew from anywhere and anytime without any FOMO.<p>Features:\n- RSS Digest: show only previously un-generated articles\n- Interested Topics&#x2F;Keywords (through Google News)\n- Daily Weather\n- Bookmark to Instapaper\n- Show hot articles &#x2F; comments link for Hacker News posts<p>Upcoming Features:\n- Terminal mode\n- Quote of the"
+  },
+  {
+   "objectID": "33331134",
+   "title": "Show HN: Bookmarks.email – Daily digest of Twitter bookmarks",
+   "url": "https://bookmarks.email",
+   "author": "bascodes",
+   "created_at": "2022-10-25T14:44:46Z",
+   "points": 6,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "47804755",
+   "title": "Hacker News Daily Audio Digest for Commuters",
+   "url": "https://code2cast.com/org/hackernews/podcasts/hn-daily-digest",
+   "author": "willbrazil",
+   "created_at": "2026-04-17T11:29:19Z",
+   "points": 5,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "43879451",
+   "title": "Show HN: Daily email digests of your calendar, fitness and todo lists",
+   "url": "https://dailydebrief.io",
+   "author": "sansjack",
+   "created_at": "2025-05-03T14:55:23Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": "Hey HN,<p>I recently created dailydebrief as i was kinda bored of hopping between my apps and calendars in the morning and checking each one and just wanted a simple brief and catch any important things for the day.<p>You just have to connect to your apps like Google Calendar, github, Strava, Monday.com and it will sends you a daily email debrief at the time you choose summarizing your day (i prefer 9am). You can also get a weather update too but i plan to add a lot more.<p>What’s different about it?\n- The emails are minimal and fast to scan (built for busy developers).\n- Growing integrations "
+  },
+  {
+   "objectID": "46110899",
+   "title": "Using Imapsync as an email daily digest",
+   "url": "https://imapsync.lamiral.info/FAQ.d/FAQ.Fun_Things.txt",
+   "author": "lemonwaterlime",
+   "created_at": "2025-12-01T18:21:00Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "46033915",
+   "title": "Show HN: Folo – an RSS reader that summarizes timeline and sends daily AI digest",
+   "url": "https://app.folo.is",
+   "author": "DIYgod",
+   "created_at": "2025-11-24T13:34:07Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "I’ve used RSS heavily for years (and maintain RSSHub <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=24213682\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=24213682</a> ). I love the control RSS gives, but the “1,000+ unread” problem is real, and most readers don’t help with discovery or filtering noise.<p>So I built Folo, a modern open-source RSS reader ( 36k stars on GitHub: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;RSSNext&#x2F;Folo\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;RSSNext&#x2F;Folo</a> ) that adds optional AI features without taking control away:<p>Wha"
+  },
+  {
+   "objectID": "43843344",
+   "title": "Show HN: Daily Digest of the Least Popular Posts on Hacker News",
+   "url": "https://leastpopular.io/",
+   "author": "tomgs",
+   "created_at": "2025-04-30T10:44:06Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "39931933",
+   "title": "Ask HN: Alternative to U.S. DHS Daily Digest Bulletin?",
+   "url": null,
+   "author": "Cab00s3",
+   "created_at": "2024-04-04T15:49:20Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "I really enjoyed reading the U.S. Department of Homeland Security Daily Digest Bulletin when they were still being written.  Has anybody found an alternative resource for this information?"
+  },
+  {
+   "objectID": "46350324",
+   "title": "Build your own RSS daily digest using GitHub Actions/Pages in 5 minutes",
+   "url": "https://github.com/piqoni/go-digest",
+   "author": "lexoj",
+   "created_at": "2025-12-22T01:14:09Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "41628455",
+   "title": "AI-Curated ArXiv Papers – Daily Research Digest to Email Inbox",
+   "url": "https://newsletter.pantheon.so",
+   "author": "dominik-space",
+   "created_at": "2024-09-23T17:28:46Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "49696293",
+   "title": "Show HN: Good News Digest – Daily stories of progress, kindness and discovery",
+   "url": "https://goodnewsdigest.app/",
+   "author": "cjami",
+   "created_at": "2026-09-14T13:13:40Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "49072174",
+   "title": "Show HN: KBlip – turns AI/LLM news across 100 sources into daily digest threads",
+   "url": "https://kblip.com/releases",
+   "author": "jonam21",
+   "created_at": "2026-07-27T16:41:10Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": "Hi HN, maker here.<p>KBlip watches Reddit, HN, arXiv, GitHub, YouTube, and ~100 RSS&#x2F;blog feeds for anything\nAI-related, clusters same-story coverage into a single &quot;thread&quot; (every source linked as\nevidence), and sorts it into 5 feeds: Releases, News, Social, Developments (research + hardware),\nProducts&#x2F;Ideas, and Trending.<p>My daily routine to catch-up on the current happenings related to AI&#x2F;LLM takes a big chunk of my time and I had to do multiple hops between different products and even worse sometimes I find myself lost in a rabbit hole in any of those products. Wan"
+  },
+  {
+   "objectID": "43075041",
+   "title": "Daily ArXiv: A Curated Daily Digest of ArXiv Preprints about AI",
+   "url": "https://www.haebom.dev/daily_arxiv",
+   "author": "haebom",
+   "created_at": "2025-02-17T04:11:08Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "48460942",
+   "title": "Show HN: HN Debrief – A daily digest of the best HN comment threads",
+   "url": "https://hndebrief.com/2026-06-08",
+   "author": "nitekode",
+   "created_at": "2026-06-09T13:34:05Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I read HN every day but kept hitting the same issue: the most valuable stuff usually isn&#x27;t in the linked article, it&#x27;s buried in the comments. The engineering manager explaining what actually happened internally before the layoffs. The trader explaining why &quot;energy independence&quot; is a myth. The defense analyst who knows why the stockpiles are empty. That signal is there every day, scattered across thousands of comments in 30 front-page posts, and I never had time to dig through all of it.<p>So I built HN Debrief (<a href=\"https:&#x2F;&#x2F;hndebrief.com\" rel=\"nofollow\">https"
+  },
+  {
+   "objectID": "48345189",
+   "title": "Show HN: My tiny project MyTube Newsletter – daily AI digest of YouTube subs",
+   "url": null,
+   "author": "questmas",
+   "created_at": "2026-05-31T12:30:40Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "This is technically a Show HN for MyTube Newsletter — an email digest of new videos from the YouTube channels you subscribe to, AI-summarized. But the tech isn&#x27;t very interesting. I&#x27;d rather talk about why I shipped it.<p>Like many other developers, I have a huge backlog of projects I want to do but never get around to. I have a much smaller list of half-finished or &quot;finished&quot; projects that never see the light of day. This time around I&#x27;m hoping to take a project from not just code-complete and deployed but also with basic monetization and at least a minimal attempt at"
+  },
+  {
+   "objectID": "46470001",
+   "title": "Show HN: Turn your \"email it to myself\" habit into an organized daily digest",
+   "url": null,
+   "author": "kaniksu",
+   "created_at": "2026-01-02T22:06:24Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I forward emails to myself constantly (articles, videos, podcasts, random tasks), but my inbox quickly becomes a janky todo list that I never look at.<p>Built this with Claude Code over a few weekends:<p>1. Forward anything to save@itforlater.com<p>2. It auto-categorizes into read&#x2F;watch&#x2F;listen&#x2F;do (uses Firecrawl + OpenAI to parse the content)<p>3. You get one daily digest with everything organized<p>No app to download. Just email in, email out.<p>When you sign up, you&#x27;ll verify email addresses you want to allow sending from.<p>Been using it myself for a month and it&#x27;s "
+  },
+  {
+   "objectID": "44006924",
+   "title": "Show HN: My open-source, self-hostable Hacker News daily digest",
+   "url": "https://github.com/herget/hn-buddy",
+   "author": "gaborme",
+   "created_at": "2025-05-16T15:54:02Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "28923493",
+   "title": "News, not paper: daily digest of top HN posts",
+   "url": "https://news-not-paper.com",
+   "author": "dym",
+   "created_at": "2021-10-19T20:42:45Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "27016987",
+   "title": "Show HN: Repo automation that generates a daily digest email of your feeds",
+   "url": null,
+   "author": "mhitza",
+   "created_at": "2021-05-02T17:22:40Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Being displeased with feed reader experience I wrote up a quick script and GitHub automation that generates a daily digest email for my subscriptions.<p>I have been using this setup for a week at this point, and I found it pleasant enough that I thought others might find a use for it as well.<p>https:&#x2F;&#x2F;github.com&#x2F;mhitza&#x2F;subscriptions-digest"
+  },
+  {
+   "objectID": "46949654",
+   "title": "Daily YouTube Digest for Your AI Agents",
+   "url": "https://github.com/therohitdas/awesome-openclaw-usecases/blob/add-daily-youtube-digest/usecases/daily-youtube-digest.md",
+   "author": "nikhonit",
+   "created_at": "2026-02-09T19:20:08Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "49816681",
+   "title": "Show HN: HackDigest – AI-summarized daily news digest via email",
+   "url": "https://minjungsung.github.io/hackdigest/",
+   "author": "minjungsung1994",
+   "created_at": "2026-09-23T14:24:27Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "48474693",
+   "title": "Show HN: AgentHUD – Live TUI and daily digest for parallel Claude Code sessions",
+   "url": "https://github.com/neochoon/agenthud",
+   "author": "neochoon",
+   "created_at": "2026-06-10T11:25:25Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "47306942",
+   "title": "Show HN: arxiv-digest: Daily robotics paper scouting for OpenClaw and Zotero",
+   "url": "https://github.com/tb5z035i/arxiv-digest",
+   "author": "tb5z035i",
+   "created_at": "2026-03-09T10:01:14Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I built arxiv-digest, a tool for OpenClaw to call daily and turn new cs.RO papers into a filtered robotics digest.<p>It uses an LLM to judge relevance, outputs a markdown report, and can sync selected papers plus PDFs to Zotero. To change the research interests, just edit the README.<p>Repo: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;tb5z035i&#x2F;arxiv-digest\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;tb5z035i&#x2F;arxiv-digest</a>"
+  },
+  {
+   "objectID": "46881760",
+   "title": "Show HN: Everymorning – Daily digest of top fresh STEM papers from ArXiv",
+   "url": "https://stemem.info",
+   "author": "xodn348",
+   "created_at": "2026-02-04T05:13:44Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "- Scores newly published papers by citation velocity + impact.\n- Summarizes each into 3 bullet points, emails top 3 every morning at 7 AM.\n- Free and open source."
+  },
+  {
+   "objectID": "45120401",
+   "title": "Engineering Stories Behind the Medium Daily Digest Algorithm: Part 1",
+   "url": "https://medium.engineering/engineering-stories-behind-the-medium-daily-digest-algorithm-part-1-909a7ca5e807",
+   "author": "amynw",
+   "created_at": "2025-09-03T21:03:29Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "43576775",
+   "title": "Show HN: Daily AI Digest – An AI-generated daily news podcast",
+   "url": "https://news.alpacha.fr/",
+   "author": "aymanelotfi",
+   "created_at": "2025-04-03T23:41:21Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I built Daily AI Digest (<a href=\"https:&#x2F;&#x2F;news.alpacha.fr&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;news.alpacha.fr&#x2F;</a>) as a way to get a quick, essential news update every day.<p>It&#x27;s a daily audio briefing, but the core idea is that the content is curated and the audio is generated entirely by AI, pulling from the latest breaking stories to create a fresh episode daily.<p>Currently, it offers a general news digest each day.<p>The next feature I&#x27;m excited about and actively working on is personalization. The plan is to allow users to hook up their own RSS fee"
+  },
+  {
+   "objectID": "36520009",
+   "title": "AI-Crafted Daily Digest: Exploring Latest ML Developments",
+   "url": "https://podcast.mlcult.org",
+   "author": "renus",
+   "created_at": "2023-06-29T13:22:30Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "33975321",
+   "title": "Show HN: A rich daily digest feed for Hacker News",
+   "url": "https://feeds.leonid.codes/hacker_news.html",
+   "author": "lshevtsov",
+   "created_at": "2022-12-13T20:33:30Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I made a feed that contains rich information from every article (title, description, image), and also from the Hacker News discussion.<p>The feed is very convenient for reviewing Hacker News content weekly and picking what to read out of the myriad of articles.<p>The backend is Ruby on AWS Lambda, with the brilliant [metainspector gem](<a href=\"https:&#x2F;&#x2F;github.com&#x2F;metainspector&#x2F;metainspector\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;metainspector&#x2F;metainspector</a>) to extract rich content."
+  },
+  {
+   "objectID": "31812229",
+   "title": "Show HN: A daily email digest of the best links from one's Twitter friends",
+   "url": "https://murmel.social",
+   "author": "p5v",
+   "created_at": "2022-06-20T16:25:31Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "30850120",
+   "title": "You can subscribe to ArXiv daily email digests",
+   "url": "https://arxiv.org/abs/subscribe",
+   "author": "fallat",
+   "created_at": "2022-03-30T00:26:06Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "30164476",
+   "title": "Show HN: Daily digest of PRs waiting for review, emailed to your teammates",
+   "url": "https://reviewbunny.app",
+   "author": "vdemedes",
+   "created_at": "2022-02-01T16:12:08Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "27301985",
+   "title": "The battle of the daily news digests",
+   "url": "https://simonowens.substack.com/p/the-battle-of-the-daily-news-digests",
+   "author": "exolymph",
+   "created_at": "2021-05-27T12:03:24Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "39235039",
+   "title": "Show HN: HN stories categorized by topics of interest",
+   "url": "https://hnto.pics/",
+   "author": "WhatsName",
+   "created_at": "2024-02-02T22:00:29Z",
+   "points": 25,
+   "num_comments": 2,
+   "story_text": "Hi HN,<p>TL;DR: I made a website that takes all the top stories on HN and categorizes them into one of ten topics of interest using LangChain and GPT-4.<p>I&#x27;ve always liked the idea of getting a personal mix of news tailored to my interests. Hacker News is pretty close to that ideal, which is reflected in the time I spend on here every day.<p>It&#x27;s a great mix, but playing with LangChain, I got the idea for a weekend project. Roughly speaking most posts on HN fall into one of these categories:<p><pre><code>   * Programming, Software &amp; Computer Science\n   * AI, Data Science &amp; A"
+  },
+  {
+   "objectID": "36061427",
+   "title": "Show HN: Yakread – An RSS reader powered by machine learning",
+   "url": "https://yakread.com/",
+   "author": "jacobobryant",
+   "created_at": "2023-05-24T17:29:43Z",
+   "points": 18,
+   "num_comments": 5,
+   "story_text": "This is a web-based reading app I&#x27;ve been working on since August. The main differentiator is that Yakread uses machine learning to rank the articles in your feed: as you click on articles from a particular RSS&#x2F;newsletter subscription, other articles from that subscription will tend to be ranked higher in the future (via a bandit algorithm). Yakread also uses ML to recommend articles that other users have read, so your feed will have articles in it even before you sign up and add your own subscriptions.<p>For the recommendations, I&#x27;m using the collaborative filtering implementat"
+  },
+  {
+   "objectID": "34605264",
+   "title": "Show HN: 1Daily – Do email 90% faster",
+   "url": null,
+   "author": "jamesbond2",
+   "created_at": "2023-02-01T01:51:40Z",
+   "points": 8,
+   "num_comments": 4,
+   "story_text": "1Daily is a custom daily digest covering the latest news in your industry. You choose your favorite publications, newsletters, and social media posts, and we’ll summarize it in one simple email.<p>Staying up-to-date with what’s going on in your industry isn’t easy when you’re juggling the day-to-day tasks of building a company. Many of us subscribe to dozens of newsletters and news publications and follow hundreds of social media accounts but don’t actually have the time to consume all of that content.<p>1Daily gives you the need-to-know information in a simple, digestible format, so you can s"
+  },
+  {
+   "objectID": "44234787",
+   "title": "Ask HN: What Are Your Most Useful Everyday AI Use-Cases? Here Are My Top",
+   "url": null,
+   "author": "kotyk",
+   "created_at": "2025-06-10T10:00:43Z",
+   "points": 5,
+   "num_comments": 2,
+   "story_text": "Hey HN,<p>I&#x27;ve been building a few personal GPT-powered tools to simplify and enhance daily tasks — and thought it would be useful to open a thread for sharing AI lifehacks in one place. Here&#x27;s what I&#x27;m using:<p>1. Profiler Assistant\nThis GPT knows my professional background (skills, past projects, industries I care about), and helps me:<p>write cover letters tailored to specific roles,<p>generate Upwork proposals based on job descriptions,<p>respond to business emails in context of my domain,<p>refine summaries for resumes or LinkedIn.<p>Basically, it&#x27;s a memory-augmented "
+  },
+  {
+   "objectID": "42703168",
+   "title": "Show HN: HN-Daily Podcast – Recapping Last 24 Hours Top Stories",
+   "url": "https://hackernews-daily.thepodcastcollective.com/",
+   "author": "rolandpeelen",
+   "created_at": "2025-01-14T20:13:19Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": "Hey HN!<p>Started out with an idea over the holidays to start building a system that creates daily digests of content I follow as a podcast, such that I can listen to it when commuting.<p>The first one is one that takes the top articles of HN in the last 24 hours and builds them into a podcast. It took forever to tweak it in such a way that it doesn&#x27;t sound 100% AI, isn&#x27;t too sensational, but also not extremely boring. I&#x27;ve been tweaking over the past weeks to get it just right and I&#x27;m pretty happy with what comes out of it now. I&#x27;ve just submitted &#x2F; got them all "
+  },
+  {
+   "objectID": "43011217",
+   "title": "Show HN: A News Service That Almost Never Emails You (By Design)",
+   "url": "https://www.notably.news/",
+   "author": "wodow",
+   "created_at": "2025-02-11T10:36:52Z",
+   "points": 4,
+   "num_comments": 5,
+   "story_text": "Hi HN,<p>I’ve been working on Notably News – a short-form news service that delivers micro updates by email. Instead of constant notifications or daily digests, you get just a few key updates per year on a subject, covering only the most important events.<p>I follow a lot of different topics but don’t want to rely on social media, Google Alerts, or traditional news sites that flood me with updates, clickbait, or opinions. I just want concise, neutral updates on the most significant events.<p>I first tried to build something similar ten years ago, leveraging my (very minimal!) academic experien"
+  },
+  {
+   "objectID": "47522387",
+   "title": "Do you give OpenClaw access to your personal accounts?",
+   "url": null,
+   "author": "dokdev",
+   "created_at": "2026-03-25T20:00:18Z",
+   "points": 4,
+   "num_comments": 2,
+   "story_text": "If you are using openclaw( or any other personal agent ), how are you handling security ? Are you setting up new accounts for email, twitter etc or just giving access to your personal accounts ?<p>For me I haven’t given it any access to any account, I am only using it to do some daily digests for me from public web."
+  },
+  {
+   "objectID": "32778311",
+   "title": "Introducting our best feature yet: the paywall detector",
+   "url": null,
+   "author": "drpepp",
+   "created_at": "2022-09-09T12:30:28Z",
+   "points": 4,
+   "num_comments": 2,
+   "story_text": "At Notnow.email we believe reading is one of the best way to open up to the best our world has to offer. And when it comes to that there should be nothing that stands in your way.<p>That’s why we would like to introduce our new feature: the paywall detector.<p>Within each daily digest, our paywall detector searches for websites reported as using a paywall to redirect you to a readable version, as always with the design our users know and love.<p>Now, with each new feature, nothing is perfect and there still is room for improvement. For now we listed over 170 websites using paywalls, from over "
+  },
+  {
+   "objectID": "40982144",
+   "title": "Show HN: Tidyread, an ADHD-Friendly RSS Reader, Powered by AI",
+   "url": "https://tidyread.ai",
+   "author": "wushi",
+   "created_at": "2024-07-17T02:51:12Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Living with ADHD, I often get easily distracted. I find myself frustrated with certain algorithmic recommendations that seem to exploit my vulnerabilities. These algorithms trigger FOMO or cater to my impulses, leaving me feeling out of control and overwhelmed.<p>I once thought RSS readers could solve my problem, but I still faced new issues that made me want to escape:<p>1. Many sources only provide titles or truncated summaries, requiring me to click through to see if it’s the content I want. Often, I realize halfway through that it’s not what I want, making me feel like I wasted my time.<p>"
+  },
+  {
+   "objectID": "46436419",
+   "title": "Ask HN: Hndigest No Longer Working?",
+   "url": null,
+   "author": "aagha",
+   "created_at": "2025-12-30T18:37:31Z",
+   "points": 3,
+   "num_comments": 4,
+   "story_text": "Is hndigest working for anyone? I still get a daily digest, but clicking on the post or comment links takes me to this message: The page you were looking for doesn&#x27;t exist."
+  },
+  {
+   "objectID": "40201859",
+   "title": "Show HN: Remake of 9M+ downloaded app (Yahoo News Digest)",
+   "url": null,
+   "author": "TySchultz",
+   "created_at": "2024-04-29T18:08:26Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": "Years ago Yahoo has shut down Yahoo News Digest. It was an app loved by millions. The idea is simple, a once daily news digest that delivers and unbiased 6-10 stories. Each story broken down into atoms; summary, quote, images, maps.\nWith the advancement in LLM&#x27;s it made it possible to bring this back. Its called Quill News Digest and it follows nearly the same format.<p>Everyone is sick of scrolling through endless feeds or watching people yell at each other on tv.<p>Quill delivers an unbiased and succinct digest that you can complete. Just like a newspaper. Once you&#x27;re done you can "
+  },
+  {
+   "objectID": "48480745",
+   "title": "Show HN: TG Alpha Hunter – AI that turns Telegram noise into a crypto digest",
+   "url": "https://app.flowgaia.io/",
+   "author": "manueltena",
+   "created_at": "2026-06-10T18:38:03Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "AI intelligence layer for Telegram. Connect your crypto groups and it analyzes every message, surfaces the most-mentioned bullish coins, sends you a daily alpha digest, and lets you chat with an AI that has full context of your groups. Built for traders drowning in 20+ Telegram chats who don&#x27;t want to miss the next call. Free during public beta."
+  },
+  {
+   "objectID": "47309377",
+   "title": "Show HN: ClawDiary – Audit log and human approval gate for AI agents (Claw, MCP",
+   "url": "https://github.com/jetywolf/claw-diary",
+   "author": "jetywolf",
+   "created_at": "2026-03-09T14:15:08Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "ClawDiary is an audit diary and guard for AI agents. I use Cursor a lot and wanted something that (a) logs what the agent does and (b) blocks dangerous actions until I approve them in Telegram.<p>What it does:\n- Audit: agents POST to &#x2F;v1&#x2F;audit after each action; writes go to D1 async so the agent isn’t blocked.\n- Guard: before risky ops (rm, drop table, execute_bash, transfer, etc.) the agent calls &#x2F;v1&#x2F;guard. Request is stored and the call blocks until you approve or reject in Telegram (or by updating DB). Green-light actions return immediately.\n- Diary, daily digest (cron)"
+  },
+  {
+   "objectID": "47286650",
+   "title": "Show HN: I built an AI social media summarizer to stop doomscrolling anxiety",
+   "url": "https://www.somree.app",
+   "author": "danielkrajka",
+   "created_at": "2026-03-07T11:27:57Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I was wasting a lot of time on X and after uninstalling it from my phone, I noticed how anxious it was making me. But I still missed knowing what’s going on with AI, news, and the people I follow.\nSo I built Somree. It summarizes Twitter&#x2F;X accounts and YouTube playlists into a clean daily email digest. You pick who and what you want to follow, and it does the rest — no feed, no algorithm, no rabbit holes.\nHow it works:\n ∙ Add Twitter accounts and YouTube playlists you care about\n ∙ Somree fetches and summarizes the content using AI\n ∙ You get a daily email with the highlights\nTech stack: "
+  }
+ ]
+}

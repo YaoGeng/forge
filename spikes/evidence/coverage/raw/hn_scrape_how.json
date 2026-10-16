@@ -1,0 +1,513 @@
+{
+ "query": "how do you scrape",
+ "params": {
+  "query": "how do you scrape",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 189,
+ "hits": [
+  {
+   "objectID": "46935908",
+   "title": "Ask HN: How do you handle Canadian income tax brackets in software?",
+   "url": null,
+   "author": "jbsgermain",
+   "created_at": "2026-02-08T16:39:00Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "I’ve worked on a few tools that need Canadian income tax brackets (federal and provincial) for calculations, projections, or estimators. This is not about sales tax or invoicing.<p>I was surprised there doesn’t seem to be a clean, structured, versioned source that’s easy to consume, especially once you factor in provincial differences and historical years.<p>When you need this kind of data, how do you usually handle it? Do you scrape the CRA site, hard-code values, rely on spreadsheets, or just avoid the problem entirely?<p>Genuinely curious if I’m missing an obvious solution."
+  },
+  {
+   "objectID": "49460258",
+   "title": "Ask HN: How do you protect self-hosted websites from LLM scrapers?",
+   "url": null,
+   "author": "atmosx",
+   "created_at": "2026-08-27T05:43:12Z",
+   "points": 1,
+   "num_comments": 3,
+   "story_text": "Hello HN,<p>I&#x27;m considering self-hosting a couple of static low-volume traffic on a VM. I&#x27;m curious to know what techniques you using to protect personal and professional websites from abusive LLM (and other) scraping. Assume no CDN is involved.<p>I&#x27;m aware of:<p><pre><code>    (1) anubis AI firewall\n    (2) LLM poisoning projects like iocaine\n    (3) bate links hidden in the HTML source code that block IPs when accessed\n    (4) ppl blocking CIDRs of all major Cloud Providers (GCP, AWS, Azure, Alibaba, etc).\n\n</code></pre>\nAre there any other interesting techniques that can be u"
+  },
+  {
+   "objectID": "32136715",
+   "title": "Ask HN: How do you localize your prices?",
+   "url": null,
+   "author": "jamesfisher",
+   "created_at": "2022-07-18T10:55:08Z",
+   "points": 6,
+   "num_comments": 12,
+   "story_text": "We recently released an online course. [1] It&#x27;s $29, but we&#x27;ve had users saying, &quot;I&#x27;m in ${country poorer than USA}, and I can&#x27;t afford the $29. Do you offer regional pricing?&quot;<p>I would like to support this. The dollar-value to a customer in India is probably lower than in the USA.<p>Most big platforms (Udemy, App Store, Play Store) seem to solve this with a price tier matrix. They maintain a big table of prices per (tier, currency). The tier comes from the product, and the currency comes from ... the user&#x27;s IP address? (See example matrix [2])<p>To build th"
+  },
+  {
+   "objectID": "47110844",
+   "title": "Ask HN: How do you track 2026 AI price wars? I built a tool to help",
+   "url": null,
+   "author": "TokenCost",
+   "created_at": "2026-02-22T13:28:10Z",
+   "points": 2,
+   "num_comments": 3,
+   "story_text": "&quot;I built https:&#x2F;&#x2F;tokencost.is to solve a recurring headache: manually scraping dozens of provider pages just to estimate API spend for my agentic workflows.<p>My goal was a neutral, minimalist utility in the vein of Time.is. We now track 44 models—including OpenAI, Anthropic, Google, DeepSeek, Mistral, and Cohere—with hourly updates.<p>Key Features:<p>Real-Time Latency: We track TTFT benchmarks (e.g., Llama 3.1 at 28ms) alongside pricing.<p>Price Deltas: We track 24h market shifts; look for the ↑↓ indicators in the table to see how the &#x27;AI Price War&#x27; is moving.<p>Multi"
+  },
+  {
+   "objectID": "31540557",
+   "title": "Ask HN: How do you keep track of everything you have read/watched/listened?",
+   "url": null,
+   "author": "swyx",
+   "created_at": "2022-05-28T14:23:59Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "I am tired of vaguely remembering something cool I came across before and not being able to find it. Manual bookmarking like upnext&#x2F;readitlater are too slow for my desired workflow - I want literally everything I have ever read to be indexed, on desktop, ipad or iphone. Nice to have - also index what I watch and listen to.<p>I remember that some folks have some kind of pihole thing that snoops the router and scrapes all text to make it searchable but don&#x27;t really know how to do it. I&#x27;m down for that as long as we can keep privacy for each tenant (this is negotiable). Are there a"
+  },
+  {
+   "objectID": "35155921",
+   "title": "Ask HN: Anyone else noticed the media's push to label websites as “platforms”?",
+   "url": null,
+   "author": "qzx_pierri",
+   "created_at": "2023-03-14T18:11:27Z",
+   "points": 12,
+   "num_comments": 7,
+   "story_text": "Sometime within the past 5 years, the term &quot;platform&quot; has been used by the media and other public figures endlessly when referring to websites, and I don&#x27;t understand why.<p>Is this another way for advertisers and their collaborators to further lock down the web and mute its approachable nature?<p>It&#x27;s not exactly a secret that, when discussing web connected functionalities, there has been a consistent effort throughout the past decade to abstract away the underlying nature to the average person - This allows products to be sold to them that otherwise would have been reserv"
+  },
+  {
+   "objectID": "46934190",
+   "title": "Show HN: I built a festival tracker that matches lineups to your music library",
+   "url": "https://apps.apple.com/us/app/festiveo-music-festivals/id6755355854",
+   "author": "kirilldn",
+   "created_at": "2026-02-08T13:53:16Z",
+   "points": 9,
+   "num_comments": 2,
+   "story_text": "Hi HN,<p>I built this app because I was tired of manually checking festival lineups against my music library every summer. I wanted a way to instantly see which festivals had the highest &#x27;match&#x27; density for my specific taste.<p>Why I built this:<p>I missed one of my favorite artists at a festival last year simply because I didn&#x27;t recognize their name on a crowded poster. I realized that with Apple Music&#x2F;Spotify APIs, this discovery process should be automated.<p>Key Features:<p>Library Matching:\nIt scans your library and ranks upcoming festivals by how many artists you actu"
+  },
+  {
+   "objectID": "37036032",
+   "title": "Show HN: The Population Project",
+   "url": "https://thepopulationproject.org",
+   "author": "antoine_b",
+   "created_at": "2023-08-07T15:46:00Z",
+   "points": 7,
+   "num_comments": 21,
+   "story_text": "Two years ago, I turned 50. After a successful career as an entrepreneur, a business angel and a novelist, I set out to start a philanthropic venture under the following constraints:<p>- it had to be global.\n- it had to be beautiful (in my eyes, at least).\n- it had to be technology and stats driven.<p>I decided I would try to list the full name and date of birth of all humans alive. While some may find the concept pointless, I immediately knew I had struck gold:<p>- it was global and incredibly hard.\n- it had an almost artistic quality to it, like an ever-changing installation.\n- as a libertar"
+  },
+  {
+   "objectID": "43933727",
+   "title": "We Built Mentionedby.ai to Track How AI Models Answer Questions",
+   "url": null,
+   "author": "nikin_mat",
+   "created_at": "2025-05-09T04:13:16Z",
+   "points": 4,
+   "num_comments": 6,
+   "story_text": "Hey HN,<p>I&#x27;m Nikin, one of the creators of MentionedBy.ai — a platform we built to track how your brand is being mentioned inside AI-generated answers across ChatGPT, Claude, Perplexity, Gemini, and other LLMs.<p>We didn’t start this as a marketing tool. It began as a frustration. We noticed our startup wasn’t showing up in ChatGPT responses, even for queries where we clearly should have. Meanwhile, bigger or SEO-heavy brands were dominating AI answers — regardless of actual relevance. It wasn’t Google rankings anymore. It was model completions.<p>That sparked the question: how do you mo"
+  },
+  {
+   "objectID": "45949988",
+   "title": "Show HN: Find Faceless YouTube Channels with AI",
+   "url": null,
+   "author": "andybady",
+   "created_at": "2025-11-17T01:03:40Z",
+   "points": 2,
+   "num_comments": 4,
+   "story_text": "Here&#x27;s my embarrassing story:<p>I thought &quot;gaming highlights&quot; would work. Made 20 videos. Got 47<p>subscribers. Realized the CPM is like $2-4. Would need 500K views<p>just to make $1K&#x2F;month. Not happening.<p>Then I tried &quot;motivational quotes&quot;. Saturated. Couldn&#x27;t get any<p>traction.<p>Then &quot;meditation music&quot;. Also saturated. Plus copyright issues.<p>I was so frustrated. I knew faceless channels could work (I saw<p>some making money), but I had no idea HOW to find profitable ones.<p>Manually searching YouTube was a nightmare:<p>- Most channels show f"
+  },
+  {
+   "objectID": "45519796",
+   "title": "Ask HN: The most useful LLM agents aren't allowed?",
+   "url": null,
+   "author": "thimkerbell",
+   "created_at": "2025-10-08T19:38:47Z",
+   "points": 1,
+   "num_comments": 9,
+   "story_text": "I hope I am wrong on this: where LLM agents seem like they&#x27;d be really useful right now would be doing better search filtering and then initial contact&#x2F;negotiation Q&amp;As on platforms that match e.g. buyer and seller, like Craigslist.  But CL for one has (had?) terms of service that prohibit building stuff that scrapes it, and doesn&#x27;t seem to have improved its search interface for decades.\nSo how do you legally &amp; respectfully get agents to do the work that you need them to do?"
+  },
+  {
+   "objectID": "46437194",
+   "title": "Ask HN: My multi-agent financial sentiment architecture",
+   "url": null,
+   "author": "CLCKKKKK",
+   "created_at": "2025-12-30T19:49:00Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "Hello HN,<p>I’m a college student building a financial intelligence terminal for personal use. The goal is to capture &quot;whisper numbers&quot; and sentiment shifts in social media before they hit mainstream headlines.<p>I would love your feedback on the architecture and logic.<p>The Stack:<p>Backend: Python (PM2 managed)<p>LLM: OpenAI GPT 5.2 for high level analysis + GPT-5-mini for news filter and market data collection (via API)<p>Frontend: Next.js + Tailwind + Recharts<p>The Architecture (The interesting part):<p>1. The Collector<p>Instead of hitting the LLM immediately, I run a raw scra"
+  },
+  {
+   "objectID": "45491255",
+   "title": "Show HN: The Marketing Digest – A 3-minute weekly update for marketers",
+   "url": "https://marketers-digest.com/",
+   "author": "smartermondays",
+   "created_at": "2025-10-06T13:33:42Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "Hi HN<p>I built The Marketing Digest to solve a simple problem — marketers are drowning in content but starving for clarity.<p>It’s a short, human-curated email that lands every Monday with 12 of the week’s most important stories across content, SEO, AI, and marketing trends.<p>Readable in under 3 minutes, no fluff, no filler.\nUnlike most newsletters, it’s fully curated by humans, not scraped or automated. The goal: help marketers start the week informed without the doomscroll.<p>Would love your thoughts — how do you stay on top of marketing shifts without wasting hours?<p><a href=\"https:&#x2F"
+  },
+  {
+   "objectID": "41856818",
+   "title": "Idea: AI Browser Sidekick?",
+   "url": null,
+   "author": "siddhxrth",
+   "created_at": "2024-10-16T08:25:16Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "I have been pondering over an idea for quite sometime now. What if you could have a AI browser sidekick - let&#x27;s call it Luna as a native extension to your browser. Since AI is already multimodal, what if this extension can see what you are looking at, read what the browser is showing.\nYou could interact with it based on text&#x2F;audio. Just like how you would interact with a sidekick. You tell it her the job, how you do it. maybe show her how it&#x27;s done once and she has the ability to take action on behalf of you. This would be real life Jarvis for the web\nSome use cases I could thin"
+  },
+  {
+   "objectID": "41428635",
+   "title": "Ask HN: How to programmatically recognize main news of the week?",
+   "url": null,
+   "author": "tareefdev",
+   "created_at": "2024-09-02T20:41:59Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "I like to read news on weekly basis and there are so few weekly Arab newspapers. I am thinking about writing a scraper to fetch news on daily basis from several sources, rank them somehow (how?) and create me a newsletter.<p>How do you may approach the ranking stage? Based on what I can filter fetched articles to keep only the most important ones."
+  },
+  {
+   "objectID": "44777441",
+   "title": "Show HN: AI Privacy License – Open License for AI (EU AI Act Compliant)",
+   "url": "https://www.aiprivacylicense.com",
+   "author": "nabanita",
+   "created_at": "2025-08-03T15:57:49Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Yesterday, EU AI Act’s General-Purpose AI requirements went into enforcement, mandating machine-readable rights reservations for training data, models, and content.<p>Last week, the U.S. AI Action Plan also made open-source and open-weight AI a national priority, framing it as key to staying competitive with China.<p>One problem:\nThere’s still no standard way for creators to enforce their rights over data and models after they’ve been scraped and reused in AI training.<p>I built AI Privacy License (patent pending) to fix this, think Creative Commons for the AI era. Robots.txt but for AI and Da"
+  },
+  {
+   "objectID": "37616661",
+   "title": "Do you need to scrape data from 100s to 1000s of websites?",
+   "url": null,
+   "author": "asim-shrestha",
+   "created_at": "2023-09-22T19:34:50Z",
+   "points": 2,
+   "num_comments": 5,
+   "story_text": "We&#x27;ve been working on AI agents and in the process found what we built could be good at dynamically scraping data across a variety of websites (10s to 100s of different sites at a time)<p>Existing web scraping tools are bad at this because you need to write custom configurations per site. Not only that, but when a site changes styling, it might completely break your automation<p>We’re curious how useful this might be for people. If you’ve experienced issues that this might solve or have already explored the space, we’d love to talk to you!"
+  },
+  {
+   "objectID": "41440469",
+   "title": "Show HN: I'm making an AI scraper called FetchFox",
+   "url": "https://fetchfoxai.com/",
+   "author": "marcell",
+   "created_at": "2024-09-03T23:50:13Z",
+   "points": 105,
+   "num_comments": 59,
+   "story_text": "Hi! I&#x27;m Marcell, and I&#x27;m working on FetchFox (<a href=\"https:&#x2F;&#x2F;fetchfoxai.com\" rel=\"nofollow\">https:&#x2F;&#x2F;fetchfoxai.com</a>). It&#x27;s a Chrome extension that lets you use AI to scrape any website for any data. I&#x27;d love to get your feedback.<p>Here&#x27;s a quick demo showing how you can use it to scrape leads from an auto dealer directory. What&#x27;s cool is that it scrapes non-uniform pages, which is quite hard to do with &quot;traditional&quot; scrapers: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;wPbyPSFsqzA\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;wPb"
+  },
+  {
+   "objectID": "38900970",
+   "title": "Ask HN: AWS DMCA take down notices require 24hr response but disable for 2 weeks",
+   "url": null,
+   "author": "ddxv",
+   "created_at": "2024-01-07T13:21:13Z",
+   "points": 8,
+   "num_comments": 1,
+   "story_text": "I happened to be long distance driving in a storm and simply didn&#x27;t open my email for a day. Coincidentally, or perhaps predictably, I got my first DMA take down notice for a scraper&#x2F;dash I built. You can see some screenshot on the GitHub (original site is currently taken down)<p>https:&#x2F;&#x2F;github.com&#x2F;ddxv&#x2F;app-store-dash<p>Since I failed to reply within 24hrs, my site was disabled, for what looks like about 2 weeks waiting for the reply. I wrote a counter claim to the best of my ability and submitted that, but was disappointed by the situation.<p>How do people usuall"
+  },
+  {
+   "objectID": "32328030",
+   "title": "Ask HN: Help, I'm Drowning in JavaScript",
+   "url": null,
+   "author": "casual-dev",
+   "created_at": "2022-08-03T05:40:47Z",
+   "points": 51,
+   "num_comments": 54,
+   "story_text": "I&#x27;ve had a rough day yesterday. I&#x27;m a web dev, but read that as in &quot;I learnt HTML in the 90s and worked on small projects maintaining websites&quot;. Hence the username. On my current job I&#x27;m working with a proprietary software, which uses VanillaJS to modify XML&#x2F;JSON files to make the data useable for our company. I&#x27;m not the dumbest person on the planet, or so I believe, I understand what coding is, I understand the fundamentals.<p>Yesterday I spent 4 hours regexing out HTML data from not so well maintained data sources and screamed at my computer, because I was"
+  },
+  {
+   "objectID": "32751548",
+   "title": "Tell HN: Runops YC W21 scraped my email from Git and keeps spamming me",
+   "url": null,
+   "author": "eloisius",
+   "created_at": "2022-09-07T15:01:40Z",
+   "points": 23,
+   "num_comments": 16,
+   "story_text": "Last month I got an unsolicited email from Runops founder @andriosr. After receiving a follow-up email, I asked him to stop. Unfortunately, the emails keep coming. This is unethical and annoying. I have no relationship with this company and they must have extracted my email from a repo on GitHub. I get that you&#x27;re a scrappy startup trying to growth hack into some traction, but spam is just spam. It&#x27;s not that big of a deal, but this is the kind of behavior I expect from a shady company. As a small tech startup hoping to serve technical customers, I expect you to be better. One spam I"
+  },
+  {
+   "objectID": "27945573",
+   "title": "Ask HN: How do big companies get all their information?",
+   "url": null,
+   "author": "Martin_Johnson",
+   "created_at": "2021-07-25T00:28:59Z",
+   "points": 4,
+   "num_comments": 3,
+   "story_text": "A friend and I are starting a company that helps people optimize their tv subscriptions, so they are paying the least amount possible for the shows that they want to watch. The problem we are having however is that we can&#x27;t find a reliable source of data. I know big companies like google have web crawlers, but Netflix will not let smaller companies scrape their sites as far as we can tell. Do you guys have any ideas as to how to gather information about what online tv services have which shows, and then compile that into a database?"
+  },
+  {
+   "objectID": "34413397",
+   "title": "Ask HN: How would you market this?",
+   "url": null,
+   "author": "BerkLee19",
+   "created_at": "2023-01-17T15:17:56Z",
+   "points": 3,
+   "num_comments": 12,
+   "story_text": "Hey folks,<p>This post is a bit of a last resort since we&#x27;ve been running out of ideas to market our startup.<p>We&#x27;re building a service that scrapes the internet for data on how others have built successful businesses and uses AI to filter through the information and find the most practical insights.<p>Then the insights are made available to our members in an easy-to-digest format.<p>We&#x27;ve tried a couple of strategies so far (Joining communities, getting on 1-on-1 calls, going to events, etc).<p>If you had to market and get sales for this service, what would you do?<p>(This is "
+  },
+  {
+   "objectID": "46076878",
+   "title": "My SaaS jumped from $6,523 to $12,648 monthly, here is how",
+   "url": null,
+   "author": "nevodavid10",
+   "created_at": "2025-11-28T08:54:32Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "This is my story of Postiz doubling its revenue in one month.\nFeel free to ask me anything.<p>I saw an opening\nPostiz is traditionally an open-source social media scheduling tool.\nIn August, I started seeing something interesting: new YouTube videos about how people are automating their social media with n8n.<p>First, I thought it was cool, then I saw a pattern.\nMany people opened &quot;Skool&quot; groups on how to use n8n.\nThousands of templates, but among them, how to create viral AI posts.<p>I liked it for a few reasons:<p>Low effort, people download the template and use it to post (low chu"
+  },
+  {
+   "objectID": "36860974",
+   "title": "Ask HN: Would you be interested in a course/eBook about scraping and automation?",
+   "url": null,
+   "author": "OtmaneBenazzou",
+   "created_at": "2023-07-25T11:55:55Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": "Hi, I’m a pretty experienced scraper&#x2F;automator and I was thinking about sharing my knowledge. I originally thought about writing a blog, but I&#x27;m not sure that would be the best format to transmit everything I know. Maybe I&#x27;ll do both.<p>There would first be a quick introduction to the legacy ways of scraping(i.e GET request+parser), why they’re often not enough today and when can they be still used.<p>Then I’d delve into more advanced techniques, I usually try to find the cheapest&#x2F;free solutions to the problems I’m solving but I’ll also compare paid options:<p>-how to make "
+  },
+  {
+   "objectID": "47651305",
+   "title": "Ask HN: Folks with disabilities, what is it like in this LLM/scraper age?",
+   "url": null,
+   "author": "eventualcomp",
+   "created_at": "2026-04-05T16:54:01Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I see lots of posts about how people are putting poison fountains to combat LLM scrapers who disrespect robots.txt, and other various workarounds, and a nontrivial number of folks are impressed and support&#x2F;condone this.<p>But I want to know how this particular minority is dealing with this. How has accessibility been hit? Are those aria- tags being abused for scraping?<p>Has it been business as usual or worse? Which kinds of sites have gotten worse? Which aspects of online culture do you feel like is no longer accessible? Are there any silver linings?<p>Would like inputs of either those w"
+  },
+  {
+   "objectID": "37514280",
+   "title": "Ask HN: Do You Maintain a Hobby Dataset?",
+   "url": null,
+   "author": "soultrees",
+   "created_at": "2023-09-14T20:17:40Z",
+   "points": 1,
+   "num_comments": 5,
+   "story_text": "I&#x27;m looking for inspiration and would love to hear about the datasets and how you&#x27;re using those datasets in your hobby applications.<p>My personal data set I am building is a single dataset of all SVG brand logos and colour palettes for as many companies as I can scrape. I&#x27;m at about 8k now and not doing anything with it except posting it on huggingface and also feeling a bit smug that I have all this info.<p>So let&#x27;s see what you&#x27;re working on."
+  },
+  {
+   "objectID": "43547163",
+   "title": "I created my own VPS providing service, what do you think?",
+   "url": null,
+   "author": "someonefrom80s",
+   "created_at": "2025-04-01T14:26:12Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Before I start with all details, I&#x27;ll like to say that this is project from fun, not expecting too much from it, actually expecting nothing from it, but I wanna see how it would play out. Honestly, from age I became aware of myself, I wanted to do this, so finally took courage and some ca$h to start it. Please don&#x27;t be too rude and too judgy :P. Just give me some pointers and&#x2F;or tips.<p>I&#x27;ve created my own VPS hosting provider app from very start. It took me some time to develop this and make it fully functional. I wanted it to be as simple as possible on design, but on fun"
+  },
+  {
+   "objectID": "30605010",
+   "title": "Launch HN: Optery (YC W22) – Remove your personal info from the internet",
+   "url": null,
+   "author": "beyondd",
+   "created_at": "2022-03-08T19:22:18Z",
+   "points": 223,
+   "num_comments": 140,
+   "story_text": "Hi HN, we’re Lawrence, Chen and Dekel from Optery (<a href=\"https:&#x2F;&#x2F;www.optery.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.optery.com&#x2F;</a>). Optery is opt out software that removes your home address, phone number, email, age, and other private info from the internet. Specifically, we find and delete your profiles on hundreds of data broker and people-search web sites.<p>Sites like Radaris, SocialCatfish, VoterRecords.com, Persopo, PeekYou, and WhitePages.com scrape the internet for the personal information of as many people as they can find, plus buy it in bulk from other so"
+  },
+  {
+   "objectID": "28389576",
+   "title": "Ask HN: Are you terrified of Plaid’s account verification approach?",
+   "url": null,
+   "author": "YeBanKo",
+   "created_at": "2021-09-02T07:39:58Z",
+   "points": 56,
+   "num_comments": 24,
+   "story_text": "As a consumer, aren&#x27;t you terrified of Plaid account verification approach?<p>Some time ago I wanted to connect my bank account to my old Coinbase account, once I chose my bank I was prompted to enter my online banking username and password. They use the service called Plaid, that requires your bank credentials (and one time code if 2F is enabled) to verify your checking account. I was able to go with ACH deposit verification route as an alternative, but it is not default approach anymore.<p>This seems like a security and privacy nightmare.\nFirst, sharing your username and password is aga"
+  },
+  {
+   "objectID": "47530870",
+   "title": "Show HN: Context Plugins – API context for AI coding assistants",
+   "url": "https://www.apimatic.io/product/context-plugins",
+   "author": "sohaibtariq",
+   "created_at": "2026-03-26T14:26:27Z",
+   "points": 8,
+   "num_comments": 6,
+   "story_text": "Hi, we&#x27;re Sohaib and Hannan from APIMatic.<p>We built Context Plugins: given an OpenAPI spec, we generate SDKs and an MCP server that exposes structured API context to AI coding assistants.<p>This gives tools like Cursor access to comprehensive, up-to-date API context (including SDK documentation and API integration patterns), instead of relying on outdated training data or code scraped from GitHub.<p>We&#x27;ve just launched a pilot with PayPal, it&#x27;s live on the PayPal Developer Portal <a href=\"https:&#x2F;&#x2F;developer.paypal.com&#x2F;serversdk&#x2F;java&#x2F;getting-started&#x2F"
+  },
+  {
+   "objectID": "42369029",
+   "title": "Show HN: Pruna AI – Inference Optimization Engine",
+   "url": null,
+   "author": "bertrand_charp",
+   "created_at": "2024-12-09T18:38:04Z",
+   "points": 6,
+   "num_comments": 0,
+   "story_text": "Hello Hacker News!<p>I am Bertrand from Pruna AI. With my associates, John, Rayan, and Stephan, we are fellow researchers in AI efficiency and reliability coming from TUM.<p>We are building an optimization engine that combines compression methods (e.g. quantization, pruning, compilation, batching…) in the aim of saving compute power when running AI models. This optimization engine take one base model as input and returns a compressed model as output. It aims to help for two things:<p>- Make various AI models faster and&#x2F;or smaller for various hardware (because they can require significant "
+  },
+  {
+   "objectID": "44663347",
+   "title": "My project made me $18,000 in 7 months. Here's what I did differently this time",
+   "url": null,
+   "author": "OmPatel5",
+   "created_at": "2025-07-23T20:01:28Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": "I started building side projects a little over a year ago.<p>Some of them got a few users, but they never made money. I kept running into the same issue: I was building without knowing if people actually wanted what I was making.<p>My latest project is different :)<p>I launched my project (bigideasdb.com) 7 months ago, and it made $18,000 in revenue within that time. My most successful product by far.<p>Here&#x27;s what I did differently this time:<p>1. Building a habit of collecting problems<p>I created a habit of constantly writing down problems and pain points, whether it was something I pe"
+  },
+  {
+   "objectID": "43321239",
+   "title": "Show HN: Chatleh – AI Customer Support for Professional Services",
+   "url": "https://chatleh.com",
+   "author": "chatleh",
+   "created_at": "2025-03-10T14:45:25Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "We built Chatleh to solve a problem we kept facing: handling website inquiries without bloated, pricey tools like Intercom. Professional service firms - lawyers, accountants, consultants — told us they wanted something simpler that still qualifies leads and explains services 24&#x2F;7. So, we made Chatleh.<p>It is an AI chatbot you can train with your website or docs in minutes. It scrapes your site or uses added context to answer questions and collect leads, no coding needed. What is different? It is lightweight, compliance-aware (big for law&#x2F;accounting), and works via a site embed or sh"
+  },
+  {
+   "objectID": "47996123",
+   "title": "Show HN: I built a web builder after 6 years of trying",
+   "url": "https://whale.kiraaziz.club",
+   "author": "kira_aziz",
+   "created_at": "2026-05-03T12:07:35Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "finally, after near 6 years I created the only app that I want to build.\nok so basically I start learning it, programming and building software about 7&#x2F;8 years, where see teacher show us how to build a game with scratch 3, well it was first time the it session in school look way too interesting, back then I didn&#x27;t have computer so I write my first dino game with scratch and papers (I draw the brocks).<p>then I start learning UI design, I start we some websites builders like axure rp, mobirise and bootsrap studio, so I like them but to be honest I didn&#x27;t feel free, so I planned t"
+  },
+  {
+   "objectID": "47146085",
+   "title": "If agents become the users, what happens to the software market?",
+   "url": null,
+   "author": "nworley",
+   "created_at": "2026-02-25T01:23:19Z",
+   "points": 2,
+   "num_comments": 7,
+   "story_text": "I’ve been thinking a lot about how strange it is that we’re building autonomous agent but they still operate on software designed entirely for humans.<p>They scrape HTML, interpret UIs, simulate clicks and and sometimes guess at workflows. It works, but it feels like a transitional phase like early mobile apps pretending to be desktop sites.<p>If agents start becoming the primary operators of software, the market itself shifts.<p>Today software competes for human attention with landing pages, feature comparisons, SEO, ads,  and UI polish BUT if the “user” is an agent, none of that matters in t"
+  },
+  {
+   "objectID": "34425738",
+   "title": "Ask HN: Fallout of Stable Diffusion/Getty Lawsuit?",
+   "url": null,
+   "author": "BaculumMeumEst",
+   "created_at": "2023-01-18T12:04:32Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": "It was recently reported that Getty Images is suing Stability AI for using scraped Getty images in its training dataset.<p>Hypothetically, if a result of the lawsuit would be that Stability AI is no longer be permitted to use its current dataset, what do you think would happen next?<p>Aren&#x27;t communities like civitai and huggingface already building derivative models based on the datasets already available?<p>If individuals use models circulated in the open source community that include Getty Images in commercial products (as I expect they would), and they don&#x27;t disclose how those ima"
+  },
+  {
+   "objectID": "46968889",
+   "title": "Show HN: Thoth – Obsidian AI Research Assistant",
+   "url": "https://github.com/acertainKnight/project-thoth",
+   "author": "acertainKnight",
+   "created_at": "2026-02-11T00:01:01Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I&#x27;m an ML scientist who was drowning in papers. Every research tool I tried locked me into their workflow, their sources, their extraction schemas. The real friction wasn&#x27;t features—it was the interface. Why am I editing files and settings when I could just tell the agent what I want? How do I find new research thats relevant to ME and keep up to date? How do i have my agent actually LEARN about my work and my research paths?<p>So I built Thoth. Three design decisions that drove everything:<p>1. HOT-LOADING SKILLS\nAgents start minimal—no tools loaded. When you ask &quot;find papers o"
+  },
+  {
+   "objectID": "46780122",
+   "title": "Show HN: Nichestarter – Stop guessing what to build. Find validated pain points",
+   "url": "https://www.nichestarter.ai/",
+   "author": "shujip",
+   "created_at": "2026-01-27T14:10:22Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I’m Lu. I spent the last year falling into the classic trap: building solutions first, then looking for problems. After launching two projects that got zero traction, I realized I needed to validate demand before writing code.<p>I started manually browsing subreddits like r&#x2F;SaaS, r&#x2F;marketing, and r&#x2F;smallbusiness, looking for posts containing phrases like &quot;how do I,&quot; &quot;why is X so hard,&quot; or &quot;I hate Y.&quot; It worked, but it was unscalable.<p>So, I automated it. I built Nichestarter.ai.<p>How it works (The Stack):<p>Ingestion: I try to scrape daily threads"
+  },
+  {
+   "objectID": "46322924",
+   "title": "I built a tool to stop wasting hours on LinkedIn outreach messages",
+   "url": null,
+   "author": "mdanjumkamali",
+   "created_at": "2025-12-19T06:49:30Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I&#x27;ve been doing cold outreach on LinkedIn for two years. Not at scale — maybe 10-15 messages a day to potential customers.<p>The problem was never finding people to message. LinkedIn search works fine. Sales Navigator exists. Referrals happen.<p>The problem was opening their profile and... staring.<p>&quot;Okay, they&#x27;re a VP of Engineering at a Series B company. They posted about technical debt last week. How do I not sound like every other person in their inbox?&quot;<p>Delete. Rewrite. Check if it&#x27;s too long. Too short. Too salesy. Not specific enough.<p>Forty-seven minutes la"
+  },
+  {
+   "objectID": "40426104",
+   "title": "I made a list of and250 companies hiring developers in the US",
+   "url": null,
+   "author": "achirie",
+   "created_at": "2024-05-21T09:31:55Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "If it might be of any help: I made a list of +250 companies recruiting developers in the United States (front, back, full stack, ...): you can find the list here (created the 14th of May 24)<p>https:&#x2F;&#x2F;docs.google.com&#x2F;spreadsheets&#x2F;d&#x2F;1MtmpkY3LnBEyURrYXehJYVBTHwmA8HZZjKLNBHNgeCo&#x2F;edit?ref=en.blog.mantiks.io#gid=405908756<p>I remove all the recruiting agencies and intern position to have the cleanest list possible :)\nI basically scrape job postings from Indeed, LinkedIn, Glassdoor, ...<p>There is a lot more actually: around +2k companies hiring developers in the US in "
+  },
+  {
+   "objectID": "43322148",
+   "title": "Ask HN: I gathered info about ~1700 SaaS'es. Can I scale it into business?",
+   "url": null,
+   "author": "Zernat",
+   "created_at": "2025-03-10T16:19:07Z",
+   "points": 1,
+   "num_comments": 5,
+   "story_text": "Hello! I wanted to ask you for your opinion.<p>Over the weekend I built a very small demo where I hosted a website where you can view info about ~1700 SaaS&#x27;es &#x2F; Online businesses.<p>I was able to get info like: website link, seo title, seo description, pricing link, contact link, socials. Of course not every website has every field present. (I wanted to scrape email addresses as well, but apparently it&#x27;s illegal :P )<p>I had an idea that I could sell access to the database and let people query it (of course through some front-end). Including some nice fuzzy matching or leverage "
+  },
+  {
+   "objectID": "45150348",
+   "title": "Ask HN: My Math Anxiety Journey – Worried About My 5th Grader",
+   "url": null,
+   "author": "johngorse",
+   "created_at": "2025-09-06T15:52:29Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "I&#x27;m watching my 5th grade son excel at math and it&#x27;s bringing back some intense memories of my own school experience. He&#x27;s doing really well right now, but I&#x27;m terrified he might end up on the same path I did.<p>Despite getting decent grades in elementary math (around a B), I completely crashed and burned in high school. Failed my first year math class, barely scraped by with D&#x27;s the rest of high school. College was even worse - managed to pass one math course with a C, but didn&#x27;t pass the second required course until literally my final semester before graduation."
+  },
+  {
+   "objectID": "49656324",
+   "title": "Show HN: You can't read every ToS, but the clanker can",
+   "url": "https://github.com/PAndreew/termsinator",
+   "author": "PAndreew",
+   "created_at": "2026-09-11T11:01:04Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Termsinator is a public registry of LLM-performed analyses of public legal documents like ToSs, Privacy policies, Cookie policies, etc. The goal of this project is to help people better understand how their data will be used, and what potential pitfalls they need to avoid.<p>Why?\nYou know that feeling of enlightenment and sense of control after you&#x27;ve red dozens of pages of legal mumbo-jumbo before subscribing to a service? Yeah, neither do I (well, maybe some of you do and mad respect for that). I&#x27;ve been encountering more and more reports on how corporations abuse ToSs, Privacy pol"
+  },
+  {
+   "objectID": "43704250",
+   "title": "Show HN: Get an updated activity report of any startup investor",
+   "url": "https://easyvc.ai/",
+   "author": "daolm",
+   "created_at": "2025-04-16T11:57:41Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I&#x27;m generating activity reports of thousands of startup investors in my website and indexing them in Google. For context, I&#x27;ve been building a massive database of startup investors (VCs, Business Angels, Accelerators, etc) of more than 50,000 investors, and adding AI wherever it can add value. One of the things I&#x27;m doing now is running an AI scraper for each investor in the database to build an independent report so people can see whether the investor is currently active or they are BS.<p>Are you raising and want to know if an investor is currently investing? Just type &quot;Eas"
+  },
+  {
+   "objectID": "40407585",
+   "title": "Ask HN: Potential Business Model for LLMs: A Netflix-Like Content Platform",
+   "url": null,
+   "author": "sturza",
+   "created_at": "2024-05-19T15:33:23Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I&#x27;ve been thinking about a new business model LLMs and wanted to get your thoughts. The idea is to create a platform similar to Netflix but for LLMs.<p>Here&#x27;s how it would work:<p>Content Creator Sign-Up: Authors, bloggers, and other content creators sign up on the platform. They can either upload their content directly or allow the LLMs to scrape their publicly available content.<p>Content Integration: The LLM integrates the content from these creators into its training data. The model ensures that the content from various creators is weighted appropriately based on quality"
+  },
+  {
+   "objectID": "28462284",
+   "title": "Ask HN: Feedback on a product comparison tool mockup",
+   "url": null,
+   "author": "jamesbond2",
+   "created_at": "2021-09-08T19:59:47Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I spend a lot of time comparing similar products and reading reviews. The trouble for me is that Google is full of listicles that I can’t trust, and Amazon reviews aren’t reliable, so I usually search Reddit for product recommendations.<p>To save time, I’m thinking of building a product comparison tool that will scrape reddit and recommend the top products &#x2F; most mentioned products in a given category.\nHere’s a quick mockup: https:&#x2F;&#x2F;imgur.com&#x2F;a&#x2F;pY2G279<p>What do you think - useful? Not trustworthy?\nAny recommendations for how else I can find products without spending t"
+  },
+  {
+   "objectID": "29430520",
+   "title": "How to Start a Movement – Strange Experiences in Marketing",
+   "url": null,
+   "author": "kristintynski",
+   "created_at": "2021-12-03T14:41:53Z",
+   "points": 29,
+   "num_comments": 3,
+   "story_text": "As a marketer, i’ve always been fascinated with new and interesting ways content is driving engagement, sharing, but most of all how content creates motivation and growth around shared goals. What is it that can turn a single viral post into a movement? How does that happen? Who can do it? How does it grow, and what can we learn?<p>I’m going to tell you two stories, both of which happened to me in the last year, experiences that have made me look at marketing, content, community, and purpose differently. I will explore the special dynamics that led to the creation of something from nothing in "
+  },
+  {
+   "objectID": "33491446",
+   "title": "Ask HN: Open-Source GitHub Copilot?",
+   "url": null,
+   "author": "ghoomketu",
+   "created_at": "2022-11-06T11:24:24Z",
+   "points": 28,
+   "num_comments": 17,
+   "story_text": "Just wondering if for some reason copilot shuts down, I was wondering if it&#x27;s possible to home brew it.<p>Some hurdles I see:<p>- Github rate limits the GET requests so it doesn&#x27;t seem possible to scrape all the source code on there. But maybe it can be crowdsourced like seti@home so 1000 people can install a program to get around this.<p>- Training the model. I would imagine this would be hardest as it would need millions of dollars for this? Is there a way to get around it or using free tools like colab?<p>- Running the api. Once the model is trained, would it be possible to run it"
+  },
+  {
+   "objectID": "44497573",
+   "title": "Show HN: Curro – Startup Jobs Board",
+   "url": "https://www.curro.work/",
+   "author": "wyxuan",
+   "created_at": "2025-07-08T06:19:50Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "I built this out because I think there should be a better way of looking for jobs than just crawling through different Ashby or Greenhouse links on different startups<p>Some of the features supported:<p>- Sort by years of experience, startup stage, location, salary, etc<p>- Easily see jobs by company<p>- See when a company last raised and who their investors are<p>- Track your job hunt and bookmark roles<p>Some thoughts from building it:<p>- Because I&#x27;m scraping, I can also see when companies add and remove jobs, which could be a data point for how well a company is doing – could be inter"
+  }
+ ]
+}

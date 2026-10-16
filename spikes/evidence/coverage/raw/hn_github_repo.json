@@ -1,0 +1,513 @@
+{
+ "query": "github repo",
+ "params": {
+  "query": "github repo",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 9809,
+ "hits": [
+  {
+   "objectID": "48583928",
+   "title": "I found 10k GitHub repositories distributing Trojan malware",
+   "url": "https://orchidfiles.com/github-repositories-distributing-malware/",
+   "author": "theorchid",
+   "created_at": "2026-06-18T11:45:43Z",
+   "points": 987,
+   "num_comments": 248,
+   "story_text": ""
+  },
+  {
+   "objectID": "43969827",
+   "title": "Mozilla Firefox – Official GitHub repo",
+   "url": "https://github.com/mozilla-firefox/firefox",
+   "author": "thefilmore",
+   "created_at": "2025-05-13T05:23:10Z",
+   "points": 855,
+   "num_comments": 466,
+   "story_text": ""
+  },
+  {
+   "objectID": "37516523",
+   "title": "Unity has seemingly silently removed its GitHub repo that tracks ToS changes",
+   "url": "https://www.gamerbraves.com/unity-silently-deletes-github-repo-that-tracks-terms-of-service-changes-and-updated-its-license/",
+   "author": "agluszak",
+   "created_at": "2023-09-15T00:10:07Z",
+   "points": 682,
+   "num_comments": 176,
+   "story_text": ""
+  },
+  {
+   "objectID": "48181125",
+   "title": "We stopped AI bot spam in our GitHub repo using Git's –author flag",
+   "url": "https://archestra.ai/blog/only-responsible-ai",
+   "author": "ildari",
+   "created_at": "2026-05-18T15:24:19Z",
+   "points": 501,
+   "num_comments": 237,
+   "story_text": ""
+  },
+  {
+   "objectID": "34257646",
+   "title": "Slack's private GitHub code repositories stolen over holidays",
+   "url": "https://www.bleepingcomputer.com/news/security/slacks-private-github-code-repositories-stolen-over-holidays/",
+   "author": "mindracer",
+   "created_at": "2023-01-05T09:13:49Z",
+   "points": 347,
+   "num_comments": 139,
+   "story_text": ""
+  },
+  {
+   "objectID": "47521157",
+   "title": "90% of Claude-linked output going to GitHub repos w <2 stars",
+   "url": "https://www.claudescode.dev/?window=since_launch",
+   "author": "louiereederson",
+   "created_at": "2026-03-25T18:16:40Z",
+   "points": 337,
+   "num_comments": 222,
+   "story_text": ""
+  },
+  {
+   "objectID": "29870151",
+   "title": "noDRM's GitHub repo DeDRM_tools is disabled due to Readium's DMCA notice",
+   "url": "https://github.com/github/dmca/blob/master/2022/01/2022-01-04-readium.md",
+   "author": "xxyzz",
+   "created_at": "2022-01-10T03:11:07Z",
+   "points": 319,
+   "num_comments": 162,
+   "story_text": ""
+  },
+  {
+   "objectID": "27004677",
+   "title": "GitHub repository for Sedgewick's Algorithms is taken down",
+   "url": "https://github.com/kevin-wayne/algs4",
+   "author": "altro",
+   "created_at": "2021-05-01T09:15:46Z",
+   "points": 302,
+   "num_comments": 189,
+   "story_text": ""
+  },
+  {
+   "objectID": "44100082",
+   "title": "Claude 4 and GitHub MCP will leak your private GitHub repositories",
+   "url": "https://twitter.com/lbeurerkellner/status/1926991491735429514",
+   "author": "amrrs",
+   "created_at": "2025-05-26T18:20:18Z",
+   "points": 248,
+   "num_comments": 3,
+   "story_text": ""
+  },
+  {
+   "objectID": "47493657",
+   "title": "Local Stack Archived their GitHub repo and requires an account to run",
+   "url": "https://github.com/localstack/localstack",
+   "author": "ecshafer",
+   "created_at": "2026-03-23T18:57:08Z",
+   "points": 216,
+   "num_comments": 126,
+   "story_text": ""
+  },
+  {
+   "objectID": "32327903",
+   "title": "Malicious code added to 35k GitHub repos, leaking user environments",
+   "url": "https://twitter.com/stephenlacy/status/1554697077430505473",
+   "author": "pcmonk",
+   "created_at": "2022-08-03T05:16:31Z",
+   "points": 215,
+   "num_comments": 76,
+   "story_text": ""
+  },
+  {
+   "objectID": "30675357",
+   "title": "Show HN: Instantly create a GitHub repository to take screenshots of a web page",
+   "url": "https://simonwillison.net/2022/Mar/14/shot-scraper-template/",
+   "author": "simonw",
+   "created_at": "2022-03-14T17:34:33Z",
+   "points": 214,
+   "num_comments": 36,
+   "story_text": "I built a GitHub repository template which automates the process of configuring a new repository to take web page screenshots using GitHub Actions.<p>You can try this out at <a href=\"https:&#x2F;&#x2F;github.com&#x2F;simonw&#x2F;shot-scraper-template\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;simonw&#x2F;shot-scraper-template</a><p>Use the <a href=\"https:&#x2F;&#x2F;github.com&#x2F;simonw&#x2F;shot-scraper-template&#x2F;generate\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;simonw&#x2F;shot-scraper-template&#x2F;generate</a> interface to create a new repository using that template, "
+  },
+  {
+   "objectID": "39770712",
+   "title": "Claim: Private GitHub repos included in AI dataset",
+   "url": "https://post.lurk.org/@emenel/112111014479288871",
+   "author": "latexr",
+   "created_at": "2024-03-20T19:07:03Z",
+   "points": 193,
+   "num_comments": 167,
+   "story_text": ""
+  },
+  {
+   "objectID": "43573539",
+   "title": "Show HN: GitMCP is an automatic MCP server for every GitHub repo",
+   "url": "https://gitmcp.io/",
+   "author": "liadyo",
+   "created_at": "2025-04-03T18:28:44Z",
+   "points": 185,
+   "num_comments": 60,
+   "story_text": ""
+  },
+  {
+   "objectID": "30554723",
+   "title": "A GitHub repository was public-viewable",
+   "url": "https://blog.adafruit.com/2022/03/04/a-github-repository-was-public-viewable/",
+   "author": "zdw",
+   "created_at": "2022-03-04T13:54:39Z",
+   "points": 179,
+   "num_comments": 128,
+   "story_text": ""
+  },
+  {
+   "objectID": "42118097",
+   "title": "Backdoor attempt on Exolabs GitHub repo through an innocent looking PR",
+   "url": "https://twitter.com/alexocheema/status/1856295635143524378",
+   "author": "amrrs",
+   "created_at": "2024-11-12T18:17:32Z",
+   "points": 170,
+   "num_comments": 114,
+   "story_text": ""
+  },
+  {
+   "objectID": "36184948",
+   "title": "GitHub Private Repos Considered Private-­Ish",
+   "url": "https://tylercipriani.com/blog/2023/03/31/private-ish-github-repos/",
+   "author": "fagnerbrack",
+   "created_at": "2023-06-04T12:04:24Z",
+   "points": 163,
+   "num_comments": 145,
+   "story_text": ""
+  },
+  {
+   "objectID": "46636093",
+   "title": "Supply Chain Vuln Compromised Core AWS GitHub Repos & Threatened the AWS Console",
+   "url": "https://www.wiz.io/blog/wiz-research-codebreach-vulnerability-aws-codebuild",
+   "author": "uvuv",
+   "created_at": "2026-01-15T17:30:10Z",
+   "points": 160,
+   "num_comments": 38,
+   "story_text": ""
+  },
+  {
+   "objectID": "48768997",
+   "title": "Order a burned CD of your own public GitHub repo",
+   "url": "https://forms.cloud.microsoft/pages/responsepage.aspx?id=v4j5cvGGr0GRqy180BHbR6G-c11n8yFDlQmk4B-QjDxUQkdTTjZLU0EyTFFRV1E3NVRTVTRTWjRHMy4u&route=shorturl",
+   "author": "throwaway2027",
+   "created_at": "2026-07-03T00:01:26Z",
+   "points": 152,
+   "num_comments": 119,
+   "story_text": ""
+  },
+  {
+   "objectID": "31283557",
+   "title": "GitHub Résumé: Service that creates a résumé based on your GitHub repos/activity",
+   "url": "https://github.com/resume/resume.github.com",
+   "author": "rg111",
+   "created_at": "2022-05-06T10:33:25Z",
+   "points": 145,
+   "num_comments": 67,
+   "story_text": ""
+  },
+  {
+   "objectID": "36452322",
+   "title": "Millions of GitHub repos likely vulnerable to RepoJacking, researchers say",
+   "url": "https://www.bleepingcomputer.com/news/security/millions-of-github-repos-likely-vulnerable-to-repojacking-researchers-say/",
+   "author": "pyeri",
+   "created_at": "2023-06-23T21:22:09Z",
+   "points": 134,
+   "num_comments": 50,
+   "story_text": ""
+  },
+  {
+   "objectID": "34262587",
+   "title": "Show HN: GPTDuck – Ask questions about any GitHub repo",
+   "url": "https://www.gptduck.com/",
+   "author": "penguinten",
+   "created_at": "2023-01-05T16:47:21Z",
+   "points": 128,
+   "num_comments": 55,
+   "story_text": ""
+  },
+  {
+   "objectID": "30185599",
+   "title": "Show HN: Find alternatives to almost any popular GitHub repo",
+   "url": null,
+   "author": "stanislavb",
+   "created_at": "2022-02-02T23:15:50Z",
+   "points": 120,
+   "num_comments": 55,
+   "story_text": "Several months ago, I built a &quot;stealth&quot; feature that I could use. It hasn&#x27;t been advertised, and I&#x27;ve been the only user. As I find it useful for myself, I believe others (software developers) may like it too. So, this is the first public post about it, and if it gets any positive feedback, I may put some time into promoting it more.<p>In essence, given that you&#x27;ve opened a GitHub repo (there are ~225k of the more popular ones indexed as of now), you can replace &quot;github&quot; with &quot;libhunt&quot; within the URL, and you will find the top alternatives and relat"
+  },
+  {
+   "objectID": "43222842",
+   "title": "18F GitHub Repositories",
+   "url": "https://github.com/18f",
+   "author": "ronbenton",
+   "created_at": "2025-03-01T19:39:00Z",
+   "points": 114,
+   "num_comments": 40,
+   "story_text": ""
+  },
+  {
+   "objectID": "40941809",
+   "title": "Leaked admin access token to Python, PyPI, and PSF GitHub repos",
+   "url": "https://jfrog.com/blog/leaked-pypi-secret-token-revealed-in-binary-preventing-suppy-chain-attack/",
+   "author": "elchief",
+   "created_at": "2024-07-12T00:34:03Z",
+   "points": 114,
+   "num_comments": 29,
+   "story_text": ""
+  },
+  {
+   "objectID": "40837791",
+   "title": "Dev rejects CVE severity, makes his GitHub repo read-only",
+   "url": "https://www.bleepingcomputer.com/news/security/dev-rejects-cve-severity-makes-his-github-repo-read-only/",
+   "author": "rntn",
+   "created_at": "2024-06-30T15:37:01Z",
+   "points": 113,
+   "num_comments": 107,
+   "story_text": ""
+  },
+  {
+   "objectID": "44102376",
+   "title": "Accessing private GitHub repositories via MCP",
+   "url": "https://invariantlabs.ai/blog/mcp-github-vulnerability",
+   "author": "gokhan",
+   "created_at": "2025-05-26T22:53:51Z",
+   "points": 110,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "27260591",
+   "title": "Useful iOS Things GitHub Repository",
+   "url": "https://github.com/jphong1111/Useful_Swift",
+   "author": "jphong1111",
+   "created_at": "2021-05-24T02:32:16Z",
+   "points": 93,
+   "num_comments": 24,
+   "story_text": ""
+  },
+  {
+   "objectID": "28157661",
+   "title": "GitHub.Dev is now available on any GitHub repo",
+   "url": null,
+   "author": "RyJones",
+   "created_at": "2021-08-12T15:37:46Z",
+   "points": 79,
+   "num_comments": 25,
+   "story_text": "If you&#x27;re authenticated with GitHub, visit a repo&#x27;s page and press &quot;.&quot;. A web version of Visual Studio Code will spin up in your browser. This is distinct from the Codespaces launch yesterday."
+  },
+  {
+   "objectID": "25612743",
+   "title": "GitHub repo of ALL known bug bounty platforms (45) and Halls of Fame (497)",
+   "url": "https://github.com/disclose/diodata",
+   "author": "caseyjohnellis",
+   "created_at": "2021-01-02T13:35:39Z",
+   "points": 77,
+   "num_comments": 10,
+   "story_text": ""
+  },
+  {
+   "objectID": "41639082",
+   "title": "Show HN: GitHub Repo Visualizer Using D3",
+   "url": "https://see-my-repo.netlify.app/",
+   "author": "Cerchie",
+   "created_at": "2024-09-24T17:47:11Z",
+   "points": 76,
+   "num_comments": 14,
+   "story_text": "I built this as part of my quest to properly learn data visualization. The code is the easy part!<p>Some lessons learned:<p>- personal verification of the the general truth that pie charts are tough! and the returns are not great for the effort due to people&#x27;s difficulties perceiving angles\n- may not use &quot;vanilla&quot; d3 with no React. was difficult to adapt for mobile\n- the GitHub API provides fairly standardized responses so building dynamic charts wasn&#x27;t too bad. But when working with streaming data (say Kafka) I can see this getting interesting... schema registry should hel"
+  },
+  {
+   "objectID": "26674781",
+   "title": "RepoKitteh: Github workflow automation using Starlark",
+   "url": "https://repokitteh.io",
+   "author": "itayd",
+   "created_at": "2021-04-02T19:04:43Z",
+   "points": 66,
+   "num_comments": 7,
+   "story_text": ""
+  },
+  {
+   "objectID": "28757897",
+   "title": "GitHub Repositories with Links to Academic Papers [pdf]",
+   "url": "https://arxiv.org/abs/2004.00199",
+   "author": "Hard_Space",
+   "created_at": "2021-10-05T11:18:59Z",
+   "points": 59,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "26813928",
+   "title": "Medical company uploads secrets to GitHub; threatens reporter with legal action",
+   "url": "https://robdyke.com/howto-disclose/",
+   "author": "bashtoni",
+   "created_at": "2021-04-14T22:33:49Z",
+   "points": 58,
+   "num_comments": 13,
+   "story_text": ""
+  },
+  {
+   "objectID": "33284659",
+   "title": "Securing a GitHub repo is a ton of work",
+   "url": "https://codeofhonor.substack.com/p/securing-a-github-repo-is-a-ton-of",
+   "author": "the_jesus_villa",
+   "created_at": "2022-10-21T04:55:00Z",
+   "points": 57,
+   "num_comments": 24,
+   "story_text": ""
+  },
+  {
+   "objectID": "48248256",
+   "title": "New Attack \"Megaladon\" Compromises 5.5K+ GitHub Repos",
+   "url": "https://www.theregister.com/security/2026/05/22/megalodon-chums-the-waters-in-55k-github-repo-poisonings/5245342",
+   "author": "theanonymousone",
+   "created_at": "2026-05-23T14:57:42Z",
+   "points": 53,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "33438729",
+   "title": "GitHub availability report: October 2022",
+   "url": "https://github.blog/2022-11-02-github-availability-report-october-2022/",
+   "author": "edmorley",
+   "created_at": "2022-11-02T16:41:23Z",
+   "points": 49,
+   "num_comments": 39,
+   "story_text": ""
+  },
+  {
+   "objectID": "44328389",
+   "title": "Malware-Laced GitHub Repos Found Masquerading as Developer Tools",
+   "url": "https://klarrio.com/klarrio-discovers-large-scale-malware-network-on-github/",
+   "author": "Lescro",
+   "created_at": "2025-06-20T15:03:23Z",
+   "points": 48,
+   "num_comments": 13,
+   "story_text": ""
+  },
+  {
+   "objectID": "43223489",
+   "title": "Microsoft Copilot continues to expose private GitHub repositories",
+   "url": "https://www.developer-tech.com/news/microsoft-copilot-continues-to-expose-private-github-repositories/",
+   "author": "birdculture",
+   "created_at": "2025-03-01T20:44:10Z",
+   "points": 44,
+   "num_comments": 12,
+   "story_text": ""
+  },
+  {
+   "objectID": "38487587",
+   "title": "Show HN: Generate a video to animate stars of any GitHub repository",
+   "url": "https://scastiel.dev/github-stars?ref=hn",
+   "author": "scastiel",
+   "created_at": "2023-12-01T15:09:33Z",
+   "points": 42,
+   "num_comments": 16,
+   "story_text": "I made this as a fun tiny project to experiment with Remotion [1] to generate videos. You can find the source code on GitHub [2].<p>[1] <a href=\"https:&#x2F;&#x2F;www.remotion.dev&#x2F;\" rel=\"nofollow noreferrer\">https:&#x2F;&#x2F;www.remotion.dev&#x2F;</a><p>[2] <a href=\"https:&#x2F;&#x2F;github.com&#x2F;scastiel&#x2F;github-stars-video\">https:&#x2F;&#x2F;github.com&#x2F;scastiel&#x2F;github-stars-video</a>"
+  },
+  {
+   "objectID": "28144833",
+   "title": "Hit '.' On Any GitHub Repo",
+   "url": "https://twitter.com/natfriedman/status/1425504734530650114",
+   "author": "semiquaver",
+   "created_at": "2021-08-11T17:17:59Z",
+   "points": 41,
+   "num_comments": 17,
+   "story_text": ""
+  },
+  {
+   "objectID": "34422220",
+   "title": "Show HN: I made a tool, create GitHub Repository from local directory directly",
+   "url": "https://github.com/shunak/wfh",
+   "author": "shunak",
+   "created_at": "2023-01-18T01:28:19Z",
+   "points": 38,
+   "num_comments": 21,
+   "story_text": "Create a remote repository directly from your local folder to GitHub."
+  },
+  {
+   "objectID": "30561550",
+   "title": "China government takedown request for GitHub repos",
+   "url": "https://github.com/github/gov-takedowns/blob/master/China/2021/2021-01-29-BNIA.md",
+   "author": "feross",
+   "created_at": "2022-03-04T22:37:07Z",
+   "points": 38,
+   "num_comments": 20,
+   "story_text": ""
+  },
+  {
+   "objectID": "48848819",
+   "title": "Show HN: Devthropology – Better Insights for GitHub Repos",
+   "url": "https://devthropology.com/demo",
+   "author": "dpc94",
+   "created_at": "2026-07-09T16:47:53Z",
+   "points": 37,
+   "num_comments": 10,
+   "story_text": "Devthropology is a passion project built on top of GitHub pull data. The name is a play on developer anthropology. Pull request data can be cut a lot of ways. The functionality has been built out of curiosity as I want to see different insights into codebases that I work on. Some of the data is typical and other parts I haven&#x27;t seen elsewhere.<p>I think of this as an improved GitHub Insights page, with faster performance, more detail, and a focus on how work moves through a codebase. The main entity is a contributor, which has two sides: authoring PRs and reviewing&#x2F;giving feedback to"
+  },
+  {
+   "objectID": "25755425",
+   "title": "GitHub reportedly fired a Jewish employee who called Capitol rioters “Nazis”",
+   "url": "https://www.theverge.com/2021/1/12/22227487/github-microsoft-fired-jewish-employee-warned-nazis-us-capitol-breach",
+   "author": "wfleming",
+   "created_at": "2021-01-12T23:19:28Z",
+   "points": 36,
+   "num_comments": 16,
+   "story_text": ""
+  },
+  {
+   "objectID": "31531767",
+   "title": "Quickly find sensitive files in your GitHub repo",
+   "url": "https://about.sourcegraph.com/blog/no-more-secrets",
+   "author": "jdorfman",
+   "created_at": "2022-05-27T16:50:12Z",
+   "points": 34,
+   "num_comments": 17,
+   "story_text": ""
+  },
+  {
+   "objectID": "38828739",
+   "title": "Ask HN: Is there a data set for GitHub repos associated with academic papers?",
+   "url": null,
+   "author": "mnky9800n",
+   "created_at": "2024-01-01T00:38:45Z",
+   "points": 34,
+   "num_comments": 7,
+   "story_text": "Codes are often included in academic publications however I haven&#x27;t seen a list of repos anywhere that is connected to doi numbers from papers or zenodo. Does this already exist somewhere or should I need to create it?"
+  },
+  {
+   "objectID": "42121969",
+   "title": "Threat actor attempted to slipstream a malware payload into yt-dlp's GitHub repo",
+   "url": "https://twitter.com/vxunderground/status/1856450468945506615",
+   "author": "raybb",
+   "created_at": "2024-11-13T01:27:29Z",
+   "points": 33,
+   "num_comments": 5,
+   "story_text": ""
+  },
+  {
+   "objectID": "33969233",
+   "title": "Twitter currently does not have admin access to some of its GitHub repos",
+   "url": "https://twitter.com/zoeschiffer/status/1602663271911358466",
+   "author": "GavCo",
+   "created_at": "2022-12-13T14:23:35Z",
+   "points": 32,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "40793185",
+   "title": "GitHub repo extensively mirrored by GitCode, platform launched by China's CSDN",
+   "url": "https://gitcode.com/",
+   "author": "EtaoinWu",
+   "created_at": "2024-06-25T20:26:16Z",
+   "points": 28,
+   "num_comments": 29,
+   "story_text": ""
+  }
+ ]
+}

@@ -1,0 +1,513 @@
+{
+ "query": "monitor website",
+ "params": {
+  "query": "monitor website",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 229,
+ "hits": [
+  {
+   "objectID": "37348162",
+   "title": "ChangeDetection, monitor any website change",
+   "url": "https://github.com/dgtlmoon/changedetection.io",
+   "author": "serhack_",
+   "created_at": "2023-09-01T08:27:21Z",
+   "points": 253,
+   "num_comments": 56,
+   "story_text": ""
+  },
+  {
+   "objectID": "38693719",
+   "title": "Show HN: ScrapX – Monitor the websites of your competitors",
+   "url": "https://www.scrapx.io",
+   "author": "henriklippke",
+   "created_at": "2023-12-19T09:52:46Z",
+   "points": 14,
+   "num_comments": 5,
+   "story_text": "Stay ahead of your competitors - Our service tracks the websites you select on a daily basis and notifies you of any changes, whether it&#x27;s a new headline or a new product that&#x27;s been released."
+  },
+  {
+   "objectID": "27582298",
+   "title": "Show HN: Monitor websites for changes. Get alerted by Email, Slack and Telegram",
+   "url": "https://webtrackr.io/",
+   "author": "amalantony06",
+   "created_at": "2021-06-21T18:37:05Z",
+   "points": 8,
+   "num_comments": 4,
+   "story_text": ""
+  },
+  {
+   "objectID": "27050876",
+   "title": "Upptime: An open source app to monitor our website and API uptime status",
+   "url": "https://www.ayrshare.com/upptime-monitor-status-website-api/",
+   "author": "gbourne",
+   "created_at": "2021-05-05T15:10:53Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "43556197",
+   "title": "Ask HN: What do you use to monitor website security (vulns, uptime, etc.)?",
+   "url": null,
+   "author": "lukejkwarren",
+   "created_at": "2025-04-02T13:01:36Z",
+   "points": 3,
+   "num_comments": 5,
+   "story_text": "I recently built [PenZen](https:&#x2F;&#x2F;penzen.app). It scans websites for real vulnerabilities (not just SSL checks) using OWASP Zap under the hood and sends prioritized alerts with AI-powered remediation suggestions.<p>I made it because I was tired of tools that alert me about issues I don&#x27;t understand or can’t do anything about. Curious: What are you using to monitor website security?<p>And more importantly: What actually makes you trust a report or take action on it?"
+  },
+  {
+   "objectID": "28207567",
+   "title": "Elixir and Phoenix uptime monitor for websites and web apps #3: Data models",
+   "url": "https://l.prograils.com/2UpVIID",
+   "author": "prgrls",
+   "created_at": "2021-08-17T08:39:26Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "37646947",
+   "title": "Show HN: Web app to monitor website security",
+   "url": "https://www.pingkat.com/",
+   "author": "rinz",
+   "created_at": "2023-09-25T16:54:57Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "I am building a tool that can perform some basic (and in the future some more advanced) security-related checks on an ongoing basis. I think the tool could also be useful for pentesters. \nI would love to hear your feedback and feature requests."
+  },
+  {
+   "objectID": "48888502",
+   "title": "Show HN: Monitor any website, discuss outages, and post verified owner updates",
+   "url": "https://anysite.live/site/news.ycombinator.com",
+   "author": "joseph2024",
+   "created_at": "2026-07-13T06:06:19Z",
+   "points": 2,
+   "num_comments": 4,
+   "story_text": "Hi,<p>I built anysite.live, a website monitoring service where anyone can add a site, check its status, and discuss outages in the comments. Verified site owners can also post official updates.<p>Just enter a URL, and anysite.live will check the site every minute.<p>I built this because some of the online communities I regularly use occasionally go down. Most status pages can only be created by site owners, but I wanted a place where anyone could register a site and talk with other users when something went wrong.<p>Current features:<p>Website status checks every minute\np50, p90, and p99 laten"
+  },
+  {
+   "objectID": "47299551",
+   "title": "How to monitor competitor website changes automatically",
+   "url": "https://adversa.io/blog/monitor-competitor-website-changes/",
+   "author": "robinweller",
+   "created_at": "2026-03-08T18:13:16Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "47398259",
+   "title": "Show HN: SiteMon – Browser extension that monitors your websites",
+   "url": "https://sitemon.geekaa.com",
+   "author": "quasimo",
+   "created_at": "2026-03-16T12:47:12Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "27896150",
+   "title": "Monitor your website uptime for free",
+   "url": "https://www.upzilla.co/uptime-monitor/",
+   "author": "upzilla",
+   "created_at": "2021-07-20T16:52:09Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "35754566",
+   "title": "A Website Monitor That Sends Page Owners Live Updates When the Site Goes Down",
+   "url": "https://sitewatcher.co/",
+   "author": "Rehite",
+   "created_at": "2023-04-29T16:44:08Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "48774008",
+   "title": "Feedback about a Visualping alternative using AI to monitor websites",
+   "url": null,
+   "author": "arthurdelerue",
+   "created_at": "2026-07-03T12:03:04Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I&#x27;m launching an alternative to Visualing called Page Deltas ( https:&#x2F;&#x2F;pagedeltas.com ) to monitor websites using LLMs.<p>The idea is to ask AI which part of a webpage you want to monitor, and let it summarize detected changes for you.<p>Useful to monitor your competitors for example (their pricing, products, TOS, etc.).<p>I&#x27;d love to have your feedback on this. Do you think it&#x27;s useful? Any advice?<p>Thanks"
+  },
+  {
+   "objectID": "47289574",
+   "title": "Show HN: Adversa – Monitor competitor websites with AI summaries",
+   "url": "https://adversa.io/",
+   "author": "robinweller",
+   "created_at": "2026-03-07T17:27:55Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I built Adversa to solve a problem I kept running into while working on SaaS projects: tracking competitor changes.<p>I was manually checking competitor pricing pages, landing pages, and feature pages to see if anything had changed. Tools exist that detect page changes, but they mostly send raw diffs or visual alerts.<p>Adversa monitors competitor webpages and uses AI to explain what actually changed and why it might matter. The goal is to filter out cosmetic updates and highlight meaningful changes like pricing shifts, new features, or messaging changes.<p>For example:\n• pricing upda"
+  },
+  {
+   "objectID": "45850914",
+   "title": "Website Monitors Bus Drivers Who Exceed Speed Limits in Helsinki",
+   "url": "https://2fast2hsl.live/",
+   "author": "jnieminen",
+   "created_at": "2025-11-07T20:45:18Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "44797786",
+   "title": "Show HN: Global Website Monitor – Free Multi-Region Latency Checker",
+   "url": "https://website-monitor-dbg.pages.dev/",
+   "author": "coolandersonfan",
+   "created_at": "2025-08-05T13:36:09Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN<p>I built [Global Website Monitor](<a href=\"https:&#x2F;&#x2F;website-monitor-dbg.pages.dev&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;website-monitor-dbg.pages.dev&#x2F;</a>) – a free tool that checks website latency from multiple global regions (Asia, US, Europe) in real time.<p>Features:\n-  Global region checks (GCP-based monitors)\n-  Multi-hop latency tracking (ICMP + TCP + TLS)\n-  Realtime charts with React + Chart.js\n-  Geo map visualization of routing path\n-  Free to use – no sign-up required for basic trial<p>Tech Stack:\n- Backend: Go (Gin) + Prometheus + MongoDB + Redis\n- Frontend:"
+  },
+  {
+   "objectID": "35197795",
+   "title": "Show HN: Track, Replay, Optimize: Monitor Your Website with Our Application",
+   "url": "https://leveloper.io/app/login",
+   "author": "egykettoharo",
+   "created_at": "2023-03-17T14:46:26Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi there!<p>I&#x27;m Martin and I would like to show what we were working on in the past year.\nOur website monitoring application helps you keep track of your visitors&#x27; behavior on your website. With this tool, you can replay a visitor session or watch it live, capture console messages and network activities, and even create heatmaps for your pages to view mouse movements and clicks.<p>Additionally, the application captures frontend javascript errors and provides an overview of them with attached recordings. The A&#x2F;B testing option allows you to test different page designs and content"
+  },
+  {
+   "objectID": "33622363",
+   "title": "Show HN: [Free] Monitor website changes, crawl entire sites, save time and costs",
+   "url": "https://alertbits.com/",
+   "author": "abraararique",
+   "created_at": "2022-11-16T13:10:41Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I wanted to share a free tool I built for people who are tired of manually checking websites for important changes:<p>Is there a website with valuable info that you&#x27;d like to stay updated on?<p>Well, as you can imagine, checking that site yourself every day would be boring, tedious &amp; slow; not to mention a big waste of time.<p>(Hey, if the thought of checking dozens of websites every day makes you jump up and down in joy, sure, go ahead...)<p>But you can automate all that with AlertBits, a free tool that can monitor any website or crawl entire sites &amp; alert you whenever that site "
+  },
+  {
+   "objectID": "27085405",
+   "title": "Ask HN: Monitor Website for Coders?",
+   "url": null,
+   "author": "KingOfCoders",
+   "created_at": "2021-05-08T09:28:57Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "As a coder I want larger monitors from time to time, or two monitors etc.<p>But with DP1.2&#x2F;1.4, HDMI 2.0&#x2F;2.1, TB3&#x2F;TB4 it gets complicated.<p>Is there a website where I can see what is the cheapest card to drive e.g. 2x 5k monitors, or e.g. a Samsung G9@240Hz? What cabling do I need etc. Also what monitor works with what MBP."
+  },
+  {
+   "objectID": "42319315",
+   "title": "Launch HN: Parsagon (YC W21) – AI for public affairs and government relations",
+   "url": null,
+   "author": "sand1929",
+   "created_at": "2024-12-04T16:50:06Z",
+   "points": 73,
+   "num_comments": 53,
+   "story_text": "Hi HN! I’m Sandy, and I’m excited to introduce Parsagon. Parsagon is using AI to automate workflows for government affairs professionals, starting with an AI search for public policy. Here&#x27;s a demo: <a href=\"https:&#x2F;&#x2F;parsagon.io&#x2F;explore-search\">https:&#x2F;&#x2F;parsagon.io&#x2F;explore-search</a><p>Current search portals for political monitoring are outdated. (By political monitoring, we mean people&#x2F;orgs monitoring government announcements, policy updates, etc.; not the government monitoring people.) Each one only covers one region of the world, and they only allow you"
+  },
+  {
+   "objectID": "47601577",
+   "title": "BetterDB – open-source Redis/Valkey migration across clouds and self-hosted",
+   "url": null,
+   "author": "kaliades",
+   "created_at": "2026-04-01T14:38:11Z",
+   "points": 15,
+   "num_comments": 6,
+   "story_text": "I built this after a year at Redis as an engineering manager for their developer tools, watching the ecosystem fragment after the license change.<p>Redis 7.4 broke data file compatibility with Valkey. RIOT, the only widely-used open migration tool, was archived last October with no open replacement. And the clouds - AWS, GCP, Redis Cloud - have no incentive to make leaving easy. If you want to move between providers, switch protocols, or get off managed infrastructure entirely, you&#x27;re on your own.<p>BetterDB ships a three-phase workflow to fix that:<p>Analysis - scans your keyspace and fl"
+  },
+  {
+   "objectID": "39982552",
+   "title": "Ask HN: Search engine ranking monitoring tool?",
+   "url": null,
+   "author": "b20000",
+   "created_at": "2024-04-09T18:30:26Z",
+   "points": 6,
+   "num_comments": 5,
+   "story_text": "What are your favourite tools to monitor your website search engine ranking daily&#x2F;weekly?"
+  },
+  {
+   "objectID": "38191609",
+   "title": "Show HN: UptimeFunk, Because the World Needs Another Uptime Monitoring Service",
+   "url": "https://uptimefunk.com/",
+   "author": "guybedo",
+   "created_at": "2023-11-08T15:20:01Z",
+   "points": 5,
+   "num_comments": 7,
+   "story_text": "A few months ago, i was looking for a simple uptime monitor service to monitor my websites, but i wanted some extra features that i couldn&#x27;t find anywhere.<p>These aren&#x27;t wild features, but oddly enough couldn&#x27;t find a service that was easy to setup, cheap, and that could do simple uptime mointoring for databases (sql &amp; mongodb), docker containers, rabbitmq queues and os memory&#x2F;cpu.<p>It&#x27;s only when i was almost done that i realized uptime monitoring services had become something of mania in the indiehacker&#x2F;solopreneur world. Anyways, hoping it can provide val"
+  },
+  {
+   "objectID": "36416178",
+   "title": "AI apps for ideation, research, and validation",
+   "url": null,
+   "author": "sneha1995",
+   "created_at": "2023-06-21T09:06:30Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": "7 AI apps for ideation, research, and validation.<p>1. Notion: Notion is an all-in-one workspace where you can write, plan, collaborate and get organized - it allows you to take notes, add tasks, manage projects &amp; more. Imagine a lego structure. Notion provides the building blocks and you can create your own layouts and toolkit to get work done.<p>2. Browse AI: Browse.AI lets you train a robot to scrape or monitor any website in 2 mins:  No-code  1-click automations  Adapts to website changes  Works on almost any website  Simulates user actions  Integrates w. Google Sheet &amp; Zapier  API"
+  },
+  {
+   "objectID": "30399216",
+   "title": "Show HN: Statusping.co – Website Monitoring Service",
+   "url": "https://statusping.co",
+   "author": "sanomial",
+   "created_at": "2022-02-19T18:23:21Z",
+   "points": 3,
+   "num_comments": 3,
+   "story_text": "Hi everyone<p>Just launched a website monitoring service <a href=\"https:&#x2F;&#x2F;statusping.co\" rel=\"nofollow\">https:&#x2F;&#x2F;statusping.co</a>. It constantly monitors your website and notifies you whenever it is unavailable or returns an unexpected response.<p>If it seems like something useful to you please try it out <a href=\"https:&#x2F;&#x2F;statusping.co\" rel=\"nofollow\">https:&#x2F;&#x2F;statusping.co</a> and let me know if you have any questions, feedback or anything else :)"
+  },
+  {
+   "objectID": "46776065",
+   "title": "A Lightweight, Non-Intrusive Approach to Website Monitoring (Ops Perspective)",
+   "url": null,
+   "author": "marksugar",
+   "created_at": "2026-01-27T06:00:43Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "I’m a Linux ops engineer working in the DevOps&#x2F;SRE space. and over the past few months, I’ve been working on a small *website monitoring* side project in my spare time:\n  https:&#x2F;&#x2F;inostop.com&#x2F;en&#x2F;<p>Most of the monitoring and ops tools I’ve built before were used internally within companies. This is my first attempt to turn a relatively complete tool into something publicly usable.<p>In day-to-day operations, website monitoring usually involves:<p>- Infrastructure monitoring\n- Application &#x2F; API monitoring\n- Partial CDN monitoring<p>These are often built on top of to"
+  },
+  {
+   "objectID": "37939983",
+   "title": "Ready, Set, Launch: Introducing Your AI Tool to the Market That Drives Traffic",
+   "url": null,
+   "author": "sneha1995",
+   "created_at": "2023-10-19T08:16:40Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": "Launching an AI tool to bring traffic to a website can be an exciting and daunting task. If you’ve done the groundwork and created a valuable tool, it’s time to prepare for your launch day.<p>What to Expect<p>Launching an AI tool may seem straightforward, but it requires careful planning and execution. When you launch a new product or service, you need to be prepared for problems and delays and launching an AI tool is no different.<p>Firstly, it&#x27;s important to remember that not everyone will immediately understand how your AI tool works. You will need to take the time to explain it and sh"
+  },
+  {
+   "objectID": "47244160",
+   "title": "Show HN: PulseWatch – AI-powered website change monitoring with visual selectors",
+   "url": "https://pulsewatch.watch",
+   "author": "KaracaTR",
+   "created_at": "2026-03-04T07:10:01Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I built PulseWatch as a solo dev because I was tired of writing CSS selectors to monitor websites for changes.<p>It uses GPT-4o to analyze page screenshots and suggest what to track — just point and click. When something changes, you get a plain-language summary instead of a raw diff.<p>Tech stack: .NET 8, Flutter (web + iOS + Android), PostgreSQL, Railway + Vercel.<p>Free tier: 2 monitors with daily checks.<p>Demo: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;2SKgV4QqtNg\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;2SKgV4QqtNg</a><p>Happy to answer any questions!"
+  },
+  {
+   "objectID": "44391771",
+   "title": "Ask HN: Would you use a self-hosted uptime monitor with a public status page?",
+   "url": null,
+   "author": "lpmsh",
+   "created_at": "2025-06-26T21:43:14Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I’m thinking of building an open-source alternative to Better Stack and StatusPage. It would let you monitor website or API uptime, receive alerts (via email, Slack, Discord, or webhooks), and display a branded public status page.<p>The goal is to offer something:\n- Easy to self-host with Docker\n- Lightweight and developer-friendly\n- Privacy-focused with no data collection\n- Free to use, with optional paid hosting and support<p>I’m still validating the idea and would love your input.<p>Would you use a tool like this?\nWhat features matter most to you in an uptime monitor?<p>Would you rather sel"
+  },
+  {
+   "objectID": "43684599",
+   "title": "Show HN: I made a Free internal SEO monitoring tool",
+   "url": "https://webcustodia.com",
+   "author": "standardfloat",
+   "created_at": "2025-04-14T18:36:49Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "TLDR: add websites you wish to monitor to the tool and get notified when issues are detected<p>I manage multiple websites and was having issues with handling all small SEO errors that can happen in the lifecycle of a website (broken links, missing meta tags, bad page hierarchy etc.), so I created this tool which monitors the website every few hours.<p>Google Search Console and Bing Webmaster provide some of these, but I&#x27;ve found both to be lacking, and not user-friendly.<p>Planning on adding more features, let me know what you personally would like to monitor on your website!"
+  },
+  {
+   "objectID": "43458502",
+   "title": "Show HN: SpyDelta – Real-Time Competitive Intelligence, Straight to Your Inbox",
+   "url": "https://spydelta.com/",
+   "author": "erol444",
+   "created_at": "2025-03-24T07:59:26Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I built SpyDelta because I needed a better way to track competitors’ website changes (for my &quot;day job&quot;). The existing tools that I tried were outdated and I figured I could make a better one using todays tech (LLMs&#x2F;LVMs).<p>SpyDelta continuously monitors competitor websites and delivers only key insights straight to your inbox. No dashboards, no fluff—just actionable updates on pricing changes, new products, job postings, and more. Features:<p>- AI-powered – Filters out noise, surfaces only relevant competitor insights\n- Crawls around the website to monitor multiple pages\n- &lt;"
+  },
+  {
+   "objectID": "42039891",
+   "title": "Mastering SEO: Best Practices Every Web Developer Should Know",
+   "url": null,
+   "author": "cannibalXxx",
+   "created_at": "2024-11-04T09:25:27Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "In the vast landscape of the internet, where millions of websites compete for attention, mastering Search Engine Optimization (SEO) is crucial for any web developer. Implementing SEO best practices not only improves a website&#x27;s visibility but also enhances its relevance and user experience. This article outlines essential SEO strategies tailored for web developers to ensure their creations rank high and thrive in the digital realm.<p>1. Mobile-First Design:<p>With mobile devices dominating internet usage, prioritizing mobile-friendly designs is imperative. Utilize responsive design techni"
+  },
+  {
+   "objectID": "36006627",
+   "title": "Show HN: The fastest selfhostable analytics and performance monitoring tool",
+   "url": "https://github.com/Swetrix/swetrix-api/releases/tag/v2.0.0",
+   "author": "blaumaus",
+   "created_at": "2023-05-19T20:42:44Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "Hi HN, I&#x27;m excited to share a selfhosted release of my web analytics tool I&#x27;ve been working on for more than 2 years.<p>The selfhostable Swetrix allows you to monitor your website&#x27;s traffic &amp; user flow, track the performance data, custom events and much more.<p>It&#x27;s available on Docker Hub <a href=\"https:&#x2F;&#x2F;hub.docker.com&#x2F;r&#x2F;swetrix&#x2F;swetrix-api\" rel=\"nofollow\">https:&#x2F;&#x2F;hub.docker.com&#x2F;r&#x2F;swetrix&#x2F;swetrix-api</a> and soon will be added to Caprover.<p>Any feedback would be much appreciated!"
+  },
+  {
+   "objectID": "47389369",
+   "title": "Show HN: Crabby, open source web+API synthetic monitoring",
+   "url": "https://github.com/chrissnell/crabby",
+   "author": "chrissnell",
+   "created_at": "2026-03-15T17:07:10Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Crabby monitors your websites and APIs and reports metrics to a variety of storage backends (Prometheus, Datadog, Splunk, InfluxDB, etc).<p>It gives you insight into timings like TTFB, DNS resolution, TLS negotiation, server processing, and content delivery. It also supports chromedp for automated gathering of browser metrics like page render timings.<p>It&#x27;s very easy to configure and includes a Helm chart for deployment into K8S."
+  },
+  {
+   "objectID": "47072913",
+   "title": "Show HN: StatusMonk – Uptime monitoring and status pages for small SaaS teams",
+   "url": "https://statusmonk.com/",
+   "author": "mukul767",
+   "created_at": "2026-02-19T12:03:15Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>We built StatusMonk after repeatedly finding out about outages from customers instead of our systems.<p>StatusMonk is an all-in-one monitoring and public status page platform designed for founders and small teams who want early detection and clear communication without enterprise complexity.<p>What it does today:<p>- Monitor websites, APIs, and cron jobs<p>- Domain, SSL certificate, and DNS monitoring<p>- Alerts via email, Slack, or webhooks<p>- Automatic incident creation and recovery notifications<p>- Public status pages with uptime history and incidents<p>The goal is simple: detect"
+  },
+  {
+   "objectID": "46860167",
+   "title": "Show HN: Parano.ai – Continuous Competitor Monitoring",
+   "url": "https://parano.ai",
+   "author": "mlukaszczyk",
+   "created_at": "2026-02-02T19:32:19Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Tracks competitors for changes (pricing, features, messaging, hiring etc) and delivers AI-summarized insights to your inbox. Built because manual competitive research breaks at scale. Markets move continuously but humans don&#x27;t monitor consistently.<p>Live at <a href=\"https:&#x2F;&#x2F;parano.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;parano.ai</a><p>Monitors full websites and other sources like social media &#x2F; Github. Detects content-level changes, filters noise.<p>The problem: Teams either do quarterly manual research (too slow) or set up Google Alerts (too noisy, misses subtle changes). W"
+  },
+  {
+   "objectID": "46207478",
+   "title": "Show HN: I built an AI tool that tracks competitor changes in real time",
+   "url": "https://usesignallabs.com/the-ci-treadmill-is-broken-why-battlecards-age-in-days-not-quarters",
+   "author": "emre94",
+   "created_at": "2025-12-09T17:09:33Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I&#x27;m the solo founder of Signal Labs. I built a tool called CIx because in my previous roles, competitive intelligence and battelcards became outdated in days. Updating them manually was painful, slow, and constantly behind competitors.<p>The problem we’re trying to solve:<p>- Competitors launch features daily&#x2F;weekly but teams only notice months later<p>- Sales needs fresh intel for calls, not stale quarterly slides<p>- PMs want to know what competitors are shipping so they can make informed roadmaps decisions<p>- CI&#x2F;PMM teams spend hours gathering intel that becomes out"
+  },
+  {
+   "objectID": "45646236",
+   "title": "Show HN: Free AI Website Change Tracker and Smart Alerts",
+   "url": "https://justcanary.com/",
+   "author": "spotus",
+   "created_at": "2025-10-20T17:00:22Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi, I wanted to introduce you to the beta version of a project that uses AI to monitor websites. I’d be glad to receive your feedback."
+  },
+  {
+   "objectID": "42879979",
+   "title": "Show HN: I made an iOS app to view Plausible Analytics on home screen widgets",
+   "url": "https://applausible.app/",
+   "author": "rfbabeheer",
+   "created_at": "2025-01-30T17:30:53Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "As someone who loves to keep a close eye on website performance, I’ve often found myself wishing for a simple, mobile-friendly way to monitor key website stats on the go. Sure, Plausible has a great web dashboard, but when you want quick insights without opening a browser, something is missing.<p>That’s why I built Applausible. I wanted a dedicated app that gives me instant access to key metrics like current visitors, top pages, and visitor sources—right from my iPhone or iPad. The goal was to create something minimal, fast, and reliable for Plausible users who need instant insights wherever t"
+  },
+  {
+   "objectID": "37674941",
+   "title": "Boost Your Client's SEO with a Killer Landing Page in 1 Hour – Can You Do It?",
+   "url": null,
+   "author": "sneha1995",
+   "created_at": "2023-09-27T14:12:31Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "When it comes to building a landing page for a new client in just one hour, the tools and technologies to use heavily depend on the project requirements, the level of complexity, and the resources available. However, in most cases, there are some tools and AI technologies that can be handy in building a landing page quickly and optimizing it for SEO.<p>Here are some of the tools and AI SEO techniques that can be used in building a landing page for a new client within an hour:<p>1. Website builder tools: These are drag and drop web page creation tools that allow users to design and customize we"
+  },
+  {
+   "objectID": "26740888",
+   "title": "Website Monitoring Service Looking for Beta Users",
+   "url": null,
+   "author": "ivnilv",
+   "created_at": "2021-04-08T16:39:39Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hello HackerNews !<p>A bit of background story here.<p>I am a Linux sysadmin&#x2F;devops guy that has been maintaining freelance customer&#x27;s websites for some time now.<p>The customer base that I support are usually small online businesses (ecommerce,blogs,affiliates). Those businesses operate at a smaller scale than larger companies and often don&#x27;t have a dedicated IT department to look after their production websites. So when an issue with the website occurs, the site owners are not being notified in a timely manner about this.<p>Due to some demand from those customers and seeing an"
+  },
+  {
+   "objectID": "30526058",
+   "title": "Show HN: I created a website to monitor the war situation",
+   "url": "https://isrussiawinningthewar.com",
+   "author": "bobabob",
+   "created_at": "2022-03-02T11:14:32Z",
+   "points": 5,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "49455426",
+   "title": "I Made a Website to Monitor Data Center Effects on Electricity Prices",
+   "url": "https://www.cremieux.xyz/p/i-made-a-website-to-monitor-data",
+   "author": "MrBuddyCasino",
+   "created_at": "2026-08-26T20:30:02Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "31089367",
+   "title": "Ask HN: Best Width for Website?",
+   "url": null,
+   "author": "iio7",
+   "created_at": "2022-04-19T21:19:44Z",
+   "points": 27,
+   "num_comments": 27,
+   "story_text": "I see a lot of people recommending something like 80 char width max. Or even lower. However, since each person is able to set the width of the browser, does this really apply to the browser? I mean, I have an 1080p 27&quot; monitor, and I am fairly happy reading something like 90% width of that. No need to go all the way down to max. of 80 chars. Also, I think it looks horrible when the browser is full width on the monitor, yet a website forces the max-width to something like 940px. What is your personal preference on this?"
+  },
+  {
+   "objectID": "40776324",
+   "title": "Ask HN: Legal texts from websites, how to trust it?",
+   "url": null,
+   "author": "null_investor",
+   "created_at": "2024-06-24T14:15:46Z",
+   "points": 4,
+   "num_comments": 3,
+   "story_text": "While using the web, we accept many privacy policies and terms of services, but it feels weird.<p>Unlike a paper contract, where I have a copy of it, on a website, I&#x27;ve never saved a page from one of those websites, and they could modify it without warning me.<p>Is there a website that monitors this? Or there&#x27;s some industry standard that every website follows it and I&#x27;m being overconcerned?"
+  },
+  {
+   "objectID": "40524772",
+   "title": "Show HN: Pingify – A tool to keep your website up and running",
+   "url": "https://pingify.com",
+   "author": "venelinkochev",
+   "created_at": "2024-05-30T15:19:11Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I’m excited to share Pingify, a project I’ve been developing during my free time over the past two months while working a full-time job.<p>I’ve often experienced unexpected downtime, which can disrupt user experience and damage trust. I created Pingify to help website owners monitor performance and quickly address issues.<p>It offers Uptime, SSL, DNS, and Cron Tasks Monitoring, as well as real-time notifications.<p>I build it with Laravel and TailwindCSS.<p>I’m eager to get feedback from the HN community and hear any suggestions you might have.<p>Thanks for taking a look!"
+  },
+  {
+   "objectID": "43576621",
+   "title": "Show HN: I built an AI that tracks your competitors so your team doesn't have to",
+   "url": "https://hiresteve.ai/",
+   "author": "TakaJP",
+   "created_at": "2025-04-03T23:18:11Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "Hi HN,<p>We built Steve(<a href=\"https:&#x2F;&#x2F;hiresteve.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;hiresteve.ai</a>) because most modern marketing teams struggle to keep up with competitor moves.<p>Steve is an AI-powered competitive research assistant designed specifically for marketing teams.<p>What Steve does:\n- Continuously monitors your competitors’ websites, social media, news, and reviews\n- Detects and summarizes changes to product, pricing, positioning, and messaging\n- Delivers insights directly into your Slack channel — without you needing to ask\n- Builds positioning maps and highlights"
+  },
+  {
+   "objectID": "39417932",
+   "title": "A PagerDuty Competitor?",
+   "url": null,
+   "author": "Drantaz",
+   "created_at": "2024-02-18T10:33:22Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Murnitur is creating a Site Reliability Tool which monitors services like Websites, APIs, Kubernetes containers and notifies when there is a downtime or degraded performance.\nIt also allows for transparency between companies and their users, allowing the companies to create public and private status pages to give insights of their services to private stakeholders or public users. Murnitur also provides on-call scheduling which alows the company to setup shifts of those who will be on-call to handle incidents when they happen. Murnitur comes with a fully functional incident management system.<p"
+  },
+  {
+   "objectID": "47334705",
+   "title": "What Pages Should You Monitor on a Competitor Website?",
+   "url": "https://adversa.io/blog/what-pages-should-you-monitor-on-a-competitor-website/",
+   "author": "robinweller",
+   "created_at": "2026-03-11T12:28:21Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "39292151",
+   "title": "Visualping - Monitor Visual Changes on Websites",
+   "url": "https://www.visualping.io/",
+   "author": "Fake4d",
+   "created_at": "2024-02-07T18:22:08Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": ""
+  }
+ ]
+}

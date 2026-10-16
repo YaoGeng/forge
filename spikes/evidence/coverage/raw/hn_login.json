@@ -1,0 +1,73 @@
+{
+ "query": "scrape behind login",
+ "params": {
+  "query": "scrape behind login",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 6,
+ "hits": [
+  {
+   "objectID": "30699237",
+   "title": "How to scrape pages behind login with Python",
+   "url": "https://www.trickster.dev/post/how-to-scrape-pages-behind-login-with-python/",
+   "author": "rl1987",
+   "created_at": "2022-03-16T14:26:52Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "48981273",
+   "title": "Show HN: Free creator brand-safety checker, no signup",
+   "url": null,
+   "author": "yurimhln",
+   "created_at": "2026-07-20T16:41:03Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": "Hi HN, I&#x27;m Yuri, co-founder of Oriane.\nLike a lot of people here, I&#x27;d rather write code than do marketing. But at some point growth means working with creators, and that part is stubbornly manual. Before you pay someone to post about your product, you&#x27;re supposed to actually watch their stuff and make sure it won&#x27;t blow up in your face. Nobody does this well because watching 3 months of video across 20 accounts is nobody&#x27;s idea of a good time.<p>The annoying part is that the signal you care about isn&#x27;t in the metadata or the captions. It&#x27;s inside the videos: "
+  },
+  {
+   "objectID": "47207790",
+   "title": "Show HN: Chromectl – CLI to give an AI agent its own Chrome session",
+   "url": "https://github.com/BartlomiejLewandowski/chromectl",
+   "author": "bartek_gdn",
+   "created_at": "2026-03-01T15:50:14Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Most browser automation tools (Playwright MCP and similar) create a browser process owned by the agent. chromectl flips that: you start a named session, and the agent connects to it. The session is isolated — no cookies, no saved logins, no way for the agent to wander into your banking tab.<p>This also unlocks human handoff. Start a session, navigate to a site, log in manually, then hand control back to Claude. Useful for anything behind auth that you don&#x27;t want to automate credentials for.\nEach session gets a dedicated Chrome profile. Stop it, start it again tomorrow, you&#x27;re still l"
+  },
+  {
+   "objectID": "44419947",
+   "title": "Show HN: Ship Name AI Tool",
+   "url": "https://shipname.net",
+   "author": "virusyu",
+   "created_at": "2025-06-30T06:06:16Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hey HN!<p>I just launched ShipName – a bilingual (English + Chinese) “ship-name”\ngenerator that blends two names into a catchy couple tag in one click.<p>What it does  \n• Takes two names and a style (cute &#x2F; cool &#x2F; meme &#x2F; wedding)  \n• Generates 8 short blended names, in English, Chinese or mixed  \n• One-click download of a share card (PNG) for X, Discord, Weibo  \n• Bilingual UI + Pinyin support – no more garbled Chinese outputs<p>Stack  \nNext.js 14 + Vercel Edge Functions  \nphi-3-mini-128k via OpenRouter for fallback creativity  \nSatori&#x2F;Resvg for server-side card rendering  "
+  },
+  {
+   "objectID": "47382802",
+   "title": "Show HN: Plaidify – Give AI agents access to any login-protected website",
+   "url": "https://github.com/meetpandya27/plaidify",
+   "author": "meetpandya99",
+   "created_at": "2026-03-15T00:16:16Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": "Every AI agent hits the same wall: the world&#x27;s most valuable data is locked behind login forms. Bank balances, utility bills, insurance policies, academic transcripts — none of them have APIs. Plaid covers banks for $500+&#x2F;mo. Everything else? You write fragile Selenium scripts.<p>Plaidify is open-source infrastructure that turns any login-protected website into a REST API. You drop a JSON &quot;blueprint&quot; into the connectors folder — CSS selectors for username, password, submit, and what to extract — and you get a structured JSON endpoint. No scraper code to write.<p>It&#x27;s d"
+  },
+  {
+   "objectID": "47431330",
+   "title": "GitHub permanently banned my account for using Actions to validate VPN nodes",
+   "url": null,
+   "author": "shray88",
+   "created_at": "2026-03-18T20:54:54Z",
+   "points": 3,
+   "num_comments": 7,
+   "story_text": "I&#x27;m a 20-year-old veterinary student from Russia developing anti-censorship tools. On March 17, 2026, GitHub permanently suspended my account citing Terms of Service violations related to GitHub Actions.<p>THE PROJECT<p>Raccoon Squad VPN — an Android VPN client based on Xray-core with DPI bypass for Russian users. Supports VLESS, VMess, Trojan, Shadowsocks, Hysteria2, TUIC. Built entirely with AI assistance over several months.<p>Source: <a href=\"https:&#x2F;&#x2F;gitlab.com&#x2F;shray77&#x2F;rsquad\" rel=\"nofollow\">https:&#x2F;&#x2F;gitlab.com&#x2F;shray77&#x2F;rsquad</a><p>WHAT THE ACTIO"
+  }
+ ]
+}

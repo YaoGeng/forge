@@ -1,0 +1,513 @@
+{
+ "query": "track website changes",
+ "params": {
+  "query": "track website changes",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 75,
+ "hits": [
+  {
+   "objectID": "43458502",
+   "title": "Show HN: SpyDelta – Real-Time Competitive Intelligence, Straight to Your Inbox",
+   "url": "https://spydelta.com/",
+   "author": "erol444",
+   "created_at": "2025-03-24T07:59:26Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I built SpyDelta because I needed a better way to track competitors’ website changes (for my &quot;day job&quot;). The existing tools that I tried were outdated and I figured I could make a better one using todays tech (LLMs&#x2F;LVMs).<p>SpyDelta continuously monitors competitor websites and delivers only key insights straight to your inbox. No dashboards, no fluff—just actionable updates on pricing changes, new products, job postings, and more. Features:<p>- AI-powered – Filters out noise, surfaces only relevant competitor insights\n- Crawls around the website to monitor multiple pages\n- &lt;"
+  },
+  {
+   "objectID": "42018357",
+   "title": "Show HN: Trackly – Change Detection for Business",
+   "url": "https://trackly.io/",
+   "author": "stevewillbe",
+   "created_at": "2024-11-01T16:06:00Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Track website changes that impact your business\nGet clear alerts when web pages change. Maintain a history of tracked pages. Customize frequency, keywords and page section to get the notifications you need."
+  },
+  {
+   "objectID": "45608356",
+   "title": "Show HN: RemindMe – AI reminders that understand context",
+   "url": "https://apps.apple.com/us/app/remindme-ai-reminders-app/id6753209895",
+   "author": "gagarwal123",
+   "created_at": "2025-10-16T17:40:02Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Hi HN! I built RemindMe, an iOS app that uses AI to create context-aware reminders.<p>Unlike traditional reminder apps, RemindMe understands natural language and monitors real-world conditions:<p>• &quot;Remind me to take an umbrella when it rains tomorrow&quot; - We monitor weather\n• Snap a photo of an event poster - We extract dates&#x2F;times automatically (OCR + GPT)\n• &quot;Alert me when I&#x27;m near any grocery store&quot; - Location category detection, not specific addresses\n• Track YouTube uploads, product availability, website changes<p>What makes it different?\n• Photo intelligence: "
+  },
+  {
+   "objectID": "40046670",
+   "title": "Ask HN: How do you track copy changes on websites/emails?",
+   "url": null,
+   "author": "beatthatflight",
+   "created_at": "2024-04-15T23:04:48Z",
+   "points": 30,
+   "num_comments": 16,
+   "story_text": "Have a client with multiple departments making copy changes&#x2F;edits on email templates and websites.  However, it either comes in forwarded emails with strikethroughs and red&#x2F;black text, or in a word document with two columns showing old and new, and you have to eyeball each character.  Is there a tool or better way to do it?"
+  },
+  {
+   "objectID": "40563830",
+   "title": "Show HN: I made a website to track public policy changes across US",
+   "url": "https://causalcities.com/",
+   "author": "WasimBhai",
+   "created_at": "2024-06-03T15:45:30Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "The website tracks over 100 newspapers across US and checks if there is a policy change. If it finds one, it only shows that news and a causal question that is linked with it."
+  },
+  {
+   "objectID": "44951198",
+   "title": "Show HN: SitemapMonitor – Track changes in any website's sitemap automatically",
+   "url": "https://www.sitemapmonitor.live",
+   "author": "pikaiqiu",
+   "created_at": "2025-08-19T13:20:33Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I built a tool to monitor changes in any website’s sitemap: [sitemapmonitor.live]<p>It automatically tracks new&#x2F;removed URLs from a site’s sitemap.xml, and notifies you when something changes.  \nThis is useful for:\n- SEO (detecting new pages or deleted ones)\n- Competitive analysis (see when competitors launch new features or content)\n- Site reliability (alert if a big chunk of pages disappears)<p>Unlike generic crawlers, it focuses only on sitemap data → less overhead, more precise tracking.<p>I made it because I kept manually checking competitor sitemaps for updates, which was painful.  "
+  },
+  {
+   "objectID": "43681943",
+   "title": "I am developing  a Website Change Detection Tool",
+   "url": "https://sitechangetracker.com/",
+   "author": "InnoDev_",
+   "created_at": "2025-04-14T14:50:17Z",
+   "points": 3,
+   "num_comments": 2,
+   "story_text": "I am developing a Website Change Detection Tool after missing a critical product restock. Now it tracks page changes in real-time using AI to verify changes, sends alerts via multiple integrations, and captures screenshots. Built it to solve my own pain—hope it helps others."
+  },
+  {
+   "objectID": "47244160",
+   "title": "Show HN: PulseWatch – AI-powered website change monitoring with visual selectors",
+   "url": "https://pulsewatch.watch",
+   "author": "KaracaTR",
+   "created_at": "2026-03-04T07:10:01Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I built PulseWatch as a solo dev because I was tired of writing CSS selectors to monitor websites for changes.<p>It uses GPT-4o to analyze page screenshots and suggest what to track — just point and click. When something changes, you get a plain-language summary instead of a raw diff.<p>Tech stack: .NET 8, Flutter (web + iOS + Android), PostgreSQL, Railway + Vercel.<p>Free tier: 2 monitors with daily checks.<p>Demo: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;2SKgV4QqtNg\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;2SKgV4QqtNg</a><p>Happy to answer any questions!"
+  },
+  {
+   "objectID": "37064152",
+   "title": "Show HN: Get notified when sites update their terms of service",
+   "url": "https://tosnotify.com/",
+   "author": "supermdguy",
+   "created_at": "2023-08-09T15:26:56Z",
+   "points": 190,
+   "num_comments": 66,
+   "story_text": "After reading about what happened with NightOwl yesterday [0], I thought about what it would take to be aware of things like that in the future. I created ToSNotify to automatically notify you when a website&#x27;s terms change.<p>A harder problem I&#x27;ve been thinking through is how to know which terms to track, since it&#x27;d be a pain to add every site I have an account with. One idea I had is to automatically get terms for apps you have installed from the app store. Any other ideas&#x2F;feedback are appreciated!<p>[0]: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=3705250"
+  },
+  {
+   "objectID": "38693719",
+   "title": "Show HN: ScrapX – Monitor the websites of your competitors",
+   "url": "https://www.scrapx.io",
+   "author": "henriklippke",
+   "created_at": "2023-12-19T09:52:46Z",
+   "points": 14,
+   "num_comments": 5,
+   "story_text": "Stay ahead of your competitors - Our service tracks the websites you select on a daily basis and notifies you of any changes, whether it&#x27;s a new headline or a new product that&#x27;s been released."
+  },
+  {
+   "objectID": "44636968",
+   "title": "Show HN: An API for human-powered browser tasks",
+   "url": "https://browser-work.com/",
+   "author": "madebywelch",
+   "created_at": "2025-07-21T16:16:28Z",
+   "points": 5,
+   "num_comments": 7,
+   "story_text": "At APM Help, we have a large team that performs repetitive, browser-based tasks. Years ago, to manage this work securely and get a clear audit trail, we built an internal platform we call &quot;Hub.&quot; It&#x27;s essentially a locked-down environment where our team works that records their sessions, tracks every interaction, and prevents data from being copied or shared. It&#x27;s been our internal source of truth for years.<p>More recently, like many companies, we&#x27;ve been building more automation. And like everyone else, we&#x27;ve seen our automations fail on edge cases—a weirdly form"
+  },
+  {
+   "objectID": "37421818",
+   "title": "Show HN: Automated Competitors Tracking for Startups",
+   "url": "https://rivalhunt.co?ref=producthunt",
+   "author": "semanser",
+   "created_at": "2023-09-07T16:49:31Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "Almost every company that I&#x27;ve worked for has always used Notion or Google Docs to manually track their competitors. Once I started working on my own startup, I quickly realized that it&#x27;s pretty tedious to try to keep an eye on my competitors and keep all the data updated manually.\nRivalHunt is designed to empower startups in tracking their competitors effortlessly. It offers:<p>Real-time updates on competitors&#x27; website changes, such as pricing updates, team modifications, and feature releases. Stay informed about competitors&#x27; latest social media posts across Twitter, Faceb"
+  },
+  {
+   "objectID": "46723258",
+   "title": "Show HN: Meter – data feed monitoring changes on any site",
+   "url": "https://www.meter.sh/",
+   "author": "hankwilliamsjr",
+   "created_at": "2026-01-22T18:30:24Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Officially launching meter today - it tracks the changes on any website and sends you a webhook with the changes.<p>Supports proxies, antibot handling, and schedule management.<p>We’ve had a large amount of users migrate from traditional scrapers to only track the content changes.<p>We have a generous free tier - give it a try!"
+  },
+  {
+   "objectID": "37418853",
+   "title": "Show HN: Automated competitor tracking tool for startups",
+   "url": "https://rivalhunt.co",
+   "author": "semanser",
+   "created_at": "2023-09-07T13:47:20Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Almost every company that I&#x27;ve worked for has always used Notion or Google Docs to manually track their competitors. Once I started working on my own startup, I quickly realized that it&#x27;s pretty tedious to try to keep an eye on my competitors and keep all the data updated manually.<p>RivalHunt is designed to empower startups in tracking their competitors effortlessly. It offers:<p>Real-time updates on competitors&#x27; website changes, such as pricing updates, team modifications, and feature releases.\n Stay informed about competitors&#x27; latest social media posts across Twitter, Fa"
+  },
+  {
+   "objectID": "49792076",
+   "title": "Show HN: A website that tracks US food prices every day",
+   "url": "https://www.kadoa.com/food-prices",
+   "author": "hubraumhugo",
+   "created_at": "2026-09-21T19:24:10Z",
+   "points": 29,
+   "num_comments": 11,
+   "story_text": "The US Department of Agriculture (USDA) publishes daily food price data for about 290 commodities on:<p>- what growers were paid at shipping point<p>- what buyers paid at the big city wholesale markets<p>- what prices supermarkets advertised in their weekly ads<p>This data comes out as dozens of separate text reports and PDFs, one per market, with no history and no way to see how prices change over time.<p>I think this should be public data that is easy to access and understand, so I built an open-source tracker for it.<p>Github: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;kadoa-org&#x2F;food-p"
+  },
+  {
+   "objectID": "49642791",
+   "title": "Show HN: I graded 200 AI tools/apps and track any changes in their policies",
+   "url": "https://isittrainingonme.com/",
+   "author": "trainingonme",
+   "created_at": "2026-09-10T12:39:55Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Hi all,<p>Given the recent OpenAI saga with the Navier–Stokes problem, I thought it would be a good time to show my latest project.<p>The site pulls policies from 200+ websites, keeps track of them and compares them to any changes. I then grade the companies (A-F + Unclear) and I have emailed all of the companies that have been graded D or below.<p>Where applicable, such as with OpenAI, I&#x27;ve provided instructions on how users can opt-out of their data being used for training.<p>Findings of note so far:<p>- 80 tools train on you by default. 55 don&#x27;t let you opt-in and four do, but you"
+  },
+  {
+   "objectID": "47695993",
+   "title": "Show HN: A website to track live music attendance",
+   "url": "https://www.showcount.com/",
+   "author": "henryrobbins00",
+   "created_at": "2026-04-08T20:42:40Z",
+   "points": 3,
+   "num_comments": 1,
+   "story_text": "TL;DR: I built a website that allows users to track the concerts they&#x27;ve been to. If you have strong opinions about engineering&#x2F;design or how shows should be tracked (festivals, venues, etc...), I&#x27;d love to get your input!<p>For the past ~5 years, I&#x27;ve been tracking the shows I attend on my personal website (<a href=\"https:&#x2F;&#x2F;love-music-will-travel.henryrobbins.com\" rel=\"nofollow\">https:&#x2F;&#x2F;love-music-will-travel.henryrobbins.com</a>). It&#x27;s fun to see things like distance traveled and how many times I&#x27;ve been to certain venues. I know many friends"
+  },
+  {
+   "objectID": "46207478",
+   "title": "Show HN: I built an AI tool that tracks competitor changes in real time",
+   "url": "https://usesignallabs.com/the-ci-treadmill-is-broken-why-battlecards-age-in-days-not-quarters",
+   "author": "emre94",
+   "created_at": "2025-12-09T17:09:33Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I&#x27;m the solo founder of Signal Labs. I built a tool called CIx because in my previous roles, competitive intelligence and battelcards became outdated in days. Updating them manually was painful, slow, and constantly behind competitors.<p>The problem we’re trying to solve:<p>- Competitors launch features daily&#x2F;weekly but teams only notice months later<p>- Sales needs fresh intel for calls, not stale quarterly slides<p>- PMs want to know what competitors are shipping so they can make informed roadmaps decisions<p>- CI&#x2F;PMM teams spend hours gathering intel that becomes out"
+  },
+  {
+   "objectID": "38718136",
+   "title": "Show HN: Reddit Unread Comments – track new comments on Reddit easier",
+   "url": "https://github.com/nemanjam/reddit-unread-comments",
+   "author": "nemanja_codes",
+   "created_at": "2023-12-21T08:13:24Z",
+   "points": 3,
+   "num_comments": 2,
+   "story_text": "Hello everyone.<p>I made a Firefox&#x2F;Chrome extension for easier tracking of new comments in Reddit threads. Have you ever felt frustrated having to scroll and reread 100 comments thread just to find a few new scattered comments? If yes, then this extension is for you. Hopefully it will save you nerves and time, give it a try and let me know your impressions.<p>The extension is completely free and open source using MIT license. It is privacy aware, runs completely client side and no data ever leaves your browser and no user activity or data is tracked. It is completely unobtrusive to the ex"
+  },
+  {
+   "objectID": "35464115",
+   "title": "The code ChatGPT wrote to help with my YC application",
+   "url": null,
+   "author": "magicseth",
+   "created_at": "2023-04-06T04:26:01Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "I&#x27;m sitting here working on my YC application, and it has character limits.<p>I thought it would be nice to see a live update of character counts, so I asked GPT:<p><i>Write a bit of javascript that I can paste into chrome devtools. Everytime I enter text in an input box, it should show the character count of the current input box in a div in the lower left of the website. When I change to a new input, the counter should reset.</i><p>And it spit out code that worked perfectly.<p>This is a new era of &quot;disposable code&quot; appears when needed, and can be thrown away!<p>here&#x27;s the"
+  },
+  {
+   "objectID": "34540882",
+   "title": "Show HN: Simple and privacy-friendly analytics for websites and SaaS",
+   "url": "https://usermaven.com",
+   "author": "gmsiperx",
+   "created_at": "2023-01-27T00:27:45Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Hey everyone,<p>I (Waqar) along with my two other co-founders (Amad and Azhar), have built a no-code analytics tool that provides simple website analytics and SaaS product usage insights in a single place.<p>Before building Usermaven, we tried Mixpanel, Google Anlaytics and a couple other solutions for my SaaS businesses (<a href=\"https:&#x2F;&#x2F;contentstudio.io\" rel=\"nofollow\">https:&#x2F;&#x2F;contentstudio.io</a> and <a href=\"https:&#x2F;&#x2F;replug.io\" rel=\"nofollow\">https:&#x2F;&#x2F;replug.io</a>) but unfortunately, all of the analytics tools fell short in one way or another. They we"
+  },
+  {
+   "objectID": "41183666",
+   "title": "Show HN: A minimal mdx static site generator",
+   "url": "https://github.com/harshithmullapudi/tsukuru",
+   "author": "harshithmul",
+   "created_at": "2024-08-07T17:52:32Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I&#x27;ve been working on a personal website to keep track of my anime-watching, and readings, and to start some writing. During this process, I wanted to experiment with MDX in Next.js.<p>As I structured my website, I created a generator that allows you to build a personal site using JSON and MDX files.<p>I&#x27;d love for you to check it out and let me know what you think! There are definitely some more things I want to include, theme changes and some UI improvements."
+  },
+  {
+   "objectID": "33594078",
+   "title": "A new website backed by Al Gore tracks big polluters by name",
+   "url": "https://www.npr.org/2022/11/13/1136376981/al-gore-climate-change",
+   "author": "gmays",
+   "created_at": "2022-11-14T14:08:02Z",
+   "points": 163,
+   "num_comments": 95,
+   "story_text": ""
+  },
+  {
+   "objectID": "42768754",
+   "title": "Show HN: I made tracking competitors social media a breeze with GPT-4o",
+   "url": "https://scoutlyai.com",
+   "author": "malhalwachi2000",
+   "created_at": "2025-01-20T13:55:36Z",
+   "points": 5,
+   "num_comments": 2,
+   "story_text": "Hi HN,<p>I’m excited to share something I’ve been working on: ScoutlyAI—a tool that simplifies tracking competitors’ social media and online activity.<p>The idea came from my own frustration with how scattered and time-consuming it is to keep an eye on competitors. I wanted something that could monitor multiple sources (like websites, Instagram, and X), summarize the important updates, and present actionable insights—all in one place.<p>ScoutlyAI does just that:\n • You create “scouts” for competitors by selecting sources you want to track.\n • It uses AI to distill changes (like posts, updates,"
+  },
+  {
+   "objectID": "27498902",
+   "title": "Ask HN: Why does archive.is track who reads submitted content via DNS",
+   "url": null,
+   "author": "1vuio0pswjnm7",
+   "created_at": "2021-06-14T03:13:25Z",
+   "points": 45,
+   "num_comments": 14,
+   "story_text": "Does anyone know why archive.is tracks who has read an article.  If we look at the HTML from archive.is we see they include an image link to a domain name that contains the user&#x27;s IP address.  Popular browsers not only run arbitrary Javascript by default, they also access image links by default.  Thus the archive.is DNS server has a record of every time the page is viewed in one of these browsers (and the domain name is not cached).  This includes the IP address of the person who retrieved the page.<p><pre><code>    &lt;img style=&quot;position:absolute&quot; width=&quot;1&quot; height=&q"
+  },
+  {
+   "objectID": "48306073",
+   "title": "Show HN: I made samspov.com to easily track updates",
+   "url": "https://samspov.com",
+   "author": "NKCSS",
+   "created_at": "2026-05-28T08:07:14Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "I&#x27;ve discovered this TikTokker called samspov a few months ago, and was immediately taken aback by the way he handled himself and tried to shine a spotlight on restaurants that were struggling but didn&#x27;t have to be (great food, no audience).<p>He tries to do updates and the bigger his fame got, the more incredibly the change for the restaurants.<p>While TikTok is great for consuming lots of content, it&#x27;s not great for context, so I made something that pulls in the videos, tries to figure out which restaurant it is, query Google Places API (paid  but luckily, I think they have a "
+  },
+  {
+   "objectID": "48490626",
+   "title": "Show HN: Domain Rating – a leaderboard of startup website Domain Ratings",
+   "url": "https://www.domain-rating.com",
+   "author": "nocodeg",
+   "created_at": "2026-06-11T14:11:05Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Hey all, I just shipped a new side-project<p>It&#x27;s called Domain-Rating.com and it’s a leaderboard of startups with their Domain Rating<p>Kinda like TrustMRR but for DR<p>The idea is simple:<p>1. Check your domain rating in seconds\n2. Add your website to the database\n3. Compete with other founders on the leaderboard\n4. Track your DR change<p>It&#x27;s 100% free to use, no catch<p>Made possible thanks to Ahrefs new free API<p>Hope you enjoy it, and would love to hear your feedback"
+  },
+  {
+   "objectID": "46468469",
+   "title": "Show HN: FleetFix – A free trucking fleet management website",
+   "url": "https://fleetfix-begin.vercel.app/login",
+   "author": "argam",
+   "created_at": "2026-01-02T19:35:06Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": "Core Purpose\nBuilt specifically for smaller fleet operations that are underserved by large fleet systems like Fleetio or Samsara.<p>Core Features\n1. Vehicle Management<p>Add&#x2F;Edit Trucks with VIN, license plate, make&#x2F;model, year, mileage<p>Truck nickname or ID system<p>Status Tags: &quot;In Service&quot;, &quot;Out for Repair&quot;, &quot;Needs Attention&quot;, &quot;Retired&quot;<p>2. Maintenance Logs<p>Log Entries: oil change, tire replacement, engine service, brake inspection, etc.<p>Date &amp; mileage tracking at service<p>Cost tracking and notes&#x2F;images support<p>Reminders: m"
+  },
+  {
+   "objectID": "47691689",
+   "title": "Show HN: Staccato – Generate multi-track MIDI from text prompts [video]",
+   "url": "https://www.youtube.com/watch?v=NfvoLx6FL78",
+   "author": "JeffLupker",
+   "created_at": "2026-04-08T15:36:59Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi everyone, I&#x27;m Jeff, co-founder of Staccato.<p>website: <a href=\"https:&#x2F;&#x2F;staccato.ai&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;staccato.ai&#x2F;</a><p>The AI music race has hit maturity for casual users, but for experienced music producers it’s just\nstarting.<p>I’ve spoken with many producers, and their most apparent functional issues with AI tools are 1)\nthe lack of creative control and 2) something that does all the work for them and doesn&#x27;t work &quot;with them&quot;.<p>AI song generators are impressive, but you’re stuck with a non-editable audio file. Or you end\nup hitt"
+  },
+  {
+   "objectID": "44668970",
+   "title": "Show HN: Track Nancy Pelosi's Stock Trades (Auto-Updated)",
+   "url": "https://nancypelosistocktracker.org",
+   "author": "virusyu",
+   "created_at": "2025-07-24T10:09:26Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I built <a href=\"https:&#x2F;&#x2F;nancypelosistocktracker.org&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;nancypelosistocktracker.org&#x2F;</a> — a site that automatically tracks and visualizes U.S. Congresswoman Nancy Pelosi’s stock transactions using official House disclosure filings.<p>*Why I built it*\nI was curious about the recurring headlines claiming “Pelosi’s portfolio outperforms the market.” The raw data is public but buried inside PDFs&#x2F;TXT bundles on the House Clerk’s website. I wanted a clean, automated way to parse the disclosures, highlight trades, and show positions o"
+  },
+  {
+   "objectID": "43803786",
+   "title": "Show HN: Fix unplayable tracks in Spotify playlists",
+   "url": "https://playlisthospital.com/",
+   "author": "srvaroa",
+   "created_at": "2025-04-26T14:11:04Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Scratching this itch: tracks suddenly become unplayable in my [carefully curated] Spotify playlists. Fixing them is cumbersome. Spotify usually has alternative recordings of the same song, but you have to find and replace them by hand. I figured I could automate the process, and made it into a website in case others find it useful.<p>Disclaimer: I&#x27;m a backend person with an LLM. Please forgive my UI&#x2F;UX, and lack of proper mobile support.<p>Feedback welcome! (social things in profile)<p>--<p>For the curious, here is a brief explanation of this annoying phenomenon (I worked on the cata"
+  },
+  {
+   "objectID": "41876083",
+   "title": "Show HN: Top Richest USDT Addresses – Track Tether Whales Across Networks",
+   "url": "https://usdtqrtool.com/top-usdt-addresses",
+   "author": "moonbay42",
+   "created_at": "2024-10-18T03:20:39Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Ever wondered who holds the most Tether (USDT) in the crypto world? Curious about how much of the total USDT supply is concentrated in the top wallets? I&#x27;ve created a free tool to answer these questions and more.<p>I present to you a comprehensive tracker for the top USDT (Tether) addresses across major networks like Ethereum, Tron.<p>Did you know? The top 100 addresses hold a significant portion of the total USDT supply. With this tool, you can see exactly how much they control and track changes over time.<p>Key features:<p>- Lists top 100 USDT addresses by balance<p>- Shows network, bal"
+  },
+  {
+   "objectID": "47334428",
+   "title": "Show HN: MoodPulse App – a simple app to track your mood in seconds",
+   "url": "https://apps.apple.com/us/app/moodpulse-app/id6760206782",
+   "author": "powerwild",
+   "created_at": "2026-03-11T11:53:02Z",
+   "points": 1,
+   "num_comments": 4,
+   "story_text": "Hi HN,<p>I built MoodPulse App, a small app that helps you log your mood in seconds and visualize how it changes over time.<p>The idea came from wanting something simpler than most journaling or mental-health apps. Many of them require long entries or feel heavy to maintain daily. I wanted something that takes just a few seconds but still gives useful insights.<p>What it does:<p>• Log your mood with a single tap (with optional notes)\n• Visualize emotional trends with simple charts\n• Track streaks and weekly patterns\n• Share visual mood charts with friends if you want<p>The focus is on speed an"
+  },
+  {
+   "objectID": "43576621",
+   "title": "Show HN: I built an AI that tracks your competitors so your team doesn't have to",
+   "url": "https://hiresteve.ai/",
+   "author": "TakaJP",
+   "created_at": "2025-04-03T23:18:11Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "Hi HN,<p>We built Steve(<a href=\"https:&#x2F;&#x2F;hiresteve.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;hiresteve.ai</a>) because most modern marketing teams struggle to keep up with competitor moves.<p>Steve is an AI-powered competitive research assistant designed specifically for marketing teams.<p>What Steve does:\n- Continuously monitors your competitors’ websites, social media, news, and reviews\n- Detects and summarizes changes to product, pricing, positioning, and messaging\n- Delivers insights directly into your Slack channel — without you needing to ask\n- Builds positioning maps and highlights"
+  },
+  {
+   "objectID": "46979917",
+   "title": "Show HN: DetectZeStack – REST API to detect any website's technology stack",
+   "url": "https://detectzestack.fly.dev/",
+   "author": "mlugo-apx",
+   "created_at": "2026-02-11T19:49:57Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I built DetectZeStack, a REST API that identifies the technologies behind any website.<p>What it does: Give it a URL, get back a list of frameworks, CMS platforms, CDNs, analytics tools, and more — with confidence scores and metadata for each technology.<p>How detection works:\n- Wappalyzer fingerprinting (3,800+ signatures from HTML, headers, cookies, scripts)\n- DNS CNAME resolution (maps CNAMEs like *.cloudfront.net to CDN providers)\n- TLS certificate issuer analysis (identifies SSL providers like Let&#x27;s Encrypt, Cloudflare, DigiCert)\n- Custom HTTP header matching (catches platfo"
+  },
+  {
+   "objectID": "36043944",
+   "title": "Launch HN: Common Paper (YC W23) – SAFEs for Commercial Contracts",
+   "url": null,
+   "author": "jakestein",
+   "created_at": "2023-05-23T13:28:53Z",
+   "points": 431,
+   "num_comments": 167,
+   "story_text": "Hey HN, we’re Ben and Jake, founders of Common Paper (<a href=\"https:&#x2F;&#x2F;commonpaper.com\">https:&#x2F;&#x2F;commonpaper.com</a>). We provide standard, open-source contracts and a platform for getting them signed quickly.  See <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;f7maIapJpU4\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;f7maIapJpU4</a> for an overview, and <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;A1PWjWiheFk\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;A1PWjWiheFk</a> for a demo of sending and signing a contract.<p>I (Jake) was a co-founder of two B2B SaaS companies, RJMetrics "
+  },
+  {
+   "objectID": "45916525",
+   "title": "Launch HN: Tweeks (YC W25) – Browser extension to deshittify the web",
+   "url": "https://www.tweeks.io/onboarding",
+   "author": "jmadeano",
+   "created_at": "2025-11-13T16:03:04Z",
+   "points": 351,
+   "num_comments": 213,
+   "story_text": "Hey HN! We’re Jason &amp; Matt and we’re building Tweeks (<a href=\"https:&#x2F;&#x2F;tweeks.io\">https:&#x2F;&#x2F;tweeks.io</a>), a browser extension that lets you modify any website in your browser to add functionality, filter&#x2F;highlight, re-theme, reorganize, de-clutter, etc. If you’ve used Violentmonkey&#x2F;Tampermonkey, Tweeks is like a next‑generation userscript manager. Instead of digging through selectors and hand‑writing custom JS&#x2F;CSS, describe what you want in natural language and Tweeks plans + generates your edits and applies them.<p>The modern web is so full of clutter an"
+  },
+  {
+   "objectID": "34442603",
+   "title": "Launch HN: Odigos (YC W23) – Instant distributed tracing for Kubernetes clusters",
+   "url": null,
+   "author": "edenfed",
+   "created_at": "2023-01-19T16:59:52Z",
+   "points": 162,
+   "num_comments": 52,
+   "story_text": "Hi HN! We’re Eden and Ari, co-founders of Odigos (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;keyval-dev&#x2F;odigos\">https:&#x2F;&#x2F;github.com&#x2F;keyval-dev&#x2F;odigos</a>). Odigos is an open-source project that lets you instantly generate distributed traces for your applications. It works alongside existing monitoring tools and does not require any code changes.<p>Our earlier experiences with monitoring tools were frustrating. Monitoring a distributed system with multiple microservices, we found ourselves spending way too much time trying to locate the specific microservice that was at "
+  },
+  {
+   "objectID": "42197741",
+   "title": "Show HN: Autotab – Programmable AI browser for turning web tasks into APIs",
+   "url": null,
+   "author": "jonasnelle",
+   "created_at": "2024-11-20T20:22:32Z",
+   "points": 159,
+   "num_comments": 82,
+   "story_text": "Hey HN, we&#x27;re Alexi and Jonas the co-founders of Autotab (<a href=\"https:&#x2F;&#x2F;autotab.com\">https:&#x2F;&#x2F;autotab.com</a>). Autotab is a chrome-based browser you can teach to do complex tasks, with a simple API for running them from your app or backend.<p>Here is a walkthrough of how it works: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;63co74JHy1k\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;63co74JHy1k</a>, and you can try it for free at <a href=\"https:&#x2F;&#x2F;autotab.com\">https:&#x2F;&#x2F;autotab.com</a> by downloading the app.<p>Why a dedicated editor?<p>The number one "
+  },
+  {
+   "objectID": "35042836",
+   "title": "Launch HN: Vellum (YC W23) – Dev Platform for LLM Apps",
+   "url": null,
+   "author": "noaflaherty",
+   "created_at": "2023-03-06T16:20:38Z",
+   "points": 136,
+   "num_comments": 40,
+   "story_text": "Hi HN – Noa, Akash, and Sidd here. We’re building Vellum (<a href=\"https:&#x2F;&#x2F;www.vellum.ai\">https:&#x2F;&#x2F;www.vellum.ai</a>), a developer platform for building on LLMs like OpenAI’s GPT-3 and Anthropic’s Claude. We provide tools for efficient prompt engineering, semantic search, performance monitoring, and fine-tuning, helping you bring LLM-powered features from prototype to production.<p>The MLOps industry has matured rapidly for traditional ML (typically open-source models hosted in-house), but companies using LLMs are suffering from a lack of tooling to support things like exper"
+  },
+  {
+   "objectID": "34052786",
+   "title": "Tell HN: Google Maps location data is used for GeoIP updates",
+   "url": null,
+   "author": "ogeiczvm",
+   "created_at": "2022-12-19T14:57:24Z",
+   "points": 113,
+   "num_comments": 65,
+   "story_text": "Hi,<p>I&#x27;ve been meaning to write this for a few years now.\nI saw https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=34032484 and lots of great replies there - but I happen to have an insight which I kept track of for years now.<p>Some background first. Since more than a decade I&#x27;ve been using an always-on VPN on all my devices through a VPS I operate (various cloud providers along the years).\nAlso for context, I stopped using all google services around 2015 or thereabouts - although I still have an account I no longer use it.\nThe only google service that I use rarely is google maps "
+  },
+  {
+   "objectID": "48762862",
+   "title": "Launch HN: Manufact (YC S25) – MCP Cloud",
+   "url": "https://manufact.com",
+   "author": "pzullo",
+   "created_at": "2026-07-02T15:11:20Z",
+   "points": 111,
+   "num_comments": 70,
+   "story_text": "Hi HN, we are Pietro and Luigi, cofounders of Manufact (<a href=\"https:&#x2F;&#x2F;manufact.com\">https:&#x2F;&#x2F;manufact.com</a>), a cloud for MCP apps and servers. We used to be called mcp-use, and still build open source SDKs for MCP under that name: <a href=\"https:&#x2F;&#x2F;github.com&#x2F;mcp-use&#x2F;mcp-use\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;mcp-use&#x2F;mcp-use</a>. We did a Show HN about that last year: <a href=\"https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44747229\">https:&#x2F;&#x2F;news.ycombinator.com&#x2F;item?id=44747229</a>.<p>Today we want to tell you "
+  },
+  {
+   "objectID": "39215779",
+   "title": "Launch HN: Escape (YC W23) – Discover and secure all your APIs",
+   "url": null,
+   "author": "glimow",
+   "created_at": "2024-02-01T13:38:42Z",
+   "points": 96,
+   "num_comments": 34,
+   "story_text": "Hey HN! We’re Tristan and Antoine, co-founders of Escape (<a href=\"https:&#x2F;&#x2F;escape.tech\">https:&#x2F;&#x2F;escape.tech</a>). We use AI inspired by chess to help security engineers and developers discover and secure APIs created by their organizations.<p>Here is our demo: <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;qcCaegVElTY\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;qcCaegVElTY</a><p>Typical modern large orgs have hundreds if not thousands of APIs, and many of those handle sensitive data or are critical to business operations. The development of those APIs is distributed across di"
+  },
+  {
+   "objectID": "33316694",
+   "title": "Launch HN: Noloco (YC S21) – Build internal tools from data without code",
+   "url": null,
+   "author": "darraghmckay",
+   "created_at": "2022-10-24T13:58:57Z",
+   "points": 95,
+   "num_comments": 38,
+   "story_text": "Hi all, we’re Darragh and Simon, cofounders of Noloco (<a href=\"https:&#x2F;&#x2F;noloco.io\" rel=\"nofollow\">https:&#x2F;&#x2F;noloco.io</a>), a no-code platform for teams to create internal tools from their business data.<p>Noloco lets you create internal apps from data sources like PostgreSQL, Airtable and Google Sheets without writing any code. This makes building internal tools and configuring views a lot faster than building them with code and SQL queries. It also enables non-technical team members like those in ops, customer support or sales to make changes without having to rely on engin"
+  },
+  {
+   "objectID": "29825681",
+   "title": "Launch HN: ContainIQ (YC S21) – Kubernetes Native Monitoring with eBPF",
+   "url": null,
+   "author": "NWMatherson",
+   "created_at": "2022-01-06T16:30:54Z",
+   "points": 79,
+   "num_comments": 20,
+   "story_text": "Hi HN, I’m Nate, and here together with my co-founder Matt, we are the founders of ContainIQ (<a href=\"https:&#x2F;&#x2F;www.containiq.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.containiq.com&#x2F;</a>). ContainIQ is a complete K8s monitoring solution that is easy to set up and maintain and provides a comprehensive view of cluster health.<p>Over the last few years, we noticed a shift that more of our friends and other founders were using Kubernetes earlier on. (Whether or not they actually need it so early is not as clear, but that’s a point for another discussion.) From our past experien"
+  },
+  {
+   "objectID": "26400053",
+   "title": "Launch HN: Charge Running (YC W21) – Social running app with real-time coaching",
+   "url": null,
+   "author": "mknippen",
+   "created_at": "2021-03-09T15:58:25Z",
+   "points": 75,
+   "num_comments": 60,
+   "story_text": "Hi HN,<p>I’m Matthew Knippen, a 10 year iOS dev turned CEO for Charge Running (www.chargerunning.com). We built a mobile app that allows you to run with others from all over the world in real-time, all while being trained by a certified run coach. Think of us as Peloton for running, but way more social. You can learn more about  our product here: <a href=\"http:&#x2F;&#x2F;www.chargerunning.com\" rel=\"nofollow\">http:&#x2F;&#x2F;www.chargerunning.com</a><p>I’m a career mobile dev that always liked hacking on things, and worked on over 60 applications ranging from photos, games, and fitness. Over "
+  },
+  {
+   "objectID": "26024912",
+   "title": "Launch HN: Feroot (YC W21) – security scanner for front-end JavaScript code",
+   "url": null,
+   "author": "ivan_tsarynny",
+   "created_at": "2021-02-04T12:55:30Z",
+   "points": 47,
+   "num_comments": 10,
+   "story_text": "Hi HN! I&#x27;m Ivan, the co-founder of Feroot Security (YC W21) (<a href=\"https:&#x2F;&#x2F;www.feroot.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;www.feroot.com&#x2F;</a>). Feroot Inspector is a security scanner for the client-side javascript code of web apps made for app sec teams.<p>If you&#x27;re not testing the security of the client-side code of your web app, there’s a good chance you could be exposed to Magecart skimmers, malware and spyware loaded with third-party scripts - css, pixels, tags, trackers, and more. We use synthetic users (i.e. bots—good ones!) to detect keyloggers, spywa"
+  },
+  {
+   "objectID": "44457069",
+   "title": "Show HN: Mochia, a virtual pet browser game, built with Rust, SolidJS, Postgres",
+   "url": "https://mochia.net/",
+   "author": "lemphi",
+   "created_at": "2025-07-03T17:00:11Z",
+   "points": 24,
+   "num_comments": 9,
+   "story_text": "Around three years ago, I was reminiscing about how much I loved playing Neopets as a kid. Meanwhile, I was also looking for a project to better learn Rust and SolidJS. So.. I figured making my own virtual pet browser game would be a fun way to practice! Since then, I’ve been working on it nearly every day, and.. it’s grown quite a bit! Here are some bulleted lists for your convenience:<p>Technical Details:<p><pre><code>  * Backend monolithic Rust server runs on a single $5&#x2F;month VPS\n\n  * Lean frontend with just 3 dependencies (SolidJS, Solid Router, and Mutative)\n\n  * Around 130,000 comb"
+  },
+  {
+   "objectID": "40338155",
+   "title": "Ask HN: What do social networks put unique IDs in link sharing for?",
+   "url": null,
+   "author": "Timothee",
+   "created_at": "2024-05-12T22:48:17Z",
+   "points": 10,
+   "num_comments": 10,
+   "story_text": "When I copy a link to share a tweet, or a YouTube video or any number of websites, there&#x27;s often an ID unique to me attached to the link. (YouTube even changes it for every share)<p>e.g. https:&#x2F;&#x2F;youtu.be&#x2F;dQw4w9WgXcQ?si=2W5B4wtJZFr7-Ps4 (yes, it&#x27;s Rick Astley)<p>I understand it&#x27;s for tracking and analytics generally speaking, but practically, what do these sites really get from them?<p>The signals from me sharing a particular link, and others clicking it seem very minute and not very valuable. I suppose you could establish parts of a social network over time, but h"
+  },
+  {
+   "objectID": "43832326",
+   "title": "Show HN: Classic games that look like a spreadsheet for office workers",
+   "url": "https://boredspreadsheet.com",
+   "author": "kevinclelland",
+   "created_at": "2025-04-29T13:29:13Z",
+   "points": 10,
+   "num_comments": 0,
+   "story_text": "A NextJS and Supabase app designed for office workers to kill some time playing games while looking like they&#x27;re on a spreadsheet.<p>Backstory: A few months ago I built a Webapp and used CapacitorJS to have native iOS and Android apps. Having to test any UI changes on desktop web, mobile web, small iPhones, big iPhones, small Androids etc. really became tedious. I promised myself that the next app I built would be built just for a single platform so I could focus on features. I&#x27;m mostly on a laptop and like the web so that&#x27;s my preferred option. So, who spends hours in front of "
+  }
+ ]
+}

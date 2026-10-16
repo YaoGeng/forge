@@ -1,0 +1,513 @@
+{
+ "query": "search api",
+ "params": {
+  "query": "search api",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 1714,
+ "hits": [
+  {
+   "objectID": "49963171",
+   "title": "Web Search API",
+   "url": "https://developers.cloudflare.com/changelog/post/2026-10-02-introducing-web-search-api/",
+   "author": "tosh",
+   "created_at": "2026-10-05T10:47:06Z",
+   "points": 596,
+   "num_comments": 286,
+   "story_text": ""
+  },
+  {
+   "objectID": "40496967",
+   "title": "Anonymous Source Shared Leaked Google Search API Documents",
+   "url": "https://sparktoro.com/blog/an-anonymous-source-shared-thousands-of-leaked-google-search-api-documents-with-me-everyone-in-seo-should-see-them/",
+   "author": "andrewfong",
+   "created_at": "2024-05-28T03:07:31Z",
+   "points": 333,
+   "num_comments": 296,
+   "story_text": ""
+  },
+  {
+   "objectID": "34831100",
+   "title": "Bing Search API Pricing Update",
+   "url": "https://www.microsoft.com/en-us/bing/apis/pricing-update",
+   "author": "vincent_s",
+   "created_at": "2023-02-17T05:22:34Z",
+   "points": 168,
+   "num_comments": 115,
+   "story_text": ""
+  },
+  {
+   "objectID": "43680699",
+   "title": "Meilisearch – search engine API bringing AI-powered hybrid search",
+   "url": "https://github.com/meilisearch/meilisearch",
+   "author": "modinfo",
+   "created_at": "2025-04-14T12:46:45Z",
+   "points": 151,
+   "num_comments": 73,
+   "story_text": ""
+  },
+  {
+   "objectID": "42305767",
+   "title": "Kagi Search API",
+   "url": "https://help.kagi.com/kagi/api/search.html",
+   "author": "edweis",
+   "created_at": "2024-12-03T13:22:23Z",
+   "points": 145,
+   "num_comments": 150,
+   "story_text": ""
+  },
+  {
+   "objectID": "45837425",
+   "title": "The Parallel Search API",
+   "url": "https://parallel.ai/blog/introducing-parallel-search",
+   "author": "lukaslevert",
+   "created_at": "2025-11-06T17:04:41Z",
+   "points": 123,
+   "num_comments": 52,
+   "story_text": ""
+  },
+  {
+   "objectID": "36128702",
+   "title": "Brave releases its Search API, bringing independence to the search landscape",
+   "url": "https://brave.com/search-api-launch/",
+   "author": "fariszr",
+   "created_at": "2023-05-30T18:36:20Z",
+   "points": 95,
+   "num_comments": 11,
+   "story_text": ""
+  },
+  {
+   "objectID": "32107287",
+   "title": "Show HN: Eesel – Federated search without API integrations",
+   "url": "https://www.eesel.app/",
+   "author": "amoghs",
+   "created_at": "2022-07-15T12:14:55Z",
+   "points": 54,
+   "num_comments": 28,
+   "story_text": "Hey there! Amogh here from eesel (<a href=\"https:&#x2F;&#x2F;eesel.app\" rel=\"nofollow\">https:&#x2F;&#x2F;eesel.app</a>). eesel filters your browser history to show the docs you need for work, right in your new tab. You can see recent docs, filter by app or search by title or content.<p>We&#x27;re trying to solve a pretty universal problem. Everyone&#x27;s work is spread across apps - there&#x27;s a project brief in Google Docs, issues in Jira, a mockup in Figma, PRs in GitHub - and with this kind of sprawl, it can be a game of trial and error to find the links we need to do our job.\nTrying key"
+  },
+  {
+   "objectID": "48942250",
+   "title": "Google Kills Custom Search API on Jan 1, 2027",
+   "url": "https://thenextgennexus.com/2026/05/14/google-kills-custom-search-api-on-jan-1-2027-you-have-9-months/",
+   "author": "alexey-salmin",
+   "created_at": "2026-07-17T01:03:25Z",
+   "points": 53,
+   "num_comments": 29,
+   "story_text": ""
+  },
+  {
+   "objectID": "34832726",
+   "title": "Microsoft increases Bing Search API pricing",
+   "url": "https://www.ghacks.net/2023/02/17/microsoft-increases-bing-search-api-pricing-by-up-to-1000/",
+   "author": "georgehill",
+   "created_at": "2023-02-17T09:40:19Z",
+   "points": 35,
+   "num_comments": 8,
+   "story_text": ""
+  },
+  {
+   "objectID": "43986828",
+   "title": "Show HN: Tako, a Knowledge Search API",
+   "url": "https://trytako.com/playground/",
+   "author": "ttobbaybbob",
+   "created_at": "2025-05-14T17:04:56Z",
+   "points": 22,
+   "num_comments": 12,
+   "story_text": "I&#x27;m Bobby, CTO of Tako. We just launched our Knowledge Search API.<p>Our API takes natural-language prompts like &quot;Nvidia M&amp;A history&quot; and returns visual answers and grounding text sourced from real-time, structured data (example: <a href=\"https:&#x2F;&#x2F;trytako.com&#x2F;card&#x2F;YHloo1Ea7GRnBr_s5r6s&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;trytako.com&#x2F;card&#x2F;YHloo1Ea7GRnBr_s5r6s&#x2F;</a>).<p>Most AI systems can’t effectively reason about real-time, structured data. One reason is access: a lot of the most valuable info is trapped in databases web crawlers can&#x27"
+  },
+  {
+   "objectID": "34830465",
+   "title": "Ask HN: Alternatives to Bing Search API",
+   "url": null,
+   "author": "schappim",
+   "created_at": "2023-02-17T03:43:42Z",
+   "points": 21,
+   "num_comments": 12,
+   "story_text": "Bing has increased the cost of their Search API by 10 times[1], which has caused many users to search for alternative options. As a result, I&#x27;m wondering if anyone knows of any legitimate alternatives to the Bing API that I can use. I&#x27;d prefer not to use fly-by-night web scraping operators.<p>Thank you in advance for your help!<p>[1] https:&#x2F;&#x2F;www.microsoft.com&#x2F;en-us&#x2F;bing&#x2F;apis&#x2F;pricing-update"
+  },
+  {
+   "objectID": "45376381",
+   "title": "The Perplexity Search API",
+   "url": "https://www.perplexity.ai/hub/blog/introducing-the-perplexity-search-api",
+   "author": "tosh",
+   "created_at": "2025-09-25T17:55:29Z",
+   "points": 16,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "34824543",
+   "title": "Bing Search API Pricing Update",
+   "url": "https://www.microsoft.com/en-us/bing/apis/pricing-update",
+   "author": "Pneumaticat",
+   "created_at": "2023-02-16T19:37:32Z",
+   "points": 14,
+   "num_comments": 19,
+   "story_text": ""
+  },
+  {
+   "objectID": "49435555",
+   "title": "Show HN: Keenable – A different web search API for AI agents",
+   "url": "https://keenable.ai/",
+   "author": "matt4711",
+   "created_at": "2026-08-25T15:12:52Z",
+   "points": 12,
+   "num_comments": 5,
+   "story_text": "Hey HN! We built <a href=\"https:&#x2F;&#x2F;keenable.ai\" rel=\"nofollow\">https:&#x2F;&#x2F;keenable.ai</a>, a different web search API for AI agents.<p>Keenable searches our own 100B+ page index. We are focused on low cost and latency (p95 &lt;250ms from us-east). We don’t believe in benchmaxxing, so we open-sourced our internal benchmarking suite, NEEDLE (available at <a href=\"https:&#x2F;&#x2F;keenableai.github.io&#x2F;needle\" rel=\"nofollow\">https:&#x2F;&#x2F;keenableai.github.io&#x2F;needle</a>): a live benchmark that compares Keenable with other search APIs on fresh agent-like queries.<p>I "
+  },
+  {
+   "objectID": "36140371",
+   "title": "Show HN: Brave Search API",
+   "url": "https://brave.com/search/api/",
+   "author": "vmullin",
+   "created_at": "2023-05-31T16:39:15Z",
+   "points": 12,
+   "num_comments": 0,
+   "story_text": "Today, we&#x27;re releasing the Brave Search API for public access.<p>The Brave Search API is the backbone of our independent search engine, and we&#x27;re excited to provide a competitive alternative to Big Tech. We hope to serve customers ranging from independent developers to large companies.<p>Brave Search recently became 100% independent for Web search (<a href=\"https:&#x2F;&#x2F;brave.com&#x2F;search-independence&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;brave.com&#x2F;search-independence&#x2F;</a>), removing any remnant calls to Microsoft Bing in order to rely fully on our own index.<p>Ou"
+  },
+  {
+   "objectID": "31949768",
+   "title": "Show HN: The best Podcast Details + Podcast Search API",
+   "url": "https://taddy.org/developers",
+   "author": "dannylmathews",
+   "created_at": "2022-07-01T17:28:35Z",
+   "points": 11,
+   "num_comments": 3,
+   "story_text": ""
+  },
+  {
+   "objectID": "47170182",
+   "title": "Brave Search API now features Place Search, a new endpoint for map applications",
+   "url": "https://brave.com/blog/place-search-api/",
+   "author": "w0ts0n",
+   "created_at": "2026-02-26T18:39:09Z",
+   "points": 11,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "49407060",
+   "title": "Contextual News Search APIs: A Deep Comparison for AI, RAG, and Research",
+   "url": "https://github.com/free-news-api/news-search-api-comparison",
+   "author": "ermanos12",
+   "created_at": "2026-08-23T08:30:32Z",
+   "points": 10,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "47146819",
+   "title": "Show HN: Crustdata (YC F24) – Web Search API for Token-Efficient AI Agents",
+   "url": "https://crustdata.com",
+   "author": "loondri",
+   "created_at": "2026-02-25T03:11:30Z",
+   "points": 10,
+   "num_comments": 0,
+   "story_text": "Hi HN! We’re Abhilash Chowdhary, Chris Pisarski and Manmohit Grewal. We built Crustdata (YC F24). Today we’re launching our web search API for AI agents, which not only returns the most relevant documents from the web but also maps them to the correct entity (person, company or event). Demo video here <a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;IouWW97hBN8\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;IouWW97hBN8</a><p>If you run agents at scale, tokens become a line item. The web data is the worst input: long pages, repeated content, mixed entities, stale claims. The usual web search -&gt; scr"
+  },
+  {
+   "objectID": "39273340",
+   "title": "Show HN: SearchApi – real-time SERP API",
+   "url": "https://www.searchapi.io/",
+   "author": "Sebassas",
+   "created_at": "2024-02-06T12:03:07Z",
+   "points": 7,
+   "num_comments": 2,
+   "story_text": "SearchApi is a robust real-time SERP API delivering structured data from a collection of search engines including Google Search, Google Shopping, Google Jobs, YouTube, Amazon, and many more.<p>SearchApi key features:\n- Supports precise location geo-targeting.\n- Uses only premium proxies.\n- Superior ads scraping rate.\n- Structures Google (Search, News, Jobs, Shopping and other services) results into JSON in real-time.\n- US-Legal scraping protection."
+  },
+  {
+   "objectID": "47863906",
+   "title": "Show HN: CatchAll – slowest web search API that outperforms everything on recall",
+   "url": "https://platform.newscatcherapi.com/catchall/try",
+   "author": "artembugara",
+   "created_at": "2026-04-22T14:09:08Z",
+   "points": 7,
+   "num_comments": 1,
+   "story_text": "Hey HN,<p>Artem and Maksym from NewsCatcher here.<p>Some of you know us as we started six years ago as two freshly graduated economics students who decided to build the best news API product.<p>We started NewsCatcher thinking the market for news APIs was so big that we could build a self-serve platform and get millions of $29 users.<p>Obviously, it was a wrong assumption. We pivoted to serve enterprises and had success with it.<p>But we are hackers at heart, and we want to serve hackers.<p>We haven&#x27;t used our Launch HN yet, so consider this our smoke test.<p>We&#x27;re looking for feedbac"
+  },
+  {
+   "objectID": "43988685",
+   "title": "Bing Search and Bing Custom Search APIs will be retired on 11th August 2025",
+   "url": "https://www.microsoft.com/en-us/bing/apis/pricing",
+   "author": "the_mitsuhiko",
+   "created_at": "2025-05-14T20:11:59Z",
+   "points": 7,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "43970461",
+   "title": "Bing Search APIs will be retired on 11 August 2025",
+   "url": "https://learn.microsoft.com/en-us/bing/search-apis/",
+   "author": "sushicanon",
+   "created_at": "2025-05-13T07:32:51Z",
+   "points": 6,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "47649955",
+   "title": "Roogle: a Rust API search engine",
+   "url": "https://github.com/roogle-rs/roogle",
+   "author": "fanf2",
+   "created_at": "2026-04-05T14:42:04Z",
+   "points": 6,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "44575134",
+   "title": "Show HN: ArguSeek – Agent‑first deep‑search API for hard‑to‑find dev answers",
+   "url": "https://agruseek.com/",
+   "author": "justagoat",
+   "created_at": "2025-07-15T19:50:38Z",
+   "points": 5,
+   "num_comments": 4,
+   "story_text": "Hi HN,<p>Even the smartest AI coding agents stall when the fix isn’t in their training data. AgruSeek runs an agentic search loop across ~30 M developer sources to dig up solutions normal web search misses.<p>REAL‑WORLD USES<p>• Found an undocumented `--runtime‑bypass` flag (buried in a 2017 gist)<p>• Pulled actual Claude Code pricing from forum anecdotes - no “contact us” paywalls<p>• Traced a race condition by cross‑linking five issue trackers across forks<p>WHY POST NOW<p>We’ve abused AgruSeek internally for three weeks; we’d love outside stress tests.\nAccess is free (limited seats for Beta"
+  },
+  {
+   "objectID": "28529655",
+   "title": "Show HN: File Search API for Your Software",
+   "url": "https://mixpeek.com/",
+   "author": "Beefin",
+   "created_at": "2021-09-14T19:20:34Z",
+   "points": 5,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "47837377",
+   "title": "Show HN: Seltz – The fastest, high quality, search API for AI agents",
+   "url": "https://console.seltz.ai/login",
+   "author": "amallia",
+   "created_at": "2026-04-20T17:12:38Z",
+   "points": 5,
+   "num_comments": 1,
+   "story_text": "Hi HN, Antonio here. Founder of Seltz.<p>Seltz is a web search API built for AI agents. We wrote the crawler, the index, and the retrieval models ourselves, in Rust, by a team that&#x27;s spent years building web search at scale. In our tests, queries come back in under 200ms.<p>Efficiency was the first design principle. Search sits on the critical path: agents  can&#x27;t generate their first tokens or kick off the next tool call until results come back. When you run tens or hundreds of queries in parallel, every millisecond of tail latency compounds.<p>Most search APIs for agents are wrapper"
+  },
+  {
+   "objectID": "48244252",
+   "title": "Kagi Search API is now in public preview",
+   "url": "https://kagi.com/changelog#10622",
+   "author": "mroche",
+   "created_at": "2026-05-23T03:14:52Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "46992570",
+   "title": "Brave launches most powerful search API for AI to date",
+   "url": "https://brave.com/blog/most-powerful-search-api-for-ai/",
+   "author": "XzetaU8",
+   "created_at": "2026-02-12T18:07:38Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "43969359",
+   "title": "Retirement: Bing Search APIs on August 12, 2025 – End of an Era?",
+   "url": "https://azure.microsoft.com/en-us/updates",
+   "author": "taxonomyman",
+   "created_at": "2025-05-13T03:07:30Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "46822822",
+   "title": "Ask HN: Brave Search API forbids use with AI agents (openclaw, moltbot?)",
+   "url": null,
+   "author": "aussieguy1234",
+   "created_at": "2026-01-30T10:42:47Z",
+   "points": 4,
+   "num_comments": 2,
+   "story_text": "I was setting up OpenClaw and it requested a Brave Search API key for some social media scanning functionality.<p>When I went through Brave&#x27;s onboarding workflow and tried to subscribe to the free tier, I noticed this in their Terms of Use:<p>&gt; By subscribing to this plan, you agree to abide by the Terms of Use. These Terms of Use prohibit using responses for AI inference.<p>Wouldn&#x27;t an agent using Brave Search responses constitute AI inference? That seems to be exactly what OpenClaw would be doing with the data.<p>Despite this restriction, there are numerous guides online showing"
+  },
+  {
+   "objectID": "44734729",
+   "title": "Who Has the Fastest Google Search API?",
+   "url": "https://serpapi.com/blog/who-has-the-fastest-google-search-api/",
+   "author": "barron35",
+   "created_at": "2025-07-30T14:29:36Z",
+   "points": 4,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "43995595",
+   "title": "Microsoft set to pull the plug on Bing Search APIs in favor of AI alternative",
+   "url": "https://www.theregister.com/2025/05/15/bing_search_apis_retired/",
+   "author": "rntn",
+   "created_at": "2025-05-15T14:42:06Z",
+   "points": 4,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "49379725",
+   "title": "Show HN: Sourcery – Benchmark for search APIs on the sources they return",
+   "url": "https://sameerhimati.com/sourcery/",
+   "author": "sameerhimati",
+   "created_at": "2026-08-20T20:21:41Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "48443011",
+   "title": "New web search API with proper context awareness",
+   "url": "https://search-router.com",
+   "author": "SwtCyber",
+   "created_at": "2026-06-08T09:18:12Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "47648323",
+   "title": "tteg – Free stock image search, no API key",
+   "url": null,
+   "author": "Kushalzen",
+   "created_at": "2026-04-05T11:32:03Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": "I&#x27;ve seen people juggling Unsplash API keys to deal with rate limits, and its hard to get enterprise account.<p>So forget all that. I built a free CLI, I handle the mess with Unsplash, Pexels, and others behind the scenes. \nNo keys, no config, no rate limit headaches.<p>You can use it, your agents can use it — enrich whatever you&#x27;re building with real professional photos.<p>uv tool install tteg<p>tteg &quot;mountain sunset&quot; --count 5<p>https:&#x2F;&#x2F;pypi.org&#x2F;project&#x2F;tteg&#x2F;"
+  },
+  {
+   "objectID": "44957735",
+   "title": "Ask HN: MCP/API search vs. vector search – what's winning for you?",
+   "url": null,
+   "author": "ngkw",
+   "created_at": "2025-08-20T01:04:40Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": "TL;DR:\nI have a hunch that demand for classic RAG (embeddings + vector DB) will shrink. Reasons:<p>1. Embedding ops cost (re-indexing, freshness) is high.<p>2. LLMs are getting good at iterative query expansion over plain search APIs (BM25-style).<p>3. Embedding quality is still uneven across domains&#x2F;languages.\n   Curious what you are actually seeing in production.<p>Context:\nWe’re a \\~10-person team inside a large company. People use different UIs (ChatGPT, Claude, Dify, etc.). Cost&#x2F;security aren’t our main issues; we just want higher throughput. We can wire MCP-style connectors (No"
+  },
+  {
+   "objectID": "44053651",
+   "title": "Retirement: Bing Search APIs on August 11, 2025",
+   "url": "https://azure.microsoft.com/en-us/updates",
+   "author": "binarymax",
+   "created_at": "2025-05-21T17:12:08Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "43992879",
+   "title": "Bing Search APIs will be retired on August 11, 2025",
+   "url": "https://azure.microsoft.com/en-us/updates",
+   "author": "croes",
+   "created_at": "2025-05-15T08:07:05Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "42619392",
+   "title": "Ruby API: Search and Explore Ruby Documentation",
+   "url": "https://rubyapi.org/",
+   "author": "thunderbong",
+   "created_at": "2025-01-07T04:56:24Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "30699772",
+   "title": "Supercharge Your Skills Using the Google Search Console API with Node.js",
+   "url": "https://fusebit.io/blog/google-search-console-nodejs/",
+   "author": "lizparody23",
+   "created_at": "2022-03-16T15:12:28Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "28811658",
+   "title": "Hoogle – Haskell API search engine",
+   "url": "https://hoogle.haskell.org/",
+   "author": "WallyFunk",
+   "created_at": "2021-10-09T17:30:47Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "49656926",
+   "title": "Twelve search APIs ran through the same AI agent to see which one helps it most",
+   "url": "https://artificialanalysis.ai/agents/search-api",
+   "author": "2001asjad",
+   "created_at": "2026-09-11T11:56:46Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "48833750",
+   "title": "Brave Place Search API: The Google Maps Alternative That Costs 6–7x Less",
+   "url": "https://brave.com/blog/place-search-improved/",
+   "author": "dotcoma",
+   "created_at": "2026-07-08T16:10:30Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "48564015",
+   "title": "Web Search API for Agents 70x Cheaper Than Exa",
+   "url": "https://www.searchspace.io/",
+   "author": "carsonpoole",
+   "created_at": "2026-06-17T00:00:10Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "48355485",
+   "title": "Web Search API Types: Three Architectures, One Confusing Name",
+   "url": "https://www.newscatcherapi.com/blog-posts/web-search-api-types-2026",
+   "author": "artembugara",
+   "created_at": "2026-06-01T11:35:42Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "45744078",
+   "title": "Brave Earns SoC 2 Type II Attestation for Brave Search API",
+   "url": "https://brave.com/blog/soc2/",
+   "author": "vorticalbox",
+   "created_at": "2025-10-29T08:16:41Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "45381943",
+   "title": "The Perplexity Search API",
+   "url": "https://www.perplexity.ai/hub/blog/introducing-the-perplexity-search-api",
+   "author": "wosat",
+   "created_at": "2025-09-26T02:30:33Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "33334407",
+   "title": "Show HN: Macrometa – A CDN for databases, streaming, search, and APIs",
+   "url": null,
+   "author": "Elof",
+   "created_at": "2022-10-25T18:30:22Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Head of Product here, Macrometa is the first of its kind developer platform for building apps and APIs that run in multiple regions, cloud providers, and a worldwide network of Edge locations (175+). We call it the &quot;Global Data Network&quot; or GDN. The GDN puts your apps and APIs as close as possible to where the people who use your apps are, to mobile, desktop and devices that access your apps, and to events and things all around the world. We do this so that everything is real-time and instant - everything from the web service request that accesses an API, which may be served by a bunc"
+  }
+ ]
+}

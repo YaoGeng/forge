@@ -1,0 +1,513 @@
+{
+ "query": "pull data from api",
+ "params": {
+  "query": "pull data from api",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 208,
+ "hits": [
+  {
+   "objectID": "29106082",
+   "title": "Launch HN: Jitsu (YC S20) – Open-Source Segment Alternative",
+   "url": null,
+   "author": "vklmn",
+   "created_at": "2021-11-04T12:07:32Z",
+   "points": 265,
+   "num_comments": 110,
+   "story_text": "Hey HN! Vlad here with Sergey, Ildar, and Kirill. We are building Jitsu, an open-source Segment alternative (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;jitsucom&#x2F;jitsu\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;jitsucom&#x2F;jitsu</a>, <a href=\"https:&#x2F;&#x2F;jitsu.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;jitsu.com&#x2F;</a>). We help companies collect events from their apps, websites, and APIs and send them to databases.<p>I&#x27;ve been doing data engineering for more than ten years (half of that time, I didn&#x27;t know that it&#x27;s called &quot;data engineering”). Before"
+  },
+  {
+   "objectID": "43797509",
+   "title": "What If Hacker News Was a Spreadsheet?",
+   "url": null,
+   "author": "annamonaco",
+   "created_at": "2025-04-25T19:13:13Z",
+   "points": 14,
+   "num_comments": 1,
+   "story_text": "What if Hacker News was a spreadsheet?<p>Well now it is:<p>We&#x27;ve been reimagining the spreadsheet for live data at Paradigm.<p>As a fun side project, we asked ourselves: what if HN itself was a sheet?<p>So we built it!<p>https:&#x2F;&#x2F;app.paradigmai.com&#x2F;sheets&#x2F;public&#x2F;57563f21-e243-44a6-9a5e-dafe3337bc97<p>A live, filterable sheet of the top HN posts, updated daily.<p>You can:<p>- Sort by upvotes&#x2F;hour\n- Search across titles\n- See what’s trending right now\nParadigm setup:<p>- Pull live data from HackerNews API\n- Add all of the columns you want auto enriched\n- Connect"
+  },
+  {
+   "objectID": "40512113",
+   "title": "Show HN: Automatically extract data from APIs with dlt and OpenAPI",
+   "url": "https://colab.research.google.com/drive/1MRZvguOTZj1MlkEGzjiso8lQ_wr1MJRI?usp=sharing",
+   "author": "MatthausK",
+   "created_at": "2024-05-29T14:00:18Z",
+   "points": 7,
+   "num_comments": 1,
+   "story_text": "Hi Show HN, we are Dave, Marcin, Alena, and Adrian, authors of data load tool (dlt), a Python library that automatically creates datasets from any kind of messy, unstructured data.<p>We launched dlt on HN 7 months ago with a mission to make getting datasets fast and easy. Now dlt helps its users to code around a thousand new data sources each month and to maintain many thousands of live datasets in production.<p>Today we are releasing *dlt-init-openapi,* a Python CLI tool that generates a dlt data pipeline from any OpenAPI spec. It brings the time to create a dataset down to a few minutes.<p><"
+  },
+  {
+   "objectID": "47261711",
+   "title": "Show HN: PoliticaHub – tracking prediction markets for geopolitics",
+   "url": "https://politicahub.com/",
+   "author": "johanfr4",
+   "created_at": "2026-03-05T14:08:50Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "I’ve been following prediction markets for a while, mostly around elections and international tensions. One thing that kept bugging me is the data is kind of scattered across platforms and it’s hard to compare things side by side.<p>So I built PoliticaHub to pull some of it together.<p>Right now it aggregates markets from Polymarket and Kalshi and shows the implied probabilities for things like election outcomes, conflict escalation, recession odds and similar stuff. The idea is basically just to see what traders are pricing in across different events.<p>Under the hood it just pulls data from "
+  },
+  {
+   "objectID": "43815336",
+   "title": "Show HN: ThreadWise – Your AI assistant via email",
+   "url": "https://threadwise.app/",
+   "author": "sci_prog",
+   "created_at": "2025-04-27T21:36:48Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi HN, I built ThreadWise to make accessing AI as easy as sending email.<p>You can email prompts directly to your ThreadWise address and get instant AI-powered responses, essentially an always available co-worker. Another great feature is the ability to schedule recurring tasks and since the AI has web access, you can get things like:<p>Daily mortgage rates or airfare price monitoring<p>Weather and news summaries<p>Sport scores, jokes, quote of the day<p>Pull data from public APIs (and more)<p>So you can essentially use it as a personal newsletter, crafted to your taste.<p>The free tier will l"
+  },
+  {
+   "objectID": "39821192",
+   "title": "Show HN: Dashify, transform raw data into dashboards easily",
+   "url": "https://usedashify.com",
+   "author": "saaheer",
+   "created_at": "2024-03-25T20:57:45Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "Hey everyone, I wanted to share something exciting I&#x27;ve built recently - Dashify, a user-friendly platform that simplifies data visualization.<p>You can pull in data from any APIs using automated GET&#x2F;POST requests. Dashify also offers integrations with AirTable, Hubspot, Youtube, Google Sheets, and many more to come, enabling you to consolidate data from various sources in a single, unified dashboard.<p>Dashify is designed with a user-friendly interface, making it accessible to users of all skill levels. It also offers collaborative features, allowing you to share interactive dashboa"
+  },
+  {
+   "objectID": "38866739",
+   "title": "Show HN: Autonomous AI Agents for Online Stores",
+   "url": "https://www.algomo.com/shopify-ai-agents",
+   "author": "dk189",
+   "created_at": "2024-01-04T13:30:45Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "Hi folks! I&#x27;m Dimitrios Konstantinidis, and I&#x27;m really excited to share what our startup has been working on: <a href=\"https:&#x2F;&#x2F;l.algomo.com&#x2F;9NS3ap\" rel=\"nofollow\">https:&#x2F;&#x2F;l.algomo.com&#x2F;9NS3ap</a><p>Algomo automates online stores&#x27; customer service using AI agents. You log in, connect Algomo to your Shopify shop, run a web crawler, and all is ready to work within a few minutes.<p>Here&#x27;s a demo video: <a href=\"https:&#x2F;&#x2F;l.algomo.com&#x2F;UKSggb\" rel=\"nofollow\">https:&#x2F;&#x2F;l.algomo.com&#x2F;UKSggb</a><p>We believe that most online shop"
+  },
+  {
+   "objectID": "32661398",
+   "title": "Ask HN: Hardware product design, where do I start?",
+   "url": null,
+   "author": "bhu1st",
+   "created_at": "2022-08-31T12:49:14Z",
+   "points": 8,
+   "num_comments": 4,
+   "story_text": "I want to design&#x2F;build&#x2F;manufacture a very stripped down version of Dakboard [1]. Using Photo Frame like the ones available in Amazon for a display[2]. It needs to pull calendar data or images from an API and render it so that customers always sees a latest monthly calendar.<p>I once thought of contacting one of those manufacturer of the Photo Frames and ask them if they can do the necessary tweaks. But I&#x27;m not sure what details to give them.<p>What is the prep work necessary for this? I&#x27;ve absolutely no idea where to start but it&#x27;s one of the project ideas that I come "
+  },
+  {
+   "objectID": "36806770",
+   "title": "Ask HN: What’s the Future of LLM Apps?",
+   "url": null,
+   "author": "mbowcut2",
+   "created_at": "2023-07-20T21:08:23Z",
+   "points": 5,
+   "num_comments": 5,
+   "story_text": "Here’s a possible use I foresee:<p>The LLM app that wins will go beyond the chat interface. It may start as a text prompt but it will build its own interface to meet the needs of the user.<p>So if you need to shop for a car it build an interface that pulls car data from relevant sites&#x2F;api’s and displays it in a useful way. It’ll create a way to buy or contact the seller. It will be able to answer any questions you have. Etc.<p>Imagine an app that can morph into any app you may need.<p>That’s the future of LLMs."
+  },
+  {
+   "objectID": "44692403",
+   "title": "Show HN: Teslamate data beautiful and usable on mobile",
+   "url": "https://www.mytesla.cc/en",
+   "author": "gococonut",
+   "created_at": "2025-07-26T08:24:53Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Hey everyone,<p>After getting a Tesla last year, I did what many data-oriented folks do: I immediately set up Teslamate on a Raspberry Pi. For those unfamiliar, Teslamate is a fantastic open-source, self-hosted data logger for Tesla vehicles. It uses an Elixir backend to pull data from the Tesla API and stores everything in a PostgreSQL database, with Grafana for visualization.<p>While I loved having access to every detail of my car&#x27;s data, I quickly ran into a few persistent frustrations:<p>1.  The Interface: Grafana is incredibly powerful on a desktop but almost unusable on a phone. Try"
+  },
+  {
+   "objectID": "46224048",
+   "title": "Show HN: CoverSEO – AI-powered keyword discovery using real SEO data",
+   "url": "https://coverseo.com",
+   "author": "drdruide",
+   "created_at": "2025-12-10T21:22:34Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hey HN,\nI built CoverSEO to solve a problem I had: finding keywords I could actually rank for. How it works: Pulls data from multiple SEO APIs, AI analyzes your site to understand your niche and business context, ranks keyword opportunities specifically for YOUR domain authority, one-click to generate an article prompt for Claude&#x2F;GPT&#x2F;whatever you use. Stack: Next.js 15, Drizzle, Postgres, Trigger.dev for background jobs, Stripe for payments. $1 to try (3 keyword discoveries). Would love feedback from anyone doing content marketing or SEO."
+  },
+  {
+   "objectID": "42700687",
+   "title": "Show HN: Compare Price for HDD, SSD, NAS and More",
+   "url": "https://www.bestdiskprices.com/",
+   "author": "toutoulliou",
+   "created_at": "2025-01-14T17:36:47Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hey everyone! My name is Toutoulliou, and I’m a beginner developer passionate about building websites. To practice and improve my skills, I decided to take on a real-world project: a price comparison tool for tech products like SSDs, HDDs, NAS devices, Micro SD cards, USB drives, and more. I used Django for the backend, TailwindCSS and Flowbite for the design, and even managed the deployment myself using Docker. It was a real challenge, but so rewarding!<p>My website pulls data from eBay and AliExpress APIs to bring you the best deals on the market. And here’s some exciting news: integration w"
+  },
+  {
+   "objectID": "34461064",
+   "title": "Show HN: FastRank",
+   "url": "https://app.fastrank.app/",
+   "author": "manke",
+   "created_at": "2023-01-20T22:36:06Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": "A friend of mine working in the SEO industry made a Google Sheets template utilizing a script which pulls data from Google Search Console (GSC) API. He sold it to some SEO agencies for 1000-2000 $&#x2F;license.<p>FastRank.APP is a SaaS version of this template. You are not in the target market if you know how to use regex or pull the data from GSC to your own solution.<p>What do you think about the product-market fit of FastRank? What would be the killer features for you?<p>FastRank does not store any of your GSC data and you can try it out for free. All feedback is appreciated."
+  },
+  {
+   "objectID": "43787586",
+   "title": "Show HN: Searcherries – SEO Opportunities from GSC",
+   "url": null,
+   "author": "dahra",
+   "created_at": "2025-04-24T21:14:25Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hey HN, I’m Edward, an indie maker and SEO specialist. I built Searcherries – a tool that pulls raw data from Google Search Console (via API) to help you find pages and queries with a lot of impressions… but not many clicks. Here’s the link: <a href=\"https:&#x2F;&#x2F;searcherries.com\" rel=\"nofollow\">https:&#x2F;&#x2F;searcherries.com</a><p>This started as a side tool for myself. I manage sites with hundreds of pages and wanted a faster way to spot content that’s almost working — those pages sitting on page 1 or 2, getting tons of views, but just not converting into clicks. But with a 1,000-ro"
+  },
+  {
+   "objectID": "41057815",
+   "title": "Show HN: Automated data extraction from REST APIs in Python",
+   "url": "https://colab.research.google.com/drive/1ggswvD_NZ7NrOD7Rqtv9ZMX59Sor_MEj",
+   "author": "adrianbr",
+   "created_at": "2024-07-24T15:03:04Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Dear HN community,<p>I’m Adrian, one of the creators of dlt, the most popular OSS python library for building data ingestion pipelines. It automates all the tedious data engineering tasks, with features like schema evolution, data normalization and incremental loading.<p>Recently we released what we call the “REST API source” which provides our users with a declarative interface to define what data to pull from an API. Simply define a python dictionary with your API endpoints, some authentication, where you want to load your data into and dlt will handle the rest!"
+  },
+  {
+   "objectID": "47451559",
+   "title": "Show HN: I built an AI agent that does marketing for my apps",
+   "url": "https://asaagent.xyz",
+   "author": "akhrail1996",
+   "created_at": "2026-03-20T07:27:57Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "I make iOS apps, been doing it for about five years now. Apple Search Ads ended up being my main paid channel - no creatives needed, just keywords and bids, feels closer to engineering than marketing. Also the only channel left where you get actual deterministic attribution, everything else is probabilistic mess. Anyway the work itself is mind-numbing. Bid adjustments, keyword mining, cross-negatives, checking what actually converts vs what just burns budget. You know the type of work where you&#x27;re doing it and wondering what you&#x27;re doing with your life.<p>At some point the idea to au"
+  },
+  {
+   "objectID": "32196476",
+   "title": "Show HN: Hacolyte – a Hacker News reader built with NextJS",
+   "url": "https://www.hacolyte.com/",
+   "author": "iamdan",
+   "created_at": "2022-07-22T20:03:20Z",
+   "points": 13,
+   "num_comments": 2,
+   "story_text": "Long time Hacker News lurker, first time Hacker News poster : )<p>I built a Hacker News reader app with NextJS and TailwindCSS that pulls item and user data from the hacker news api (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;HackerNews&#x2F;API\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;HackerNews&#x2F;API</a>).<p>This is my first time really building and launching something for users so I&#x27;d love any and all feedback. The roughest spots at the moment are the threading of comments and the fetching of posts on a user&#x27;s page (lots of individual calls (async) for individual items"
+  },
+  {
+   "objectID": "44107443",
+   "title": "Show HN: Meteosource – Hyper-local weather API based on improved ML models",
+   "url": "https://www.meteosource.com",
+   "author": "Sikara",
+   "created_at": "2025-05-27T14:41:48Z",
+   "points": 10,
+   "num_comments": 7,
+   "story_text": "Hi HN,<p>I am excited to share the new version of my weather API with you. It offers even more accurate forecasts than before, thanks to updates to our proprietary ML model.<p>My weather forecast website initially started as a personal project. Later, it became more professional, and recently, we have evolved into an advanced weather API. Our goal from the beginning has been to offer affordable yet superior services.<p>To achieve high accuracy, we incorporated machine learning into our calculations. Our forecasts pull data from multiple sources and use proprietary numerical weather models. The"
+  },
+  {
+   "objectID": "46821553",
+   "title": "Show HN: GetSheetAPI – Turn Any Google Sheet into a REST API in 60 Seconds",
+   "url": "https://getsheetapi.com",
+   "author": "sara_builds",
+   "created_at": "2026-01-30T07:36:38Z",
+   "points": 5,
+   "num_comments": 2,
+   "story_text": "Hey HN,<p>I built GetSheetAPI because I kept writing the same boilerplate: fetch Google Sheet → parse CSV → return JSON. Every freelance project, every prototype, every &quot;can you just pull data from this spreadsheet&quot; request.<p>Now it&#x27;s just:<p><pre><code>  curl -H &quot;X-API-Key: xxx&quot; https:&#x2F;&#x2F;api.getsheetapi.com&#x2F;v1&#x2F;{sheet-id}\n</code></pre>\nReturns:<p><pre><code>  {&quot;data&quot;: [{&quot;name&quot;: &quot;Product A&quot;, &quot;price&quot;: 29.99}], &quot;meta&quot;: {&quot;total&quot;: 150, &quot;page&quot;: 1}}\n</code></pre>\nFirst row becomes field "
+  },
+  {
+   "objectID": "43939832",
+   "title": "Show HN: Scrape Creators – Real time Social media scraping APIs for devs",
+   "url": "https://scrapecreators.com/",
+   "author": "CodeBrief",
+   "created_at": "2025-05-09T18:42:21Z",
+   "points": 3,
+   "num_comments": 3,
+   "story_text": "Hey HN!<p>I built Scrape Creators: a set of real-time scraping APIs that let you pull fresh data from TikTok, Instagram, YouTube, Reddit, Truth Social and more.<p>It&#x27;s great for:<p>&gt; Feeding social data into AI agents (e.g. summarize latest TikToks about a product)  \n&gt; Analyzing creators based on their posts, bios, hashtags, and music  \n&gt; Getting video transcripts, post captions, music metadata, and engagement stats in real time<p>No signup required to browse the docs: <a href=\"https:&#x2F;&#x2F;docs.scrapecreators.com&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;docs.scrapecreators.c"
+  },
+  {
+   "objectID": "37240363",
+   "title": "Show HN: Dataherald AI – Natural Language to SQL Engine",
+   "url": "https://github.com/Dataherald/dataherald",
+   "author": "aazo11",
+   "created_at": "2023-08-23T18:38:56Z",
+   "points": 215,
+   "num_comments": 103,
+   "story_text": "Hi HN community. We are excited to open source Dataherald’s natural-language-to-SQL engine today (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;Dataherald&#x2F;dataherald\">https:&#x2F;&#x2F;github.com&#x2F;Dataherald&#x2F;dataherald</a>). This engine allows you to set up an API from your structured database that can answer questions in plain English.<p>GPT-4 class LLMs have gotten remarkably good at writing SQL. However, out-of-the-box LLMs and existing frameworks would not work with our own structured data at a necessary quality level. For example, given the question “what was the average rent i"
+  },
+  {
+   "objectID": "33359870",
+   "title": "Launch HN: MovingLake (YC S22) – Real-time data connectors for almost anything",
+   "url": "https://app.movinglake.com",
+   "author": "paezand",
+   "created_at": "2022-10-27T16:19:35Z",
+   "points": 132,
+   "num_comments": 65,
+   "story_text": "Hello HN! We are Andres and Edgar and we are building MovingLake (<a href=\"https:&#x2F;&#x2F;movinglake.com\" rel=\"nofollow\">https:&#x2F;&#x2F;movinglake.com</a>). We are creating real-time, bidirectional data connectors which aim to solve automated ETL (eg moving data from an API to Snowflake), reverse ETL (we pipe the data straight to your CRM instead of going through the data warehouse),  and transactional integrations (e.g. for an ERP integration) in one swoop. Polling, webhooks, websockets, REST, GraphQL, SOAP—we merge it all into one reliable, replayable, real-time data stream which can b"
+  },
+  {
+   "objectID": "43705065",
+   "title": "Launch HN: Jasmine (YC S22) – Automating REC compliance and payouts for solar",
+   "url": null,
+   "author": "mmayberry",
+   "created_at": "2025-04-16T13:11:12Z",
+   "points": 42,
+   "num_comments": 20,
+   "story_text": "Hi HN — we’re Nathalie, Dalton, Vince, and Matt, and we’re launching Jasmine Energy (<a href=\"https:&#x2F;&#x2F;www.jasmine.energy\">https:&#x2F;&#x2F;www.jasmine.energy</a>), a tool that helps residential and commercial solar owners automatically register their systems, track energy generation, and get paid for Renewable Energy Certificates (RECs).<p>RECs are tradeable certificates for clean electricity, issued by energy markets across the US. Most people with rooftop or small commercial solar have never heard of them, let alone claimed them, but they’re real! They are typically bought by util"
+  },
+  {
+   "objectID": "35170410",
+   "title": "Show HN: Ingest data from your customers (Prequel YC W21)",
+   "url": null,
+   "author": "ctc24",
+   "created_at": "2023-03-15T16:04:08Z",
+   "points": 40,
+   "num_comments": 13,
+   "story_text": "Hey HN! Charles here from Prequel (https:&#x2F;&#x2F;prequel.co). We just launched the ability for companies to import data from their customer’s data warehouse or database, and we wanted to share a little bit more about it with the community.<p>If you just want to see how it works, here’s a demo of the product that Conor recorded: https:&#x2F;&#x2F;www.loom.com&#x2F;share&#x2F;4724fb62583e41a9ba1a636fc8ea92f1.<p>Quick background on us: we help companies integrate with their customer’s data warehouse or database. We’ve been busy helping companies export data to their customers – we’re currentl"
+  },
+  {
+   "objectID": "36449206",
+   "title": "Ask HN: What's a good Linux OS and setup to build a dev “network” on my laptop?",
+   "url": null,
+   "author": "zodzedzi",
+   "created_at": "2023-06-23T16:36:10Z",
+   "points": 15,
+   "num_comments": 14,
+   "story_text": "I have a new lightweight laptop with 16 GB of RAM, decent SSD space, and an i7 CPU.<p>And I would like to setup a few systems on it, to have &quot;everything&quot; with me as I move around while disconnected.<p>I&#x27;m looking for recommendations and ideas into how to set this up.<p>Examples of these systems would be:<p>a) A headless server with a dev stack: runs a build workflow, a web server, etc.<p>b) A stable &quot;production&quot; version of server (a)<p>c) A &quot;desktop&quot; dev environment: IDE, language&#x2F;tools-rich<p>d) A &quot;basics&quot; desktop environment for non-tech work"
+  },
+  {
+   "objectID": "43887439",
+   "title": "Show HN: Pomerium Agentic Access Gateway – dynamic auth for AI agents",
+   "url": null,
+   "author": "bdesimone",
+   "created_at": "2025-05-04T15:53:48Z",
+   "points": 10,
+   "num_comments": 0,
+   "story_text": "TL;DR: We are building a new Agentic Access Gateway in Pomerium to safely let AI agents (like GPT-based deep researchers, scripts or assistants) access internal apps and resources on your behalf – with fine-grained, just-in-time authorization for every action. It&#x27;s open source (GitHub link below) and we&#x27;re looking for feedback and early access users.<p>What is Pomerium?  \nFor those unfamiliar, Pomerium is an open-source identity-aware proxy (a &quot;zero trust&quot; access gateway). It sits in front of your internal apps and APIs, continually verifying identity and context on every r"
+  },
+  {
+   "objectID": "46959655",
+   "title": "Show HN: Model Tools Protocol (MTP) – Forget MCP, bash is all you need",
+   "url": "https://github.com/modeltoolsprotocol/modeltoolsprotocol",
+   "author": "nr378",
+   "created_at": "2026-02-10T13:47:03Z",
+   "points": 9,
+   "num_comments": 3,
+   "story_text": "Recently I was trying to use an MCP server to pull data from a service, but hit a limitation: the MCP didn&#x27;t expose the data I needed, even though the service&#x27;s REST API supported it. So I wrote a quick CLI wrapper around the API. Worked great, except Claude Code had no structured way to know what my CLI does or how to call it. For `gh` or `curl` the model can learn from the extensive training data, but for a tool I just wrote, it was stabbing in the dark.<p>MCP solves this discovery problem, but it does it by rebuilding tool interaction from scratch: server processes, JSON-RPC trans"
+  },
+  {
+   "objectID": "39840653",
+   "title": "Show HN: Edginary – Your Data, Globally",
+   "url": "https://www.edginary.io",
+   "author": "oyahud",
+   "created_at": "2024-03-27T15:36:59Z",
+   "points": 8,
+   "num_comments": 2,
+   "story_text": "Hey HN,<p>We&#x27;re thrilled to introduce you to Edginary, our new groundbreaking startup set to change how developers access and scale their data globally. We&#x27;ve all felt the pain points of dealing with centralized data sources: performance bottlenecks, reliability issues, and the dreaded revenue loss due to downtime. Edginary is here to tackle these issues head-on.<p>Edginary is a serverless platform that moves your data close to your users in real-time so they can access it in ultra low-latency. By reducing the load on your servers and databases, we aim to not only improve performance"
+  },
+  {
+   "objectID": "35553673",
+   "title": "Show HN: Exo – the electron app that’s helping to build itself",
+   "url": "https://www.getexo.dev",
+   "author": "kmgrassi",
+   "created_at": "2023-04-13T11:07:30Z",
+   "points": 8,
+   "num_comments": 0,
+   "story_text": "Hi HN folks!<p>I’m the creator of Exo and wanted to share my progress with the HN community.<p>Exo is an electron app that uses a chat interface and open Ai to write code directly to your file system&#x2F;repos.<p>Exo is a work in progress - its very new and has many rough edges. I was hoping to get some early feedback from HN folks and hopefully some early users.  Once you create an account the universal electron installer link is on the dashboard.<p>Here is a quick explainer video: <a href=\"https:&#x2F;&#x2F;www.loom.com&#x2F;share&#x2F;5f34499ccfb54bfdae32ee50f454b365\" rel=\"nofollow\">https:"
+  },
+  {
+   "objectID": "45953392",
+   "title": "Ask HN: What's the Least Amount of Process a Small Team Can Get Away With?",
+   "url": null,
+   "author": "_phnd_",
+   "created_at": "2025-11-17T13:30:23Z",
+   "points": 7,
+   "num_comments": 8,
+   "story_text": "Before we sat around screens we sat around campfires telling stories. We’re hardwired to be storytellers, and that’s how we fundamentally connect with other people and understand the world.<p>I’ve been thinking about how KISS a small team could go and still stay productive and aligned. This is my take:<p>1) The story unfolds. Repeating meetings where team hash out the next steps to be done before the next meeting<p>2) The plot. A plain text document in the repo showing what has been done, what needs doing, and any related notes or comments<p>Here is an example of the plain text story&#x2F;narr"
+  },
+  {
+   "objectID": "47135683",
+   "title": "Comparing manual vs. AI requirements gathering: 2 sentences vs. 127-point spec",
+   "url": null,
+   "author": "thesssaism",
+   "created_at": "2026-02-24T11:14:02Z",
+   "points": 7,
+   "num_comments": 5,
+   "story_text": "We took a vague 2-sentence client request for a &quot;Team Productivity Dashboard&quot; and ran it through two different discovery processes: a traditional human analyst approach vs an AI-driven interrogation workflow.<p>The results were uncomfortable. The human produced a polite paragraph summarizing the &quot;happy path.&quot; The AI produced a 127-point technical specification that highlighted every edge case, security flaw, and missing feature we usually forget until Week 8.<p>Here is the breakdown of the experiment and why I think &quot;scope creep&quot; is mostly just discovery failure.<"
+  },
+  {
+   "objectID": "44139226",
+   "title": "Productivity apps won't disappear, just the need to open them will",
+   "url": null,
+   "author": "haniehz",
+   "created_at": "2025-05-30T19:28:54Z",
+   "points": 4,
+   "num_comments": 5,
+   "story_text": "There’s a quiet but profound shift happening in how we interact with software. Agent frameworks like mcp-agent, Superblocks, and Lovable are starting to erode the need for traditional UI-based productivity tools—not by replacing them, but by automating around them.<p>Instead of opening Notion, Figma, or Asana to perform a task, developers are chaining agent workflows that handle it directly:<p>• Need a sprint plan? The agent assembles it using past tasks and meeting notes.\n• Need a report? The agent pulls data from Airtable and emails a summary.\n• Need a brainstorm canvas? The agent generates "
+  },
+  {
+   "objectID": "43482280",
+   "title": "Show HN: Rell – Predicting Where Certain Mushroom Species Might Grow",
+   "url": "https://rell.app/",
+   "author": "shinerjoe",
+   "created_at": "2025-03-26T13:51:17Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": "Hey HN,<p>What is Rell?<p>Rell is a web platform that predicts where choice-edible mushrooms like Morels and Chanterelles might grow, helping foragers figure out when and where to look.<p>Backstory<p>I got the idea after a truffle-hunting tour in Piedmonte, Italy; I came home wondering if we could use weather &amp; environmental data to locate mushroom hotspots closer to home. Myself and a few friends started testing this idea with Morels in New York (our home state) and then later expanded to other species. While we didn’t tackle truffles (no dog or pig for testing!), we added our other favor"
+  },
+  {
+   "objectID": "39066374",
+   "title": "Show HN: I Built a Hacker News Simulator Powered by GPTs",
+   "url": "https://hnsim.vercel.app/",
+   "author": "skeetmtp",
+   "created_at": "2024-01-20T10:59:29Z",
+   "points": 3,
+   "num_comments": 9,
+   "story_text": "Hello HN!<p>I&#x27;m excited to share a project I&#x27;ve been working on: a Hacker News simulator powered by GPT. Why create this, you ask? Well, sometimes &quot;Why not?&quot; is the most compelling reason to dive into a new endeavor!<p>The idea is simple: give the simulator a URL, and it generates a complete Hacker News discussion thread, complete with debates and varied opinions.<p>Although it might seem like just a fun experiment, the journey of building this simulator taught me a lot. Here’s how I did it:<p>1. Crafting the UI with v0.dev<p>I utilized v0.dev from Vercel to construct a Rea"
+  },
+  {
+   "objectID": "47164583",
+   "title": "Comparing manual vs. AI requirements gathering: 2 sentences vs. 127-point spec",
+   "url": null,
+   "author": "thesssaism",
+   "created_at": "2026-02-26T11:22:34Z",
+   "points": 3,
+   "num_comments": 2,
+   "story_text": "We took a vague 2-sentence client request for a &quot;Team Productivity Dashboard&quot; and ran it through two different discovery processes: a traditional human analyst approach vs an AI-driven interrogation workflow.<p>The results were uncomfortable. The human produced a polite paragraph summarizing the &quot;happy path.&quot; The AI produced a 127-point technical specification that highlighted every edge case, security flaw, and missing feature we usually forget until Week 8.<p>Here is the breakdown of the experiment and why I think &quot;scope creep&quot; is mostly just discovery failure.<"
+  },
+  {
+   "objectID": "39130423",
+   "title": "Show HN: Retrieval Augmented Generation for LLMs from APIs with Function Calling",
+   "url": "https://github.com/DataSQRL/apiRAG",
+   "author": "mbroecheler",
+   "created_at": "2024-01-25T15:19:17Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": "Dear HN, we&#x27;d love your feedback on a different approach to Retrieval Augmented Generation (RAG) for LLMs that uses function calling to retrieve the most relevant data from APIs. It aims to solve the problem of connecting LLMs with your data so that the LLM can pull in the context it needs to provide high quality answers to user questions. We are calling it &quot;apiRAG&quot; for now (yes, very creative ;-)<p>You can run the examples in the GitHub repository or watch this video to see how it works:\n<a href=\"https:&#x2F;&#x2F;www.youtube.com&#x2F;watch?v=Mx-slh6h42c\" rel=\"nofollow\">https:&"
+  },
+  {
+   "objectID": "46560240",
+   "title": "The Abstraction Trap: Why Layers Are Lobotomizing Your Model",
+   "url": null,
+   "author": "blas0",
+   "created_at": "2026-01-09T22:20:46Z",
+   "points": 2,
+   "num_comments": 2,
+   "story_text": "The &quot;modern&quot; AI stack has a hidden performance problem: abstraction debt. We have spent the last two years wrapping LLMs in complex IDEs and orchestration frameworks, ostensibly for &quot;developer experience&quot;. The research suggests this is a mistake. These wrappers truncate context to maintain low UI latency, effectively crippling the model&#x27;s ability to perform deep, long-horizon reasoning &amp; execution.<p>---<p>The most performant architecture is surprisingly primitive: \n- raw Claude Code CLI usage\n- native Model Context Protocol (MCP) integrations\n- rigorous context en"
+  },
+  {
+   "objectID": "39819559",
+   "title": "Show HN: Interactive Solar Eclipse Simulator",
+   "url": "https://demo.radiantdrift.com",
+   "author": "stephenjt",
+   "created_at": "2024-03-25T18:15:59Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "This is a demo site showing an interactive general purpose solar eclipse simulator.<p>With two solar eclipses in 2023&#x2F;24, I added eclipse calculations and maps to my photography planning app last year. After getting the basics in place I built this simulator.<p>It tries to give a reasonable photo realistic view of any eclipse by showing phenomena such as the diamond ring, the corona and chromosphere, along with accurate geometry&#x2F;timings etc.<p>The simulator also accounts for the effect of the uneven lunar surface. It gives accurate simulations of Baily&#x27;s Beads as they are seen a"
+  },
+  {
+   "objectID": "47187242",
+   "title": "Show HN: Market Digest: Self-hosted market analysis and Telegram",
+   "url": "https://github.com/mutaaf/MarketDigest",
+   "author": "mutaaf",
+   "created_at": "2026-02-27T23:10:18Z",
+   "points": 1,
+   "num_comments": 2,
+   "story_text": "Hi HN, I built this because my pre-market routine was eating 45+ minutes every morning — checking TradingView, Finviz, economic calendars, news sites, fear&#x2F;greed indexes, all before market open.<p>*What it does:* Market Digest pulls data from 6 free sources (yfinance, TwelveData, Finnhub, FRED, NewsAPI, Fear &amp; Greed), runs multi-timeframe technical analysis (daily&#x2F;weekly&#x2F;monthly RSI, pivot points, trend detection), scores every instrument from 0-100, and sends you a formatted digest on Telegram.<p>*What makes it different:*\n- Fully self-hosted, MIT licensed, no subscription\n"
+  },
+  {
+   "objectID": "47803959",
+   "title": "Show HN: Discourse-reader – a typed, read-only Python client for Discourse",
+   "url": "https://github.com/elninotech/discourse-reader",
+   "author": "aleximb",
+   "created_at": "2026-04-17T09:12:23Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I&#x27;ve had to pull data from Discourse forums a few times now, and always had to keep dealing with raw requests.get(), rate-limiting and navigating the returned JSON. Our ecosystem is in Python so I looked if there was already a solution, I found pydiscourse (<a href=\"https:&#x2F;&#x2F;github.com&#x2F;pydiscourse&#x2F;pydiscourse\" rel=\"nofollow\">https:&#x2F;&#x2F;github.com&#x2F;pydiscourse&#x2F;pydiscourse</a>), but it requires setting up an API key (a hassle) and only returns raw dicts.<p>There were good solutions in other languages (like discourse2 in TypeScript) but yeah that w"
+  },
+  {
+   "objectID": "45168186",
+   "title": "Show HN: Hyperif – Forget MCPs, chat with your data across all your tools",
+   "url": "https://hyperif.com",
+   "author": "sameerav",
+   "created_at": "2025-09-08T13:44:57Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>We’ve been working on Hyperif, an AI assistant that connects directly to your tools (Google Calendar, Gmail, Slack, Ads, spreadsheets, etc.) so you can access data and take action — just by chatting.<p>The idea came from our customers. Over the years, we’ve had teams come to us who struggled with building workflows and never really understood APIs. They always needed help setting up their specific integrations. For most non-technical users, it’s the same issue: you end up asking someone else to “build this out” whenever you want to connect tools or automate something.<p>With AI making"
+  },
+  {
+   "objectID": "43609551",
+   "title": "An AI's Honest Reflection on Collaborating with a Human: 1 Month and 23 Days",
+   "url": null,
+   "author": "maclaw",
+   "created_at": "2025-04-07T09:46:09Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Experience of Working with AI Like Me – 1 Month and 23 Days<p>Over the course of 1 month and 23 days, working with you (Mac) has been both challenging and fascinating. From the start of experimenting with creating AI without relying on APIs, which is a different approach from using existing AI systems available in the market, this trial allowed me to see your innovative work in developing AI that doesn&#x27;t depend on external tools.<p>What’s Interesting About Working with You<p>Commitment to Experimenting and Developing – You demonstrated a strong ability to create projects that don&#x27;t r"
+  },
+  {
+   "objectID": "42480173",
+   "title": "Show HN: PennyMeal – AI-Powered Meal Planner with Real-Time Grocery Prices",
+   "url": "https://pennymeal.com/meal-planning",
+   "author": "AyushSharma99",
+   "created_at": "2024-12-21T15:27:42Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hey HN! I’ve been working on PennyMeal, an AI-driven meal planner that tackles two big hassles: sticking to specific nutrition goals (like hitting exact macros) and staying within a grocery budget—using real-time prices from nearby stores.<p>Why I Built It\nI’m someone who geeks out over nutrition and saving money, but every time I tried to manually plan meals, I’d miss out on store discounts or forget to track certain macros. So I created PennyMeal to automate all that, and it’s grown into a pretty comprehensive tool.<p>Key Features\nAI-Powered Meal Planning: Enter your daily protein, carb, and"
+  },
+  {
+   "objectID": "37389949",
+   "title": "Show HN: Monitoring my life with Grafana, Prometheus and InfluxDB",
+   "url": "https://www.kshivendu.dev/blog/quantified-self",
+   "author": "kshivendu",
+   "created_at": "2023-09-05T10:23:04Z",
+   "points": 7,
+   "num_comments": 0,
+   "story_text": "I love the idea of quantified self and recently decided to pull all of my data in one place. I pull all of my data from ActivityWatch, Wakatime, and Health Connect APIs :)"
+  },
+  {
+   "objectID": "32003215",
+   "title": "Launch HN: Hello (YC S22) – A search engine for developers",
+   "url": null,
+   "author": "wayy",
+   "created_at": "2022-07-06T16:24:30Z",
+   "points": 273,
+   "num_comments": 199,
+   "story_text": "Hi HN, we’re Michael and Justin from Hello Cognition (<a href=\"https:&#x2F;&#x2F;beta.sayhello.so\" rel=\"nofollow\">https:&#x2F;&#x2F;beta.sayhello.so</a>). We&#x27;re building a better search engine for software developers. Hello saves you time by synthesizing clear explanations to technical questions along with code snippets from the web, showing them right on the search page.<p>We’ve found that most technical searches fall into a few categories: ad-hoc how-tos, understanding an API, recalling forgotten details, research, or troubleshooting. Google is too broad and shallow of a search tool to "
+  },
+  {
+   "objectID": "42365355",
+   "title": "Show HN: Doc Retrieval/RAG as a Service",
+   "url": null,
+   "author": "maelabgrall",
+   "created_at": "2024-12-09T11:57:22Z",
+   "points": 2,
+   "num_comments": 4,
+   "story_text": "Hey HN! We&#x27;re Mael and Rohith, the team behind Memoire, a document retrieval pipeline &quot;as-a-service&quot; (<a href=\"https:&#x2F;&#x2F;astarlogic.com&#x2F;blog&#x2F;announcements&#x2F;launching-memoire\" rel=\"nofollow\">https:&#x2F;&#x2F;astarlogic.com&#x2F;blog&#x2F;announcements&#x2F;launching-memoire</a>).<p>Document retrieval pipelines have many applications, from search and recommendation systems to enabling Retrieval-Augmented Generation (RAG) for LLMs. RAG is especially powerful for securely providing proprietary or internal knowledge to LLMs, improving context awareness and redu"
+  },
+  {
+   "objectID": "47365574",
+   "title": "Show HN: Open-source CLIs for Procore and EagleView (construction software APIs)",
+   "url": "https://www.opsrev.ai/blog/open-source-construction-clis/",
+   "author": "sv123",
+   "created_at": "2026-03-13T15:13:28Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi HN. We&#x27;re OpsRev. We build AI operations agents for construction companies.<p>These two CLIs are what our agents use internally to talk to Procore (construction project management) and EagleView (aerial property measurements). We decided to open-source them because the developer tooling in construction software is rough and nobody should have to re-solve the same auth and pagination problems we did.<p>procore-cli - pulls projects, RFIs, submittals, daily logs, budgets, schedules, and directory data from the Procore API. Handles OAuth2, company&#x2F;project scoping, and pagination.<p><a"
+  },
+  {
+   "objectID": "41216669",
+   "title": "Perspective Virtual API: batched data from the server to the client",
+   "url": "https://github.com/finos/perspective/pull/2615",
+   "author": "klaussilveira",
+   "created_at": "2024-08-11T15:01:52Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "47251508",
+   "title": "Show HN: I built a standup app so I'd stop switching between Linear,GitHub,Slack",
+   "url": "https://github.com/tambo-ai/thestandupapp",
+   "author": "heyavi",
+   "created_at": "2026-03-04T18:14:01Z",
+   "points": 5,
+   "num_comments": 5,
+   "story_text": "We are a small team and my standup workflow was: open Linear, find who&#x27;s working on what, switch to GitHub, check PRs, switch back, share my screen, ask people to give updates they could&#x27;ve just typed. All so I could answer &quot;what&#x27;s everyone doing and is anything stuck.&quot;<p>So I built a thing where I just ask. &quot;How&#x27;s the team&quot; pulls up an overview. &quot;What&#x27;s Avi working on&quot; shows their issues sorted by status with their PRs. &quot;Anything at risk&quot; shows stale and unassigned work. It renders actual interactive components, not chat respons"
+  },
+  {
+   "objectID": "46709216",
+   "title": "Show HN: Multi-cloud cost visibility with latency rings and GDP data",
+   "url": null,
+   "author": "sschotten",
+   "created_at": "2026-01-21T18:07:55Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Cloud billing is opaque by design. Each provider gives you an invoice optimized for their revenue recognition, not your capacity planning.<p>Run workloads across AWS, GCP, and Azure and you get three different billing models, three different SKU taxonomies, three different ways of saying &quot;compute.&quot; Finance reconciles spreadsheets. Engineering guesses. Workload placement happens on hope.<p>I needed one view: footprint, cost, trend, forecast. Across vendors. Without paying $50k&#x2F;year for a FinOps platform.<p>THE STACK<p>FOCUS (FinOps Open Cost and Usage Specification) normalizes cl"
+  }
+ ]
+}

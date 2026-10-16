@@ -1,0 +1,513 @@
+{
+ "query": "summarize articles",
+ "params": {
+  "query": "summarize articles",
+  "tags": "(story,ask_hn)",
+  "numericFilters": "created_at_i>1609459200",
+  "hitsPerPage": 50
+ },
+ "fetched_at": "2026-10-16T16:09:51+00:00",
+ "nbHits": 276,
+ "hits": [
+  {
+   "objectID": "34421314",
+   "title": "Show HN: Summate.it – Quickly summarize web articles with OpenAI",
+   "url": "https://summate.it/?v2",
+   "author": "k1m",
+   "created_at": "2023-01-17T23:59:41Z",
+   "points": 142,
+   "num_comments": 51,
+   "story_text": ""
+  },
+  {
+   "objectID": "35973947",
+   "title": "Summarize Any Article as a Dialog Between Two People with Bing Chat",
+   "url": "https://www.aidemos.info/summarize-any-article-as-a-dialog-between-two-people-with-bing-chat/",
+   "author": "bepero",
+   "created_at": "2023-05-17T11:45:43Z",
+   "points": 133,
+   "num_comments": 61,
+   "story_text": ""
+  },
+  {
+   "objectID": "37138586",
+   "title": "Google Chrome will summarize entire articles for you with built-in generative AI",
+   "url": "https://www.theverge.com/2023/8/15/23833045/google-artificial-intelligence-summary-chrome-sge",
+   "author": "exz",
+   "created_at": "2023-08-15T19:57:46Z",
+   "points": 17,
+   "num_comments": 3,
+   "story_text": ""
+  },
+  {
+   "objectID": "45255975",
+   "title": "Show HN: Summarize Any Article, Paper, or Video in 5 Bullet Points",
+   "url": "https://unrav.io/summarize",
+   "author": "rriley",
+   "created_at": "2025-09-15T22:54:47Z",
+   "points": 5,
+   "num_comments": 1,
+   "story_text": "Built a tool that turns long-form content (articles, PDFs, YouTube videos) into 5 key points. Quick way to get the gist before diving deeper.<p>It’s not perfect, but surprisingly useful for research papers and long talks.<p>Tip: There’s a bookmarklet too. Hit it while browsing and boom, instant 5-point summary. Add it to your browser here: <a href=\"https:&#x2F;&#x2F;unrav.io\" rel=\"nofollow\">https:&#x2F;&#x2F;unrav.io</a>"
+  },
+  {
+   "objectID": "35329916",
+   "title": "Summarize Articles on Hacker News Using OpenAI API",
+   "url": "https://github.com/MeowthyVoyager/HNsummary",
+   "author": "bhupesh",
+   "created_at": "2023-03-27T17:52:04Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "31419464",
+   "title": "Smmry – Summarize articles, text, websites, essays and documents",
+   "url": "https://smmry.com/",
+   "author": "animal_spirits",
+   "created_at": "2022-05-18T05:15:41Z",
+   "points": 4,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "41768258",
+   "title": "Show HN: Newsboat-Digest, Summarize unread articles in newsboat with Gemini",
+   "url": "https://github.com/luvchurchill/Newsboat-Digest",
+   "author": "FergusArgyll",
+   "created_at": "2024-10-07T17:10:27Z",
+   "points": 3,
+   "num_comments": 2,
+   "story_text": ""
+  },
+  {
+   "objectID": "45383623",
+   "title": "Wikicheck – Summarize Wikipedia Articles",
+   "url": "https://chromewebstore.google.com/detail/wikicheck-extension/lonegbjhaldfblmfhlfaiooehhapcdfh",
+   "author": "jacktheprogram",
+   "created_at": "2025-09-26T07:04:42Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "33711870",
+   "title": "Chrome extension that uses AI to summarize any article",
+   "url": "https://bearly.ai",
+   "author": "johnthuss",
+   "created_at": "2022-11-22T21:36:42Z",
+   "points": 3,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "37145306",
+   "title": "Google Chrome will now summarize entire articles for you",
+   "url": "https://www.theverge.com/2023/8/15/23833045/google-artificial-intelligence-summary-chrome-sge",
+   "author": "gzer0",
+   "created_at": "2023-08-16T11:10:05Z",
+   "points": 2,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "43495304",
+   "title": "Show HN: Summarize articles and discussions from your HN and Reddit feeds",
+   "url": "https://literead.ai",
+   "author": "ravroid",
+   "created_at": "2025-03-27T16:32:05Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hey HN - I spent the last couple of months building a browser extension to make scrolling Reddit &amp; Hacker News a bit more convenient.<p>I made LiteRead.ai, a Chrome &amp; Firefox extension that summarizes individual posts, articles, and discussions on Reddit, Hacker News, and even YouTube videos.<p>The idea came from wanting a faster way to skim articles, YT videos, posts, and comments. LiteRead adds a simple &quot;Summarize&quot; button that gives you the key takeaways in various formats: brief, detailed, &amp; notes.<p>It&#x27;s free to signup and try, and has a pay-to-go pricing model i"
+  },
+  {
+   "objectID": "42033150",
+   "title": "Show HN: I made an AI summarizer to summarize articles or URL links for free",
+   "url": "https://summarizer.best",
+   "author": "blacktechnology",
+   "created_at": "2024-11-03T14:10:35Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "41057356",
+   "title": "Show HN: AI Summary Helper – Summarize Web Articles – Ready for on the Go",
+   "url": "https://philwornath.substack.com/p/ai-summary-helper-summarize-web-articles",
+   "author": "philjw",
+   "created_at": "2024-07-24T14:15:57Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi HN community  - Today I wanted to share with you my latest open source project:<p>When scrolling through HN every day I usually open multiple tabs. Some articles I read immediately but most of them I want to consume at a later point, preferably on my e-reader - in a format tailored to me so it provides more context sparks more inspiration.<p>AI Summary Helper (available as Chrome Extension and Universal &#x2F; browser-agnostic bookmarklet) allows you to summarize articles with a custom prompt — so it can be as tailored to your language, profession or point of view as you define it. You can "
+  },
+  {
+   "objectID": "37143857",
+   "title": "Google Chrome for iOS Can Now Use AI to Summarize Articles",
+   "url": "https://blog.google/products/search/google-search-generative-ai-learning-features/",
+   "author": "marban",
+   "created_at": "2023-08-16T07:31:39Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "35420183",
+   "title": "Bing Chat can summarize articles BEHIND A PAYWALL",
+   "url": "https://twitter.com/debarghya_das/status/1642704810817232903",
+   "author": "sytelus",
+   "created_at": "2023-04-03T08:14:32Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "34399445",
+   "title": "Show HN: Free Chrome extension to summarize articles using ChatGPT AI",
+   "url": "https://gimmesummary.ai/",
+   "author": "jerrygoyal",
+   "created_at": "2023-01-16T11:10:17Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "35716658",
+   "title": "Summarize Web Articles Fast",
+   "url": "https://apps.apple.com/us/app/ask-summarize/id6446225669",
+   "author": "meanraw",
+   "created_at": "2023-04-26T16:51:15Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": ""
+  },
+  {
+   "objectID": "41523982",
+   "title": "Ask HN: Best\" model to run on local machine and summarize articles",
+   "url": null,
+   "author": "accidbuddy",
+   "created_at": "2024-09-12T18:28:37Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Some channels and websites that I follow unfortunately add a lot of nonsense and irrelevant content in the middle of what really matters. So, I&#x27;ve been reading their summaries, obtained from the transcripts. Basically, I use Whisper to get the transcript and then use ChatGPT to request a summary. It turns out that some texts are long and eat up my daily quota.<p>So, anyone knows of a good model (that doesn&#x27;t require powerful hardware) that can be run locally and get good results when summarizing articles?"
+  },
+  {
+   "objectID": "38066966",
+   "title": "NewsGPT(Neotice): Summarize News Articles",
+   "url": "https://github.com/timho102003/NewsGPT",
+   "author": "plurby",
+   "created_at": "2023-10-30T08:39:29Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "36763188",
+   "title": "Show HN: Summarize articles in Chrome. Translate summary into 9 languages",
+   "url": "https://toolongapp.com/",
+   "author": "dvolkhonskiy",
+   "created_at": "2023-07-17T19:56:01Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "36517215",
+   "title": "Summate.it: quickly summarize web articles with GPT",
+   "url": "https://www.fivefilters.org/2023/summate-it-quickly-summarize-web-articles-with-gpt/",
+   "author": "k1m",
+   "created_at": "2023-06-29T06:49:35Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "36404188",
+   "title": "Show HN: Chrome extension – Summarize lengthy articles and bust misinformation",
+   "url": "https://chrome.google.com/webstore/detail/intentseek/pcdpkmfbionbpgacjngfpeflcoajhbbo",
+   "author": "lp13",
+   "created_at": "2023-06-20T14:06:58Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "34998774",
+   "title": "Summarize web articles in 1 click using AI",
+   "url": "https://chrome.google.com/webstore/detail/ai-alfred/eeeahhaanadpgonocbinjbhbohcknfcd",
+   "author": "aialfred_sum",
+   "created_at": "2023-03-02T17:26:54Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "34295474",
+   "title": "Show HN: Summate.it – Summarize Web Articles",
+   "url": "https://summate.it/",
+   "author": "k1m",
+   "created_at": "2023-01-08T02:44:30Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "28708438",
+   "title": "Smmry: API to Summarize Articles and Text",
+   "url": "https://smmry.com/",
+   "author": "sprague",
+   "created_at": "2021-09-30T16:53:08Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": ""
+  },
+  {
+   "objectID": "39132766",
+   "title": "Show HN: Lumos, a local LLM Chrome extension",
+   "url": "https://github.com/andrewnguonly/Lumos",
+   "author": "andrewnguonly",
+   "created_at": "2024-01-25T18:24:40Z",
+   "points": 146,
+   "num_comments": 39,
+   "story_text": "Lumos is an LLM co-pilot for browsing the web, powered by local LLMs (Ollama).<p>- Summarize long threads on issue tracking sites, forums, and social media sites<p>- Summarize news articles<p>- Ask questions about reviews on business and product pages<p>- Ask questions about long, technical documentation<p>- What else?"
+  },
+  {
+   "objectID": "39706253",
+   "title": "Launch HN: Meticulate (YC W24) – LLM pipelines for business research",
+   "url": null,
+   "author": "JPalakapilly",
+   "created_at": "2024-03-14T16:51:23Z",
+   "points": 100,
+   "num_comments": 38,
+   "story_text": "Hi HN, Meticulate gives finance professionals easy access to world class business research—think competitive landscapes, market sizings, customer segmentation etc. Here&#x27;s a video of a competitive landscape generation in action (<a href=\"https:&#x2F;&#x2F;youtu.be&#x2F;aJ-slHcp32c)and\" rel=\"nofollow\">https:&#x2F;&#x2F;youtu.be&#x2F;aJ-slHcp32c)and</a> we’ve taken down the signup wall today so you can try it directly at <a href=\"https:&#x2F;&#x2F;meticulate.ai&#x2F;\">https:&#x2F;&#x2F;meticulate.ai&#x2F;</a>.<p>Some background on “business research”: investment and consulting teams sink man"
+  },
+  {
+   "objectID": "35329054",
+   "title": "Ask HN: What is a specific use of GPT-4 that you think is remarkable?",
+   "url": null,
+   "author": "jasondigitized",
+   "created_at": "2023-03-27T16:54:14Z",
+   "points": 88,
+   "num_comments": 133,
+   "story_text": "I see plenty of hot takes on Twitter about GPT-4 and how its going to kill jobs and give us super powers.  What I am not seeing are practical and specific applications outside of &quot;Write code&quot; or &quot;Summarize articles&quot;.  What examples do you have where someone used GPT-4&#x2F;AI tech that had a high degree of utility for a specific job to be done?  The guy who found his pets illness after the vet gave up is a good specific example applied to a very narrow use case."
+  },
+  {
+   "objectID": "50017301",
+   "title": "Show HN: Apogee: Rebuilding Mozilla's Orbit, fully local and private",
+   "url": "https://github.com/darshi1337/apogee",
+   "author": "zxdc7896",
+   "created_at": "2026-10-09T07:36:19Z",
+   "points": 66,
+   "num_comments": 3,
+   "story_text": "Hey everyone!<p>Last year, Mozilla released Orbit, an AI-powered browser summarizer hosted on a GCP server. After people started digging into the extension, they discovered things like backend endpoints such as store_result. Eventually, Mozilla discontinued the project.<p>For the past month, I’ve been trying to rebuild Orbit from scratch, but with one major difference: Apogee is fully local and privacy-focused. Apogee doesn’t send or store your data. It can directly connect to your local Ollama instance for inference. I’ve also added WebGPU integration for Chrome and Transformers.js for Firefo"
+  },
+  {
+   "objectID": "37045493",
+   "title": "Show HN: Allclues – The Next-Gen AI powered workspace",
+   "url": "https://allclues.ai/",
+   "author": "Inshpro",
+   "created_at": "2023-08-08T07:04:30Z",
+   "points": 20,
+   "num_comments": 9,
+   "story_text": "Hi everyone,<p>Hope you all doing well. I would like to introduce our new product, Allclues (<a href=\"http:&#x2F;&#x2F;www.allclues.ai\" rel=\"nofollow noreferrer\">http:&#x2F;&#x2F;www.allclues.ai</a>), with you all. We&#x27;ve been working on it for 6+ months, and we hope you like it as much as we do!<p>To give you some background, our goal is to empower individuals and teams to effortlessly organize, process, and collaborate with information in a seamless and efficient manner. In the past, we lacked this ability, but now with AI, we can liberate users from organizing folders and tags, losing c"
+  },
+  {
+   "objectID": "35287365",
+   "title": "Show HN: Hacker News Summarizer (Chrome Extension)",
+   "url": "https://chrome.google.com/webstore/detail/hacker-news-summarizer/ajodkpllepafdcjcgklhnamlnninjbmd",
+   "author": "bishalpaudel",
+   "created_at": "2023-03-24T10:48:17Z",
+   "points": 19,
+   "num_comments": 6,
+   "story_text": "Hey Hacker News community,<p>We&#x27;re excited to announce the launch of our new Chrome extension, &quot;Hacker News Summarizer,&quot; which uses OpenAI API to summarize articles on Hacker News. It helps you quickly understand the key takeaways without reading the whole article. Plus, no login or confirmation is required to use it! Simply install the extension and click the &quot;summary&quot; link next to &quot;comments&quot; when you want to read an article.<p>Disclaimer: Not all articles are summarised, or supported but we will change and try to support them later. Additionally, this exten"
+  },
+  {
+   "objectID": "41693218",
+   "title": "Show HN: Rocky AI – Chat with any webpage in Chrome using AI",
+   "url": "https://chromewebstore.google.com/detail/rocky-ai/fdjoklehjinbgibfgbncoljognjjpkna",
+   "author": "crush_robo_1536",
+   "created_at": "2024-09-30T03:17:48Z",
+   "points": 9,
+   "num_comments": 3,
+   "story_text": "A simple chrome extension that lets you chat with any webpage using AI. I was tired of copy pasting into Chat GPT from webpages all them time so built this.<p>Popular Use Cases:<p>1. Summarize Articles – Get concise overviews of content from sources like HackerNews, Reddit, and more.\n2. Quick Information Lookup – Effortlessly locate key details on pages such as developer documentation, car forums, and beyond.\n3. Personalized LinkedIn Outreach – Craft customized outreach messages for your LinkedIn connections with ease.\n4. Review Analysis – Analyze feedback and reviews from platforms like Airbn"
+  },
+  {
+   "objectID": "42242263",
+   "title": "Ask HN: How are you using LLMs?",
+   "url": null,
+   "author": "WheelsAtLarge",
+   "created_at": "2024-11-26T03:12:45Z",
+   "points": 8,
+   "num_comments": 6,
+   "story_text": "I like to ask every so often to see what new uses there are.<p>Here&#x27;s what I do daily:<p>Writing Assistance: I use LLMs to help me write emails, reports, and even creative writing pieces. I give it an outline, and it helps me generate text. I edit the LLM output.<p>Coding Assistance: to help me write batch and PowerShell scripts.<p>Summarization: to summarize long articles or documents, saving me time.<p>Language Translation: I write in English, and it translates to Spanish.<p>Recipe Ideas: I use them to come up with recipe ideas based on the ingredients I have at home.<p>How do you use t"
+  },
+  {
+   "objectID": "47970734",
+   "title": "Ask HN: Does Claude use 'prior' in a Bayesian sense more than English?",
+   "url": null,
+   "author": "slake",
+   "created_at": "2026-05-01T02:32:17Z",
+   "points": 5,
+   "num_comments": 6,
+   "story_text": "Just an observation. When asked to summarize articles, or extract insights, I see the word &#x27;prior&#x27; being used a lot more by Claude than usual English language writing (Journalistic essence). And it&#x27;s clearly using it in a Bayesian sense, because it&#x27;s always mentioning things like &#x27;Updating priors&#x27;, &#x27;the prior doesn&#x27;t hold&#x27;, etc.<p>Probably something I noticed after reading the &#x27;goblin&#x27; and &#x27;gremlin&#x27; article."
+  },
+  {
+   "objectID": "36416178",
+   "title": "AI apps for ideation, research, and validation",
+   "url": null,
+   "author": "sneha1995",
+   "created_at": "2023-06-21T09:06:30Z",
+   "points": 5,
+   "num_comments": 0,
+   "story_text": "7 AI apps for ideation, research, and validation.<p>1. Notion: Notion is an all-in-one workspace where you can write, plan, collaborate and get organized - it allows you to take notes, add tasks, manage projects &amp; more. Imagine a lego structure. Notion provides the building blocks and you can create your own layouts and toolkit to get work done.<p>2. Browse AI: Browse.AI lets you train a robot to scrape or monitor any website in 2 mins:  No-code  1-click automations  Adapts to website changes  Works on almost any website  Simulates user actions  Integrates w. Google Sheet &amp; Zapier  API"
+  },
+  {
+   "objectID": "48341045",
+   "title": "Show HN: HN Station – A local-first HN desktop client with split-pane reading",
+   "url": "https://github.com/rajeshkumarblr/hn_station",
+   "author": "raj_db_dev",
+   "created_at": "2026-05-30T22:03:53Z",
+   "points": 4,
+   "num_comments": 2,
+   "story_text": "Hi HN,\nThis is my side project for reading hacker news in a specialized IDE like environment where all my news articles I read and the comments threads are group together in different threads. So it avoids the clutter when you read HN and it is mingled with other things like your email, work related tabs etc. This gives a focussed desktop app to read articles and it&#x27;s discussions. I have also added a way to filter artcles based on keywords like LLM, PostgreSQL etc. So we can easily filter what we want to read and spend time with. It has bookmarking feature to read later on also. Same filt"
+  },
+  {
+   "objectID": "28684843",
+   "title": "Show HN: Python brief / ML generated Python daily newsletter",
+   "url": null,
+   "author": "jv22222",
+   "created_at": "2021-09-28T16:49:30Z",
+   "points": 4,
+   "num_comments": 1,
+   "story_text": "After 9 long months of coding, testing, and refining we&#x27;re excited to release our daily Python newsletter, built with Python!<p>We scan millions of posts a day from Twitter, Reddit, Hacker News, and other social sites to bring you the best Python articles that people are discussing, ranked by our unique score that uses signals like upvotes, comments, and poster authority.<p>Finally, we summarize each article and wrap it all up in a nice daily email.\nIt sounds easy, but it&#x27;s been quite the journey...<p>While we are only just launching today we have been building &quot;back issues&quot"
+  },
+  {
+   "objectID": "44930802",
+   "title": "Should we summarize HN submissions?",
+   "url": null,
+   "author": "lapcat",
+   "created_at": "2025-08-17T11:19:28Z",
+   "points": 3,
+   "num_comments": 26,
+   "story_text": "A submission to HN (https:&#x2F;&#x2F;news.ycombinator.com&#x2F;submit) has three fields: title, url, and text. The submission form says, &quot;If there is a url, text is optional,&quot; and indeed most submissions with a url provide no text. This standard practice means that HN readers have only the submission title and url as clues to what the submission is about.<p>Submission titles are necessarily brief, not only on the author&#x27;s side but on the HN side, whose title field has a limit of 80 characters. Some article titles are clickbait, and others are too clever for their own good, but "
+  },
+  {
+   "objectID": "25895767",
+   "title": "Ask HN: Python repo for abstractive summarization anyone?",
+   "url": null,
+   "author": "naikas82",
+   "created_at": "2021-01-24T20:44:14Z",
+   "points": 3,
+   "num_comments": 2,
+   "story_text": "I noticed that I don&#x27;t read the entire news article anymore. I look for most important details, but they are scattered and not always crisp. I have looked around for APIs and toolboxes. They aren&#x27;t at par with what ML stacks (NLP&#x2F;BERT&#x2F;Deep Learning) has to offer. Can anyone suggest what is the best package&#x2F;tool&#x2F;API to do summarize news articles, say in 5 bullet points."
+  },
+  {
+   "objectID": "46957766",
+   "title": "Show HN: Cross-platform RSS reader with user-defined prompt workflows",
+   "url": "https://vinsonguo.github.io/introducing-smartrss",
+   "author": "vinsonguo",
+   "created_at": "2026-02-10T10:28:22Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi guys, I build a cross-platform RSS reader (Android&#x2F;iOS&#x2F;macOS&#x2F;Windows) and I am very excited to share it!<p>The best part is the Al features. It can help you do summaries, translations, and analysis by customizing prompt. It can also group and summarize 100 articles by topics, very efficient way to get rid of overwhelmed unread items. You can also share the content in markdown format to your note&#x2F;read later apps.<p>Also, the reading experience is very smooth and comfortable. It has 1000+ fonts and many custom options. For accessibility, I added full VoiceOver&#x2F;TalkBac"
+  },
+  {
+   "objectID": "45219899",
+   "title": "I built a free Chrome extension to summarize anything with 17 AI models",
+   "url": null,
+   "author": "huizhu",
+   "created_at": "2025-09-12T08:13:56Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi HN,<p>I built a Chrome extension to tackle my own information overload problem. I wanted a quick way to summarize articles, YouTube videos, and even PDFs, but I didn&#x27;t want to be locked into a single AI ecosystem.<p>So, I created AI Summarizer. It&#x27;s a simple, free tool that lets you choose from 17 different AI models to get the job done.<p>*The main idea is flexibility. You can use:*<p>*   *OpenAI:* ChatGPT\n*   *Google:* Gemini, Google AI Studio\n*   *Anthropic:* Claude\n*   *xAI:* Grok\n*   *And 12 others:* Mistral, Cohere (Command), DeepSeek, Qwen (Alibaba), Hunyuan (Tencent), Doub"
+  },
+  {
+   "objectID": "37048910",
+   "title": "Boost Productivity with AI-powered workspace-Allclues",
+   "url": null,
+   "author": "allclues",
+   "created_at": "2023-08-08T13:47:32Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hi everyone,<p>Hope you all doing well. I would like to introduce our new product, Allclues (http:&#x2F;&#x2F;www.allclues.ai), with you all. We&#x27;ve been working on it for 6+ months, and we hope you like it as much as we do!<p>To give you some background, our goal is to empower individuals and teams to effortlessly organize, process, and collaborate with information in a seamless and efficient manner. In the past, we lacked this ability, but now with AI, we can liberate users from organizing folders and tags, losing clues between messages, and reading long and deep articles...<p>Allclues w"
+  },
+  {
+   "objectID": "35355266",
+   "title": "Show HN: Hacker News Summarizer (Chrome Extension)",
+   "url": "https://chrome.google.com/webstore/detail/hacker-news-summarizer/ajodkpllepafdcjcgklhnamlnninjbmd",
+   "author": "bishalpaudel",
+   "created_at": "2023-03-29T10:48:35Z",
+   "points": 2,
+   "num_comments": 0,
+   "story_text": "Hey Hacker News community,<p>We&#x27;re excited to announce the launch of our new Chrome extension, &quot;Hacker News Summarizer,&quot; which uses OpenAI API to summarize articles on Hacker News. It helps you quickly understand the key takeaways without reading the whole article. Plus, no login or confirmation is required to use it! Simply install the extension and click the &quot;summary&quot; link next to &quot;comments&quot; when you want to read an article.<p>Disclaimer: Not all articles are summarised, or supported but we will change and try to support them later. Additionally, this exten"
+  },
+  {
+   "objectID": "45726426",
+   "title": "Show HN: Palm Trees AI – A Software Robot Network of Specialized AI Personas",
+   "url": "https://palmtreesai.com",
+   "author": "jtechy",
+   "created_at": "2025-10-27T21:19:21Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "Hi HN, I’m the founder of Palm Trees AI, and I’m excited to share what I’ve been building. Palm Trees AI is a Software Robot Network (SRN) – a platform of AI-powered personas you can use for different tasks (coding help, legal Q&amp;A, real estate analysis, medical info, entertainment, etc.) with one account.<p>The idea came from my frustration using separate AI tools for different needs and having multiple ideas for AI applications. I wanted a unified home for multiple specialized AI agents with a consistent, user-friendly UX.<p>What It Is<p>Palm Trees AI is a curated library of AI personas, "
+  },
+  {
+   "objectID": "39106615",
+   "title": "Show HN: Turn prompts from plain English to GPT-powered function APIs",
+   "url": "https://xytext.com/",
+   "author": "kenifxyz",
+   "created_at": "2024-01-23T17:35:18Z",
+   "points": 1,
+   "num_comments": 1,
+   "story_text": "Xytext turns prompts from plain English to GPT-powered function APIs that you can plug into your own applications. Xytext can do it all - craft captivating stories, summarize articles, translate languages with nuanced accuracy, and much more."
+  },
+  {
+   "objectID": "49670245",
+   "title": "Show HN: Stend – share whatever your agent came up with",
+   "url": "https://stend.sh",
+   "author": "chalyi",
+   "created_at": "2026-09-12T08:27:54Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "An agent-first way to share things on the internet.<p>Ask your agent: set up the Stend MCP globally <a href=\"https:&#x2F;&#x2F;stend.sh&#x2F;mcp\" rel=\"nofollow\">https:&#x2F;&#x2F;stend.sh&#x2F;mcp</a><p>And then:<p>- Create a stend with my shopping list\n- Draw a Gantt chart for my project and post it to Stend\n- Summarize this article and make a stend for me"
+  },
+  {
+   "objectID": "43516044",
+   "title": "Show HN: Readfast – AI-Powered Summaries for Faster Web Reading",
+   "url": "https://chromewebstore.google.com/detail/readfast/liocfigbpddjkeamedfhedagphkjninf",
+   "author": "lengzuo",
+   "created_at": "2025-03-29T14:57:04Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Hi everyone,<p>I’m excited to share Readfast, a Chrome extension I built to help tackle information overload. With one click, Readfast uses AI to quickly summarize articles from any website, helping you focus on what matters most—whether you’re a student, researcher, or just trying to keep up with the news.<p>Key Features:\n- One-Click Summaries: Instant AI-powered condensation of long-form content.\n- Versatile: Works across news sites, blogs, academic papers, and more.\n- Customizable Experience: Choose your preferred summary length, language, and format (like bullet points).\n- Efficiency: Save"
+  },
+  {
+   "objectID": "42579048",
+   "title": "Show HN: Tabchat AI — Chat with any tab using our Chrome extension",
+   "url": "https://chromewebstore.google.com/detail/tabchat-ai/belpggoeapomplfgocfednggkbimicph",
+   "author": "heythisischris",
+   "created_at": "2025-01-02T21:20:09Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Chat with your tabs using our Chrome extension.<p>Tabchat AI is an extension that lets you chat directly with your active tabs. We securely scrape the HTML data from your DOM, send it over to our LLM, and viola- you&#x27;re able to receive AI assistance with any website you&#x27;re currently browsing. The possibilities, as you might imagine, are endless.<p>Need help with a forum post? Done. Seeing if a product is worth purchasing? We can help. Need to extract data from a table? Piece of cake.<p>In short:<p><pre><code>  • Chat with any tab you have open\n  • Easily extract unstructured data to C"
+  },
+  {
+   "objectID": "39635107",
+   "title": "Show HN: TranslateTribune – News from the 'Global South', Translated by Claude 3",
+   "url": "http://translatetribune.com/",
+   "author": "medusaML",
+   "created_at": "2024-03-07T22:03:25Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "I&#x27;m excited to share <a href=\"https:&#x2F;&#x2F;TranslateTribune.com\" rel=\"nofollow\">https:&#x2F;&#x2F;TranslateTribune.com</a>, an open-source project aimed at making international news accessible to English-speaking audiences by breaking down language barriers and offering daily insights from a broad array of global sources.<p><i>Why TranslateTribune?</i><p>In today&#x27;s interconnected world, understanding global events requires access to diverse perspectives. However, language barriers and media biases often limit this exposure. TranslateTribune leverages advanced AI to select, trans"
+  },
+  {
+   "objectID": "37021301",
+   "title": "Show HN: SafariGPT iOS Shortcut to summarize pages in Safari",
+   "url": "https://shareshortcuts.com/shortcuts/2586-safarigpt.html",
+   "author": "bayramn",
+   "created_at": "2023-08-06T12:38:27Z",
+   "points": 1,
+   "num_comments": 0,
+   "story_text": "Ever since ChatGPT came out, I wanted Safari extension for iOS to summarize web articles when I was lazy to read the whole article.<p>So I wrote my first shortcut that summarizes long page into small paragraphs using Official &#x27;Ask ChatGPT&#x27; shortcut.<p>How to use:<p>Since it uses official shortcut of ChatGPT app, you need to have Official OpenAl ChatGPT iOS app installed. (Note that it won&#x27;t work on MacOS.)<p>- Make sure ChatGPT app is installed. - Add Shortcut \n- While on Safari, click Share \n- Scroll all the way down and click SafariGPT \n- After 30-40 seconds, summary will be d"
+  }
+ ]
+}
