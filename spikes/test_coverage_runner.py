@@ -141,3 +141,41 @@ class TestLoadSample:
 
 def test_known_domains_are_ten_scenarios():
     assert KNOWN_DOMAINS == [f"s{i}" for i in range(1, 11)]
+
+
+class TestRealArtifacts:
+    """真实产物校验（池/样本落盘后跑；不触网）。"""
+
+    def test_real_sample_loads_and_domains_frozen(self):
+        entries = load_sample("spikes/coverage/sample.json", "spikes/coverage/pool.json")
+        assert len(entries) == 30
+        # 两阶段写入：阶段一产物（选样+域映射）与阶段二（形状+尝试）一致性由池快照钉死
+        for e in entries:
+            assert e["shape_digest"].startswith("sha256:")
+
+    def test_domain_mapping_recorded_before_attempt(self, tmp_path):
+        # 阶段二字段（attempt/expected_shape）不得回写阶段一域判定：
+        # 构造「阶段一 domains 与池一致、阶段二被篡改」的样本 → 必须拒绝
+        pool = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"])])
+        sample = {
+            "meta": {"pool_ref": "sha256:x"},
+            "entries": [{
+                "id": "a", "domains": ["s7"],  # 篡改：池登记 s1
+                "expected_shape": {"format": "digest"},
+                "attempt": {"kind": "uncoverable", "category": "site_not_covered", "reason": "x"},
+            }],
+        }
+        sp = tmp_path / "sample.json"
+        sp.write_text(json.dumps(sample), encoding="utf-8")
+        with pytest.raises(ValueError, match="domains"):
+            load_sample(str(sp), str(pool))
+
+    def test_real_sample_attempt_kinds_valid(self):
+        entries = load_sample("spikes/coverage/sample.json", "spikes/coverage/pool.json")
+        cats = {"site_not_covered", "capability_missing", "needs_genericization"}
+        for e in entries:
+            a = e["attempt"]
+            if a["kind"] == "uncoverable":
+                assert a["category"] in cats and a["reason"]
+            else:
+                assert a["kind"] == "chain" and a["steps"]
