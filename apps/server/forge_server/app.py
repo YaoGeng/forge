@@ -11,6 +11,7 @@ from .api_devices import NonceStore, register_device_routes
 from .db import make_engine
 from .etiquette import Clock
 from .models import Base
+from .registry import register_registry_routes
 from .scheduler import CertScheduler, SegRunHook, WallClock
 from .spotcheck import register_spotcheck_routes
 
@@ -65,10 +66,12 @@ def create_app(
         tempfile.mkdtemp(prefix="forge-server-reports-")
     )
     app.state.report_results = {}  # 幂等缓存：(run_id, report_hash, nonce) → 响应（v1 载体内存态）
+    app.state.chain_runner = None  # T1.64a：chain 认证执行器（驱动器/工具装配；None → 503）
 
     register_certification_routes(app)
     register_device_routes(app)
     register_spotcheck_routes(app)
+    register_registry_routes(app)
     return app
 
 

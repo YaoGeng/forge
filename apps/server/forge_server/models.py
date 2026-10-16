@@ -58,6 +58,68 @@ class ClientDevice(Base):
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
 
 
+class Block(Base):
+    """M10 §4 blocks 子集（阶段 1 内部注册；distribution=public 自营）。"""
+
+    __tablename__ = "blocks"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    distribution: Mapped[str] = mapped_column(String(32), default="public")
+    owner_id: Mapped[str] = mapped_column(String(255), default="platform")
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class BlockVersion(Base):
+    """M10 §4 block_versions 子集；reliability_json = 注册时刻认证快照（C13）。"""
+
+    __tablename__ = "block_versions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    block_id: Mapped[int] = mapped_column(Integer, index=True)
+    version: Mapped[str] = mapped_column(String(64))
+    change_kind: Mapped[str] = mapped_column(String(32), default="code")
+    certification_level: Mapped[str] = mapped_column(String(16))
+    reliability_json: Mapped[dict | None] = mapped_column(JSON, default=None)
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class App(Base):
+    __tablename__ = "apps"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    name: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    title: Mapped[str] = mapped_column(String(255))
+    owner_id: Mapped[str] = mapped_column(String(255), default="platform")
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class AppVersion(Base):
+    """M10 §4 app_versions 子集：status 仅 draft/published（完整状态机阶段 2，C11）。"""
+
+    __tablename__ = "app_versions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    app_id: Mapped[int] = mapped_column(Integer, index=True)
+    version: Mapped[str] = mapped_column(String(64))
+    status: Mapped[str] = mapped_column(String(32), default="draft")
+    composition_json: Mapped[dict | None] = mapped_column(JSON, default=None)
+    user_input_schema_json: Mapped[dict | None] = mapped_column(JSON, default=None)
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class AppBlockRef(Base):
+    """M10 §4 block_refs 子集：应用对积木版本的引用（发布时基准）。"""
+
+    __tablename__ = "block_refs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    app_id: Mapped[int] = mapped_column(Integer, index=True)
+    block_name: Mapped[str] = mapped_column(String(255))
+    base_version: Mapped[str] = mapped_column(String(64))
+    patch_window: Mapped[str | None] = mapped_column(JSON, default=None)
+
+
 def run_to_dict(row: CertificationRun) -> dict:
     """API 出口（live/regression 分列原样，不做任何合计派生）。"""
 
