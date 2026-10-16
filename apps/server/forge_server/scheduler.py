@@ -251,8 +251,12 @@ class CertScheduler:
             )
             pending = set(range(row.n, total))
             tier = site_tier or self._tiers.get(run_id) or "standard"
-            reg_ok = round((row.regression_pass_rate or 0.0) * row.n)
-            partials = set()
+            # 缓办#12：reg_ok 半进位确定性（banker's 在精确 .5 平局偏偶漂 -1）；
+            # partials 从 fail_rows 归因重建（env_error/captcha → partial 语义，不落 below_threshold）
+            reg_ok = int((row.regression_pass_rate or 0.0) * row.n + 0.5)
+            partials = ({"captcha_shortfall"}
+                        if any(f.get("failure_class") in ("env_error", "captcha_detected")
+                               for f in fail_rows) else set())
             with self.session_factory() as s:  # 回写重建结果，后续重启走精确路径
                 fresh = s.get(CertificationRun, run_id)
                 fresh.plan_json = self._plan_state(plan, pending, tier, reg_ok, partials)

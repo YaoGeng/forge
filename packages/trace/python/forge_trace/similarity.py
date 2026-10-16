@@ -162,7 +162,7 @@ def golden_similarity(
     fields_a: dict | None = None,
     fields_b: dict | None = None,
 ) -> SimilarityVerdict:
-    """结构余弦 ∧ 字段级容差（M07 §3.2；字段缺省时仅结构）。"""
+    """广义 Jaccard ∧ 字段级容差（M07 §3.2；字段缺省时仅结构）。"""
     score = structural_similarity(html_a, html_b)
     if fields_a is None or fields_b is None:
         fields_ok = True

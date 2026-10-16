@@ -119,17 +119,14 @@ def run_site(key: str) -> dict:
 
     # 3. 回放 10 次（独立浏览器；html 捕获供 similarity 通道）
     runs, sinks = [], []
-    try:
-        for _ in range(REPLAYS):
-            sink: list[str] = []
-            port = PatchrightBrowser(html_sink=sink)
-            try:
-                runs.append(replay.run(trace_ref, store=store, browser_factory=lambda p=port: p))
-            finally:
-                port.close()
-            sinks.append(sink)
-    finally:
-        pass
+    for _ in range(REPLAYS):
+        sink: list[str] = []
+        port = PatchrightBrowser(html_sink=sink)
+        try:
+            runs.append(replay.run(trace_ref, store=store, browser_factory=lambda p=port: p))
+        finally:
+            port.close()
+        sinks.append(sink)
     step_count = len(runs[0].step_results)
     htmls = {
         runs[0].step_results[i]["seq"]: tuple(sink[i] for sink in sinks if len(sink) > i)

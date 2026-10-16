@@ -384,6 +384,15 @@ def test_router_unregistered_run_counts_env_error():
     assert out.failure_class == "env_error"
 
 
+def test_router_unregistered_run_marks_partial_flag():
+    """缓办#11：未登记 run 的 env_error 与 scheduler_hook 异常路径同 flag——verdict 落 partial 不落 below_threshold。"""
+    from forge_server.sandbox import router_hook
+
+    hook = router_hook({1: (make_fake_runner(), "refA", {})})
+    out = hook(999, 1, 0)
+    assert out.partial_flags == frozenset({"captcha_shortfall"})
+
+
 def test_adapter_runner_golden_compares_output(tmp_path):
     """python 块：local=真执行；golden=重执行 + 输出对拍 expected_output.json（C5）。"""
     from forge_server.sandbox import AdapterRunner

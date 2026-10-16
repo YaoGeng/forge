@@ -324,6 +324,38 @@ def test_reattach_legacy_row_without_plan_json(make_scheduler, clock, drain, get
     assert row.n == 20 and row.verdict == "pass"
 
 
+def test_reattach_legacy_rounding_is_half_up(make_scheduler, clock, drain, get_row):
+    """缓办#12：旧回退 reg_ok 半进位确定性——banker's 在精确 .5 平局偏偶漂 -1。"""
+    sched = make_scheduler(make_all_ok_hook())
+    run_id = sched.submit("block", "roundingblock", "1.0.0", "C2", site_tier="standard")
+    drain(sched, clock, until=START + timedelta(seconds=60))
+    with sched.session_factory() as s:
+        row = s.get(CertificationRun, run_id)
+        row.plan_json = None
+        row.n = 8
+        row.regression_pass_rate = 0.8125  # 0.8125*8 = 6.5 精确平局：round()→6，半进位→7
+        s.commit()
+    sched2 = make_scheduler(make_all_ok_hook())
+    assert sched2.reattach(run_id) is True
+    assert sched2._reg_ok[run_id] == 7
+
+
+def test_reattach_legacy_reconstructs_partials_from_fail_rows(make_scheduler, clock, drain, get_row):
+    """缓办#12：旧回退 partials 从 fail_rows 归因重建（env_error → captcha_shortfall）。"""
+    sched = make_scheduler(make_all_ok_hook())
+    run_id = sched.submit("block", "partialblock", "1.0.0", "C2", site_tier="standard")
+    drain(sched, clock, until=START + timedelta(seconds=60))
+    with sched.session_factory() as s:
+        row = s.get(CertificationRun, run_id)
+        row.plan_json = None
+        row.fail_json = {"failures": [
+            {"failure_class": "env_error", "segment": 1, "index": 2}]}
+        s.commit()
+    sched2 = make_scheduler(make_all_ok_hook())
+    assert sched2.reattach(run_id) is True
+    assert sched2._partials[run_id] == {"captcha_shortfall"}
+
+
 def test_create_app_migrates_legacy_db_adds_plan_json(tmp_path):
     """旧库（T1.30 版本建的表，无 plan_json 列）：create_app 幂等补列。"""
     from sqlalchemy import create_engine, inspect, text

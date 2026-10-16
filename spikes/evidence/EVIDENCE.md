@@ -170,8 +170,8 @@
 4. forge_selector 对 id 无 CSS 转义（非法 selector 误标 fragile）——selectors.py 后续卡
 5. RecordingsStore 无 close()（Windows 长驻句柄）——随端口 close 面一并收口
 6. _snapshots_at_finalize O(n²)——已有 ledger ruling（T1.21b），超长会话 stop 变慢
-7. proto test_trace_types.py:349 死代码行（本里程碑修复轮引入的测试卫生）
-8. golden_similarity docstring 措辞（「结构余弦」→ 广义 Jaccard）+ gate 运行器死 finally/session
+7. proto test_trace_types.py:349 死代码行——**已处理**（2026-10-17 等钟清理轮）
+8. golden_similarity docstring 措辞 + gate 运行器死 finally——**已处理**（2026-10-17 等钟清理轮；docstring 改广义 Jaccard、run_ms1d_gate 空 finally:pass 移除；session 一项经查在用非死代码，decline）
 
 ## MS-1F 种子积木库+自制应用（docs/13，2026-10-16 开工；进行中）
 
@@ -201,3 +201,10 @@
 ### 时钟日彩排（2026-10-17，ms1e_store 副本，离线）
 
 副本内 block run 强制 verdict=pass 模拟 seg2 完成，真 state/真积木目录/真 trace_refs 预演全链：register 22/22 新块通过（遗留 c1/c2 两键按手册走手动 POST，注册名≠subject 的 422 符合预期）；五应用 5/5 published（C1 登录态报表走 C8-R1：certify 422 证据 + 本机整链恰一次 + 链行设备签名）；覆盖实验 1/30 covered（hn-44955461 rows=5 过形状核对）、未覆盖分类 17/7/5 与样本裁定逐条一致——D-4 呈报预测值（3.3%）就位。彩排产物仅存本地（含 store 副本，golden 边界不进 git）；`spikes/rehearse_clock_day.py` 可重跑。
+
+### 等钟清理轮（2026-10-17，时钟窗口前）
+
+- MS-1F 缓办清理：#11 router_hook 未登记 run 的 env_error 补 `captcha_shortfall` partial flag（verdict 落 partial 不落 below_threshold，与 scheduler_hook 异常路径一致）；#12 reattach 旧回退 reg_ok 改半进位确定性 + partials 从 fail_rows 归因重建——各 RED→GREEN（test_router_unregistered_run_marks_partial_flag / test_reattach_legacy_rounding_is_half_up / test_reattach_legacy_reconstructs_partials_from_fail_rows）。
+- #15 Creator UI 全部动态插值加 esc() 转义（需求文本/标题等用户输入面 13 处；onclick 内块名经 dir-safe 校验无引号维持直排）。
+- 维持缓办（理由更新）：#14 python⇒site 空是 seedline 有意保留的过渡裁定（「可空或 API 域」，随 M05 网络后端定稿）；#17 chain 失败 verdict 枚举属 M09 API 契约（M10-c 状态机细化时区分）；manifest rows:"[]" golden 改参数会打脱 seg1 golden 对拍，时钟日前不可动。
+- 全仓 356/356。

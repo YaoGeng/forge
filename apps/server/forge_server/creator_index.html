@@ -92,6 +92,8 @@ async function api(method, path, body) {
   return j;
 }
 
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
 function renderRail() {
   $("rail").innerHTML = STEPS.map((s, i) => {
     const n = i + 1;
@@ -102,10 +104,10 @@ function renderRail() {
 }
 
 function relHtml(rel) {
-  if (!rel || rel.label) return `<span class="rel">${(rel && rel.label) || "数据不足"}</span>`;
+  if (!rel || rel.label) return `<span class="rel">${esc((rel && rel.label) || "数据不足")}</span>`;
   const pct = (rel.live_pass_rate * 100).toFixed(0) + "%";
   const win = (rel.window_start || "?").slice(0, 10) + " ~ " + (rel.window_end || "?").slice(0, 10);
-  return `<span class="rel">通过率 <b>${pct}</b>（N=${rel.n}，${win}）</span>`
+  return `<span class="rel">通过率 <b>${esc(pct)}</b>（N=${esc(rel.n)}，${esc(win)}）</span>`
     + (rel.level === "C1" ? ` <span class="badge c1">C1</span>` : "")
     + (rel.best_effort ? ` <span class="badge best">best-effort</span>` : "");
 }
@@ -118,7 +120,7 @@ function panelStep1() {
     <label style="margin-top:14px">已认证积木目录</label>
     <div class="blocks" id="catalog">${
       blocks.length ? blocks.map(b =>
-        `<div class="brow"><span class="name">${b.name}</span><span class="badge">${b.level}</span>
+        `<div class="brow"><span class="name">${esc(b.name)}</span><span class="badge">${esc(b.level)}</span>
          ${relHtml(b.reliability)}<button class="ghost" style="margin:0 0 0 auto" onclick="addBlock('${b.name}')">加入画布</button></div>`
       ).join("") : `<div class="note">暂无已注册积木（完成认证并注册后出现）。</div>`
     }</div></div>`;
@@ -129,8 +131,8 @@ function panelStep2() {
   return `<div class="card"><h2><span class="stepno">2</span>画布组装（线性管线）</h2>
     <table><tr><th>#</th><th>积木/交互</th><th>参数（JSON）</th><th></th></tr>
     ${comp.map((st, i) => `<tr><td>${i + 1}</td>
-      <td><b>${st.block || "「" + st.interaction + "」交互"}</b></td>
-      <td><code>${JSON.stringify(st.params || st.bindings || {})}</code></td>
+      <td><b>${esc(st.block || "「" + st.interaction + "」交互")}</b></td>
+      <td><code>${esc(JSON.stringify(st.params || st.bindings || {}))}</code></td>
       <td><button class="ghost" onclick="delStep(${i})">移除</button></td></tr>`).join("")
       || `<tr><td colspan="4" class="note">从第 1 步目录加入积木。</td></tr>`}
     </table>
@@ -172,7 +174,7 @@ function panelStep7() {
 
 function panelStep8() {
   return `<div class="card"><h2><span class="stepno">8</span>发布配置</h2>
-    <label>应用标题</label><input type="text" id="title" value="${draft.title || ""}">
+    <label>应用标题</label><input type="text" id="title" value="${esc(draft.title || "")}">
     <label style="margin-top:10px"><input type="checkbox" id="comp"> 我确认：本应用仅访问已声明站点的公开数据，遵守各站点服务条款</label>
     <button onclick="savePublish()">保存发布配置</button>
     <button onclick="goto(9)">进入提审 →</button>
@@ -195,10 +197,10 @@ function render() {
     <button onclick="goto(2)">← 画布</button> <button onclick="goto(4)">启动表单 →</button></div>`;
   $("panels").innerHTML = html;
   $("sideBody").innerHTML = sid
-    ? `<div class="kv"><b>需求</b>：${draft.__req || ""}</div>
+    ? `<div class="kv"><b>需求</b>：${esc(draft.__req || "")}</div>
        <div class="kv"><b>组合</b>：${(draft.composition || []).length} 步</div>
-       <div class="kv"><b>应用</b>：${draft.app_name || "未创建"}</div>
-       <div class="kv"><b>自动保存</b>：${draft.__saved || ""}</div>`
+       <div class="kv"><b>应用</b>：${esc(draft.app_name || "未创建")}</div>
+       <div class="kv"><b>自动保存</b>：${esc(draft.__saved || "")}</div>`
     : "先在第 1 步描述需求并开会话。";
   if (cur === 7 && draft.app_id) loadReport();
 }
@@ -229,26 +231,26 @@ async function goto(n) { try { await api("POST", `/creator/sessions/${sid}/goto`
     await loadSession(); render(); } catch (e) { alert(e.message); } }
 async function dryrun() { try { const j = await api("POST", `/creator/sessions/${sid}/dryrun`);
     $("dry").innerHTML = `<table><tr><th>步</th><th>积木</th><th>结果</th></tr>` +
-      j.steps.map(s => `<tr><td>${s.index + 1}</td><td>${s.block || "-"}</td>
-        <td class="${s.ok ? "ok" : "bad"}">${s.ok ? "通过" : (s.failure_class || "失败")}</td></tr>`).join("") + "</table>";
+      j.steps.map(s => `<tr><td>${s.index + 1}</td><td>${esc(s.block || "-")}</td>
+        <td class="${s.ok ? "ok" : "bad"}">${s.ok ? "通过" : esc(s.failure_class || "失败")}</td></tr>`).join("") + "</table>";
   } catch (e) { $("err5").textContent = e.message; } }
 async function certify() { try { const j = await api("POST", `/creator/sessions/${sid}/certify`);
-    $("cert").innerHTML = `verdict=<b class="${j.verdict === "pass" ? "ok" : "bad"}">${j.verdict}</b>
+    $("cert").innerHTML = `verdict=<b class="${j.verdict === "pass" ? "ok" : "bad"}">${esc(j.verdict)}</b>
       <span class="badge nostat">非统计值</span>（N=${j.n}）`; await loadSession();
   } catch (e) { $("err6").textContent = e.message; } }
 async function loadReport() { try { const j = await api("GET", `/creator/sessions/${sid}/report`);
     $("rep").innerHTML = `<table><tr><th>积木</th><th>可靠性（认证初始）</th></tr>` +
-      j.blocks.map(b => `<tr><td><b>${b.name}</b></td><td>${relHtml(b.reliability)}
-        ${b.reliability.c1_label ? `<div class="c1label">${b.reliability.c1_label}</div>` : ""}</td></tr>`).join("") +
-      "</table>" + (j.chain ? `<div class="note">整链：verdict=<b>${j.chain.verdict}</b>
-        <span class="badge nostat">${j.chain.annotation}</span></div>` : `<div class="note">尚未整链认证。</div>`);
-  } catch (e) { $("rep").innerHTML = `<div class="error">${e.message}</div>`; } }
+      j.blocks.map(b => `<tr><td><b>${esc(b.name)}</b></td><td>${relHtml(b.reliability)}
+        ${b.reliability.c1_label ? `<div class="c1label">${esc(b.reliability.c1_label)}</div>` : ""}</td></tr>`).join("") +
+      "</table>" + (j.chain ? `<div class="note">整链：verdict=<b>${esc(j.chain.verdict)}</b>
+        <span class="badge nostat">${esc(j.chain.annotation)}</span></div>` : `<div class="note">尚未整链认证。</div>`);
+  } catch (e) { $("rep").innerHTML = `<div class="error">${esc(e.message)}</div>`; } }
 async function savePublish() { try { await api("PUT", `/creator/sessions/${sid}/publish`, {
       title: $("title").value, sites_compliance_confirmed: $("comp").checked });
     await loadSession(); render();
   } catch (e) { $("err8").textContent = e.message; } }
 async function submitApp() { try { const j = await api("POST", `/creator/sessions/${sid}/submit`);
-    $("sub").innerHTML = `已上架：<b class="ok">${j.status}</b>（app_id=${j.app_id}）`;
+    $("sub").innerHTML = `已上架：<b class="ok">${esc(j.status)}</b>（app_id=${esc(j.app_id)}）`;
   } catch (e) { $("err9").textContent = e.message; } }
 
 (async () => {

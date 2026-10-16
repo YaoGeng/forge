@@ -251,7 +251,8 @@ def router_hook(
                 from .scheduler import SegmentRunOutcome
 
                 return SegmentRunOutcome(
-                    live_ok=False, regression_ok=False, failure_class="env_error"
+                    live_ok=False, regression_ok=False, failure_class="env_error",
+                    partial_flags=frozenset({"captcha_shortfall"}),  # 缓办#11：与执行器异常路径同 flag（verdict 走 partial）
                 )
             bridge = scheduler_hook(C2Executor(), runner, block_ref=block_ref,
                                     params=params, clock=clock)
