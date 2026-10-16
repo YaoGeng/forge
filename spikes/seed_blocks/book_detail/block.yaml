@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: book_detail
+version: 1.0.0
+title: book_detail
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "books.toscrape.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 book_detail（场景 s3_catalog_read）

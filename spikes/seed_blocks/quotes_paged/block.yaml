@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: quotes_paged
+version: 1.0.0
+title: quotes_paged
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "quotes.toscrape.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 quotes_paged（场景 s4_text_extract）

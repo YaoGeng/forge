@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: bing_search
+version: 1.0.0
+title: bing_search
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "cn.bing.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 bing_search（场景 s1_search_digest）

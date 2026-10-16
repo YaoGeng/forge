@@ -210,8 +210,8 @@ def main() -> int:
             parser.error("drive 需要 --segment {1,2}")
         routes = build_routes(STORE, manifest, batch=args.batch)
         result = drive(STORE, manifest, args.segment, app=app, routes=routes)
-        out = EVIDENCE / f"t1.63_drive_seg{args.segment}" + (
-            f"_batch{args.batch}" if args.batch else "") + ".json"
+        suffix = f"_batch{args.batch}" if args.batch else ""
+        out = EVIDENCE / f"t1.63_drive_seg{args.segment}{suffix}.json"
         out.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps(result, ensure_ascii=False, indent=2))
         print(f"drive: {'PASS' if result['reached_all'] else 'INCOMPLETE'} → {out}")

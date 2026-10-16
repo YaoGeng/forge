@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: baidu_home_watch
+version: 1.0.0
+title: baidu_home_watch
+site_change_tier: high
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "baidu.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 baidu_home_watch（场景 s7_home_watch）
