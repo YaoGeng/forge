@@ -1,0 +1,11 @@
+[project]
+name = "forge-server"
+version = "0.1.0"
+description = "Forge 认证流水线服务端：CertScheduler/certification_runs/C2 执行器/报告 REST（M09 编码，docs/12）"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.110",
+    "sqlalchemy>=2.0",
+    "PyYAML>=6.0",
+    "cryptography>=42",
+]
