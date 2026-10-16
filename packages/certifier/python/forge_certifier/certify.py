@@ -55,13 +55,16 @@ class CertReportClient:
     def __init__(self, http=None):
         self._http = http or httpx.Client()
 
-    def payload(self, signed: SignedReport, cert_run_id: int) -> dict:
-        return {"cert_run_id": cert_run_id, **signed.payload()}
+    def payload(self, signed: SignedReport, cert_run_id: int, *, golden: dict | None = None) -> dict:
+        payload = {"cert_run_id": cert_run_id, **signed.payload()}
+        if golden is not None:
+            payload["golden"] = golden  # C1 golden 子集随报告上传（M09 §3.2）
+        return payload
 
-    def upload(self, server_base: str, signed: SignedReport, cert_run_id: int) -> UploadResult:
+    def upload(self, server_base: str, signed: SignedReport, cert_run_id: int, *, golden: dict | None = None) -> UploadResult:
         r = self._http.post(
             f"{server_base}/api/v1/certifications/{cert_run_id}/report",
-            json=self.payload(signed, cert_run_id),
+            json=self.payload(signed, cert_run_id, golden=golden),
         )
         try:
             body = r.json()

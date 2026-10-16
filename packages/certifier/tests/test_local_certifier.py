@@ -210,6 +210,17 @@ def test_nonce_fetched_after_runs(make_app):
     assert last_run < nonce_index  # 运行全部完成后再取 nonce
 
 
+def test_upload_payload_carries_golden():
+    """上传载荷可携带 golden 子集（M09 §3.2：C1 golden 随报告上传，服务端强制脱敏校验）。"""
+    from forge_certifier.certify import CertReportClient, SignedReport
+
+    signed = SignedReport(report={}, attestation={}, signature=b"", device_fp="fp")
+    payload = CertReportClient().payload(signed, 7, golden={"expected_steps": [], "network_stubs": {"entries": []}})
+    assert payload["cert_run_id"] == 7
+    assert payload["golden"] == {"expected_steps": [], "network_stubs": {"entries": []}}
+    assert "golden" not in CertReportClient().payload(signed, 7)  # 未提供则不带
+
+
 def test_session_profile_ephemeral(make_app):
     _, client, key, _, runner, factory, profiles = make_certify_env(make_app)
     certify(
