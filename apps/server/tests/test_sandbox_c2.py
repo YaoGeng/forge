@@ -354,3 +354,71 @@ def test_fixture_idempotency_two_pass(tmp_path):
     ro_block = make_block_dir(tmp_path, name="ro_probe", side_effects=False)
     ro = verify_idempotency(ro_block, params, invoke)
     assert ro.ok is True and ro.passes == 0
+
+
+# --- T1.62：router_hook 多积木并发分发 + AdapterRunner（docs/13 C5/Review Focus 2）---
+
+
+def test_router_dispatches_per_run():
+    """两 run 两块各异：按 run_id 严格分发，live/regression 计数互不串。"""
+    from forge_server.sandbox import router_hook
+
+    fake_a = make_fake_runner(golden_ok=True)
+    fake_b = make_fake_runner(golden_ok=False)
+    hook = router_hook(
+        {101: (fake_a, "refA", {}), 102: (fake_b, "refB", {"q": "x"})},
+    )
+    out_a = hook(101, 1, 0)
+    out_b = hook(102, 1, 0)
+    assert out_a.live_ok and out_a.regression_ok
+    assert out_b.live_ok and not out_b.regression_ok  # golden 失败只落在 B
+    assert fake_a is not fake_b
+
+
+def test_router_unregistered_run_counts_env_error():
+    from forge_server.sandbox import router_hook
+
+    hook = router_hook({1: (make_fake_runner(), "refA", {})})
+    out = hook(999, 1, 0)
+    assert not out.live_ok and not out.regression_ok
+    assert out.failure_class == "env_error"
+
+
+def test_adapter_runner_golden_compares_output(tmp_path):
+    """python 块：local=真执行；golden=重执行 + 输出对拍 expected_output.json（C5）。"""
+    from forge_server.sandbox import AdapterRunner
+
+    d = tmp_path / "excel_export"
+    d.mkdir()
+    (d / "main.py").write_text(
+        'def run(params):\n    return {"rows": len(params.get("rows", "").split(";"))}\n',
+        encoding="utf-8",
+    )
+    golden_dir = d / "tests" / "golden"
+    golden_dir.mkdir(parents=True)
+    (golden_dir / "expected_output.json").write_text('{"rows": 3}\n', encoding="utf-8")
+
+    runner = AdapterRunner({d.name: d})
+    live = runner.run_once("excel_export", {"rows": "a;b;c"}, mode="local")
+    assert live.ok and live.output == {"rows": 3}
+
+    good = runner.run_once("excel_export", {"rows": "a;b;c"}, mode="golden")
+    assert good.ok
+
+    # 输出漂移（行数变了）→ regression 失败，归因 anchor_mismatch
+    drifted = runner.run_once("excel_export", {"rows": "a;b"}, mode="golden")
+    assert drifted.ok is False
+    assert drifted.failure_class == "anchor_mismatch"
+
+
+def test_adapter_runner_exception_is_env_error(tmp_path):
+    from forge_server.sandbox import AdapterRunner
+
+    d = tmp_path / "boom"
+    d.mkdir()
+    (d / "main.py").write_text(
+        'def run(params):\n    raise ValueError("块自身缺陷")\n', encoding="utf-8"
+    )
+    runner = AdapterRunner({d.name: d})
+    out = runner.run_once("boom", {}, mode="local")
+    assert out.ok is False and out.failure_class == "env_error"

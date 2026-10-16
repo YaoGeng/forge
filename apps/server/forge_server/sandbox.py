@@ -31,6 +31,7 @@ class RunOutcome:
     network_shape: frozenset[str] = frozenset()
     timed_out: bool = False
     partial_flags: frozenset[str] = frozenset()
+    output: dict | None = None  # python 适配块产物（ChainRunner 上下文传递消费）
 
 
 class RunnerPort(Protocol):
@@ -227,3 +228,88 @@ def scheduler_hook(
         )
 
     return hook
+
+
+def router_hook(
+    routes: dict[int, tuple[RunnerPort, str, dict[str, str] | None]],
+    *,
+    clock=None,
+) -> Callable[[int, int, int], "object"]:
+    """多积木并发认证分发（docs/13 T1.62）：run_id → (runner, block_ref, params)。
+
+    未登记 run_id 如实计 env_error（该次不计数 → N 不足走 partial）。
+    """
+    executors: dict[int, Callable] = {}
+
+    def hook(run_id: int, segment: int, index: int):
+        bridge = executors.get(run_id)
+        if bridge is None:
+            try:
+                runner, block_ref, params = routes[run_id]
+            except KeyError:
+                _LOG.warning("router 未登记 run_id=%s", run_id)
+                from .scheduler import SegmentRunOutcome
+
+                return SegmentRunOutcome(
+                    live_ok=False, regression_ok=False, failure_class="env_error"
+                )
+            bridge = scheduler_hook(C2Executor(), runner, block_ref=block_ref,
+                                    params=params, clock=clock)
+            executors[run_id] = bridge
+        return bridge(run_id, segment, index)
+
+    return hook
+
+
+class AdapterRunner:
+    """python 适配块执行器（docs/13 C5）：local=真执行；golden=重执行+输出对拍快照。
+
+    block_dirs: block_ref → 积木目录；expected_output.json 由产线 snapshot 首跑生成。
+    """
+
+    def __init__(self, block_dirs: dict[str, object]):
+        self._block_dirs = dict(block_dirs)
+
+    def _execute(self, block_ref: str, params: dict | None) -> dict:
+        import importlib.util
+
+        d = self._block_dirs.get(block_ref)
+        if d is None:
+            raise KeyError(f"AdapterRunner 未登记 block_ref={block_ref!r}")
+        spec = importlib.util.spec_from_file_location(f"adapter_{block_ref}", d / "main.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return dict(mod.run(dict(params or {})))
+
+    @staticmethod
+    def _canonical(output: dict) -> str:
+        import json
+
+        return json.dumps(output, ensure_ascii=False, sort_keys=True)
+
+    def run_once(
+        self,
+        block_ref: str,
+        params: dict[str, str] | None = None,
+        *,
+        mode: str = "local",
+        browser_factory=None,
+    ) -> RunOutcome:
+        d = self._block_dirs.get(block_ref)
+        try:
+            output = self._execute(block_ref, params)
+        except Exception as exc:
+            _LOG.warning("python 块执行异常 block=%s: %s", block_ref, exc, exc_info=True)
+            return RunOutcome(mode=mode, ok=False, failure_class="env_error")
+        if mode == "local":
+            return RunOutcome(mode=mode, ok=True, output=output)
+        import json
+
+        golden = d / "tests" / "golden" / "expected_output.json"
+        try:
+            expected = json.loads(golden.read_text(encoding="utf-8"))
+        except FileNotFoundError:
+            return RunOutcome(mode=mode, ok=False, failure_class="env_error")
+        if self._canonical(expected) == self._canonical(output):
+            return RunOutcome(mode=mode, ok=True, output=output)
+        return RunOutcome(mode=mode, ok=False, failure_class="anchor_mismatch")
