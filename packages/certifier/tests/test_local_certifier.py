@@ -171,6 +171,45 @@ def test_certify_produces_signed_report(make_app):
     assert n1["nonce"] != signed.attestation["nonce"]  # 报告用的 nonce 与后续领取互不影响
 
 
+def test_nonce_fetched_after_runs(make_app):
+    """nonce 保护的是签署/上传动作（TTL 5min）：须在全部真实运行完成后领取
+    （gate 实证：真实站点单 run 可达分钟级，先取 nonce 必然耗尽 TTL）。"""
+    app = make_app()
+    events = []
+
+    class TracingClient(RecordingClient):
+        def post(self, url, **kw):
+            events.append(("post", url))
+            return super().post(url, **kw)
+
+    client = TracingClient(app)
+    key = DeviceKey.generate()
+    register_device(client, SERVER, "creator-order", key)
+
+    class Runner:
+        def __init__(self):
+            self.calls = 0
+
+        def run_once(self, block_ref, params=None, *, mode="local", browser_factory=None):
+            if browser_factory is not None:
+                browser_factory()
+            events.append(("run", self.calls))
+            self.calls += 1
+            return RunOutcome(mode=mode, ok=True)
+
+    certify(
+        "ref", 2, {},
+        device_key=key, server_base=SERVER,
+        browser_factory=lambda profile: FakeBrowser(), runner=Runner(), http=client,
+    )
+
+    last_run = max(i for i, (k, _) in enumerate(events) if k == "run")
+    nonce_index = next(
+        i for i, (k, url) in enumerate(events) if k == "post" and url.endswith("/nonce")
+    )
+    assert last_run < nonce_index  # 运行全部完成后再取 nonce
+
+
 def test_session_profile_ephemeral(make_app):
     _, client, key, _, runner, factory, profiles = make_certify_env(make_app)
     certify(

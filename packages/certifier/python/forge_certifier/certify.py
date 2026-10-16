@@ -84,12 +84,12 @@ def certify(
     browser_version: str = "unknown",
     network_type: str = "ethernet",
 ) -> SignedReport:
-    """阻塞式认证：取 nonce → N 次真实运行（每 run 一次性 profile，即焚）→ 报告 → C7 签名。
+    """阻塞式认证：N 次真实运行（每 run 一次性 profile，即焚）→ 取 nonce → 报告 → C7 签名。
 
     browser_factory(profile_dir) 每轮调用一次；runner.run_once 接收本轮工厂（C11）。
+    nonce 在运行完成后领取——TTL 5min 保护签署/上传动作，不覆盖运行时长（gate 实证）。
     """
     http = http or httpx.Client()
-    nonce = fetch_nonce(http, server_base, device_key.device_fp)["nonce"]
     fp = env_fingerprint(browser_version, network_type)
 
     runs: list[dict] = []
@@ -121,6 +121,7 @@ def certify(
         if not outcome.ok:
             failures.append({"index": i, "failure_class": outcome.failure_class})
 
+    nonce = fetch_nonce(http, server_base, device_key.device_fp)["nonce"]
     report = {
         "runs": runs,  # 白名单：不含页面内容/快照文本（M09 §3.2）
         "env_fingerprint": fp,
