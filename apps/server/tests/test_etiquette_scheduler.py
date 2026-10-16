@@ -282,3 +282,71 @@ def test_tick_executes_segments(make_scheduler, clock, get_row, drain):
     assert row.live_pass_rate == 1.0 and row.regression_pass_rate == 1.0
     assert row.verdict == "pass"
     assert sched.status_of(run_id) == "done"
+
+
+# --- T1.62 补：计划跨进程持久化与重建（MS-1E seg2 换进程驱动的前置修复）---
+
+
+def test_reattach_restores_plan_across_instances(make_scheduler, clock, drain, get_row):
+    """新进程（内存计划为空）reattach 后可续跑到 N=20 且口径不漂移。"""
+    sched_a = make_scheduler(make_all_ok_hook())
+    run_id = sched_a.submit("block", "reblock", "1.0.0", "C2", site_tier="standard")
+    drain(sched_a, clock, until=START + timedelta(seconds=60))
+    assert get_row(sched_a, run_id).n == 10  # 时段一完成
+
+    sched_b = make_scheduler(make_all_ok_hook())  # 模拟旧进程死亡后的新进程
+    assert sched_b.plan_for(run_id) is None
+    assert sched_b.reattach(run_id) is True
+    assert sched_b.plan_for(run_id) is not None
+
+    clock.advance_to(START + timedelta(hours=48) - timedelta(seconds=1))  # 停在时段二开始前 1s：drain 需单调时钟
+    drain(sched_b, clock)
+    row = get_row(sched_b, run_id)
+    assert row.n == 20 and row.verdict == "pass"
+    assert row.live_pass_rate == 1.0 and row.regression_pass_rate == 1.0
+
+
+def test_reattach_legacy_row_without_plan_json(make_scheduler, clock, drain, get_row):
+    """旧版本行（无 plan_json，n=10）：按 started_at+n 确定性重建第二时段。"""
+    sched = make_scheduler(make_all_ok_hook())
+    run_id = sched.submit("block", "legacyblock", "1.0.0", "C2", site_tier="standard")
+    drain(sched, clock, until=START + timedelta(seconds=60))
+    with sched.session_factory() as s:
+        row = s.get(CertificationRun, run_id)
+        row.plan_json = None  # 模拟 T1.30 旧版本写入的行
+        s.commit()
+
+    sched2 = make_scheduler(make_all_ok_hook())
+    assert sched2.reattach(run_id) is True
+    clock.advance_to(START + timedelta(hours=48) - timedelta(seconds=1))  # 同上：drain 需单调时钟
+    drain(sched2, clock)
+    row = get_row(sched2, run_id)
+    assert row.n == 20 and row.verdict == "pass"
+
+
+def test_create_app_migrates_legacy_db_adds_plan_json(tmp_path):
+    """旧库（T1.30 版本建的表，无 plan_json 列）：create_app 幂等补列。"""
+    from sqlalchemy import create_engine, inspect, text
+
+    from forge_server.app import create_app
+    from forge_server.models import Base, CertificationRun
+
+    db = tmp_path / "legacy.db"
+    engine = create_engine(f"sqlite:///{db.as_posix()}")
+    Base.metadata.create_all(engine)  # 全新表
+    with engine.connect() as c:  # 手工删列 = 模拟旧版本库（SQLite 无 DROP COLUMN 旧版兼容：重建表）
+        c.execute(text("ALTER TABLE certification_runs RENAME TO certification_runs_new"))
+        cols = [r[1] for r in c.execute(text("PRAGMA table_info(certification_runs_new)"))]
+        keep = ", ".join(x for x in cols if x != "plan_json")
+        c.execute(text(
+            f"CREATE TABLE certification_runs AS SELECT {keep} FROM certification_runs_new"))
+        c.execute(text("DROP TABLE certification_runs_new"))
+        c.commit()
+    engine.dispose()
+
+    app = create_app(f"sqlite:///{db.as_posix()}")
+    check = create_engine(f"sqlite:///{db.as_posix()}")
+    names = {r[1] for r in check.connect().execute(text("PRAGMA table_info(certification_runs)"))}
+    assert "plan_json" in names
+    # 二次启动幂等
+    create_app(f"sqlite:///{db.as_posix()}")

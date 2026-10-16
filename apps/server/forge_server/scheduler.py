@@ -140,6 +140,7 @@ class CertScheduler:
                 version=version,
                 level=level,
                 batch_id=batch_id,
+                plan_json=self._plan_state(plan, set(range(len(requests))), site_tier, 0, set()),
             )
             s.add(row)
             s.commit()
@@ -189,6 +190,68 @@ class CertScheduler:
                 due.append(min(plan.requests[i].ts for i in pending))
         return min(due) if due else None
 
+    def reattach(self, run_id: int) -> bool:
+        """跨进程重建调度态（gate seg2/批次驱动器换进程续跑的前置）。
+
+        优先读行上 plan_json（计划时间戳与进度精确）；旧行（T1.30 版本，无 plan_json）
+        按 started_at + n 确定性重建：执行序 = ts 序 = index 序，时段跨度按礼仪下限 48h。
+        """
+        with self.session_factory() as s:
+            row = s.get(CertificationRun, run_id)
+            if row is None:
+                return False
+            pj = row.plan_json
+            fail_rows = list((row.fail_json or {}).get("failures", []))
+        if pj:
+            plan = BatchPlan(
+                batch_id=row.batch_id,
+                site=pj["site"],
+                requests=tuple(
+                    PlannedRequest(ts=datetime.fromisoformat(ts), segment=seg, index=idx)
+                    for ts, seg, idx in pj["requests"]
+                ),
+                segment_starts=tuple(datetime.fromisoformat(t) for t in pj["segment_starts"]),
+            )
+            pending = set(pj["pending"])
+            tier = pj.get("tier", "standard")
+            reg_ok = int(pj.get("reg_ok", 0))
+            partials = set(pj.get("partials", ()))
+        else:
+            if row.started_at is None:
+                return False  # 未起跑且无计划：无从重建
+            seg0 = row.started_at
+            seg1 = seg0 + timedelta(hours=MIN_BATCH_SPAN_H)
+            total = SEGMENTS * SEGMENT_RUNS
+            reqs = []
+            for seg, start in ((0, seg0), (1, seg1)):
+                for i in range(SEGMENT_RUNS):
+                    idx = seg * SEGMENT_RUNS + i
+                    reqs.append(PlannedRequest(
+                        ts=start + timedelta(seconds=i * MIN_REQUEST_INTERVAL_S),
+                        segment=seg, index=idx,
+                    ))
+            plan = BatchPlan(
+                batch_id=row.batch_id,
+                site=f"{row.subject_type}:{row.subject_id}",
+                requests=tuple(reqs),
+                segment_starts=(seg0, seg1),
+            )
+            pending = set(range(row.n, total))
+            tier = self._tiers.get(run_id, "standard")
+            reg_ok = round((row.regression_pass_rate or 0.0) * row.n)
+            partials = set()
+            with self.session_factory() as s:  # 回写重建结果，后续重启走精确路径
+                fresh = s.get(CertificationRun, run_id)
+                fresh.plan_json = self._plan_state(plan, pending, tier, reg_ok, partials)
+                s.commit()
+        self._plans[run_id] = plan
+        self._pending[run_id] = pending
+        self._tiers[run_id] = tier
+        self._reg_ok[run_id] = reg_ok
+        self._partials[run_id] = partials
+        self._live_fail_rows[run_id] = fail_rows
+        return True
+
     # --- 查询面 -----------------------------------------------------------------
 
     def plan_for(self, run_id: int) -> BatchPlan | None:
@@ -226,6 +289,20 @@ class CertScheduler:
 
     # --- 内部 -------------------------------------------------------------------
 
+    @staticmethod
+    def _plan_state(plan: BatchPlan, pending: set[int], tier: str, reg_ok: int,
+                    partials: set[str]) -> dict:
+        """批次计划+进度的可序列化形态（行上 plan_json，reattach 消费）。"""
+        return {
+            "requests": [[r.ts.isoformat(), r.segment, r.index] for r in plan.requests],
+            "segment_starts": [t.isoformat() for t in plan.segment_starts],
+            "site": plan.site,
+            "tier": tier,
+            "pending": sorted(pending),
+            "reg_ok": reg_ok,
+            "partials": sorted(partials),
+        }
+
     def _apply(self, run_id: int, plan: BatchPlan, index: int, outcome: SegmentRunOutcome, now: datetime) -> None:
         self._pending[run_id].discard(index)
         self._partials.setdefault(run_id, set()).update(outcome.partial_flags)
@@ -244,6 +321,10 @@ class CertScheduler:
             if row.started_at is None:
                 row.started_at = now
             row.fail_json = {"failures": self._live_fail_rows.get(run_id, [])}
+            row.plan_json = self._plan_state(
+                plan, self._pending[run_id], self.tier_of(run_id),
+                self._reg_ok.get(run_id, 0), self._partials.get(run_id, set()),
+            )
             if row.n >= len(plan.requests):
                 row.verdict = compute_verdict(
                     self.tier_of(run_id),

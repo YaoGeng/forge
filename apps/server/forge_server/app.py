@@ -15,6 +15,17 @@ from .scheduler import CertScheduler, SegRunHook, WallClock
 from .spotcheck import register_spotcheck_routes
 
 
+def _ensure_plan_json_column(engine) -> None:
+    """旧库补列（幂等）：certification_runs.plan_json——批次计划跨进程重建所需。"""
+    from sqlalchemy import inspect, text
+
+    inspector = inspect(engine)
+    if "plan_json" in {c["name"] for c in inspector.get_columns("certification_runs")}:
+        return
+    with engine.begin() as c:
+        c.execute(text("ALTER TABLE certification_runs ADD COLUMN plan_json JSON"))
+
+
 def create_app(
     db_url: str,
     *,
@@ -28,6 +39,7 @@ def create_app(
 
     engine = make_engine(db_url)
     Base.metadata.create_all(engine)
+    _ensure_plan_json_column(engine)  # v1 载体迁移：T1.30 旧库无此列（Alembic 后置，D-M1E.1）
     from sqlalchemy.orm import sessionmaker
 
     session_factory = sessionmaker(bind=engine, expire_on_commit=False)

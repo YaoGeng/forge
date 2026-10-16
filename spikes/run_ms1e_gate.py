@@ -185,6 +185,8 @@ def run_c2_segment(segment: int, state: dict) -> dict:
         run_id = r.json()["run_id"]
         state.setdefault("run_ids", {})["c2"] = run_id
         save_state(state)
+    elif not app.state.scheduler.reattach(run_id):
+        raise RuntimeError(f"C2 run_id={run_id} 无法重建调度态（reattach 失败）")
 
     result = {"segment": segment, "run_id": run_id, "submitted_at": now_iso()}
     result.update(drive_scheduler(app.state.scheduler, SEGMENT_RUNS * segment, run_id))

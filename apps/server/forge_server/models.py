@@ -28,6 +28,7 @@ class CertificationRun(Base):
     fail_json: Mapped[dict | None] = mapped_column(JSON, default=None)
     attestation_sig: Mapped[str | None] = mapped_column(Text, default=None)  # C1 时非空
     batch_id: Mapped[str] = mapped_column(String(64))  # 批次礼仪审计
+    plan_json: Mapped[dict | None] = mapped_column(JSON, default=None)  # 批次计划+进度（审计伴生：跨进程重建调度态；不进 API 读出口）
     started_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
     verdict: Mapped[str | None] = mapped_column(String(32), default=None)
