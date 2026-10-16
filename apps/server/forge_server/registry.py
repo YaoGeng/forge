@@ -75,6 +75,8 @@ def register_registry_routes(app) -> None:
                 block_id=block.id, version=version,
                 certification_level=run.level,
                 reliability_json=_reliability_snapshot(run), created_at=_now(),
+                side_effects=bool(body.get("side_effects", False)),
+                domains_json=list(body.get("domains") or []),
             ))
             s.commit()
             return {"block_id": block.id, "version": version, "registered": True}

@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Forge Creator Center（内部工具级）</title>
+<style>
+  :root {
+    --olive: #6b7f3e; --olive-deep: #556631; --olive-bg: #f4f6ec; --olive-line: #d8dec2;
+    --rust: #a5524a; --ink: #2c2e26; --muted: #7a7d6e; --card: #ffffff;
+  }
+  * { box-sizing: border-box; margin: 0; }
+  body { font: 14px/1.65 "Segoe UI", "Microsoft YaHei", sans-serif; color: var(--ink);
+         background: var(--olive-bg); padding: 20px 24px 60px; }
+  header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 18px; }
+  header h1 { font-size: 19px; color: var(--olive-deep); }
+  header .sub { color: var(--muted); font-size: 12.5px; }
+  header .session { margin-left: auto; font-size: 12.5px; color: var(--muted); }
+  .rail { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 18px; }
+  .rail .st { padding: 5px 12px; border: 1px solid var(--olive-line); border-radius: 14px;
+              background: var(--card); font-size: 12.5px; color: var(--muted); }
+  .rail .st.now { background: var(--olive); border-color: var(--olive); color: #fff; font-weight: 600; }
+  .rail .st.done { border-color: var(--olive); color: var(--olive-deep); }
+  main { display: grid; grid-template-columns: 1fr 380px; gap: 18px; align-items: start; }
+  .card { background: var(--card); border: 1px solid var(--olive-line); border-radius: 10px;
+          padding: 16px 18px; margin-bottom: 16px; }
+  .card h2 { font-size: 15px; color: var(--olive-deep); margin-bottom: 10px; }
+  .card h2 .stepno { color: var(--rust); margin-right: 6px; }
+  label { display: block; font-size: 12.5px; color: var(--muted); margin: 8px 0 3px; }
+  textarea, input[type=text] { width: 100%; border: 1px solid var(--olive-line); border-radius: 6px;
+         padding: 7px 9px; font: inherit; background: #fbfcf7; }
+  textarea { min-height: 64px; }
+  button { background: var(--olive); color: #fff; border: 0; border-radius: 6px;
+           padding: 7px 16px; font: inherit; cursor: pointer; margin-top: 10px; }
+  button:hover { background: var(--olive-deep); }
+  button.ghost { background: transparent; color: var(--olive-deep); border: 1px solid var(--olive); }
+  button.rust { background: var(--rust); }
+  button.rust:hover { background: #8d423b; }
+  .blocks { display: grid; gap: 6px; margin-top: 8px; }
+  .brow { display: flex; align-items: center; gap: 10px; padding: 7px 10px;
+          border: 1px solid var(--olive-line); border-radius: 7px; font-size: 13px; }
+  .brow .name { font-weight: 600; color: var(--olive-deep); }
+  .brow .rel { color: var(--muted); font-size: 12px; }
+  .brow .rel b { color: var(--ink); }
+  .badge { font-size: 11px; padding: 1px 8px; border-radius: 9px; }
+  .badge.c1 { background: #f6e3e0; color: var(--rust); }
+  .badge.best { background: #f6e3e0; color: var(--rust); }
+  .badge.nostat { background: #efe9d8; color: #6d5f2c; }
+  .note { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .c1label { font-size: 11.5px; color: var(--rust); }
+  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+  th, td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--olive-line); }
+  th { color: var(--muted); font-weight: 500; }
+  .ok { color: var(--olive-deep); font-weight: 600; }
+  .bad { color: var(--rust); font-weight: 600; }
+  .error { color: var(--rust); font-size: 12.5px; margin-top: 8px; white-space: pre-wrap; }
+  .side { position: sticky; top: 16px; }
+  .side .kv { font-size: 12.5px; margin: 3px 0; }
+  .side .kv b { color: var(--olive-deep); }
+  footer { margin-top: 26px; font-size: 11.5px; color: var(--muted);
+           border-top: 1px solid var(--olive-line); padding-top: 10px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Forge Creator Center</h1>
+  <span class="sub">阶段 1 内部工具级 · 九步流程（不打开代码编辑器）</span>
+  <span class="session" id="sessionInfo">未开会话</span>
+</header>
+<div class="rail" id="rail"></div>
+<main>
+  <section id="panels"></section>
+  <aside class="side card" id="side">
+    <h2>会话状态</h2>
+    <div id="sideBody" class="note">先在第 1 步描述需求并开会话。</div>
+  </aside>
+</main>
+<footer>通过率均带 N 与时间窗口径；无样本显示「数据不足」；C1 场景强制标注「创作者环境实测，平台抽查复核」；整链验证结果标注「非统计值」。</footer>
+
+<script>
+"use strict";
+const STEPS = ["说需求/搜积木","画布组装","缺积木","启动表单","本地干跑","提交认证","认证报告","发布配置","提审上架"];
+let sid = null, cur = 1, draft = {}, blocks = [];
+
+const $ = (id) => document.getElementById(id);
+async function api(method, path, body) {
+  const opt = { method, headers: { "Content-Type": "application/json" } };
+  if (body !== undefined) opt.body = JSON.stringify(body);
+  const r = await fetch("/api/v1" + path, opt);
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(j.detail || (r.status + " " + r.statusText));
+  return j;
+}
+
+function renderRail() {
+  $("rail").innerHTML = STEPS.map((s, i) => {
+    const n = i + 1;
+    const cls = n === cur ? "now" : (n < cur ? "done" : "");
+    return `<div class="st ${cls}">${n}·${s}</div>`;
+  }).join("");
+  $("sessionInfo").textContent = sid ? `会话 #${sid} · 第 ${cur} 步（自动保存）` : "未开会话";
+}
+
+function relHtml(rel) {
+  if (!rel || rel.label) return `<span class="rel">${(rel && rel.label) || "数据不足"}</span>`;
+  const pct = (rel.live_pass_rate * 100).toFixed(0) + "%";
+  const win = (rel.window_start || "?").slice(0, 10) + " ~ " + (rel.window_end || "?").slice(0, 10);
+  return `<span class="rel">通过率 <b>${pct}</b>（N=${rel.n}，${win}）</span>`
+    + (rel.level === "C1" ? ` <span class="badge c1">C1</span>` : "")
+    + (rel.best_effort ? ` <span class="badge best">best-effort</span>` : "");
+}
+
+function panelStep1() {
+  return `<div class="card"><h2><span class="stepno">1</span>说需求 / 搜积木</h2>
+    <label>需求描述</label>
+    <textarea id="req">搜索 HN 并把结果导出成 Excel 周报</textarea>
+    <button onclick="openSession()">开会话</button>
+    <label style="margin-top:14px">已认证积木目录</label>
+    <div class="blocks" id="catalog">${
+      blocks.length ? blocks.map(b =>
+        `<div class="brow"><span class="name">${b.name}</span><span class="badge">${b.level}</span>
+         ${relHtml(b.reliability)}<button class="ghost" style="margin:0 0 0 auto" onclick="addBlock('${b.name}')">加入画布</button></div>`
+      ).join("") : `<div class="note">暂无已注册积木（完成认证并注册后出现）。</div>`
+    }</div></div>`;
+}
+
+function panelStep2() {
+  const comp = draft.composition || [];
+  return `<div class="card"><h2><span class="stepno">2</span>画布组装（线性管线）</h2>
+    <table><tr><th>#</th><th>积木/交互</th><th>参数（JSON）</th><th></th></tr>
+    ${comp.map((st, i) => `<tr><td>${i + 1}</td>
+      <td><b>${st.block || "「" + st.interaction + "」交互"}</b></td>
+      <td><code>${JSON.stringify(st.params || st.bindings || {})}</code></td>
+      <td><button class="ghost" onclick="delStep(${i})">移除</button></td></tr>`).join("")
+      || `<tr><td colspan="4" class="note">从第 1 步目录加入积木。</td></tr>`}
+    </table>
+    <button class="ghost" onclick="addConfirm()">＋confirm 交互步</button>
+    <button onclick="saveCanvas()">保存画布</button>
+    <div class="error" id="err2"></div>
+    <div class="note">副作用积木（发布/提交/支付类）后必须紧跟 confirm 交互步——服务端强制。</div>
+    <button onclick="goto(4)">跳过「缺积木」，进入启动表单 →</button></div>`;
+}
+
+function panelStep4() {
+  return `<div class="card"><h2><span class="stepno">4</span>启动表单（user_input_schema）</h2>
+    <label>应用启动参数 schema（JSON）</label>
+    <textarea id="uis">${JSON.stringify(draft.user_input_schema || { q: { type: "string" } }, null, 2)}</textarea>
+    <button onclick="saveForm()">保存表单</button><button onclick="goto(5)">进入干跑 →</button>
+    <div class="error" id="err4"></div></div>`;
+}
+
+function panelStep5() {
+  return `<div class="card"><h2><span class="stepno">5</span>本地干跑（单次整链）</h2>
+    <button onclick="dryrun()">执行干跑</button>
+    <div id="dry"></div><div class="error" id="err5"></div>
+    <button onclick="goto(6)">进入提交认证 →</button></div>`;
+}
+
+function panelStep6() {
+  return `<div class="card"><h2><span class="stepno">6</span>提交认证（chain，N=1）</h2>
+    <div class="note">整链验证为单次执行，非统计值。含 C1 积木的应用走本机整链。</div>
+    <button class="rust" onclick="certify()">提交整链认证</button>
+    <div id="cert"></div><div class="error" id="err6"></div>
+    <button onclick="goto(7)">查看认证报告 →</button></div>`;
+}
+
+function panelStep7() {
+  return `<div class="card"><h2><span class="stepno">7</span>认证报告</h2>
+    <button onclick="loadReport()">刷新报告</button><div id="rep"></div>
+    <button onclick="goto(8)">进入发布配置 →</button></div>`;
+}
+
+function panelStep8() {
+  return `<div class="card"><h2><span class="stepno">8</span>发布配置</h2>
+    <label>应用标题</label><input type="text" id="title" value="${draft.title || ""}">
+    <label style="margin-top:10px"><input type="checkbox" id="comp"> 我确认：本应用仅访问已声明站点的公开数据，遵守各站点服务条款</label>
+    <button onclick="savePublish()">保存发布配置</button>
+    <button onclick="goto(9)">进入提审 →</button>
+    <div class="error" id="err8"></div></div>`;
+}
+
+function panelStep9() {
+  return `<div class="card"><h2><span class="stepno">9</span>提审上架</h2>
+    <button class="rust" onclick="submitApp()">提交审核并上架</button>
+    <div id="sub"></div><div class="error" id="err9"></div></div>`;
+}
+
+function render() {
+  renderRail();
+  const panels = { 1: panelStep1, 2: panelStep2, 4: panelStep4, 5: panelStep5, 6: panelStep6,
+                   7: panelStep7, 8: panelStep8, 9: panelStep9 };
+  let html = panels[cur] ? panels[cur]() : "";
+  if (cur === 3) html = `<div class="card"><h2><span class="stepno">3</span>缺积木</h2>
+    <div class="note">录制工作台（RecordStudio）属 M02-b，阶段 1 内部版跳过此步——回第 2 步或直达第 4 步。</div>
+    <button onclick="goto(2)">← 画布</button> <button onclick="goto(4)">启动表单 →</button></div>`;
+  $("panels").innerHTML = html;
+  $("sideBody").innerHTML = sid
+    ? `<div class="kv"><b>需求</b>：${draft.__req || ""}</div>
+       <div class="kv"><b>组合</b>：${(draft.composition || []).length} 步</div>
+       <div class="kv"><b>应用</b>：${draft.app_name || "未创建"}</div>
+       <div class="kv"><b>自动保存</b>：${draft.__saved || ""}</div>`
+    : "先在第 1 步描述需求并开会话。";
+  if (cur === 7 && draft.app_id) loadReport();
+}
+
+async function refreshBlocks() { blocks = await api("GET", "/creator/blocks"); }
+async function openSession() {
+  const j = await api("POST", "/creator/sessions", { requirement_text: $("req").value });
+  sid = j.session_id; cur = 1; await loadSession(); await refreshBlocks(); render();
+}
+async function loadSession() {
+  const j = await api("GET", `/creator/sessions/${sid}`);
+  cur = j.step;
+  draft = Object.assign({ __req: j.requirement_text, __saved: j.autosave_at || "" }, j.draft);
+}
+function addBlock(name) { if (!sid) { alert("先开会话"); return; }
+  (draft.composition = draft.composition || []).push({ block: name, params: {} }); render(); }
+function addConfirm() { (draft.composition = draft.composition || []).push({ interaction: "confirm" }); render(); }
+function delStep(i) { draft.composition.splice(i, 1); render(); }
+async function saveCanvas() {
+  try { await api("PUT", `/creator/sessions/${sid}/canvas`, { composition: draft.composition || [] });
+    await loadSession(); render();
+  } catch (e) { $("err2").textContent = e.message; } }
+async function saveForm() {
+  try { await api("PUT", `/creator/sessions/${sid}/form`, { user_input_schema: JSON.parse($("uis").value) });
+    await loadSession(); render();
+  } catch (e) { $("err4").textContent = e.message; } }
+async function goto(n) { try { await api("POST", `/creator/sessions/${sid}/goto`, { step: n });
+    await loadSession(); render(); } catch (e) { alert(e.message); } }
+async function dryrun() { try { const j = await api("POST", `/creator/sessions/${sid}/dryrun`);
+    $("dry").innerHTML = `<table><tr><th>步</th><th>积木</th><th>结果</th></tr>` +
+      j.steps.map(s => `<tr><td>${s.index + 1}</td><td>${s.block || "-"}</td>
+        <td class="${s.ok ? "ok" : "bad"}">${s.ok ? "通过" : (s.failure_class || "失败")}</td></tr>`).join("") + "</table>";
+  } catch (e) { $("err5").textContent = e.message; } }
+async function certify() { try { const j = await api("POST", `/creator/sessions/${sid}/certify`);
+    $("cert").innerHTML = `verdict=<b class="${j.verdict === "pass" ? "ok" : "bad"}">${j.verdict}</b>
+      <span class="badge nostat">非统计值</span>（N=${j.n}）`; await loadSession();
+  } catch (e) { $("err6").textContent = e.message; } }
+async function loadReport() { try { const j = await api("GET", `/creator/sessions/${sid}/report`);
+    $("rep").innerHTML = `<table><tr><th>积木</th><th>可靠性（认证初始）</th></tr>` +
+      j.blocks.map(b => `<tr><td><b>${b.name}</b></td><td>${relHtml(b.reliability)}
+        ${b.reliability.c1_label ? `<div class="c1label">${b.reliability.c1_label}</div>` : ""}</td></tr>`).join("") +
+      "</table>" + (j.chain ? `<div class="note">整链：verdict=<b>${j.chain.verdict}</b>
+        <span class="badge nostat">${j.chain.annotation}</span></div>` : `<div class="note">尚未整链认证。</div>`);
+  } catch (e) { $("rep").innerHTML = `<div class="error">${e.message}</div>`; } }
+async function savePublish() { try { await api("PUT", `/creator/sessions/${sid}/publish`, {
+      title: $("title").value, sites_compliance_confirmed: $("comp").checked });
+    await loadSession(); render();
+  } catch (e) { $("err8").textContent = e.message; } }
+async function submitApp() { try { const j = await api("POST", `/creator/sessions/${sid}/submit`);
+    $("sub").innerHTML = `已上架：<b class="ok">${j.status}</b>（app_id=${j.app_id}）`;
+  } catch (e) { $("err9").textContent = e.message; } }
+
+(async () => {
+  await refreshBlocks();
+  const qs = new URLSearchParams(location.search);
+  if (qs.get("session")) {          // 会话恢复入口（M02 §7.5：重启后回到最近自动保存点）
+    sid = parseInt(qs.get("session"), 10);
+    try { await loadSession(); } catch (e) { sid = null; }
+  }
+  render();
+})();
+</script>
+</body>
+</html>

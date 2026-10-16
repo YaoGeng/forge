@@ -11,6 +11,7 @@ from .api_devices import NonceStore, register_device_routes
 from .db import make_engine
 from .etiquette import Clock
 from .models import Base
+from .creator import register_creator_routes
 from .registry import register_registry_routes
 from .scheduler import CertScheduler, SegRunHook, WallClock
 from .spotcheck import register_spotcheck_routes
@@ -72,6 +73,14 @@ def create_app(
     register_device_routes(app)
     register_spotcheck_routes(app)
     register_registry_routes(app)
+    register_creator_routes(app)
+
+    from fastapi.responses import FileResponse
+
+    @app.get("/creator", include_in_schema=False)
+    def creator_index():
+        return FileResponse(Path(__file__).parent / "creator_index.html", media_type="text/html")
+
     return app
 
 

@@ -71,7 +71,11 @@ class Block(Base):
 
 
 class BlockVersion(Base):
-    """M10 §4 block_versions 子集；reliability_json = 注册时刻认证快照（C13）。"""
+    """M10 §4 block_versions 子集；reliability_json = 注册时刻认证快照（C13）。
+
+    side_effects/domains_json 为阶段 1 内部元数据（画布副作用规则与合规声明消费；
+    M10-a 正式化时对齐 permissions_max 口径——台账登记）。
+    """
 
     __tablename__ = "block_versions"
 
@@ -81,6 +85,8 @@ class BlockVersion(Base):
     change_kind: Mapped[str] = mapped_column(String(32), default="code")
     certification_level: Mapped[str] = mapped_column(String(16))
     reliability_json: Mapped[dict | None] = mapped_column(JSON, default=None)
+    side_effects: Mapped[bool] = mapped_column(default=False)
+    domains_json: Mapped[list | None] = mapped_column(JSON, default=None)
     created_at: Mapped[datetime] = mapped_column(DateTime)
 
 
@@ -118,6 +124,18 @@ class AppBlockRef(Base):
     block_name: Mapped[str] = mapped_column(String(255))
     base_version: Mapped[str] = mapped_column(String(64))
     patch_window: Mapped[str | None] = mapped_column(JSON, default=None)
+
+
+class CreationSession(Base):
+    """M02 §4 creation_sessions 投影（阶段 1 服务端会话，D-M1F.1）。"""
+
+    __tablename__ = "creation_sessions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    requirement_text: Mapped[str] = mapped_column(Text, default="")
+    step: Mapped[int] = mapped_column(Integer, default=1)
+    draft_json: Mapped[dict | None] = mapped_column(JSON, default=None)
+    autosave_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
 
 
 def run_to_dict(row: CertificationRun) -> dict:
