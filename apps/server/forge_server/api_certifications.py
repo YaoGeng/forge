@@ -159,6 +159,12 @@ def register_certification_routes(app):
                 scheduler.tier_of(row.id), live_rate, 0.0, frozenset()
             )
             s.commit()
+            # 报告细节落盘（仅存认证服务端，M09 §3.2 存储边界；抽查比对基准源）
+            report_path = Path(app.state.report_root) / f"run-{row.id}.json"
+            report_path.parent.mkdir(parents=True, exist_ok=True)
+            report_path.write_text(
+                json.dumps(body.report, ensure_ascii=False), encoding="utf-8"
+            )
             response = {
                 "verdict": attached.verdict,
                 "reasons": [],

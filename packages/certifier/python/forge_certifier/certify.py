@@ -95,6 +95,7 @@ def certify(
     runs: list[dict] = []
     durations: list[int] = []
     failures: list[dict] = []
+    last_shape: frozenset[str] = frozenset()
     for i in range(n):
         profile = tempfile.mkdtemp(prefix="forge-cert-profile-")
         try:
@@ -106,7 +107,17 @@ def certify(
             durations.append(int((time.perf_counter() - t0) * 1000))
         finally:
             shutil.rmtree(profile, ignore_errors=True)  # 认证会话即焚
-        runs.append({"index": i, "ok": outcome.ok, "failure_class": outcome.failure_class})
+        last_shape = outcome.network_shape
+        step = outcome.step_results[0] if outcome.step_results else {}
+        runs.append(
+            {
+                "index": i,
+                "ok": outcome.ok,
+                "failure_class": outcome.failure_class,
+                "action": step.get("action"),  # C9 比对所需（非页面内容）
+                "duration_ms": step.get("duration_ms"),
+            }
+        )
         if not outcome.ok:
             failures.append({"index": i, "failure_class": outcome.failure_class})
 
@@ -115,6 +126,7 @@ def certify(
         "env_fingerprint": fp,
         "fail_json": {"failures": failures},
         "durations": durations,
+        "network_shape": sorted(last_shape),
     }
     now = clock.now() if clock is not None else datetime.now(timezone.utc).replace(tzinfo=None)
     attestation = {
@@ -128,3 +140,33 @@ def certify(
     return SignedReport(
         report=report, attestation=attestation, signature=signature, device_fp=device_key.device_fp
     )
+
+
+def accept_spotcheck(task: dict, *, block_ref: str, runner, browser_factory=None, sender=None) -> list[dict]:
+    """接受抽查任务：以服务端下发的随机参数执行一次运行，逐 step 上送（M09 §3.4/§6）。
+
+    sender 为传输层注入点（WS 行协议由 gate 侧装配）；缺省仅收集返回。
+    返回全部上送行（含 network_shape 控制行）。
+    """
+    params = dict(task.get("params_json") or {})
+    outcome = runner.run_once(
+        block_ref, params, mode="local", browser_factory=browser_factory
+    )
+    sent: list[dict] = []
+
+    def _send(message: dict) -> None:
+        sent.append(message)
+        if sender is not None:
+            sender(message)
+
+    for r in outcome.step_results:
+        _send(
+            {
+                "seq": r["seq"],
+                "ok": r["ok"],
+                "duration_ms": r["duration_ms"],
+                "action": r.get("action"),
+            }
+        )
+    _send({"type": "network_shape", "shape": sorted(outcome.network_shape)})
+    return sent

@@ -46,7 +46,13 @@ def get_nonce(client, key):
 
 def make_report(n=20, fails=(), durations_ms=None):
     runs = [
-        {"index": i, "ok": i not in fails, "failure_class": "selector_missing" if i in fails else None}
+        {
+            "index": i,
+            "ok": i not in fails,
+            "failure_class": "selector_missing" if i in fails else None,
+            "action": "nav" if i == 0 else "click",  # C9 比对所需（T1.34 白名单扩展）
+            "duration_ms": 100,
+        }
         for i in range(n)
     ]
     return {
@@ -54,6 +60,7 @@ def make_report(n=20, fails=(), durations_ms=None):
         "env_fingerprint": "0123456789abcdef",
         "fail_json": {"failures": [{"index": i, "failure_class": "selector_missing"} for i in fails]},
         "durations": durations_ms or [6000] * n,  # 默认 6s/run > 5s 下限
+        "network_shape": ["GET example.com /search?q"],  # 形状键（无值，C8 边界内）
     }
 
 

@@ -203,7 +203,17 @@ def test_report_excludes_page_content(make_app):
     text = json.dumps(signed.payload(), ensure_ascii=False)
     assert FakeRunner.LEAK not in text  # 页面内容不进报告（M09 §3.2）
     assert "snapshot_digest" not in text  # 白名单外字段一律不透传
-    assert all(set(r) == {"index", "ok", "failure_class"} for r in signed.report["runs"])
+    assert all(
+        set(r) == {"index", "ok", "failure_class", "action", "duration_ms"}
+        for r in signed.report["runs"]
+    )  # T1.34 起 +action/duration_ms（C9 比对所需，仍无页面内容）
+    assert set(signed.report) == {
+        "runs",
+        "env_fingerprint",
+        "fail_json",
+        "durations",
+        "network_shape",
+    }
 
 
 def test_env_fingerprint_shape(make_app):

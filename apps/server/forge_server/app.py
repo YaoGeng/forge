@@ -12,6 +12,7 @@ from .db import make_engine
 from .etiquette import Clock
 from .models import Base
 from .scheduler import CertScheduler, SegRunHook, WallClock
+from .spotcheck import register_spotcheck_routes
 
 
 def create_app(
@@ -20,6 +21,7 @@ def create_app(
     clock: Clock | None = None,
     executor_hook: SegRunHook | None = None,
     golden_root=None,
+    report_root=None,
 ) -> FastAPI:
     import tempfile
     from pathlib import Path
@@ -47,10 +49,14 @@ def create_app(
     app.state.golden_root = Path(golden_root) if golden_root else Path(
         tempfile.mkdtemp(prefix="forge-server-golden-")
     )
+    app.state.report_root = Path(report_root) if report_root else Path(
+        tempfile.mkdtemp(prefix="forge-server-reports-")
+    )
     app.state.report_results = {}  # 幂等缓存：(run_id, report_hash, nonce) → 响应（v1 载体内存态）
 
     register_certification_routes(app)
     register_device_routes(app)
+    register_spotcheck_routes(app)
     return app
 
 
