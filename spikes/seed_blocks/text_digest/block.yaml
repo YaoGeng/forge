@@ -1,0 +1,14 @@
+schema_version: 2
+kind: block
+name: text_digest
+version: 1.0.0
+title: text_digest
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions: []
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 text_digest（场景 s9_text_digest）

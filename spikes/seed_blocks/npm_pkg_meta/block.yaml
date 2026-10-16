@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: npm_pkg_meta
+version: 1.0.0
+title: npm_pkg_meta
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "registry.npmmirror.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 npm_pkg_meta（场景 s5_public_api）

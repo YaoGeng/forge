@@ -148,3 +148,26 @@ def test_drive_reattaches_across_processes(store):
     result = drive(store, manifest, 1, app=app2, routes=routes,
                    poll_s=0.0, timeout_s=20.0)
     assert result["blocks"]["probe_a"]["n"] == 10
+
+
+def test_register_uses_pass_run_and_manifest_meta(store):
+    """register：state run_id → POST /registry/blocks（side_effects/domains 来自 manifest/积木目录）。"""
+    from fastapi.testclient import TestClient
+
+    from cert_batch import register_block, submit
+
+    manifest = make_manifest()
+    app = _make_app(f"sqlite:///{(store / 'server.db').as_posix()}")
+    client = TestClient(app)
+    run_ids = submit(store, manifest, batch=None, client=client)
+    # 未完成认证（verdict=None）→ 注册被拒
+    r = register_block(store, manifest, "probe_a", client=client)
+    assert r.status_code == 422
+    # verdict=pass 后注册成功，元数据落位
+    with app.state.session_factory() as s:
+        from forge_server.models import CertificationRun
+        row = s.get(CertificationRun, run_ids["probe_a"])
+        row.verdict = "pass"
+        s.commit()
+    r = register_block(store, manifest, "probe_a", client=client)
+    assert r.status_code == 200 and r.json()["registered"] is True

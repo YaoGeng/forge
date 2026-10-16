@@ -163,6 +163,25 @@ def drive(store_dir: Path, manifest, segment: int, *, app, routes: dict,
             "reached_all": all(v["reached"] for v in blocks.values()) or not blocks}
 
 
+def register_block(store_dir: Path, manifest, name: str, *, client):
+    """单块登记进 Registry：verdict 须 pass；side_effects/domains 读积木目录 block.yaml。"""
+    state = load_state(store_dir)
+    rid = state.get("run_ids", {}).get(name)
+    if rid is None:
+        raise RuntimeError(f"state 无 run_id：{name}")
+    import yaml
+
+    block_yaml_path = SEEDS / name / "block.yaml"
+    meta = yaml.safe_load(block_yaml_path.read_text(encoding="utf-8")) if block_yaml_path.exists() else {}
+    domains = [p.get("value") for p in (meta.get("permissions") or [])
+               if isinstance(p, dict) and p.get("type") == "domain"]
+    return client.post("/api/v1/registry/blocks", json={
+        "name": name, "version": meta.get("version", "1.0.0"),
+        "certification_run_id": rid,
+        "side_effects": bool(meta.get("side_effects", False)),
+        "domains": domains})
+
+
 def status(store_dir: Path, manifest, *, app) -> list[dict]:
     """全库状态：manifest 新块 + 遗留两块（legacy_state_key 映射 ms1e 键）。"""
     state = load_state(store_dir)
@@ -187,7 +206,8 @@ def status(store_dir: Path, manifest, *, app) -> list[dict]:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", choices=["submit", "drive", "status"])
+    parser.add_argument("command", choices=["submit", "drive", "status", "register"])
+    parser.add_argument("block", nargs="?", default=None, help="register 的块名（缺省=全部已 verdict 块）")
     parser.add_argument("--batch", type=int, choices=[1, 2], default=None)
     parser.add_argument("--segment", type=int, choices=[1, 2])
     args = parser.parse_args()
@@ -201,6 +221,16 @@ def main() -> int:
     app = create_app(f"sqlite:///{(STORE / 'server.db').as_posix()}", clock=WallClock())
     client = TestClient(app)
 
+    if args.command == "register":
+        state = load_state(STORE)
+        names = [args.block] if args.block else [
+            n for n, rid in state.get("run_ids", {}).items()]
+        results = {}
+        for n in names:
+            r = register_block(STORE, manifest, n, client=client)
+            results[n] = {"status": r.status_code, "body": r.json()}
+        print(json.dumps(results, ensure_ascii=False, indent=2))
+        return 0
     if args.command == "submit":
         ids = submit(STORE, manifest, batch=args.batch, client=client)
         print(json.dumps(ids, ensure_ascii=False, indent=2))

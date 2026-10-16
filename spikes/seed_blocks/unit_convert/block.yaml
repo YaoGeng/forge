@@ -1,0 +1,14 @@
+schema_version: 2
+kind: block
+name: unit_convert
+version: 1.0.0
+title: unit_convert
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions: []
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 unit_convert（场景 s10_numeric_calc）

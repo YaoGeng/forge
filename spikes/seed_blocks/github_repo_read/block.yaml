@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: github_repo_read
+version: 1.0.0
+title: github_repo_read
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "api.github.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 github_repo_read（场景 s6_repo_meta）

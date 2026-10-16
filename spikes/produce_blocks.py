@@ -75,7 +75,15 @@ def produce(batch: int | None) -> int:
                 save_state(STORE, state)
                 print(f"  trace_ref={ref}", flush=True)
             else:
-                print("  python 块：main.py 待手写（T1.63 批次二），先落占位", flush=True)
+                if (d / "main.py").exists() and "NotImplementedError" not in (
+                        d / "main.py").read_text(encoding="utf-8"):
+                    golden = d / "tests" / "golden" / "expected_output.json"
+                    if not golden.exists():
+                        from seedline import snapshot_output
+                        gp = snapshot_output(d, dict(entry.params))
+                        print(f"  golden 快照 → {gp.name}", flush=True)
+                else:
+                    print("  python 块：main.py 待手写（T1.63 批次二），先落占位", flush=True)
             spec = validate_block_dir(d)
             if not lint(d).ok:
                 raise RuntimeError("lint 未通过")

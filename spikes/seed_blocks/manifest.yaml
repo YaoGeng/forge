@@ -48,15 +48,15 @@ blocks:
 
   # ── 批次二：场景 5/6/8/9/10 ──
   - {name: npm_pkg_meta, site: registry.npmmirror.com, scenario: s5_public_api, level: C2,
-     script: null, params: {pkg: pytest}, batch: 2, adapter: python}
+     script: site_scripts.npm_pkg_meta:browse, params: {pkg: pytest}, batch: 2, adapter: trace}
   - {name: httpbin_echo, site: httpbin.org, scenario: s5_public_api, level: C2,
-     script: null, params: {echo: hello-forge}, batch: 2, adapter: python}
+     script: site_scripts.httpbin_echo:browse, params: {echo: hello-forge}, batch: 2, adapter: trace}
   - {name: jsonplaceholder_posts, site: jsonplaceholder.typicode.com, scenario: s5_public_api, level: C2,
-     script: null, params: {post_id: "1"}, batch: 2, adapter: python}
+     script: site_scripts.jsonplaceholder_posts:browse, params: {post_id: "1"}, batch: 2, adapter: trace}
   - {name: github_repo_read, site: api.github.com, scenario: s6_repo_meta, level: C2,
-     script: null, params: {repo: microsoft/vscode}, batch: 2, adapter: python}
+     script: site_scripts.github_repo_read:browse, params: {repo: microsoft/vscode}, batch: 2, adapter: trace}
   - {name: github_search, site: api.github.com, scenario: s6_repo_meta, level: C2,
-     script: null, params: {q: playwright, per_page: "5"}, batch: 2, adapter: python}
+     script: site_scripts.github_search:browse, params: {q: playwright, per_page: "5"}, batch: 2, adapter: trace}
   - {name: excel_export, site: null, scenario: s8_data_export, level: C2,
      script: null, params: {rows: "[]", out: report.xlsx}, batch: 2, adapter: python}
   - {name: csv_export, site: null, scenario: s8_data_export, level: C2,
