@@ -12,7 +12,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from seedline import ManifestError, load_manifest  # noqa: E402
+from seedline import ManifestError, Site, load_manifest  # noqa: E402
 
 _SCENARIOS = [f"s{i}_x" for i in range(1, 11)]
 
@@ -117,3 +117,77 @@ def test_manifest_accepts_good_sample(tmp_path):
     assert by_name["probe_a"].level == "C2"
     assert by_name["excel_export"].adapter == "python"
     assert by_name["excel_export"].site is None
+
+
+# ── T1.61：产线三函数（脚手架/录制幂等/输出快照）──
+
+def _entry(**over) -> "BlockEntry":
+    from seedline import BlockEntry
+    base = dict(name="probe_a", site="example.com", scenario="s1_x", level="C2",
+                script="site_scripts.probe_a:browse", params={"q": "python"},
+                batch=1, adapter="trace")
+    base.update(over)
+    return BlockEntry(**base)
+
+
+def test_scaffold_passes_sdk_gates(tmp_path, monkeypatch):
+    """脚手架产物必须直接过 SDK 两道门（validate_block_dir + lint）。"""
+    import sys
+    sdk = Path(__file__).resolve().parent.parent / "packages" / "block-sdk" / "python"
+    if str(sdk) not in sys.path:
+        sys.path.insert(0, str(sdk))
+    from forge_block_sdk import lint, validate_block_dir
+
+    from seedline import scaffold_block
+    seeds = tmp_path / "seed_blocks"
+    sites = {"example.com": Site(host="example.com", tier="medium")}
+    d1 = scaffold_block(_entry(), seeds_dir=seeds, sites=sites)
+    d2 = scaffold_block(_entry(name="excel_export", site=None, scenario="s8_x",
+                               script=None, adapter="python"),
+                        seeds_dir=seeds, sites=sites)
+    for d in (d1, d2):
+        spec = validate_block_dir(d)  # 失败抛错，成功返回 BlockSpec
+        assert spec is not None and spec.name == d.name
+        assert lint(d).ok, f"{d} lint 未过"
+    yaml_text = (d1 / "block.yaml").read_text(encoding="utf-8")
+    assert "example.com" in yaml_text and "medium" in yaml_text
+
+
+def test_ensure_block_retry_then_state_reuse(tmp_path):
+    """录制 3 次重试内成功可续；state 有 ref 时不重录（Review Focus 1）。"""
+    from seedline import ensure_block
+
+    calls = []
+
+    def flaky(record_target, entry):
+        calls.append(entry.name)
+        if len(calls) < 3:
+            raise ConnectionError("网络抖动")
+        return "ref-abc"
+
+    state: dict = {}
+    ref = ensure_block(_entry(), store=None, state=state,
+                       record_once=flaky, sleep=lambda s: None)
+    assert ref == "ref-abc" and len(calls) == 3
+    assert state["trace_refs"]["probe_a"] == "ref-abc"
+
+    # 二次调用：state 复用，不触录制
+    ref2 = ensure_block(_entry(), store=None, state=state,
+                        record_once=lambda *a: (_ for _ in ()).throw(AssertionError("不应重录")))
+    assert ref2 == "ref-abc" and len(calls) == 3
+
+
+def test_snapshot_output_writes_golden(tmp_path):
+    """python 块首跑输出落 tests/golden/expected_output.json（C5 对拍基准）。"""
+    import json
+
+    from seedline import snapshot_output
+
+    d = tmp_path / "excel_export"
+    d.mkdir()
+    (d / "main.py").write_text(
+        "def run(params):\n    return {'rows': len(params.get('rows', '').split(';')), 'ok': True}\n",
+        encoding="utf-8")
+    p = snapshot_output(d, {"rows": "a;b;c"})
+    assert p == d / "tests" / "golden" / "expected_output.json"
+    assert json.loads(p.read_text(encoding="utf-8")) == {"rows": 3, "ok": True}
