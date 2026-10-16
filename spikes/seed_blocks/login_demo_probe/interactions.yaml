@@ -1,0 +1,5 @@
+- id: demo_login
+  type: login
+  title: 登录演示站（公共测试账号）
+  site: saucedemo.com
+  optional: false

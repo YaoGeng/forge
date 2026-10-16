@@ -1,0 +1,7 @@
+assertion: schema
+expect:
+  type: object
+  required:
+    - inventory
+  properties:
+    inventory: { type: string }

@@ -1,0 +1,15 @@
+=== seg1 c2 ===
+  [drive] n=1/10 verdict=None t=2026-10-16T05:28:39+00:00
+  [drive] n=2/10 verdict=None t=2026-10-16T05:28:50+00:00
+  [drive] n=3/10 verdict=None t=2026-10-16T05:28:59+00:00
+  [drive] n=4/10 verdict=None t=2026-10-16T05:29:08+00:00
+  [drive] n=5/10 verdict=None t=2026-10-16T05:29:20+00:00
+  [drive] n=6/10 verdict=None t=2026-10-16T05:29:30+00:00
+  [drive] n=7/10 verdict=None t=2026-10-16T05:29:39+00:00
+  [drive] n=8/10 verdict=None t=2026-10-16T05:29:50+00:00
+  [drive] n=9/10 verdict=None t=2026-10-16T05:30:00+00:00
+  [drive] n=10/10 verdict=None t=2026-10-16T05:30:16+00:00
+{"segment": 1, "run_id": 1, "submitted_at": "2026-10-16T05:28:31+00:00", "n": 10, "pass": 10, "live_pass_rate": 1.0, "regression_pass_rate": 1.0, "verdict": null, "started_at": "2026-10-16T05:28:31.208798", "finished_at": null, "gate": "PASS"}
+=== seg1 c1 ===
+{"segment": 1, "run_id": 2, "n": 10, "durations_sum_s": 53.9, "upload": {"verdict": "pass", "reasons": [], "live_pass_rate": 1.0, "regression_pass_rate": null}, "reliability": {"status": "ok", "pass_rate": 1.0, "n": 10, "window_start": "2026-10-16T05:31:18.030979", "window_end": "2026-10-16T05:31:18.030979", "c1_label": "创作者环境实测，平台抽查复核"}, "gate": "PASS", "finished_at": "2026-10-16T05:31:18+00:00"}
+gate: PASS

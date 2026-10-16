@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: hn_search_probe
+version: 1.0.0
+title: HN Algolia 搜索探针（C2 seed）
+site_change_tier: medium
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "hn.algolia.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: 在 hn.algolia.com 执行两次确定性搜索导航，验证列表结果可复现

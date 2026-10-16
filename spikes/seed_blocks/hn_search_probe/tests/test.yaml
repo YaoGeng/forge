@@ -1,0 +1,7 @@
+assertion: schema
+expect:
+  type: object
+  required:
+    - hits
+  properties:
+    hits: { type: string }

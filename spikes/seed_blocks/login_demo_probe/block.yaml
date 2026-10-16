@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: login_demo_probe
+version: 1.0.0
+title: 登录演示探针（C1 seed，公共测试账号站）
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "saucedemo.com", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: 在 saucedemo.com 以公共测试账号执行登录流程，验证库存页可达
