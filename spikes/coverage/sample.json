@@ -1,0 +1,391 @@
+{
+ "meta": {
+  "stage": 1,
+  "protocol": "docs/05 附录 A.10；docs/14 T1.65c",
+  "pool_ref": "sha256:f2d0bba961ba5e203383f8429578ce0fe8af8cbf08cad2c49de95b85c0d919e3",
+  "selection_rule": "in_domain 按 posted_at 字符串降序取前 30；同刻按池序（零自由度）",
+  "generated_at": "2026-10-16T16:28:05+00:00"
+ },
+ "entries": [
+  {
+   "id": "hn-48848819",
+   "domains": [
+    "s6"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Devthropology – Better Insights for GitHub Repos",
+   "url": "https://news.ycombinator.com/item?id=48848819",
+   "excerpt": "Devthropology is a passion project built on top of GitHub pull data. The name is a play on developer anthropology. Pull request data can be cut a lot of ways. The functionality has been built out of curiosity as I want to see different insi",
+   "posted_at": "2026-07-09T16:47:53Z",
+   "note": "GitHub 仓库洞见/元数据聚合"
+  },
+  {
+   "id": "hn-48774008",
+   "domains": [
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Feedback about a Visualping alternative using AI to monitor websites",
+   "url": "https://news.ycombinator.com/item?id=48774008",
+   "excerpt": "I'm launching an alternative to Visualing called Page Deltas ( https://pagedeltas.com ) to monitor websites using LLMs. The idea is to ask AI which part of a webpage you want to monitor, and let it summarize detected changes for you. Useful",
+   "posted_at": "2026-07-03T12:03:04Z",
+   "note": "监控网页变更（Visualping 替代）"
+  },
+  {
+   "id": "hn-48345189",
+   "domains": [
+    "s1",
+    "s9"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: My tiny project MyTube Newsletter – daily AI digest of YouTube subs",
+   "url": "https://news.ycombinator.com/item?id=48345189",
+   "excerpt": "This is technically a Show HN for MyTube Newsletter — an email digest of new videos from the YouTube channels you subscribe to, AI-summarized. But the tech isn't very interesting. I'd rather talk about why I shipped it. Like many other deve",
+   "posted_at": "2026-05-31T12:30:40Z",
+   "note": "订阅源每日 AI 摘要（YouTube）"
+  },
+  {
+   "id": "reddit-1tehwy4",
+   "domains": [
+    "s3",
+    "s8"
+   ],
+   "community": "r/excel",
+   "title": "Copying data from website to excel?",
+   "url": "https://www.reddit.com/r/excel/comments/1tehwy4/copying_data_from_website_to_excel/",
+   "excerpt": "I am very new to excel and want to get better. I want to copy and paste a lot of data from a website onto my excel in the format that I want. Is there a fast way to do this? Or just 2 monitor look back and forth and spend the multiple hours",
+   "posted_at": "2026-05-16T03:23:26+00:00",
+   "note": "大量网站数据复制进 Excel"
+  },
+  {
+   "id": "hn-47389369",
+   "domains": [
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Crabby, open source web+API synthetic monitoring",
+   "url": "https://news.ycombinator.com/item?id=47389369",
+   "excerpt": "Crabby monitors your websites and APIs and reports metrics to a variety of storage backends (Prometheus, Datadog, Splunk, InfluxDB, etc). It gives you insight into timings like TTFB, DNS resolution, TLS negotiation, server processing, and c",
+   "posted_at": "2026-03-15T17:07:10Z",
+   "note": "网站+API 合成监控"
+  },
+  {
+   "id": "hn-47306942",
+   "domains": [
+    "s1",
+    "s9"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: arxiv-digest: Daily robotics paper scouting for OpenClaw and Zotero",
+   "url": "https://news.ycombinator.com/item?id=47306942",
+   "excerpt": "I built arxiv-digest, a tool for OpenClaw to call daily and turn new cs.RO papers into a filtered robotics digest. It uses an LLM to judge relevance, outputs a markdown report, and can sync selected papers plus PDFs to Zotero. To change the",
+   "posted_at": "2026-03-09T10:01:14Z",
+   "note": "arXiv 每日论文筛选摘要"
+  },
+  {
+   "id": "hn-47299551",
+   "domains": [
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "How to monitor competitor website changes automatically",
+   "url": "https://news.ycombinator.com/item?id=47299551",
+   "excerpt": "How to monitor competitor website changes automatically",
+   "posted_at": "2026-03-08T18:13:16Z",
+   "note": "竞品网站变更自动监控"
+  },
+  {
+   "id": "hn-47110844",
+   "domains": [
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Ask HN: How do you track 2026 AI price wars? I built a tool to help",
+   "url": "https://news.ycombinator.com/item?id=47110844",
+   "excerpt": "\"I built https://tokencost.is to solve a recurring headache: manually scraping dozens of provider pages just to estimate API spend for my agentic workflows. My goal was a neutral, minimalist utility in the vein of Time.is. We now track 44 m",
+   "posted_at": "2026-02-22T13:28:10Z",
+   "note": "追踪 LLM 供应商价格页变动"
+  },
+  {
+   "id": "hn-47072913",
+   "domains": [
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: StatusMonk – Uptime monitoring and status pages for small SaaS teams",
+   "url": "https://news.ycombinator.com/item?id=47072913",
+   "excerpt": "Hi HN, We built StatusMonk after repeatedly finding out about outages from customers instead of our systems. StatusMonk is an all-in-one monitoring and public status page platform designed for founders and small teams who want early detecti",
+   "posted_at": "2026-02-19T12:03:15Z",
+   "note": "可用性监控与状态页"
+  },
+  {
+   "id": "hn-46968889",
+   "domains": [
+    "s9"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Thoth – Obsidian AI Research Assistant",
+   "url": "https://news.ycombinator.com/item?id=46968889",
+   "excerpt": "I'm an ML scientist who was drowning in papers. Every research tool I tried locked me into their workflow, their sources, their extraction schemas. The real friction wasn't features—it was the interface. Why am I editing files and settings ",
+   "posted_at": "2026-02-11T00:01:01Z",
+   "note": "研究论文消化/汇总助手"
+  },
+  {
+   "id": "hn-46935908",
+   "domains": [
+    "s5",
+    "s10"
+   ],
+   "community": "Hacker News",
+   "title": "Ask HN: How do you handle Canadian income tax brackets in software?",
+   "url": "https://news.ycombinator.com/item?id=46935908",
+   "excerpt": "I’ve worked on a few tools that need Canadian income tax brackets (federal and provincial) for calculations, projections, or estimators. This is not about sales tax or invoicing. I was surprised there doesn’t seem to be a clean, structured,",
+   "posted_at": "2026-02-08T16:39:00Z",
+   "note": "税率表数据获取+计算"
+  },
+  {
+   "id": "hn-46934190",
+   "domains": [
+    "s3",
+    "s5"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: I built a festival tracker that matches lineups to your music library",
+   "url": "https://news.ycombinator.com/item?id=46934190",
+   "excerpt": "Hi HN, I built this app because I was tired of manually checking festival lineups against my music library every summer. I wanted a way to instantly see which festivals had the highest 'match' density for my specific taste. Why I built this",
+   "posted_at": "2026-02-08T13:53:16Z",
+   "note": "音乐节阵容对曲库匹配"
+  },
+  {
+   "id": "hn-46436419",
+   "domains": [
+    "s1",
+    "s9"
+   ],
+   "community": "Hacker News",
+   "title": "Ask HN: Hndigest No Longer Working?",
+   "url": "https://news.ycombinator.com/item?id=46436419",
+   "excerpt": "Is hndigest working for anyone? I still get a daily digest, but clicking on the post or comment links takes me to this message: The page you were looking for doesn't exist.",
+   "posted_at": "2025-12-30T18:37:31Z",
+   "note": "HN 每日摘要（原工具失效）"
+  },
+  {
+   "id": "hn-46034257",
+   "domains": [
+    "s4",
+    "s8"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: I made a tool to export TikTok comments",
+   "url": "https://news.ycombinator.com/item?id=46034257",
+   "excerpt": "Hey HN! I'm Jack, the maker of ExportTok. I built this tool because I spent hours manually copy-pasting TikTok comments for market research and wanted an easier way. With ExportTok, you can quickly export all comments from any TikTok video ",
+   "posted_at": "2025-11-24T14:06:51Z",
+   "note": "TikTok 评论导出"
+  },
+  {
+   "id": "hn-45935825",
+   "domains": [
+    "s5",
+    "s8"
+   ],
+   "community": "Hacker News",
+   "title": "I automatically track online spending (invoices) in a spreadsheet",
+   "url": "https://news.ycombinator.com/item?id=45935825",
+   "excerpt": "I automatically track online spending (invoices) in a spreadsheet",
+   "posted_at": "2025-11-15T08:04:28Z",
+   "note": "在线消费/发票自动进表格"
+  },
+  {
+   "id": "hn-45491255",
+   "domains": [
+    "s1",
+    "s9"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: The Marketing Digest – A 3-minute weekly update for marketers",
+   "url": "https://news.ycombinator.com/item?id=45491255",
+   "excerpt": "Hi HN I built The Marketing Digest to solve a simple problem — marketers are drowning in content but starving for clarity. It’s a short, human-curated email that lands every Monday with 12 of the week’s most important stories across content",
+   "posted_at": "2025-10-06T13:33:42Z",
+   "note": "营销内容周报摘要"
+  },
+  {
+   "id": "hn-44955461",
+   "domains": [
+    "s9",
+    "s8"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Generate polished reports/docs automatically from messy inputs",
+   "url": "https://news.ycombinator.com/item?id=44955461",
+   "excerpt": "Hi HN, We’ve been working on a project to automate one of the most painful but universal tasks: turning scattered data and notes into polished, professional documents. The idea is simple: You upload the final document you normally produce (",
+   "posted_at": "2025-08-19T19:38:52Z",
+   "note": "杂乱输入整理成报告/文档"
+  },
+  {
+   "id": "hn-44951198",
+   "domains": [
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: SitemapMonitor – Track changes in any website's sitemap automatically",
+   "url": "https://news.ycombinator.com/item?id=44951198",
+   "excerpt": "I built a tool to monitor changes in any website’s sitemap: [sitemapmonitor.live] It automatically tracks new/removed URLs from a site’s sitemap.xml, and notifies you when something changes. This is useful for: - SEO (detecting new pages or",
+   "posted_at": "2025-08-19T13:20:33Z",
+   "note": "sitemap 变更监控"
+  },
+  {
+   "id": "hn-44668970",
+   "domains": [
+    "s5",
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Track Nancy Pelosi's Stock Trades (Auto-Updated)",
+   "url": "https://news.ycombinator.com/item?id=44668970",
+   "excerpt": "Hi HN, I built https://nancypelosistocktracker.org/ — a site that automatically tracks and visualizes U.S. Congresswoman Nancy Pelosi’s stock transactions using official House disclosure filings. *Why I built it* I was curious about the rec",
+   "posted_at": "2025-07-24T10:09:26Z",
+   "note": "公开披露交易数据自动追踪"
+  },
+  {
+   "id": "reddit-1lpaq5i",
+   "domains": [
+    "s3",
+    "s8"
+   ],
+   "community": "r/excel",
+   "title": "How can I scrap some webpage data into Excel and put this data inside an Excel cell?",
+   "url": "https://www.reddit.com/r/excel/comments/1lpaq5i/how_can_i_scrap_some_webpage_data_into_excel_and/",
+   "excerpt": "Good afternoon Excel community! I want to scrap the data of \"total value locked\" from a DEX and put this data inside an Excel cell to have real time data. This is the webpage [https://app.hydration.net/liquidity/omnipool-stablepools?id=0](h",
+   "posted_at": "2025-07-01T19:19:04+00:00",
+   "note": "DEX 总锁仓值进 Excel 单元格"
+  },
+  {
+   "id": "hn-43933727",
+   "domains": [
+    "s1",
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "We Built Mentionedby.ai to Track How AI Models Answer Questions",
+   "url": "https://news.ycombinator.com/item?id=43933727",
+   "excerpt": "Hey HN, I'm Nikin, one of the creators of MentionedBy.ai — a platform we built to track how your brand is being mentioned inside AI-generated answers across ChatGPT, Claude, Perplexity, Gemini, and other LLMs. We didn’t start this as a mark",
+   "posted_at": "2025-05-09T04:13:16Z",
+   "note": "追踪 AI 模型对品牌的回答"
+  },
+  {
+   "id": "hn-43852771",
+   "domains": [
+    "s8"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Convert Large CSV/XLSX to JSON or XML in Browser",
+   "url": "https://news.ycombinator.com/item?id=43852771",
+   "excerpt": "Hello HN, I'm excited to share a project I've been working on: A simple, fast way to process huge CSV and XLSX files directly in your browser and export them as clean JSON or XML Here's a few things that makes this converter different: - ru",
+   "posted_at": "2025-05-01T01:31:19Z",
+   "note": "CSV/XLSX 转 JSON/XML"
+  },
+  {
+   "id": "hn-43787586",
+   "domains": [
+    "s5"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Searcherries – SEO Opportunities from GSC",
+   "url": "https://news.ycombinator.com/item?id=43787586",
+   "excerpt": "Hey HN, I’m Edward, an indie maker and SEO specialist. I built Searcherries – a tool that pulls raw data from Google Search Console (via API) to help you find pages and queries with a lot of impressions… but not many clicks. Here’s the link",
+   "posted_at": "2025-04-24T21:14:25Z",
+   "note": "GSC 数据拉取找 SEO 机会"
+  },
+  {
+   "id": "reddit-1jcncvx",
+   "domains": [
+    "s3",
+    "s8"
+   ],
+   "community": "r/n8n",
+   "title": "Help required for creating a Google Sheet entry from the Agent",
+   "url": "https://www.reddit.com/r/n8n/comments/1jcncvx/help_required_for_creating_a_google_sheet_entry/",
+   "excerpt": "Hi All, I intend to create the following workflow on n8n: 1. Pick the first URL from a Google Sheet which has 24 URLs available 2. Visit that particular URL in Chrome and scrape all the names of clients available in that HTML file 3. Paste ",
+   "posted_at": "2025-03-16T15:01:08+00:00",
+   "note": "URL 清单逐页抽取建 Google Sheet"
+  },
+  {
+   "id": "hn-43158425",
+   "domains": [
+    "s3",
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: I scrape Steam data every month and it's yours to download for free",
+   "url": "https://news.ycombinator.com/item?id=43158425",
+   "excerpt": "Yeah, there's AI, but I added it because I found it easier to find answers I'm looking for. For the data scientists, you can download the CSV and go crazy. Would love to know what discoveries or learnings can be found from it. To download t",
+   "posted_at": "2025-02-24T11:43:42Z",
+   "note": "Steam 数据月度抓取"
+  },
+  {
+   "id": "zapier-47915",
+   "domains": [
+    "s3",
+    "s8"
+   ],
+   "community": "Zapier Community",
+   "title": "Scraping data from a website and writing them down",
+   "url": "https://community.zapier.com/how-do-i-3/scraping-data-from-a-website-and-writing-them-down-47915",
+   "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.（每日更新的体育博彩数据）",
+   "posted_at": "2025-02",
+   "note": "读站点数据写入表格"
+  },
+  {
+   "id": "hn-42768754",
+   "domains": [
+    "s7"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: I made tracking competitors social media a breeze with GPT-4o",
+   "url": "https://news.ycombinator.com/item?id=42768754",
+   "excerpt": "Hi HN, I’m excited to share something I’ve been working on: ScoutlyAI—a tool that simplifies tracking competitors’ social media and online activity. The idea came from my own frustration with how scattered and time-consuming it is to keep a",
+   "posted_at": "2025-01-20T13:55:36Z",
+   "note": "竞品社媒动态追踪"
+  },
+  {
+   "id": "hn-42700687",
+   "domains": [
+    "s3",
+    "s10"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: Compare Price for HDD, SSD, NAS and More",
+   "url": "https://news.ycombinator.com/item?id=42700687",
+   "excerpt": "Hey everyone! My name is Toutoulliou, and I’m a beginner developer passionate about building websites. To practice and improve my skills, I decided to take on a real-world project: a price comparison tool for tech products like SSDs, HDDs, ",
+   "posted_at": "2025-01-14T17:36:47Z",
+   "note": "硬件价格对比"
+  },
+  {
+   "id": "hn-42400979",
+   "domains": [
+    "s1",
+    "s3",
+    "s8"
+   ],
+   "community": "Hacker News",
+   "title": "Show HN: AutoGather – Organize Web Information into Spreadsheets, Automatically",
+   "url": "https://news.ycombinator.com/item?id=42400979",
+   "excerpt": "Hey HN! We are excited to share AutoGather, an AI Agent that organizes the web’s information into the spreadsheets you need, automatically! Problems it solves: Scraping websites, generate leads, or gather any dataset from the web How it wor",
+   "posted_at": "2024-12-12T17:06:01Z",
+   "note": "网络信息自动整理进表格"
+  },
+  {
+   "id": "hn-41428635",
+   "domains": [
+    "s1",
+    "s9"
+   ],
+   "community": "Hacker News",
+   "title": "Ask HN: How to programmatically recognize main news of the week?",
+   "url": "https://news.ycombinator.com/item?id=41428635",
+   "excerpt": "I like to read news on weekly basis and there are so few weekly Arab newspapers. I am thinking about writing a scraper to fetch news on daily basis from several sources, rank them somehow (how?) and create me a newsletter. How do you may ap",
+   "posted_at": "2024-09-02T20:41:59Z",
+   "note": "每周新闻主旨识别"
+  }
+ ]
+}
