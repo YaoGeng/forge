@@ -1,25 +1,17 @@
 """FastAPI 装配：路由注册 + lifespan（进程内 asyncio 调度循环；建表在 create_app 即完成，
-便于 ASGITransport 无 lifespan 测试路径）。REST 契约见 M09 §5。
+便于 ASGITransport/TestClient 无 lifespan 测试路径）。REST 契约见 M09 §5。
 """
 import asyncio
 from contextlib import asynccontextmanager
-from typing import Literal
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI
 
+from .api_certifications import register_certification_routes
+from .api_devices import NonceStore, register_device_routes
 from .db import make_engine
 from .etiquette import Clock
-from .models import Base, CertificationRun, run_to_dict
-from .scheduler import CertScheduler, SegRunHook, WallClock, best_effort
-
-
-class CertificationSubmit(BaseModel):
-    subject_type: Literal["block", "app_version"]
-    subject_id: str
-    version: str
-    level: Literal["C1", "C2", "chain"]
-    site_tier: Literal["standard", "medium", "high"] = "standard"
+from .models import Base
+from .scheduler import CertScheduler, SegRunHook, WallClock
 
 
 def create_app(db_url: str, *, clock: Clock | None = None, executor_hook: SegRunHook | None = None) -> FastAPI:
@@ -28,7 +20,8 @@ def create_app(db_url: str, *, clock: Clock | None = None, executor_hook: SegRun
     from sqlalchemy.orm import sessionmaker
 
     session_factory = sessionmaker(bind=engine, expire_on_commit=False)
-    scheduler = CertScheduler(session_factory, clock=clock or WallClock(), executor_hook=executor_hook)
+    clock = clock or WallClock()
+    scheduler = CertScheduler(session_factory, clock=clock, executor_hook=executor_hook)
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
@@ -39,27 +32,12 @@ def create_app(db_url: str, *, clock: Clock | None = None, executor_hook: SegRun
     app = FastAPI(title="forge-server", lifespan=lifespan)
     app.state.engine = engine
     app.state.session_factory = session_factory
+    app.state.clock = clock
     app.state.scheduler = scheduler
+    app.state.nonces = NonceStore(clock)
 
-    @app.post("/api/v1/certifications", status_code=201)
-    def submit_certification(body: CertificationSubmit):
-        run_id = scheduler.submit(
-            body.subject_type, body.subject_id, body.version, body.level, site_tier=body.site_tier
-        )
-        return {"run_id": run_id}
-
-    @app.get("/api/v1/certifications/{run_id}")
-    def get_certification(run_id: int):
-        with session_factory() as s:
-            row = s.get(CertificationRun, run_id)
-            if row is None:
-                raise HTTPException(status_code=404, detail="certification run not found")
-            data = run_to_dict(row)
-        data["best_effort"] = best_effort(scheduler.tier_of(run_id))
-        data["status"] = scheduler.status_of(run_id)
-        data["segments"] = scheduler.segments_view(run_id)
-        return data
-
+    register_certification_routes(app)
+    register_device_routes(app)
     return app
 
 

@@ -35,7 +35,12 @@ class RunOutcome:
 
 class RunnerPort(Protocol):
     def run_once(
-        self, block_ref: str, params: dict[str, str] | None = None, *, mode: str = "local"
+        self,
+        block_ref: str,
+        params: dict[str, str] | None = None,
+        *,
+        mode: str = "local",
+        browser_factory=None,  # C11：certify 每轮注入一次性 profile 工厂；缺省用构造时工厂
     ) -> RunOutcome: ...
 
 
@@ -84,7 +89,14 @@ class TraceRunner:
 
         return make
 
-    def run_once(self, block_ref: str, params: dict[str, str] | None = None, *, mode: str = "local") -> RunOutcome:
+    def run_once(
+        self,
+        block_ref: str,
+        params: dict[str, str] | None = None,
+        *,
+        mode: str = "local",
+        browser_factory=None,
+    ) -> RunOutcome:
         block_dir = self._block_dirs.get(block_ref)
         if block_dir is None:
             return RunOutcome(
@@ -109,7 +121,7 @@ class TraceRunner:
         t0 = time.perf_counter()
         result = replay.run(
             block_ref, dict(params or {}), mode=mode, store=self._store,
-            browser_factory=self._wrapped_factory(),
+            browser_factory=browser_factory or self._wrapped_factory(),
         )
         timed_out = (time.perf_counter() - t0) > self._timeout_s
         shape = frozenset()
