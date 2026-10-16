@@ -188,3 +188,12 @@
 ### MS-1F 整分支终审（code-reviewer 子代理，2026-10-16 提前轮）
 
 子代理通道恢复（上会话 reasoning-level-missing），评审范围 463ba81..2767302：**1 Critical + 9 Important + 7 Minor**。修复轮 fea90b3（各 RED→GREEN，291/291）：drive 批次过滤三处贯通（否则 seg2 窗口重叠时错路由 env_error 污染他批真实通过率）、同站点跨 run 5s 限频（site_host 归组）、reattach 旧行 tier 显式传入（medium 不再静默降档 0.90）、副作用自确认拒绝+M02 后置语义、certify 重试复用 App、注册校验 run 归属、版本号唯一、交互步三层一致、book_detail 重录（golden 回归 0.0→1.0，run5 弃用登记）、快照字段收敛 C13。decline 1 项（reliability 端点自 MS-1E 已存在）；minor 6 项缓办（台账）。修复后待 seg2 的 21 run 全部 live=1.0 且 regression=1.0。
+
+## MS-1G 准备段（T1.65a-d，2026-10-16，与 48h 时钟窗口并行）
+
+- **规程**：docs/05 附录 A.10 备案（域内锚定采样框、机械选样零自由度、恰一次整链判定、预期形状预登记、人工可否决）；docs/14 计划（T1.65 拆 5 卡）先于池采集 commit（f0ebbd1）。
+- **池**：HN Algolia 12 预登记检索式 556 命中（原始响应归档 raw/）→ 去重 546 → 需求标记机械框出 120 → 逐条裁定 + 第二来源（Zapier/n8n 社区 WebSearch 发现、WebFetch/pullpush 逐条核验 URL/日期/原文）= **136 条（域内 55 / 域外 56 / 排除 25，6 社区）**；快照 pool_snapshot.json。
+- **样本**：机械选样 30（posted_at 倒序，选样可复算已钉测试）；两阶段写入（选样+域映射 f 先 commit，预期形状+尝试后 commit）；**1 条链式尝试 + 29 条不可组合归因（站点未覆盖 17 / 能力缺失 7 / 需通用化 5）**。样本构成披露：供给帖 18 / 求助帖 12（R1 登记，人工可否决）。
+- **结构性事实（归因依据，评审员独立核验）**：全部站点块 `run()` 仅返回 `{"ok": True}`（导航可复现性探针，TraceRunner 无数据输出通道——「HN 每日摘要」类需求无法把站点内容接入链上下文）；本地 python 块仅 excel/csv/markdown 导出与基础转换（无 JSON/XML、无拆行/结构化块）。该事实主导不可组合归因，T1.65e 报告将按分类呈报。
+- **执行器**：coverage_runner TDD 27/27（不触网）——单次运行不重试、未注册块拒绝执行只走产品路径、形状核对严格判定、判定记录携带预登记形状摘要、报告只呈报数据。
+- **评审**：code-reviewer 子代理独立复算选样/实跑块代码/比对落盘产物与 git 时序——1C+3I+8M；修复轮 R1（C1 链式尝试改直连接线 + I1 真实选样断言 + I2 构成披露登记 + I3 fetched_at 全量补齐 + pool_ref 全量哈希加强；1 Minor decline 登记）；产物再生成选样 id 逐条不变。

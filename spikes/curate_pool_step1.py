@@ -3,6 +3,8 @@
 输入：spikes/evidence/coverage/raw/hn_*.json（collect_pool_hn.py 产物）
 输出：spikes/evidence/coverage/review_worklist.json（待人工域分类的候选清单）
 规则（预登记）：objectID 去重后，title 或 story_text 命中需求标记正则即入待审清单；
+# 注： (^ask hn) 分支区分大小写，对 "Ask HN" 标题永不命中（评审 Minor 登记的死分支）；
+# 生效标记为下方 (?i:...) 组——已生成的工作清单不受影响，此处仅留档知悉。
              清单按 created_at 倒序。未入清单条目计数留痕（不入池不判域）。
 """
 from __future__ import annotations

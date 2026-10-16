@@ -10,6 +10,7 @@ from spikes.coverage_runner import (
     check_shape,
     load_pool,
     load_sample,
+    pool_digest,
     run_one,
     select_sample,
     tally,
@@ -103,7 +104,7 @@ class TestLoadSample:
     def test_rejects_sample_not_from_pool(self, tmp_path):
         pool = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"])])
         sample = {
-            "meta": {"pool_ref": "sha256:deadbeef"},
+            "meta": {"pool_ref": pool_digest(load_pool(str(pool)))},
             "entries": [{"id": "ghost", "domains": ["s1"], "expected_shape": {"type": "table"}}],
         }
         sp = tmp_path / "sample.json"
@@ -114,10 +115,10 @@ class TestLoadSample:
     def test_expected_shape_required_and_hashed(self, tmp_path):
         pool = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"])])
         sample = {
-            "meta": {"pool_ref": "sha256:x"},
+            "meta": {"pool_ref": pool_digest(load_pool(str(pool)))},
             "entries": [{
                 "id": "a", "domains": ["s1"], "expected_shape": {"type": "table", "fields": ["k"]},
-                "attempt": {"kind": "uncoverable", "reason": "站点未覆盖"},
+                "attempt": {"kind": "uncoverable", "category": "site_not_covered", "reason": "站点未覆盖"},
             }],
         }
         sp = tmp_path / "sample.json"
@@ -129,12 +130,11 @@ class TestLoadSample:
     def test_attempt_cannot_mutate_domains(self, tmp_path):
         pool = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"])])
         sample = {
-            "meta": {"pool_ref": "sha256:x"},
+            "meta": {"pool_ref": pool_digest(load_pool(str(pool)))},
             "entries": [{
                 "id": "a", "domains": ["s1", "s7"],  # 阶段二字段偷偷改域 → 拒绝
                 "expected_shape": {"type": "table"},
-                "attempt": {"kind": "uncoverable", "reason": "x"},
-                "domains_digest": None,  # 未按阶段一登记的摘要提供
+                "attempt": {"kind": "uncoverable", "category": "site_not_covered", "reason": "x"},
             }],
         }
         sp = tmp_path / "sample.json"
@@ -150,6 +150,12 @@ def test_known_domains_are_ten_scenarios():
 class TestRealArtifacts:
     """真实产物校验（池/样本落盘后跑；不触网）。"""
 
+    def test_real_sample_matches_mechanical_selection(self):
+        # I1：真实样本必须与机械选样逐条一致（id + 顺序），手工挑样即失败
+        pool = load_pool("spikes/coverage/pool.json")
+        entries = load_sample("spikes/coverage/sample.json", "spikes/coverage/pool.json")
+        assert [e["id"] for e in entries] == [e["id"] for e in select_sample(pool, 30)]
+
     def test_real_sample_loads_and_domains_frozen(self):
         entries = load_sample("spikes/coverage/sample.json", "spikes/coverage/pool.json")
         assert len(entries) == 30
@@ -157,12 +163,26 @@ class TestRealArtifacts:
         for e in entries:
             assert e["shape_digest"].startswith("sha256:")
 
+    def test_real_sample_pool_ref_pins_full_pool_content(self, tmp_path):
+        # 池条目内容被改（id/顺序不变）→ pool_ref 失配 → 拒绝
+        pool = load_pool("spikes/coverage/pool.json")
+        tampered = [dict(e) for e in pool]
+        tampered[0]["excerpt"] = tampered[0]["excerpt"] + "（事后追加）"
+        p = tmp_path / "tampered_pool.json"
+        p.write_text(json.dumps({"meta": {}, "entries": tampered}, ensure_ascii=False), encoding="utf-8")
+        with pytest.raises(ValueError, match="pool_ref"):
+            load_sample("spikes/coverage/sample.json", str(p))
+
+    def test_real_pool_fetch_times_all_present(self):
+        for e in load_pool("spikes/coverage/pool.json"):
+            assert e["fetched_at"]  # I3：可溯源性字段全量必填
+
     def test_domain_mapping_recorded_before_attempt(self, tmp_path):
         # 阶段二字段（attempt/expected_shape）不得回写阶段一域判定：
         # 构造「阶段一 domains 与池一致、阶段二被篡改」的样本 → 必须拒绝
         pool = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"])])
         sample = {
-            "meta": {"pool_ref": "sha256:x"},
+            "meta": {"pool_ref": pool_digest(load_pool(str(pool)))},
             "entries": [{
                 "id": "a", "domains": ["s7"],  # 篡改：池登记 s1
                 "expected_shape": {"format": "digest"},
@@ -223,7 +243,7 @@ class TestRunOne:
         assert calls == []
         assert rec["verdict"] == "uncovered"
         assert rec["category"] == "registry_missing"
-        assert "text_clean" not in rec.get("executed_via", "spikes-direct")  # 不出现直跑通道
+        assert "executed_via" not in rec  # 不存在任何直跑通道字段
 
     def test_uncoverable_never_runs(self):
         entry = {
@@ -303,9 +323,10 @@ class TestTallyReport:
         t = tally(self._records())
         out = tmp_path / "report.md"
         write_report(out, self._records(), t, out_of_domain={"total": 56, "top": [("管理/防护工具", 9)]},
-                     sample_meta={"pool_ref": "sha256:x"})
+                     sample_meta={"pool_ref": "sha256:x", "supply_side": 18, "demand_side": 12})
         text = out.read_text(encoding="utf-8")
         assert "5" in text and "20.0%" in text
         assert "site_not_covered" in text and "域外" in text
         assert "人工复核" in text  # C10 复核列
         assert "sha256:x" in text  # 池快照引用可追溯
+        assert "供给帖（Show HN 产品动机）18 条" in text  # I2 构成披露

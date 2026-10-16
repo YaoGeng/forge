@@ -34,10 +34,10 @@ ATTEMPTS: dict[str, dict] = {
             "kind": "chain",
             "steps": [
                 {"block": "text_clean", "params": {"text": "产品周会备忘; 发布排期  待确认 ; 用户反馈 三类 已归档; 后续 补数据核对; 遗留问题 未定"}},
-                {"block": "text_digest", "bindings": {"lines": "text_clean.text"}},
-                {"block": "markdown_export", "bindings": {"rows": "text_digest.digest"}, "params": {"out": "messy-report.md"}},
+                {"block": "markdown_export", "bindings": {"rows": "text_clean.text"}, "params": {"out": "messy-report.md"}},
             ],
-            "note": "接线最优解仍只产出 1 行摘要行（无拆行/标题块）；预期形状核对将如实判定",
+            "note": "R1 修订：直连接线（text_clean 仅空白归一、保留 ';' 分隔；markdown_export 按 ';' 拆行）——"
+                    "标题行=首段、要点=其余行；经 text_digest 的接法会以 ' | ' 合并破坏分隔符契约，弃用",
         },
     },
     # —— uncoverable：归因三类 ——

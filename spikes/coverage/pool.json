@@ -2,7 +2,7 @@
  "meta": {
   "protocol": "docs/05 附录 A.10（T1.65a 备案）",
   "domain_defs": "docs/14 C8",
-  "generated_at": "2026-10-16T16:20:44+00:00",
+  "generated_at": "2026-10-16T16:45:17+00:00",
   "counts": {
    "total": 136,
    "in_domain": 55,
@@ -1939,9 +1939,11 @@
    "community": "Zapier Community",
    "url": "https://community.zapier.com/how-do-i-3/scraping-data-from-a-website-and-writing-them-down-47915",
    "title": "Scraping data from a website and writing them down",
-   "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.（每日更新的体育博彩数据）",
+   "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.",
    "posted_at": "2025-02",
    "posted_at_precision": "month（WebFetch 页面核实）",
+   "fetched_at": "2026-10-16T16:30:00+00:00",
+   "fetched_at_precision": "采集会话（WebFetch 核验）",
    "verdict": "in_domain",
    "domains": [
     "s3",
@@ -1958,6 +1960,8 @@
    "excerpt": "User troubleshooting scraping an HTML table and populating a Google Sheet using line items.",
    "posted_at": "2024-05",
    "posted_at_precision": "month（搜索快照）",
+   "fetched_at": "2026-10-16T16:30:00+00:00",
+   "fetched_at_precision": "采集会话（WebSearch 快照）",
    "verdict": "in_domain",
    "domains": [
     "s3",
@@ -1974,6 +1978,8 @@
    "excerpt": "Using Browse.ai with URLs stored in a spreadsheet, run on a weekly schedule.",
    "posted_at": "2023-07",
    "posted_at_precision": "month（搜索快照）",
+   "fetched_at": "2026-10-16T16:30:00+00:00",
+   "fetched_at_precision": "采集会话（WebSearch 快照）",
    "verdict": "in_domain",
    "domains": [
     "s7",
@@ -1990,6 +1996,8 @@
    "excerpt": "Community thread discussing tools like Apify, ParseHub, and Import.io.",
    "posted_at": null,
    "posted_at_precision": "未核实",
+   "fetched_at": "2026-10-16T16:30:00+00:00",
+   "fetched_at_precision": "采集会话（WebSearch 快照）",
    "verdict": "excluded",
    "domains": null,
    "note": "纯咨询无具体任务"
@@ -2003,6 +2011,8 @@
    "excerpt": "Go to that program's page · Extract the HTML of the program's information · Create a sheet for the program...",
    "posted_at": "2022-08",
    "posted_at_precision": "month（搜索快照）",
+   "fetched_at": "2026-10-16T16:30:00+00:00",
+   "fetched_at_precision": "采集会话（WebSearch 快照）",
    "verdict": "in_domain",
    "domains": [
     "s3",
@@ -2019,6 +2029,8 @@
    "excerpt": "Community tutorial on using Google Sheets as a database in workflows (Nov 2025).",
    "posted_at": "2025-11",
    "posted_at_precision": "month（搜索快照）",
+   "fetched_at": "2026-10-16T16:30:00+00:00",
+   "fetched_at_precision": "采集会话（WebSearch 快照）",
    "verdict": "excluded",
    "domains": null,
    "note": "教程非需求"
@@ -2032,6 +2044,8 @@
    "excerpt": "Freelancer offering workflow creation, scraping, and Excel/Google Sheets help.",
    "posted_at": null,
    "posted_at_precision": "未核实",
+   "fetched_at": "2026-10-16T16:30:00+00:00",
+   "fetched_at_precision": "采集会话（WebSearch 快照）",
    "verdict": "excluded",
    "domains": null,
    "note": "招聘广告"
@@ -2154,7 +2168,7 @@
    "excerpt": "Monthly Self-Promotion - September 2026",
    "posted_at": null,
    "posted_at_precision": "未核实",
-   "fetched_at": null,
+   "fetched_at": "2026-10-16T16:30:00+00:00",
    "verdict": "excluded",
    "domains": null,
    "reason": "广告楼",
@@ -2169,7 +2183,7 @@
    "excerpt": "Monthly Self-Promotion - April 2026",
    "posted_at": null,
    "posted_at_precision": "未核实",
-   "fetched_at": null,
+   "fetched_at": "2026-10-16T16:30:00+00:00",
    "verdict": "excluded",
    "domains": null,
    "reason": "广告楼",
@@ -2184,7 +2198,7 @@
    "excerpt": "How to Build a Zapier Web Scraper Without Code",
    "posted_at": null,
    "posted_at_precision": "未核实",
-   "fetched_at": null,
+   "fetched_at": "2026-10-16T16:30:00+00:00",
    "verdict": "excluded",
    "domains": null,
    "reason": "教程非需求",

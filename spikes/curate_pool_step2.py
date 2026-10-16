@@ -16,6 +16,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 COV = HERE / "coverage"
 RAW = HERE / "evidence" / "coverage" / "raw"
 FETCHED_HN = "2026-10-16T16:09:51+00:00"  # collect_pool_hn.py 归档时间
+SESSION_FETCHED_AT = "2026-10-16T16:30:00+00:00"  # 第二来源采集会话（WebSearch 发现 + WebFetch/pullpush 核验）
 
 # —— HN 120 条逐条裁定（objectID -> (verdict, domains|None, reason/note)）——
 # verdict ∈ in_domain | out_of_domain | excluded
@@ -150,44 +151,51 @@ SECOND_SOURCE: list[dict] = [
     {"id": "zapier-47915", "source": "websearch", "community": "Zapier Community",
      "url": "https://community.zapier.com/how-do-i-3/scraping-data-from-a-website-and-writing-them-down-47915",
      "title": "Scraping data from a website and writing them down",
-     "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.（每日更新的体育博彩数据）",
+     "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.",
      "posted_at": "2025-02", "posted_at_precision": "month（WebFetch 页面核实）",
+     "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebFetch 核验）",
      "verdict": "in_domain", "domains": ["s3", "s8"], "note": "读站点数据写入表格"},
     {"id": "zapier-38394", "source": "websearch", "community": "Zapier Community",
      "url": "https://community.zapier.com/troubleshooting-99/how-do-i-import-data-from-a-web-table-into-google-sheets-38394",
      "title": "How do I import data from a web table into Google Sheets?",
      "excerpt": "User troubleshooting scraping an HTML table and populating a Google Sheet using line items.",
      "posted_at": "2024-05", "posted_at_precision": "month（搜索快照）",
+     "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebSearch 快照）",
      "verdict": "in_domain", "domains": ["s3", "s8"], "note": "网页表格导入 Google Sheets"},
     {"id": "zapier-25931", "source": "websearch", "community": "Zapier Community",
      "url": "https://community.zapier.com/how-do-i-3/how-to-create-a-zap-that-extracts-data-from-google-sheets-and-uses-browse-ai-to-scrape-the-data-weekly-25931",
      "title": "How to create a Zap that extracts data from Google Sheets and uses Browse AI to scrape the data weekly",
      "excerpt": "Using Browse.ai with URLs stored in a spreadsheet, run on a weekly schedule.",
      "posted_at": "2023-07", "posted_at_precision": "month（搜索快照）",
+     "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebSearch 快照）",
      "verdict": "in_domain", "domains": ["s7", "s3"], "note": "URL 清单每周定时抓取"},
     {"id": "zapier-152", "source": "websearch", "community": "Zapier Community",
      "url": "https://community.zapier.com/how-do-i-3/does-anyone-know-of-any-other-smart-ways-to-scrape-data-from-websites-152",
      "title": "Does anyone know of any other smart ways to scrape data from websites",
      "excerpt": "Community thread discussing tools like Apify, ParseHub, and Import.io.",
      "posted_at": None, "posted_at_precision": "未核实",
+     "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebSearch 快照）",
      "verdict": "excluded", "domains": None, "note": "纯咨询无具体任务"},
     {"id": "n8n-16881", "source": "websearch", "community": "n8n community",
      "url": "https://community.n8n.io/t/how-to-format-web-scraped-data-to-google-sheets/16881",
      "title": "How to format web scraped data to google sheets?",
      "excerpt": "Go to that program's page · Extract the HTML of the program's information · Create a sheet for the program...",
      "posted_at": "2022-08", "posted_at_precision": "month（搜索快照）",
+     "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebSearch 快照）",
      "verdict": "in_domain", "domains": ["s3", "s8"], "note": "节目页信息抽取建表"},
     {"id": "n8n-216043", "source": "websearch", "community": "n8n community",
      "url": "https://community.n8n.io/t/build-smarter-workflows-write-and-read-data-from-google-sheets-in-n8n/216043",
      "title": "Write and Read Data from Google Sheets in n8n",
      "excerpt": "Community tutorial on using Google Sheets as a database in workflows (Nov 2025).",
      "posted_at": "2025-11", "posted_at_precision": "month（搜索快照）",
+     "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebSearch 快照）",
      "verdict": "excluded", "domains": None, "note": "教程非需求"},
     {"id": "n8n-312871", "source": "websearch", "community": "n8n community",
      "url": "https://community.n8n.io/t/for-hire-python-n8n-automation-apis-excel-google-sheets-web-scraping-workflow-fixes/312871",
      "title": "For Hire: Python + n8n Automation (APIs, Excel/Google Sheets, Web Scraping)",
      "excerpt": "Freelancer offering workflow creation, scraping, and Excel/Google Sheets help.",
      "posted_at": None, "posted_at_precision": "未核实",
+     "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebSearch 快照）",
      "verdict": "excluded", "domains": None, "note": "招聘广告"},
 ]
 # Reddit 条目从 pullpush 归档生成（日期+selftext 已核验）
@@ -220,6 +228,7 @@ def main() -> int:
         if oid not in HN_RULINGS:
             raise SystemExit(f"缺裁定：HN {oid}（{e['title'][:50]}）——必须逐条裁定")
         verdict, domains, reason = HN_RULINGS[oid]
+        # 标题兜底：原帖无正文（story_text 空）时标题即原文（A.10 R1 登记：excerpt=标题是可溯源自身，非注记）
         excerpt = _clean(e.get("story_text") or "") or e["title"]
         entries.append({
             "id": f"hn-{oid}", "source": "hn_algolia_api", "community": "Hacker News",
@@ -256,7 +265,7 @@ def main() -> int:
     ]:
         entries.append({"id": sid, "source": "websearch", "community": comm, "url": url,
                         "title": title, "excerpt": title, "posted_at": None, "posted_at_precision": "未核实",
-                        "fetched_at": None, "verdict": "excluded", "domains": None, "reason": reason, "note": reason})
+                        "fetched_at": SESSION_FETCHED_AT, "verdict": "excluded", "domains": None, "reason": reason, "note": reason})
 
     in_dom = [e for e in entries if e["verdict"] == "in_domain"]
     out_dom = [e for e in entries if e["verdict"] == "out_of_domain"]

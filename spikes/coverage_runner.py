@@ -17,7 +17,7 @@ KNOWN_DOMAINS = [f"s{i}" for i in range(1, 11)]
 SAMPLE_SIZE = 30
 
 _REQUIRED_FIELDS = ("id", "source", "community", "url", "title", "excerpt",
-                    "posted_at", "verdict")
+                    "posted_at", "verdict", "fetched_at")
 
 
 def canonical_json(obj) -> str:
@@ -28,6 +28,11 @@ def sha256_of(obj) -> str:
     return "sha256:" + hashlib.sha256(canonical_json(obj).encode("utf-8")).hexdigest()
 
 
+def pool_digest(pool_entries: list[dict]) -> str:
+    """池快照摘要：全量条目（含裁定字段）规范化哈希——条目内容被改即失配（R1 加强）。"""
+    return sha256_of(pool_entries)
+
+
 def load_pool(path: str) -> list[dict]:
     data = json.loads(pathlib.Path(path).read_text(encoding="utf-8"))
     entries = data["entries"]
@@ -36,6 +41,8 @@ def load_pool(path: str) -> list[dict]:
         for f in _REQUIRED_FIELDS:
             if f not in e:
                 raise ValueError(f"池条目 {e.get('id')} 缺字段 {f}")
+        if not e.get("fetched_at"):
+            raise ValueError(f"池条目 {e['id']} fetched_at 为空（A.10 可溯源性：抓取时间必填）")
         if e["id"] in seen:
             raise ValueError(f"池 id 重复：{e['id']}")
         seen.add(e["id"])
@@ -60,9 +67,17 @@ def select_sample(pool_entries: list[dict], k: int = SAMPLE_SIZE) -> list[dict]:
 
 
 def load_sample(sample_path: str, pool_path: str) -> list[dict]:
-    """样本校验：条目必须来自池快照且 domains 与池一致；expected_shape 必填并生成摘要。"""
+    """样本校验：条目必须来自池快照且 domains 与池一致；expected_shape 必填并生成摘要。
+
+    meta.pool_ref 必须等于池快照全量摘要（R1 加强：条目内容被改即失配）。
+    """
     data = json.loads(pathlib.Path(sample_path).read_text(encoding="utf-8"))
-    pool_by_id = {e["id"]: e for e in load_pool(pool_path)}
+    pool_entries = load_pool(pool_path)
+    ref = data.get("meta", {}).get("pool_ref")
+    want = pool_digest(pool_entries)
+    if ref != want:
+        raise ValueError(f"样本 pool_ref {ref} 与池快照摘要 {want} 不一致（池内容或样本引用被改动）")
+    pool_by_id = {e["id"]: e for e in pool_entries}
     out: list[dict] = []
     for s in data["entries"]:
         pid = s.get("id")
@@ -74,6 +89,9 @@ def load_sample(sample_path: str, pool_path: str) -> list[dict]:
                 f"样本 {pid} 的 domains {s.get('domains')} 与池登记 {pool_entry['domains']} 不一致（域判定不可事后改）")
         if "expected_shape" not in s or not s["expected_shape"]:
             raise ValueError(f"样本 {pid} 缺 expected_shape（预期形状必须入样时预登记）")
+        att = s.get("attempt")
+        if att and att.get("kind") == "uncoverable" and att.get("category") not in UNCOVERABLE_CATEGORIES:
+            raise ValueError(f"样本 {pid} uncoverable 归因 {att.get('category')!r} 不在登记分类内")
         entry = dict(pool_entry)
         entry.update({
             "domains": s["domains"],
@@ -168,6 +186,9 @@ def write_report(path, records: list[dict], t: dict, *, out_of_domain: dict,
         "# MS-1G 覆盖率实验报告（T1.65e 产出）",
         "",
         f"- 池快照引用：{sample_meta.get('pool_ref', 'n/a')}；样本量 30（A.4 区间下限）",
+        f"- 样本构成披露：供给帖（Show HN 产品动机）{sample_meta.get('supply_side', 'n/a')} 条 / "
+        f"求助帖 {sample_meta.get('demand_side', 'n/a')} 条（R1 登记：域内判定按形状不区分供需侧，"
+        "供给帖的创作动机计为真实需求表达——人工可否决）",
         f"- 分母 {t['denominator']}｜覆盖 {t['covered']}｜覆盖率 **{t['rate'] * 100:.1f}%**（判定口径：A.4/A.10——单次整链运行产出正确结果即计覆盖）",
         "",
         "## 未覆盖分类（D-4 呈报数据）",

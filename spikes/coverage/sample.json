@@ -2,9 +2,9 @@
  "meta": {
   "stage": 2,
   "protocol": "docs/05 附录 A.10；docs/14 T1.65c",
-  "pool_ref": "sha256:f2d0bba961ba5e203383f8429578ce0fe8af8cbf08cad2c49de95b85c0d919e3",
+  "pool_ref": "sha256:d2c0589c00b0a029aeda7094074c10774c884e99fb1c0d0eebf33f8fcffdf964",
   "selection_rule": "in_domain 按 posted_at 字符串降序取前 30；同刻按池序（零自由度）",
-  "generated_at": "2026-10-16T16:28:05+00:00",
+  "generated_at": "2026-10-16T16:45:29+00:00",
   "shape_note": "预期形状从需求语义登记，不迁就库能力；执行期结构核对如实判定"
  },
  "entries": [
@@ -416,22 +416,16 @@
       }
      },
      {
-      "block": "text_digest",
-      "bindings": {
-       "lines": "text_clean.text"
-      }
-     },
-     {
       "block": "markdown_export",
       "bindings": {
-       "rows": "text_digest.digest"
+       "rows": "text_clean.text"
       },
       "params": {
        "out": "messy-report.md"
       }
      }
     ],
-    "note": "接线最优解仍只产出 1 行摘要行（无拆行/标题块）；预期形状核对将如实判定"
+    "note": "R1 修订：直连接线（text_clean 仅空白归一、保留 ';' 分隔；markdown_export 按 ';' 拆行）——标题行=首段、要点=其余行；经 text_digest 的接法会以 ' | ' 合并破坏分隔符契约，弃用"
    }
   },
   {
@@ -632,7 +626,7 @@
    "community": "Zapier Community",
    "title": "Scraping data from a website and writing them down",
    "url": "https://community.zapier.com/how-do-i-3/scraping-data-from-a-website-and-writing-them-down-47915",
-   "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.（每日更新的体育博彩数据）",
+   "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.",
    "posted_at": "2025-02",
    "note": "读站点数据写入表格",
    "expected_shape": {

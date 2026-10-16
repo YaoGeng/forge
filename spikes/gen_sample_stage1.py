@@ -11,7 +11,7 @@ import pathlib
 import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent.parent))
-from spikes.coverage_runner import SAMPLE_SIZE, canonical_json, load_pool, select_sample, sha256_of  # noqa: E402
+from spikes.coverage_runner import SAMPLE_SIZE, load_pool, pool_digest, select_sample  # noqa: E402
 
 HERE = pathlib.Path(__file__).resolve().parent
 POOL = HERE / "coverage" / "pool.json"
@@ -25,7 +25,7 @@ def main() -> int:
         "meta": {
             "stage": 1,
             "protocol": "docs/05 附录 A.10；docs/14 T1.65c",
-            "pool_ref": sha256_of([e["id"] for e in pool]),
+            "pool_ref": pool_digest(pool),  # R1 加强：全量条目哈希（内容被改即失配）
             "selection_rule": "in_domain 按 posted_at 字符串降序取前 30；同刻按池序（零自由度）",
             "generated_at": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
         },
@@ -44,7 +44,6 @@ def main() -> int:
     print(f"stage1: {len(sel)} entries; pool_ref={sample['meta']['pool_ref'][:20]}…")
     for e in sel:
         print(f"  {e['id']:16} {e['domains']}")
-    assert canonical_json(sel[0])  # import 卫生（无副作用）
     return 0
 
 
