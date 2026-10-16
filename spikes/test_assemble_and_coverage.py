@@ -1,0 +1,222 @@
+"""T1.64c/T1.65e 驱动器离线单测（临时库 + 假 trace 执行器 + 真本地 python 块；不触网）。
+
+注意：覆盖实验测试对真实 sample.json 的唯一链式样本执行一次链（纯本地块）——
+这属于驱动器验证，不属实验判定（实验纪元在 ms1e_store，T1.65e 时另行恰一次执行）。
+"""
+from __future__ import annotations
+
+import json
+import sys
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+import pytest
+
+_ROOT = Path(__file__).resolve().parent.parent
+for rel in ("apps/server", "spikes", "packages/trace/python",
+            "packages/proto/python", "packages/block-sdk/python",
+            "packages/certifier/python"):
+    p = _ROOT / rel
+    if str(p) not in sys.path:
+        sys.path.insert(0, str(p))
+
+from fastapi.testclient import TestClient  # noqa: E402
+
+from forge_server.chain import ChainRunner  # noqa: E402
+from forge_server.models import CertificationRun  # noqa: E402
+from forge_server.sandbox import AdapterRunner, RunOutcome  # noqa: E402
+
+from product_path import SEEDS, adapter_kinds, build_server  # noqa: E402
+
+KINDS = adapter_kinds()
+
+
+class FakeTraceRunner:
+    """离线替身：trace 块执行恒 ok（真实 TraceRunner 语义：output=None）。"""
+
+    def run_once(self, ref, params=None, *, mode="local", **kw):
+        return RunOutcome(mode=mode, ok=True)
+
+
+def wire_test_chain(app, names):
+    ar = AdapterRunner({n: SEEDS / n for n in names if KINDS.get(n) == "python"})
+    routes = {}
+    for n in names:
+        if KINDS.get(n) == "trace":
+            routes[n] = (FakeTraceRunner(), f"ref-{n}")
+        else:
+            routes[n] = (ar, n)
+    app.state.chain_runner = ChainRunner(routes).execute
+
+
+def seed_block(client, sf, name, level="C2"):
+    now = datetime.now(timezone.utc)
+    with sf() as s:
+        row = CertificationRun(
+            subject_type="block", subject_id=name, version="1.0.0", level=level,
+            n=20, pass_count=20, live_pass_rate=1.0, regression_pass_rate=1.0,
+            batch_id=f"seed-{name}", started_at=now - timedelta(hours=50),
+            finished_at=now, verdict="pass")
+        s.add(row)
+        s.commit()
+        rid = row.id
+    r = client.post("/api/v1/registry/blocks", json={
+        "name": name, "version": "1.0.0", "certification_run_id": rid,
+        "side_effects": False, "domains": []})
+    assert r.status_code in (200, 201), f"{name}: {r.status_code} {r.text}"
+    return rid
+
+
+@pytest.fixture()
+def server(tmp_path):
+    app = build_server(tmp_path / "store")
+    client = TestClient(app)
+    return app, client, tmp_path / "store"
+
+
+APP_BLOCKS = {
+    "hn_weekly": (["hn_search_probe", "excel_export"], "C2"),
+    "books_export": (["books_list", "excel_export"], "C2"),
+    "login_report": (["login_demo_probe", "excel_export"], "C1"),
+    "baidu_snapshot": (["baidu_home_watch", "csv_export"], "C2"),
+    "repo_digest": (["github_repo_read", "text_digest", "excel_export"], "C2"),
+}
+
+
+class TestAssembleApps:
+    def test_five_apps_assembled_and_published(self, server):
+        app, client, store = server
+        for names, _lv in APP_BLOCKS.values():
+            for n in names:
+                seed_block(client, app.state.session_factory, n,
+                           level="C1" if n == "login_demo_probe" else "C2")
+        wire_test_chain(app, sorted({n for ns, _ in APP_BLOCKS.values() for n in ns}))
+
+        from assemble_apps import run_all
+
+        out = run_all(app, client, signer=lambda d: b"test-sig",
+                      state_path=store / "t164c_state.json")
+        assert out["published"] == 5
+        login = next(r for r in out["apps"] if r["key"] == "login_report")
+        # C8：服务端 422 证据 + 本机整链落库 + 设备签名
+        assert login["c1_certify_422"], "C1 应用 certify 必须被服务端 422（M09 §3.3）"
+        assert login["chain"]["verdict"] == "pass" and login["chain"]["reused"] is False
+        with app.state.session_factory() as s:
+            row = s.get(CertificationRun, login["chain"]["run_id"])
+        assert row.level == "chain" and row.n == 1
+        assert row.attestation_sig and row.subject_type == "app_version"
+        # 报告读侧：C1 标注与非统计标注
+        assert login["report"] is not None
+
+    def test_rerun_idempotent_no_new_apps(self, server):
+        app, client, store = server
+        for names, _lv in APP_BLOCKS.values():
+            for n in names:
+                seed_block(client, app.state.session_factory, n,
+                           level="C1" if n == "login_demo_probe" else "C2")
+        wire_test_chain(app, sorted({n for ns, _ in APP_BLOCKS.values() for n in ns}))
+
+        from assemble_apps import run_all
+
+        sp = store / "t164c_state.json"
+        run_all(app, client, signer=lambda d: b"test-sig", state_path=sp)
+        before = len(client.get("/api/v1/apps").json())
+        out2 = run_all(app, client, signer=lambda d: b"test-sig", state_path=sp)
+        assert out2["published"] == 5
+        assert all(r.get("skipped") for r in out2["apps"])
+        assert len(client.get("/api/v1/apps").json()) == before
+
+    def test_c1_chain_row_reused_not_reexecuted(self, server):
+        app, client, store = server
+        for names, _lv in APP_BLOCKS.values():
+            for n in names:
+                seed_block(client, app.state.session_factory, n,
+                           level="C1" if n == "login_demo_probe" else "C2")
+        wire_test_chain(app, sorted({n for ns, _ in APP_BLOCKS.values() for n in ns}))
+
+        from assemble_apps import APPS, assemble, _load_state
+
+        sp = store / "t164c_state.json"
+        spec = next(a for a in APPS if a["key"] == "login_report")
+        state = _load_state(sp)
+        assemble(app, client, spec, state, sp, signer=lambda d: b"test-sig")
+        runs_before = _count_chain_runs(app, "app-login_report")
+        # 再次组装（state 未标 published 的中间态模拟：手动去掉 published 后重跑本机整链）
+        state["apps"]["login_report"]["published"] = False
+        state["apps"]["login_report"].pop("chain_run_id", None)
+        assemble(app, client, spec, state, sp, signer=lambda d: b"test-sig")
+        assert _count_chain_runs(app, "app-login_report") == runs_before  # 复用不重跑
+
+
+def _count_chain_runs(app, app_name: str) -> int:
+    from forge_server.models import App
+
+    with app.state.session_factory() as s:
+        a = s.query(App).filter_by(name=app_name).one_or_none()
+        if a is None:
+            return 0
+        return (s.query(CertificationRun)
+                .filter_by(subject_type="app_version", subject_id=str(a.id),
+                           level="chain").count())
+
+
+class TestRunCoverage:
+    def test_experiment_offline_end_to_end(self, server):
+        app, client, store = server
+        # 只注册链式尝试所需两块；29 条 uncoverable 不运行
+        seed_block(client, app.state.session_factory, "text_clean")
+        seed_block(client, app.state.session_factory, "markdown_export")
+        wire_test_chain(app, ["text_clean", "markdown_export"])
+
+        from run_coverage import run_experiment
+
+        runs_dir = store / "runs"
+        report = store / "report.md"
+        out = run_experiment(app, client,
+                             pool_path=_ROOT / "spikes/coverage/pool.json",
+                             sample_path=_ROOT / "spikes/coverage/sample.json",
+                             runs_dir=runs_dir, report_path=report)
+        assert out["denominator"] == 30 and out["executed"] == 30 and out["resumed"] == 0
+        assert out["covered"] == 1  # hn-44955461 直连接线：rows=5 ≥ 标题+3 要点
+        assert out["categories"].get("site_not_covered") == 17
+        rec = json.loads((runs_dir / "hn-44955461.json").read_text(encoding="utf-8"))
+        assert rec["verdict"] == "covered" and rec["final_output"]["rows"] == 5
+        assert rec["shape_digest"].startswith("sha256:")
+        text = report.read_text(encoding="utf-8")
+        assert "3.3%" in text and "供给帖（Show HN 产品动机）18 条" in text
+        assert "人工复核" in text
+
+    def test_resume_never_reexecutes_frozen_records(self, server):
+        app, client, store = server
+        seed_block(client, app.state.session_factory, "text_clean")
+        seed_block(client, app.state.session_factory, "markdown_export")
+        wire_test_chain(app, ["text_clean", "markdown_export"])
+
+        from run_coverage import run_experiment
+
+        kw = dict(pool_path=_ROOT / "spikes/coverage/pool.json",
+                  sample_path=_ROOT / "spikes/coverage/sample.json",
+                  runs_dir=store / "runs", report_path=store / "report.md")
+        run_experiment(app, client, **kw)
+        before = (store / "runs" / "hn-44955461.json").stat().st_mtime_ns
+        out2 = run_experiment(app, client, **kw)
+        assert out2["executed"] == 0 and out2["resumed"] == 30
+        assert (store / "runs" / "hn-44955461.json").stat().st_mtime_ns == before
+
+    def test_registry_gate_blocks_unregistered_chain(self, server):
+        app, client, store = server
+        seed_block(client, app.state.session_factory, "text_clean")
+        # markdown_export 未注册
+        wire_test_chain(app, ["text_clean", "markdown_export"])
+
+        from run_coverage import execute_chain_via_dryrun, registry_names
+        from coverage_runner import load_sample, run_one
+
+        entries = load_sample(str(_ROOT / "spikes/coverage/sample.json"),
+                              str(_ROOT / "spikes/coverage/pool.json"))
+        chain_entry = next(e for e in entries if e["attempt"]["kind"] == "chain")
+        names = registry_names(client)
+        assert "markdown_export" not in names
+        rec = run_one(chain_entry, execute_chain_via_dryrun(client), registry=names)
+        assert rec["verdict"] == "uncovered" and rec["category"] == "registry_missing"
+        assert rec["ran"] is False
