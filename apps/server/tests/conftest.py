@@ -11,6 +11,7 @@ for rel in (
     "../../../packages/trace/tests",  # FakeBrowser 假体（T1.31 起复用）
     "../../../packages/block-sdk/python",
     "../../../packages/proto/python",
+    "../../../packages/certifier/python",  # T1.33 起复用 DeviceKey/canonical 语义
 ):
     p = (_HERE / rel).resolve()
     if str(p) not in sys.path:

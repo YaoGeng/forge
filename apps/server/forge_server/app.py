@@ -14,7 +14,16 @@ from .models import Base
 from .scheduler import CertScheduler, SegRunHook, WallClock
 
 
-def create_app(db_url: str, *, clock: Clock | None = None, executor_hook: SegRunHook | None = None) -> FastAPI:
+def create_app(
+    db_url: str,
+    *,
+    clock: Clock | None = None,
+    executor_hook: SegRunHook | None = None,
+    golden_root=None,
+) -> FastAPI:
+    import tempfile
+    from pathlib import Path
+
     engine = make_engine(db_url)
     Base.metadata.create_all(engine)
     from sqlalchemy.orm import sessionmaker
@@ -35,6 +44,10 @@ def create_app(db_url: str, *, clock: Clock | None = None, executor_hook: SegRun
     app.state.clock = clock
     app.state.scheduler = scheduler
     app.state.nonces = NonceStore(clock)
+    app.state.golden_root = Path(golden_root) if golden_root else Path(
+        tempfile.mkdtemp(prefix="forge-server-golden-")
+    )
+    app.state.report_results = {}  # 幂等缓存：(run_id, report_hash, nonce) → 响应（v1 载体内存态）
 
     register_certification_routes(app)
     register_device_routes(app)
