@@ -240,7 +240,7 @@ def real_signer(store_dir: Path):
     """C8 设备签名：复用 MS-1E 注册设备密钥（client_keys/device_key.pem）。"""
     from forge_certifier.device import DeviceKey
 
-    key = DeviceKey.load(store_dir / "client_keys" / "device_key.pem")
+    key = DeviceKey.load(store_dir / "client_keys")  # load 收目录，自行拼接 key 文件名
     return key.sign
 
 

@@ -220,3 +220,65 @@ class TestRunCoverage:
         rec = run_one(chain_entry, execute_chain_via_dryrun(client), registry=names)
         assert rec["verdict"] == "uncovered" and rec["category"] == "registry_missing"
         assert rec["ran"] is False
+
+
+def test_real_signer_loads_key_from_client_keys_dir(tmp_path):
+    """回归（2026-10-18 时钟日）：real_signer 应把 client_keys 目录交给 DeviceKey.load
+    （load 自拼 device_key.pem）——首版误传文件路径，真实签名路径从未被彩排覆盖。"""
+    from forge_certifier.device import DeviceKey
+
+    DeviceKey.generate().save(tmp_path / "client_keys")
+    from assemble_apps import real_signer
+
+    sign = real_signer(tmp_path)
+    sig = sign(b"digest-bytes")
+    assert isinstance(sig, bytes) and len(sig) == 64  # ed25519
+
+
+def test_wire_resolves_legacy_trace_ref_keys(tmp_path):
+    """回归（2026-10-18 时钟日）：遗留块（hn_search_probe 等）的录制 ref 存在 state
+    遗留键（c2/c1）下——wire 的 ref 解析须回退到 legacy_state_key，否则链执行
+    KeyError「未知 trace_ref: ref-<name>」（彩排假执行器未覆盖此路径）。"""
+    import json as _json
+
+    store = tmp_path / "store"
+    store.mkdir()
+    (store / "state.json").write_text(_json.dumps(
+        {"trace_refs": {"c2": "tr_legacy_c2", "c1": "tr_legacy_c1"}}), encoding="utf-8")
+
+    from product_path import wire_chain_runner
+
+    captured = {}
+
+    def factory(trace_dirs):
+        captured.update(trace_dirs)
+        return object()
+
+    class _App:
+        state = type("S", (), {"chain_runner": None})()
+
+    routes = wire_chain_runner(_App(), store, ["hn_search_probe", "login_demo_probe"],
+                               trace_runner_factory=factory)
+    assert routes["hn_search_probe"][1] == "tr_legacy_c2"
+    assert routes["login_demo_probe"][1] == "tr_legacy_c1"
+    assert set(captured) == {"tr_legacy_c2", "tr_legacy_c1"}
+
+
+def test_wire_default_branch_uses_real_browser_factory(tmp_path):
+    """回归（2026-10-18 时钟日第二枚）：wire 缺省分支不得把 browser_factory=None
+    传给 TraceRunner——链执行时 NoneType 不可调用（假执行器/注入工厂均未覆盖缺省分支）。"""
+    import json as _json
+
+    store = tmp_path / "store"
+    store.mkdir()
+    (store / "state.json").write_text(_json.dumps(
+        {"trace_refs": {"c2": "tr_legacy_c2"}}), encoding="utf-8")
+
+    from product_path import wire_chain_runner
+
+    class _App:
+        state = type("S", (), {"chain_runner": None})()
+
+    routes = wire_chain_runner(_App(), store, ["hn_search_probe"])
+    tr = routes["hn_search_probe"][0]
+    assert callable(getattr(tr, "_browser_factory", None))

@@ -61,13 +61,21 @@ def wire_chain_runner(app, store_dir: Path, names, *, browser_factory=None,
     state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
     refs = state.get("trace_refs", {})
     kinds = adapters if adapters is not None else adapter_kinds()
+    from seedline import load_manifest
+
+    legacy_keys = {b.name: b.legacy_state_key for b in load_manifest(SEEDS / "manifest.yaml").blocks
+                   if getattr(b, "legacy_state_key", None)}
+
+    def _ref_of(name: str) -> str:
+        # 遗留块（hn_search_probe/login_demo_probe）的录制 ref 存在 state 遗留键下（c2/c1）
+        return refs.get(name) or refs.get(legacy_keys.get(name, "")) or f"ref-{name}"
 
     trace_dirs: dict[str, Path] = {}
     py_dirs: dict[str, Path] = {}
     name_to_ref: dict[str, str] = {}
     for name in names:
         if kinds.get(name) == "trace":
-            ref = refs.get(name, f"ref-{name}")
+            ref = _ref_of(name)
             name_to_ref[name] = ref
             trace_dirs[ref] = SEEDS / name
         else:
@@ -79,8 +87,12 @@ def wire_chain_runner(app, store_dir: Path, names, *, browser_factory=None,
             tr = trace_runner_factory(trace_dirs)
         else:
             from forge_trace import RecordingsStore
+            from forge_trace.patchright_browser import PatchrightBrowser
 
-            tr = TraceRunner(RecordingsStore(Path(store_dir)), browser_factory,
+            # 缺省浏览器工厂必须落到 PatchrightBrowser——传 None 会在链执行时
+            # TypeError（NoneType 不可调用）；cert_batch.build_routes 同款兜底
+            tr = TraceRunner(RecordingsStore(Path(store_dir)),
+                             browser_factory or PatchrightBrowser,
                              block_dirs=trace_dirs)
         for name, ref in name_to_ref.items():
             routes[name] = (tr, ref)

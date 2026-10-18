@@ -91,3 +91,24 @@ def test_save_trace_failure_leaves_no_directory(root):
     else:
         raise AssertionError("save_trace 应当抛出 ValueError")
     assert not (root / "traces" / ref).exists()
+
+
+def test_store_readable_from_foreign_thread(root):
+    """回归（2026-10-18 时钟日）：Store 常由装配线程构造、由 FastAPI 请求线程读——
+    sqlite 默认线程绑定会 ProgrammingError；连接须 check_same_thread=False。"""
+    import threading
+
+    store = RecordingsStore(root)
+    store.save_trace("ref-x", _manifest(), _steps(), {1: "<a>", 2: "<b>"}, _network())
+    out = {}
+
+    def work():
+        try:
+            out["site"] = store.get("ref-x").site
+        except Exception as exc:  # pragma: no cover - 失败路径即回归
+            out["err"] = repr(exc)
+
+    t = threading.Thread(target=work)
+    t.start()
+    t.join()
+    assert out.get("site") == "example.com", out

@@ -52,7 +52,11 @@ class RecordingsStore:
         self.redaction_dir = self.root / "redaction_maps"
         self.traces_dir.mkdir(parents=True, exist_ok=True)
         self.redaction_dir.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(self.root / "recordings.sqlite")
+        # check_same_thread=False：Store 常由装配线程构造、由 FastAPI 请求线程执行
+        # （TraceRunner/replay 在 handler 线程读录制）——sqlite 默认线程绑定会
+        # ProgrammingError（T1.64c 真实链执行实证）；同步链执行无并发写竞争
+        self._conn = sqlite3.connect(self.root / "recordings.sqlite",
+                                     check_same_thread=False)
         self._conn.execute(
             """CREATE TABLE IF NOT EXISTS recordings(
                 id INTEGER PRIMARY KEY AUTOINCREMENT,

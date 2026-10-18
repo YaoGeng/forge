@@ -95,14 +95,11 @@ def run_experiment(app, client, *, pool_path: Path, sample_path: Path,
 
     t = tally(records)
     supply = sum(1 for e in entries if e["title"].startswith(SUPPLY_PREFIXES))
-    write_report(report_path, records, t, out_of_domain=out_of_domain_stats(pool),
-                 sample_meta={"pool_ref": None, "supply_side": supply,
-                              "demand_side": len(entries) - supply})
-    # pool_ref 由 load_sample 校验过；报告里回填真实引用
-    text = report_path.read_text(encoding="utf-8")
     meta = json.loads(sample_path.read_text(encoding="utf-8"))["meta"]
-    text = text.replace("池快照引用：n/a", f"池快照引用：{meta.get('pool_ref', 'n/a')}")
-    report_path.write_text(text, encoding="utf-8")
+    write_report(report_path, records, t, out_of_domain=out_of_domain_stats(pool),
+                 sample_meta={"pool_ref": meta.get("pool_ref") or "n/a",
+                              "supply_side": supply,
+                              "demand_side": len(entries) - supply})
     return {"executed": executed, "resumed": resumed, **t, "report": str(report_path)}
 
 
