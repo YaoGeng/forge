@@ -156,7 +156,7 @@ def phase_register() -> int:
 
 
 def main() -> int:
-    log("时钟日执行器启动（真实钟；全段幂等断点续跑）")
+    log("时钟日执行器启动（真实钟；全段幂等断点续跑；尾部压缩版）")
     from forge_server.app import create_app
 
     create_app(f"sqlite:///{(STORE / 'server.db').as_posix()}")  # 预热：旧库补列等迁移问题前置暴露
@@ -168,24 +168,27 @@ def main() -> int:
             f"窗 {w[b]['min']:%H:%M:%S}~{w[b]['max']:%H:%M:%S}Z")
     rc: dict[str, int] = {}
 
+    # 尾部压缩：book_detail（末窗 w1.max）不进五应用/覆盖实验组合——首轮只给批次一
+    # 25 分钟跑完 5 个早窗块，批次二/register/assemble/coverage 先行；末窗到点再补驱+补登记。
     wait_until(w[1]["min"] + timedelta(seconds=30), "批次一窗口")
-    rc["drive_b1"] = run_cli("cert_batch.py", "drive", "--segment", "2", "--batch", "1",
-                             timeout_s=60 * 95)
-    if rc["drive_b1"] != 0:
-        # 批内末块（book_detail 重录）窗口晚于首轮 90 分钟预算起点——第二遍兜底（幂等）
-        wait_until(w[1]["max"] + timedelta(seconds=15), "批次一末块窗口")
-        rc["drive_b1_topup"] = run_cli("cert_batch.py", "drive", "--segment", "2",
-                                       "--batch", "1", timeout_s=30 * 60)
-    wait_until(w[2]["min"] + timedelta(seconds=30), "批次二窗口")
+    rc["drive_b1_core"] = run_cli("cert_batch.py", "drive", "--segment", "2",
+                                  "--batch", "1", timeout_s=25 * 60)
     rc["drive_b2"] = run_cli("cert_batch.py", "drive", "--segment", "2", "--batch", "2",
-                             timeout_s=60 * 95)
-    rc["register"] = phase_register()
+                             timeout_s=60 * 90)
+    rc["register_early"] = phase_register()  # book_detail 未出 verdict 属预期（422）
     rc["assemble"] = run_cli("assemble_apps.py", timeout_s=30 * 60)
     rc["coverage"] = run_cli("run_coverage.py", timeout_s=30 * 60)
+
+    wait_until(w[1]["max"] + timedelta(seconds=15), "批次一末块（book_detail）窗口")
+    rc["drive_b1_topup"] = run_cli("cert_batch.py", "drive", "--segment", "2",
+                                   "--batch", "1", timeout_s=30 * 60)
+    rc["register_final"] = phase_register()  # 幂等：已登记 409 视同通过；此轮补齐 22/22
+
     log(f"汇总：{json.dumps(rc)}")
-    ok = ((rc.get("drive_b1") == 0 or rc.get("drive_b1_topup") == 0)
-          and rc["drive_b2"] == 0 and rc["register"] == 0
-          and rc["assemble"] == 0 and rc["coverage"] == 0)
+    # drive_b1_core 的 25 分钟预算本就不含末块（预期 rc=1）；5 个早窗块若未达，
+    # topup 轮幂等补驱、register_final 兜住残留失败——判据只看最终态。
+    ok = (rc.get("drive_b1_topup") == 0 and rc["drive_b2"] == 0
+          and rc["register_final"] == 0 and rc["assemble"] == 0 and rc["coverage"] == 0)
     log(f"时钟日执行器结束：{'ALL PASS' if ok else '存在失败段（见上）'}")
     return 0 if ok else 1
 
