@@ -1,0 +1,22 @@
+{
+  "segment": 2,
+  "run_id": 2,
+  "n": 10,
+  "durations_sum_s": 60.6,
+  "upload": {
+    "verdict": "pass",
+    "reasons": [],
+    "live_pass_rate": 1.0,
+    "regression_pass_rate": null
+  },
+  "reliability": {
+    "status": "ok",
+    "pass_rate": 1.0,
+    "n": 10,
+    "window_start": "2026-10-16T05:31:18.030979",
+    "window_end": "2026-10-18T08:33:30.705959",
+    "c1_label": "创作者环境实测，平台抽查复核"
+  },
+  "gate": "PASS",
+  "finished_at": "2026-10-18T08:33:30+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "segment": 2,
+  "run_id": 1,
+  "submitted_at": "2026-10-18T08:30:18+00:00",
+  "n": 20,
+  "pass": 20,
+  "live_pass_rate": 1.0,
+  "regression_pass_rate": 1.0,
+  "verdict": "pass",
+  "started_at": "2026-10-16T05:28:31.208798",
+  "finished_at": "2026-10-18T08:32:19.584472",
+  "gate": "PASS"
+}

@@ -208,3 +208,8 @@
 - #15 Creator UI 全部动态插值加 esc() 转义（需求文本/标题等用户输入面 13 处；onclick 内块名经 dir-safe 校验无引号维持直排）。
 - 维持缓办（理由更新）：#14 python⇒site 空是 seedline 有意保留的过渡裁定（「可空或 API 域」，随 M05 网络后端定稿）；#17 chain 失败 verdict 枚举属 M09 API 契约（M10-c 状态机细化时区分）；manifest rows:"[]" golden 改参数会打脱 seg1 golden 对拍，时钟日前不可动。
 - 全仓 356/356。
+
+## 时钟日执行（2026-10-18，真实钟）
+
+- **MS-1E seg2 gate PASS（05:31Z 窗开后 08:30Z 执行）**：C2 hn_search_probe N=20（live/regression 双 1.0，verdict pass，窗口 10-16T05:28→10-18T08:32，`t1.35_seg2_c2.json`）；C1 login_demo_probe 第二段签名上传受理（verdict pass、live 1.0、时长下限 60.6s 过、reliability 带 48h+ 窗口与 C1 标注，`t1.35_seg2_c1.json`）。
+- **C1 行内 N 口径偏差（如实登记，不回填）**：docs/12 T1.35 期望段二上传后行内 N=20；服务端上传通道实为**替换**语义（`_finalize_report: attached.n = n`），认证行/可靠性视图显示末次受理报告 n=10。N≥20 以两段归档证据计：10-16 段 n=10（53.9s，上传受理 pass）+ 10-18 段 n=10（60.6s，上传受理 pass）= 20 次真实运行跨 ≥51h。seg1 运行明细已被段二报告文件覆盖（服务端仅存末次报告，certify 无本地持久化），不可恢复——任何「补出 n=20」均为伪造，不做。处置：服务端改累加 + 同报告哈希防重（等钟修复卡，见下节），历史行维持 n=10 呈报，人工可否决本读法。
