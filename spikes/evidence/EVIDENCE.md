@@ -213,3 +213,4 @@
 
 - **MS-1E seg2 gate PASS（05:31Z 窗开后 08:30Z 执行）**：C2 hn_search_probe N=20（live/regression 双 1.0，verdict pass，窗口 10-16T05:28→10-18T08:32，`t1.35_seg2_c2.json`）；C1 login_demo_probe 第二段签名上传受理（verdict pass、live 1.0、时长下限 60.6s 过、reliability 带 48h+ 窗口与 C1 标注，`t1.35_seg2_c1.json`）。
 - **C1 行内 N 口径偏差（如实登记，不回填）**：docs/12 T1.35 期望段二上传后行内 N=20；服务端上传通道实为**替换**语义（`_finalize_report: attached.n = n`），认证行/可靠性视图显示末次受理报告 n=10。N≥20 以两段归档证据计：10-16 段 n=10（53.9s，上传受理 pass）+ 10-18 段 n=10（60.6s，上传受理 pass）= 20 次真实运行跨 ≥51h。seg1 运行明细已被段二报告文件覆盖（服务端仅存末次报告，certify 无本地持久化），不可恢复——任何「补出 n=20」均为伪造，不做。处置：服务端改累加 + 同报告哈希防重（等钟修复卡，见下节），历史行维持 n=10 呈报，人工可否决本读法。
+- **等钟修复卡（docs/12 修订 C15，RED→GREEN，358/358）**：`_finalize_report` 受理路径改累计（n/pass_count 累加，通过率与 verdict 按累计重算）+ 新列 `accepted_report_hashes`（旧库幂等补列）防同内容换 nonce 重传重复计数——`test_second_upload_accumulates_n` / `test_replayed_report_hash_with_new_nonce_rejected` 各先 RED 后 GREEN；历史行不回填。

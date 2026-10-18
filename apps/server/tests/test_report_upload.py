@@ -202,6 +202,53 @@ def test_idempotent_resubmit(make_app):
     assert before == after  # 不重复计数/不改写
 
 
+def test_second_upload_accumulates_n(make_app):
+    """docs/12 T1.35 C1 语义：两时段各上传一批 → 行内 N=20 累计（时钟日偏差修复）。"""
+    app = make_app()
+    client = TestClient(app)
+    key = register_key(client)
+    run_id = submit_c1_run(client)
+
+    p1 = signed_payload(key, get_nonce(client, key), make_report(n=10))
+    p1["golden"] = GOOD_GOLDEN
+    assert upload(client, run_id, p1).json()["verdict"] == "pass"
+
+    p2 = signed_payload(key, get_nonce(client, key), make_report(n=10, fails=(2,)))
+    p2["golden"] = GOOD_GOLDEN
+    body = upload(client, run_id, p2).json()
+    assert body["verdict"] == "pass"
+
+    data = client.get(f"/api/v1/certifications/{run_id}").json()
+    assert data["n"] == 20  # 10 + 10 累计，非末批替换
+    assert data["pass"] == 19
+    assert abs(data["live_pass_rate"] - 0.95) < 1e-9
+    rel = client.get(f"/api/v1/blocks/login_demo/versions/1.0.0/reliability").json()
+    assert rel["n"] == 20
+
+
+def test_replayed_report_hash_with_new_nonce_rejected(make_app):
+    """同报告内容换新 nonce 重传 → 拒绝且不重复计数（累加语义下的防重放）。"""
+    app = make_app()
+    client = TestClient(app)
+    key = register_key(client)
+    run_id = submit_c1_run(client)
+    report = make_report(n=10)
+
+    p1 = signed_payload(key, get_nonce(client, key), report)
+    p1["golden"] = GOOD_GOLDEN
+    assert upload(client, run_id, p1).json()["verdict"] == "pass"
+
+    p2 = signed_payload(key, get_nonce(client, key), report)  # 同内容、新 nonce
+    p2["golden"] = GOOD_GOLDEN
+    body = upload(client, run_id, p2).json()
+    assert body["verdict"] == "rejected"
+    assert any("已受理" in r for r in body["reasons"])
+
+    data = client.get(f"/api/v1/certifications/{run_id}").json()
+    assert data["n"] == 10  # 未重复计数；已判 verdict 不被降级路径改写
+    assert data["verdict"] == "pass"
+
+
 def test_min_duration_floor(make_app):
     app = make_app()
     client = TestClient(app)

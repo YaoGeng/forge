@@ -18,14 +18,17 @@ from .spotcheck import register_spotcheck_routes
 
 
 def _ensure_plan_json_column(engine) -> None:
-    """旧库补列（幂等）：certification_runs.plan_json——批次计划跨进程重建所需。"""
+    """旧库补列（幂等）：certification_runs.plan_json——批次计划跨进程重建所需；
+    accepted_report_hashes——C1 上传累计口径防重放（时钟日偏差修复）。"""
     from sqlalchemy import inspect, text
 
     inspector = inspect(engine)
-    if "plan_json" in {c["name"] for c in inspector.get_columns("certification_runs")}:
-        return
-    with engine.begin() as c:
-        c.execute(text("ALTER TABLE certification_runs ADD COLUMN plan_json JSON"))
+    have = {c["name"] for c in inspector.get_columns("certification_runs")}
+    for col in ("plan_json", "accepted_report_hashes"):
+        if col in have:
+            continue
+        with engine.begin() as conn:
+            conn.execute(text(f"ALTER TABLE certification_runs ADD COLUMN {col} JSON"))
 
 
 def create_app(

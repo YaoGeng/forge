@@ -96,6 +96,8 @@ def register_certification_routes(app):
             reasons.append("上传通道仅限 C1 run（M09 §5）；C2/chain 由调度器与执行器落库")
         if body.attestation.get("report_hash") != attestation.report_hash(body.report):
             reasons.append("report_hash 与报告不符（签名未覆盖该报告内容，C7 绑定失败）")
+        if r_hash in (row.accepted_report_hashes or []):
+            reasons.append("同报告哈希已受理（换 nonce 重传不重复计数）")
 
         dev = None
         with session_factory() as s:
@@ -121,7 +123,7 @@ def register_certification_routes(app):
             else:
                 reasons.extend(_inspect_golden(run_id, body.golden))
 
-        response = _finalize_report(row, body, runs, reasons)
+        response = _finalize_report(row, body, runs, reasons, r_hash)
         if not reasons:  # 仅成功受理入幂等缓存；拒绝后换新 nonce 重传可重试
             app.state.report_results[(run_id, r_hash, nonce)] = response
         return response
@@ -139,7 +141,8 @@ def register_certification_routes(app):
         )
         return golden_gate.inspect(golden_dir)
 
-    def _finalize_report(row: CertificationRun, body: ReportUpload, runs, reasons) -> dict:
+    def _finalize_report(row: CertificationRun, body: ReportUpload, runs, reasons,
+                         r_hash: str) -> dict:
         n = len(runs)
         if reasons:
             with session_factory() as s:
@@ -151,14 +154,17 @@ def register_certification_routes(app):
                     "live_pass_rate": None, "regression_pass_rate": None}
 
         pass_count = sum(1 for r in runs if r.get("ok"))
-        live_rate = pass_count / n if n else 0.0
         with session_factory() as s:
             attached = s.get(CertificationRun, row.id)
-            attached.n = n
-            attached.pass_count = pass_count
+            # C1 累计口径（docs/12 T1.35）：多时段分批上传按 N/pass 累计，
+            # 通过率与 verdict 按累计重算——末批替换语义是时钟日偏差（EVIDENCE 2026-10-18）。
+            attached.n = (attached.n or 0) + n
+            attached.pass_count = (attached.pass_count or 0) + pass_count
+            live_rate = attached.pass_count / attached.n
             attached.live_pass_rate = live_rate
             attached.regression_pass_rate = None  # C1 上传通道无 golden 回放，分列不混算
             attached.attestation_sig = body.signature
+            attached.accepted_report_hashes = list(attached.accepted_report_hashes or []) + [r_hash]
             now = app.state.clock.now()
             if attached.started_at is None:
                 attached.started_at = now
