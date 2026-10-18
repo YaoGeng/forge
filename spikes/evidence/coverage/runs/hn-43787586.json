@@ -1,0 +1,10 @@
+{
+ "id": "hn-43787586",
+ "shape_digest": "sha256:abacf81d7efeef3a8e4d1f8aee4be87bbe3912b1981fbda625b73910006ded3c",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：Google Search Console API（OAuth）无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

@@ -1,0 +1,10 @@
+{
+ "id": "hn-45935825",
+ "shape_digest": "sha256:1e65fb0c3e27ff025bd6112051fbafda5febd25a1221a1c39383044551810760",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "数据源能力缺失：邮件/银行接入无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

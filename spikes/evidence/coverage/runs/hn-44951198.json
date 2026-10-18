@@ -1,0 +1,10 @@
+{
+ "id": "hn-44951198",
+ "shape_digest": "sha256:cec8c4d5533569b781fd0d9687dc7b04c04f48379364f09421fc5dab78b29cf5",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "sitemap 解析/站点遍历能力无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

@@ -1,0 +1,10 @@
+{
+ "id": "hn-42400979",
+ "shape_digest": "sha256:c2847f85976795fdfe68fc81025afa1401b424d30326fdef573a970aa3609e4e",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "无通用网络信息抓取块（目标站点未指明）",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

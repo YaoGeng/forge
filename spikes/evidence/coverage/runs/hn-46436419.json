@@ -1,0 +1,10 @@
+{
+ "id": "hn-46436419",
+ "shape_digest": "sha256:db79603cd4ee5bd1a0944019f556ca27056138544feb52d527c3ff4039bc3e1b",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "站点块无数据输出通道（探针仅导航验证，HN 内容无法进入链上下文）——旗舰缺口登记",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

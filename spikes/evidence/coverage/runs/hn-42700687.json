@@ -1,0 +1,10 @@
+{
+ "id": "hn-42700687",
+ "shape_digest": "sha256:52b256cda1617e05469f6e9c1ef68d86456e85ca8384fe5d29a9e1f523143fd3",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：电商数据源无积木（计算块有）",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

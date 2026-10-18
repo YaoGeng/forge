@@ -1,0 +1,10 @@
+{
+ "id": "hn-48345189",
+ "shape_digest": "sha256:28b22fa34ba8458a405876a499cec29b1ce2ebd2521b14e25912c134a25c2aef",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：YouTube 无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

@@ -1,0 +1,10 @@
+{
+ "id": "hn-43158425",
+ "shape_digest": "sha256:4c8113107d137fa5abf7888f52b1ad373155529d7321bcce689850b0fbb94db3",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：Steam 无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

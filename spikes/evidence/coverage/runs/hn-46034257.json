@@ -1,0 +1,10 @@
+{
+ "id": "hn-46034257",
+ "shape_digest": "sha256:6c67074ed837e175eae007a58774d44633161b24fed0a8757fe14fbb19dbd85a",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：TikTok 无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

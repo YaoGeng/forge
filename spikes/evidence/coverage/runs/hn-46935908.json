@@ -1,0 +1,10 @@
+{
+ "id": "hn-46935908",
+ "shape_digest": "sha256:23775d04644fccd2f18084392c708c67caecb5ad7c5453cd20d9a6252a05025a",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：CRA 税率表数据源无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

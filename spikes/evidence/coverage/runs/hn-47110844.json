@@ -1,0 +1,10 @@
+{
+ "id": "hn-47110844",
+ "shape_digest": "sha256:ff6651af602805b13e86076c2c1421a83bed0b9169fc1dbaf5dca49a1fbf161e",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：数十个 LLM 供应商定价页，无一有积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

@@ -1,0 +1,10 @@
+{
+ "id": "hn-42768754",
+ "shape_digest": "sha256:e275f4878976ecb8248d1a27aa44668c42e69cdcb24a22d7c6a5744ad151f456",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：社媒平台无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

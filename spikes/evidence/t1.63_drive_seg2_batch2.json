@@ -1,0 +1,119 @@
+{
+  "segment": 2,
+  "driven_at": "2026-10-18T14:57:05+00:00",
+  "blocks": {
+    "npm_pkg_meta": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "httpbin_echo": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "jsonplaceholder_posts": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "github_repo_read": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "github_search": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "excel_export": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "csv_export": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "markdown_export": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "text_digest": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "text_clean": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "text_stats": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "price_calc": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "stats_summary": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "unit_convert": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    }
+  },
+  "reached_all": true
+}

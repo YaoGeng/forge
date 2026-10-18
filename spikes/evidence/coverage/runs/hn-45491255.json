@@ -1,0 +1,10 @@
+{
+ "id": "hn-45491255",
+ "shape_digest": "sha256:017d293e53c9adf98d22b351af949fdf1ea618ce881581f94d3c88bd501c0f39",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：营销内容源无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

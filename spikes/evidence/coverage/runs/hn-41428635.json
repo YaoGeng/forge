@@ -1,0 +1,10 @@
+{
+ "id": "hn-41428635",
+ "shape_digest": "sha256:0862235543c4f21dc1391204023e5cda7fe2f3806840d7ddbe2880230c2fe5ef",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：新闻源（阿拉伯语周报）无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

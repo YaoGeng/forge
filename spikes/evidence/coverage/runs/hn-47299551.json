@@ -1,0 +1,10 @@
+{
+ "id": "hn-47299551",
+ "shape_digest": "sha256:3576426c747e2211225c79bdd624837cbc4ddc2cdf7713ca0d3d8b1121cac47f",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "竞品站点未指明；无通用页面监控块",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

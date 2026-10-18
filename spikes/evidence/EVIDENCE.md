@@ -214,3 +214,13 @@
 - **MS-1E seg2 gate PASS（05:31Z 窗开后 08:30Z 执行）**：C2 hn_search_probe N=20（live/regression 双 1.0，verdict pass，窗口 10-16T05:28→10-18T08:32，`t1.35_seg2_c2.json`）；C1 login_demo_probe 第二段签名上传受理（verdict pass、live 1.0、时长下限 60.6s 过、reliability 带 48h+ 窗口与 C1 标注，`t1.35_seg2_c1.json`）。
 - **C1 行内 N 口径偏差（如实登记，不回填）**：docs/12 T1.35 期望段二上传后行内 N=20；服务端上传通道实为**替换**语义（`_finalize_report: attached.n = n`），认证行/可靠性视图显示末次受理报告 n=10。N≥20 以两段归档证据计：10-16 段 n=10（53.9s，上传受理 pass）+ 10-18 段 n=10（60.6s，上传受理 pass）= 20 次真实运行跨 ≥51h。seg1 运行明细已被段二报告文件覆盖（服务端仅存末次报告，certify 无本地持久化），不可恢复——任何「补出 n=20」均为伪造，不做。处置：服务端改累加 + 同报告哈希防重（等钟修复卡，见下节），历史行维持 n=10 呈报，人工可否决本读法。
 - **等钟修复卡（docs/12 修订 C15，RED→GREEN，358/358）**：`_finalize_report` 受理路径改累计（n/pass_count 累加，通过率与 verdict 按累计重算）+ 新列 `accepted_report_hashes`（旧库幂等补列）防同内容换 nonce 重传重复计数——`test_second_upload_accumulates_n` / `test_replayed_report_hash_with_new_nonce_rejected` 各先 RED 后 GREEN；历史行不回填。
+
+### 时钟日收口（2026-10-18 下午-夜间，编排器 + 人工修复轮）
+
+- **批次 seg2 全绿**：批次一 6 站点块 + 批次二 14 块（5 API trace + 9 python）全部 n=20、live/regression 双 1.0、verdict pass（`t1.63_drive_seg2_batch1/2.json`；b1 首轮 25 分钟预算超时码 124 属编排设计——quotes_paged/book_detail 晚窗由 topup 轮补齐，`clock_day.log` 全程留痕）。register **22/22**（含遗留 hn_search_probe=run1 / login_demo_probe=run2 手动 POST，`t1.63_register.json`）。
+- **真实链路径四连缺陷（彩排假执行器未覆盖面，逐一定位+RED/GREEN 修复，登记如下）**：①`real_signer` 传文件路径给 `DeviceKey.load`（收目录）；②`wire_chain_runner` 遗留块 ref 不回退 legacy_state_key（c2/c1）→ KeyError 未知 trace_ref；③wire 缺省分支 `browser_factory=None` 直传 TraceRunner → NoneType 不可调用；④`RecordingsStore` sqlite 连接线程绑定 → FastAPI 请求线程 ProgrammingError（此前所有驱动均主线程）。各挂回归测试（`test_real_signer_loads_key_from_client_keys_dir` / `test_wire_resolves_legacy_trace_ref_keys` / `test_wire_default_branch_uses_real_browser_factory` / `test_store_readable_from_foreign_thread`）。
+- **失败尝试孤儿清理（如实登记）**：①②④修复前的三次失败 assemble 在库内留下 draft app/版本/引用与 rejected chain 行（工具 bug 产物、非产品失败）——已删并留库快照 `ms1e_store/server.db.bak-before-junk-cleanup`；全库最终恰 5 应用为真验收口径。
+- **T1.64c 五应用 5/5 published**（`t164c_apps.json`）：四 C2 链服务端同步认证 + C1 登录态报表走 C8-R1（certify 422 证据 + 本机整链恰一次 + 链行设备签名 run27）；`GET /apps` 恰 5 条。UI 走查三帧（真实库 22 块、只读导航不新增提审）：`t164c_ui_step1.png` / `step2_catalog.png` / `step7_report.png`——步 7 报告 N/时间窗/非统计值标注齐全（report API 同源核验）。
+- **T1.65e 覆盖实验**：30 判定记录恰一次冻结（`coverage/runs/` ×30，重跑 executed=0/resumed=30）；`report.md` 只呈报数据——**覆盖 1/30（3.3%），未覆盖 17/7/5（站点未覆盖/能力缺失/需通用化）**，与彩排预测逐条一致；池快照引用 sha256:d2c0…df964；构成披露供给 18/求助 12。run_coverage 报告回填缺陷（pool_ref 显式 None 压过缺省值）同轮修复。
+- **rows-golden 缓办（理由更新）**：manifest `rows:"[]"` golden 改参数将打脱已完成认证的参数口径（N=20 认证绑定录制时参数）——cert 已落库不可再动，该项随种子库重做（D-4 fail 路径）一并处理。
+- 全仓 **362/362**。

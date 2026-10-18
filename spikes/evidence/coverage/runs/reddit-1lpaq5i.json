@@ -1,0 +1,10 @@
+{
+ "id": "reddit-1lpaq5i",
+ "shape_digest": "sha256:4854dcd4f1cf2f24df000677b20617992412235d71cc7d5af4dd3037c0707639",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：DEX 链上数据源无积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

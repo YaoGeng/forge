@@ -1,0 +1,30 @@
+{
+ "id": "hn-44955461",
+ "shape_digest": "sha256:0c2173bf5caf808df061ad1f66e24607ca89ee77d444d558671f2056dda7b756",
+ "expected_must": {
+  "title_row": true,
+  "min_point_rows": 3
+ },
+ "ran": true,
+ "steps_view": [
+  {
+   "index": 0,
+   "block": "text_clean",
+   "ok": true,
+   "failure_class": null
+  },
+  {
+   "index": 1,
+   "block": "markdown_export",
+   "ok": true,
+   "failure_class": null
+  }
+ ],
+ "final_output": {
+  "ok": true,
+  "file": "messy-report.md",
+  "rows": 5
+ },
+ "verdict": "covered",
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

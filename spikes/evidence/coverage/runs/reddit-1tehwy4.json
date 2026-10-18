@@ -1,0 +1,10 @@
+{
+ "id": "reddit-1tehwy4",
+ "shape_digest": "sha256:fff29ce7deb59443f4aa3d1164d5752d061db60a4669bda58c8f942322bfc8b5",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "目标站点未指明；无通用目录/表格读取块",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

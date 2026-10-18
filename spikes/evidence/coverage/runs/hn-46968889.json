@@ -1,0 +1,10 @@
+{
+ "id": "hn-46968889",
+ "shape_digest": "sha256:2c1580a7eddce53720a7398a19be4ae70b67dab58fbee8aa28f966a56cfaf8c9",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点未覆盖：arXiv/出版商无积木（另需知识库集成）",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

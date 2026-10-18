@@ -1,0 +1,10 @@
+{
+ "id": "zapier-47915",
+ "shape_digest": "sha256:14e60f7c48872215878d0135004bcbf9679d66dcf24fcabcfdb054338827fb35",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "目标数据站未披露且博彩类法务审慎；无对应积木",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

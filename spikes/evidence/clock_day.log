@@ -1,0 +1,342 @@
+[2026-10-18T08:53:51+00:00] 时钟日执行器启动（真实钟；全段幂等断点续跑）
+[2026-10-18T08:53:52+00:00] 预热 create_app 完成（建表/补列幂等）
+[2026-10-18T08:53:52+00:00] 批次1：6 块 [bing_search,books_list,book_detail,quotes_list,quotes_paged,baidu_home_watch] 窗 14:26:41~15:52:38Z
+[2026-10-18T08:53:52+00:00] 批次2：14 块 [npm_pkg_meta,httpbin_echo,jsonplaceholder_posts,github_repo_read,github_search,excel_export,csv_export,markdown_export,text_digest,text_clean,text_stats,price_calc,stats_summary,unit_convert] 窗 14:53:14~14:53:14Z
+[2026-10-18T08:53:52+00:00] 等窗 批次一窗口：还剩 333 分钟
+[2026-10-18T08:59:14+00:00] 时钟日执行器启动（真实钟；全段幂等断点续跑；尾部压缩版）
+[2026-10-18T08:59:15+00:00] 预热 create_app 完成（建表/补列幂等）
+[2026-10-18T08:59:15+00:00] 批次1：6 块 [bing_search,books_list,book_detail,quotes_list,quotes_paged,baidu_home_watch] 窗 14:26:41~15:52:38Z
+[2026-10-18T08:59:15+00:00] 批次2：14 块 [npm_pkg_meta,httpbin_echo,jsonplaceholder_posts,github_repo_read,github_search,excel_export,csv_export,markdown_export,text_digest,text_clean,text_stats,price_calc,stats_summary,unit_convert] 窗 14:53:14~14:53:14Z
+[2026-10-18T08:59:15+00:00] 等窗 批次一窗口：还剩 328 分钟
+[2026-10-18T09:04:15+00:00] 等窗 批次一窗口：还剩 323 分钟
+[2026-10-18T09:09:15+00:00] 等窗 批次一窗口：还剩 318 分钟
+[2026-10-18T09:14:15+00:00] 等窗 批次一窗口：还剩 313 分钟
+[2026-10-18T09:19:15+00:00] 等窗 批次一窗口：还剩 308 分钟
+[2026-10-18T09:24:15+00:00] 等窗 批次一窗口：还剩 303 分钟
+[2026-10-18T09:29:15+00:00] 等窗 批次一窗口：还剩 298 分钟
+[2026-10-18T09:34:15+00:00] 等窗 批次一窗口：还剩 293 分钟
+[2026-10-18T09:39:15+00:00] 等窗 批次一窗口：还剩 288 分钟
+[2026-10-18T09:44:15+00:00] 等窗 批次一窗口：还剩 283 分钟
+[2026-10-18T09:49:15+00:00] 等窗 批次一窗口：还剩 278 分钟
+[2026-10-18T09:54:15+00:00] 等窗 批次一窗口：还剩 273 分钟
+[2026-10-18T09:59:15+00:00] 等窗 批次一窗口：还剩 268 分钟
+[2026-10-18T10:04:15+00:00] 等窗 批次一窗口：还剩 263 分钟
+[2026-10-18T10:09:15+00:00] 等窗 批次一窗口：还剩 258 分钟
+[2026-10-18T10:14:15+00:00] 等窗 批次一窗口：还剩 253 分钟
+[2026-10-18T10:19:15+00:00] 等窗 批次一窗口：还剩 248 分钟
+[2026-10-18T10:24:15+00:00] 等窗 批次一窗口：还剩 243 分钟
+[2026-10-18T10:29:15+00:00] 等窗 批次一窗口：还剩 238 分钟
+[2026-10-18T10:34:15+00:00] 等窗 批次一窗口：还剩 233 分钟
+[2026-10-18T10:39:15+00:00] 等窗 批次一窗口：还剩 228 分钟
+[2026-10-18T10:44:15+00:00] 等窗 批次一窗口：还剩 223 分钟
+[2026-10-18T10:49:15+00:00] 等窗 批次一窗口：还剩 218 分钟
+[2026-10-18T10:54:15+00:00] 等窗 批次一窗口：还剩 213 分钟
+[2026-10-18T10:59:15+00:00] 等窗 批次一窗口：还剩 208 分钟
+[2026-10-18T11:04:15+00:00] 等窗 批次一窗口：还剩 203 分钟
+[2026-10-18T11:09:15+00:00] 等窗 批次一窗口：还剩 198 分钟
+[2026-10-18T11:14:15+00:00] 等窗 批次一窗口：还剩 193 分钟
+[2026-10-18T11:19:15+00:00] 等窗 批次一窗口：还剩 188 分钟
+[2026-10-18T11:24:15+00:00] 等窗 批次一窗口：还剩 183 分钟
+[2026-10-18T11:29:15+00:00] 等窗 批次一窗口：还剩 178 分钟
+[2026-10-18T11:34:15+00:00] 等窗 批次一窗口：还剩 173 分钟
+[2026-10-18T11:39:15+00:00] 等窗 批次一窗口：还剩 168 分钟
+[2026-10-18T11:44:15+00:00] 等窗 批次一窗口：还剩 163 分钟
+[2026-10-18T11:49:15+00:00] 等窗 批次一窗口：还剩 158 分钟
+[2026-10-18T11:54:15+00:00] 等窗 批次一窗口：还剩 153 分钟
+[2026-10-18T11:59:15+00:00] 等窗 批次一窗口：还剩 148 分钟
+[2026-10-18T12:04:15+00:00] 等窗 批次一窗口：还剩 143 分钟
+[2026-10-18T12:09:15+00:00] 等窗 批次一窗口：还剩 138 分钟
+[2026-10-18T12:14:15+00:00] 等窗 批次一窗口：还剩 133 分钟
+[2026-10-18T12:19:15+00:00] 等窗 批次一窗口：还剩 128 分钟
+[2026-10-18T12:24:15+00:00] 等窗 批次一窗口：还剩 123 分钟
+[2026-10-18T12:29:15+00:00] 等窗 批次一窗口：还剩 118 分钟
+[2026-10-18T12:34:15+00:00] 等窗 批次一窗口：还剩 113 分钟
+[2026-10-18T12:39:15+00:00] 等窗 批次一窗口：还剩 108 分钟
+[2026-10-18T12:44:15+00:00] 等窗 批次一窗口：还剩 103 分钟
+[2026-10-18T12:49:15+00:00] 等窗 批次一窗口：还剩 98 分钟
+[2026-10-18T12:54:15+00:00] 等窗 批次一窗口：还剩 93 分钟
+[2026-10-18T12:59:15+00:00] 等窗 批次一窗口：还剩 88 分钟
+[2026-10-18T13:04:15+00:00] 等窗 批次一窗口：还剩 83 分钟
+[2026-10-18T13:09:15+00:00] 等窗 批次一窗口：还剩 78 分钟
+[2026-10-18T13:14:15+00:00] 等窗 批次一窗口：还剩 73 分钟
+[2026-10-18T13:19:15+00:00] 等窗 批次一窗口：还剩 68 分钟
+[2026-10-18T13:24:15+00:00] 等窗 批次一窗口：还剩 63 分钟
+[2026-10-18T13:29:15+00:00] 等窗 批次一窗口：还剩 58 分钟
+[2026-10-18T13:34:15+00:00] 等窗 批次一窗口：还剩 53 分钟
+[2026-10-18T13:39:15+00:00] 等窗 批次一窗口：还剩 48 分钟
+[2026-10-18T13:44:15+00:00] 等窗 批次一窗口：还剩 43 分钟
+[2026-10-18T13:49:15+00:00] 等窗 批次一窗口：还剩 38 分钟
+[2026-10-18T13:54:15+00:00] 等窗 批次一窗口：还剩 33 分钟
+[2026-10-18T13:59:15+00:00] 等窗 批次一窗口：还剩 28 分钟
+[2026-10-18T14:04:15+00:00] 等窗 批次一窗口：还剩 23 分钟
+[2026-10-18T14:09:15+00:00] 等窗 批次一窗口：还剩 18 分钟
+[2026-10-18T14:14:15+00:00] 等窗 批次一窗口：还剩 13 分钟
+[2026-10-18T14:19:15+00:00] 等窗 批次一窗口：还剩 8 分钟
+[2026-10-18T14:27:11+00:00] 到点：批次一窗口
+[2026-10-18T14:27:11+00:00] $ cert_batch.py drive --segment 2 --batch 1
+[2026-10-18T14:52:11+00:00] 子进程超时（>1500s）——按失败段记录，继续后续段
+[2026-10-18T14:52:11+00:00] exit=124（子进程输出已全文入 log）
+[2026-10-18T14:52:11+00:00] $ cert_batch.py drive --segment 2 --batch 2
+{
+  "segment": 2,
+  "driven_at": "2026-10-18T14:57:05+00:00",
+  "blocks": {
+    "npm_pkg_meta": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "httpbin_echo": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "jsonplaceholder_posts": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "github_repo_read": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "github_search": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "excel_export": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "csv_export": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "markdown_export": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "text_digest": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "text_clean": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "text_stats": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "price_calc": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "stats_summary": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "unit_convert": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    }
+  },
+  "reached_all": true
+}
+drive: PASS → C:\Users\yg\Desktop\forge\spikes\evidence\t1.63_drive_seg2_batch2.json
+
+[2026-10-18T14:57:06+00:00] exit=0（子进程输出已全文入 log）
+[2026-10-18T14:57:06+00:00]   register book_detail: 422 {"detail":"仅 verdict=pass 的认证可注册（当前 None）"}
+[2026-10-18T14:57:06+00:00] register：受理 21 + 已登记 0 / 共 22 → t1.63_register.json
+[2026-10-18T14:57:06+00:00] $ assemble_apps.py 
+[stderr]
+Traceback (most recent call last):
+  File "C:\Users\yg\Desktop\forge\spikes\assemble_apps.py", line 277, in <module>
+    sys.exit(main())
+             ^^^^^^
+  File "C:\Users\yg\Desktop\forge\spikes\assemble_apps.py", line 267, in main
+    out = run_all(app, client, signer=real_signer(store_dir),
+                                      ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yg\Desktop\forge\spikes\assemble_apps.py", line 243, in real_signer
+    key = DeviceKey.load(store_dir / "client_keys" / "device_key.pem")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yg\Desktop\forge\packages\certifier\python\forge_certifier\device.py", line 40, in load
+    key = serialization.load_pem_private_key(path.read_bytes(), password=None)
+                                             ^^^^^^^^^^^^^^^^^
+  File "C:\Users\yg\AppData\Local\Programs\Python\Python312\Lib\pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\yg\AppData\Local\Programs\Python\Python312\Lib\pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\yg\\Desktop\\forge\\spikes\\evidence\\ms1e_store\\client_keys\\device_key.pem\\device_key.pem'
+
+[2026-10-18T14:57:08+00:00] exit=1（子进程输出已全文入 log）
+[2026-10-18T14:57:08+00:00] $ run_coverage.py 
+  [hn-48848819] uncovered (capability_missing)
+  [hn-48774008] uncovered (needs_genericization)
+  [hn-48345189] uncovered (site_not_covered)
+  [reddit-1tehwy4] uncovered (needs_genericization)
+  [hn-47389369] uncovered (capability_missing)
+  [hn-47306942] uncovered (site_not_covered)
+  [hn-47299551] uncovered (needs_genericization)
+  [hn-47110844] uncovered (site_not_covered)
+  [hn-47072913] uncovered (capability_missing)
+  [hn-46968889] uncovered (site_not_covered)
+  [hn-46935908] uncovered (site_not_covered)
+  [hn-46934190] uncovered (site_not_covered)
+  [hn-46436419] uncovered (capability_missing)
+  [hn-46034257] uncovered (site_not_covered)
+  [hn-45935825] uncovered (capability_missing)
+  [hn-45491255] uncovered (site_not_covered)
+  [hn-44955461] covered
+  [hn-44951198] uncovered (capability_missing)
+  [hn-44668970] uncovered (site_not_covered)
+  [reddit-1lpaq5i] uncovered (site_not_covered)
+  [hn-43933727] uncovered (site_not_covered)
+  [hn-43852771] uncovered (capability_missing)
+  [hn-43787586] uncovered (site_not_covered)
+  [reddit-1jcncvx] uncovered (needs_genericization)
+  [hn-43158425] uncovered (site_not_covered)
+  [zapier-47915] uncovered (site_not_covered)
+  [hn-42768754] uncovered (site_not_covered)
+  [hn-42700687] uncovered (site_not_covered)
+  [hn-42400979] uncovered (needs_genericization)
+  [hn-41428635] uncovered (site_not_covered)
+{
+  "executed": 30,
+  "resumed": 0,
+  "denominator": 30,
+  "covered": 1,
+  "rate": 0.03333333333333333,
+  "report": "C:\\Users\\yg\\Desktop\\forge\\spikes\\evidence\\coverage\\report.md"
+}
+
+[2026-10-18T14:57:10+00:00] exit=0（子进程输出已全文入 log）
+[2026-10-18T14:57:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 56 分钟
+[2026-10-18T15:02:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 51 分钟
+[2026-10-18T15:07:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 46 分钟
+[2026-10-18T15:12:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 41 分钟
+[2026-10-18T15:17:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 36 分钟
+[2026-10-18T15:22:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 31 分钟
+[2026-10-18T15:27:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 26 分钟
+[2026-10-18T15:32:10+00:00] 等窗 批次一末块（book_detail）窗口：还剩 21 分钟
+[2026-10-18T15:37:11+00:00] 等窗 批次一末块（book_detail）窗口：还剩 16 分钟
+[2026-10-18T15:42:11+00:00] 等窗 批次一末块（book_detail）窗口：还剩 11 分钟
+[2026-10-18T15:47:11+00:00] 等窗 批次一末块（book_detail）窗口：还剩 6 分钟
+[2026-10-18T15:52:53+00:00] 到点：批次一末块（book_detail）窗口
+[2026-10-18T15:52:53+00:00] $ cert_batch.py drive --segment 2 --batch 1
+{
+  "segment": 2,
+  "driven_at": "2026-10-18T15:54:13+00:00",
+  "blocks": {
+    "bing_search": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "books_list": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "quotes_list": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "baidu_home_watch": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "quotes_paged": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "book_detail": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    }
+  },
+  "reached_all": true
+}
+drive: PASS → C:\Users\yg\Desktop\forge\spikes\evidence\t1.63_drive_seg2_batch1.json
+
+[2026-10-18T15:54:13+00:00] exit=0（子进程输出已全文入 log）
+[2026-10-18T15:54:13+00:00] register：受理 22 + 已登记 0 / 共 22 → t1.63_register.json
+[2026-10-18T15:54:13+00:00] 汇总：{"drive_b1_core": 124, "drive_b2": 0, "register_early": 1, "assemble": 1, "coverage": 0, "drive_b1_topup": 0, "register_final": 0}
+[2026-10-18T15:54:13+00:00] 时钟日执行器结束：存在失败段（见上）

@@ -1,0 +1,10 @@
+{
+ "id": "reddit-1jcncvx",
+ "shape_digest": "sha256:48378715214fc2a2a0144cdf5a74340566fb3c4dfb4f34c55edae1bf7abc9961",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "无通用 URL 读取块（清单逐站抽取需通用化能力）",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}

@@ -1,0 +1,331 @@
+{
+  "assembled_at": "2026-10-18T16:05:56+00:00",
+  "apps": [
+    {
+      "key": "hn_weekly",
+      "title": "HN 周报",
+      "chain": {
+        "run_id": 25,
+        "verdict": "pass",
+        "n": 1,
+        "statistical": false,
+        "annotation": "整链验证为单次执行，非统计值",
+        "steps": [
+          {
+            "index": 0,
+            "block": "hn_search_probe",
+            "ok": true,
+            "failure_class": null
+          },
+          {
+            "index": 1,
+            "block": "excel_export",
+            "ok": true,
+            "failure_class": null
+          }
+        ]
+      },
+      "app_id": 1,
+      "status": "published",
+      "report": {
+        "session_id": 2,
+        "blocks": [
+          {
+            "name": "hn_search_probe",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T05:28:31.208798",
+              "window_end": "2026-10-18T08:32:19.584472",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          },
+          {
+            "name": "excel_export",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:53:14.156531",
+              "window_end": "2026-10-18T14:56:47.598167",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          }
+        ],
+        "chain": {
+          "verdict": "pass",
+          "n": 1,
+          "statistical": false,
+          "annotation": "整链验证为单次执行，非统计值"
+        }
+      }
+    },
+    {
+      "key": "books_export",
+      "title": "书目导出",
+      "chain": {
+        "run_id": 26,
+        "verdict": "pass",
+        "n": 1,
+        "statistical": false,
+        "annotation": "整链验证为单次执行，非统计值",
+        "steps": [
+          {
+            "index": 0,
+            "block": "books_list",
+            "ok": true,
+            "failure_class": null
+          },
+          {
+            "index": 1,
+            "block": "excel_export",
+            "ok": true,
+            "failure_class": null
+          }
+        ]
+      },
+      "app_id": 2,
+      "status": "published",
+      "report": {
+        "session_id": 3,
+        "blocks": [
+          {
+            "name": "books_list",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:26:41.202841",
+              "window_end": "2026-10-18T14:32:23.611213",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          },
+          {
+            "name": "excel_export",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:53:14.156531",
+              "window_end": "2026-10-18T14:56:47.598167",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          }
+        ],
+        "chain": {
+          "verdict": "pass",
+          "n": 1,
+          "statistical": false,
+          "annotation": "整链验证为单次执行，非统计值"
+        }
+      }
+    },
+    {
+      "key": "login_report",
+      "title": "登录态报表",
+      "c1_certify_422": {
+        "detail": "含 C1 积木的应用须走创作者本机整链（M09 §3.3 下行）"
+      },
+      "chain": {
+        "run_id": 27,
+        "verdict": "pass",
+        "reused": false,
+        "steps": [
+          {
+            "index": 0,
+            "block": "login_demo_probe",
+            "ok": true,
+            "failure_class": null
+          },
+          {
+            "index": 1,
+            "block": "excel_export",
+            "ok": true,
+            "failure_class": null
+          }
+        ]
+      },
+      "app_id": 3,
+      "status": "published",
+      "report": {
+        "session_id": 4,
+        "blocks": [
+          {
+            "name": "login_demo_probe",
+            "reliability": {
+              "level": "C1",
+              "n": 10,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T05:31:18.030979",
+              "window_end": "2026-10-18T08:33:30.705959",
+              "best_effort": false,
+              "c1_label": "创作者环境实测，平台抽查复核"
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          },
+          {
+            "name": "excel_export",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:53:14.156531",
+              "window_end": "2026-10-18T14:56:47.598167",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          }
+        ],
+        "chain": null
+      }
+    },
+    {
+      "key": "baidu_snapshot",
+      "title": "高变更首页快照",
+      "chain": {
+        "run_id": 28,
+        "verdict": "pass",
+        "n": 1,
+        "statistical": false,
+        "annotation": "整链验证为单次执行，非统计值",
+        "steps": [
+          {
+            "index": 0,
+            "block": "baidu_home_watch",
+            "ok": true,
+            "failure_class": null
+          },
+          {
+            "index": 1,
+            "block": "csv_export",
+            "ok": true,
+            "failure_class": null
+          }
+        ]
+      },
+      "app_id": 4,
+      "status": "published",
+      "report": {
+        "session_id": 5,
+        "blocks": [
+          {
+            "name": "baidu_home_watch",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:26:41.202841",
+              "window_end": "2026-10-18T14:32:23.611213",
+              "best_effort": true
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          },
+          {
+            "name": "csv_export",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:53:14.156531",
+              "window_end": "2026-10-18T14:56:47.598167",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          }
+        ],
+        "chain": {
+          "verdict": "pass",
+          "n": 1,
+          "statistical": false,
+          "annotation": "整链验证为单次执行，非统计值"
+        }
+      }
+    },
+    {
+      "key": "repo_digest",
+      "title": "仓库元数据整理",
+      "chain": {
+        "run_id": 29,
+        "verdict": "pass",
+        "n": 1,
+        "statistical": false,
+        "annotation": "整链验证为单次执行，非统计值",
+        "steps": [
+          {
+            "index": 0,
+            "block": "github_repo_read",
+            "ok": true,
+            "failure_class": null
+          },
+          {
+            "index": 1,
+            "block": "text_digest",
+            "ok": true,
+            "failure_class": null
+          },
+          {
+            "index": 2,
+            "block": "excel_export",
+            "ok": true,
+            "failure_class": null
+          }
+        ]
+      },
+      "app_id": 5,
+      "status": "published",
+      "report": {
+        "session_id": 6,
+        "blocks": [
+          {
+            "name": "github_repo_read",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:53:14.156531",
+              "window_end": "2026-10-18T14:56:47.598167",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          },
+          {
+            "name": "text_digest",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:53:14.156531",
+              "window_end": "2026-10-18T14:56:47.598167",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          },
+          {
+            "name": "excel_export",
+            "reliability": {
+              "level": "C2",
+              "n": 20,
+              "live_pass_rate": 1.0,
+              "window_start": "2026-10-16T14:53:14.156531",
+              "window_end": "2026-10-18T14:56:47.598167",
+              "best_effort": false
+            },
+            "user_rolling_note": "认证初始 · 暂无用户数据"
+          }
+        ],
+        "chain": {
+          "verdict": "pass",
+          "n": 1,
+          "statistical": false,
+          "annotation": "整链验证为单次执行，非统计值"
+        }
+      }
+    }
+  ],
+  "published": 5
+}

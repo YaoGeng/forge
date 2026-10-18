@@ -1,0 +1,10 @@
+{
+ "id": "hn-48848819",
+ "shape_digest": "sha256:c4ab0dd779ad97d39fa9ec545645ca276cbc7d92ae6dab9af09f2410c41cb85e",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "仓库活动/贡献者深度数据无积木（github 块仅元数据探针且无数据输出）",
+ "ran": false,
+ "judged_at": "2026-10-18T14:57:10+00:00"
+}
