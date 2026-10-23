@@ -1,40 +1,56 @@
 {
   "segment": 1,
-  "driven_at": "2026-10-16T15:54:08+00:00",
+  "driven_at": "2026-10-23T10:12:31+00:00",
   "blocks": {
     "bing_search": {
-      "n": 10,
-      "pass": 10,
+      "n": 20,
+      "pass": 20,
       "live_pass_rate": 1.0,
       "regression_pass_rate": 1.0,
-      "verdict": null,
+      "verdict": "pass",
       "reached": true
     },
     "books_list": {
-      "n": 10,
-      "pass": 10,
+      "n": 20,
+      "pass": 20,
       "live_pass_rate": 1.0,
       "regression_pass_rate": 1.0,
-      "verdict": null,
+      "verdict": "pass",
       "reached": true
     },
     "quotes_list": {
-      "n": 10,
-      "pass": 10,
+      "n": 20,
+      "pass": 20,
       "live_pass_rate": 1.0,
       "regression_pass_rate": 1.0,
-      "verdict": null,
+      "verdict": "pass",
       "reached": true
     },
     "baidu_home_watch": {
-      "n": 10,
-      "pass": 10,
+      "n": 20,
+      "pass": 20,
       "live_pass_rate": 1.0,
       "regression_pass_rate": 1.0,
-      "verdict": null,
+      "verdict": "pass",
       "reached": true
     },
     "quotes_paged": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "book_detail": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "url_read": {
       "n": 10,
       "pass": 10,
       "live_pass_rate": 1.0,
@@ -42,7 +58,23 @@
       "verdict": null,
       "reached": true
     },
-    "book_detail": {
+    "table_read": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    },
+    "json_export": {
+      "n": 10,
+      "pass": 10,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": null,
+      "reached": true
+    },
+    "arxiv_search": {
       "n": 10,
       "pass": 10,
       "live_pass_rate": 1.0,
