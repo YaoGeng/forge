@@ -1,7 +1,9 @@
-"""T1.65b 池策展步 2——分类裁定落盘为 pool.json（HN 120 条全分类 + 第二来源）。
+"""池策展步 2——分类裁定落盘（HN 120 条全分类 + 第二来源）。
 
-分类为人工逐条判定（本文件即判定记录，可审计）；入池/排除理由随条目存档。
+分类为逐条判定（本文件即判定记录，可审计）；入池/排除理由随条目存档。
 规程：docs/05 附录 A.10；域定义：docs/14 C8。
+R2（T1.78，A.10 R2②/A.9 R2）：排除域改判 excluded、s2/s10 域清理（裁撤场景），
+产物 → pool_r2.json + evidence/coverage/pool_snapshot_r2.json；R1 产物作废留档不删除。
 """
 from __future__ import annotations
 
@@ -25,27 +27,27 @@ HN_RULINGS: dict[str, tuple[str, list[str] | None, str]] = {
     "47306942": ("in_domain", ["s1", "s9"], "arXiv 每日论文筛选摘要"),
     "48848819": ("in_domain", ["s6"], "GitHub 仓库洞见/元数据聚合"),
     "48774008": ("in_domain", ["s7"], "监控网页变更（Visualping 替代）"),
-    "48345189": ("in_domain", ["s1", "s9"], "订阅源每日 AI 摘要（YouTube）"),
+    "48345189": ("excluded", None, "R2 排除域：社媒（YouTube 订阅源）"),
     "47389369": ("in_domain", ["s7"], "网站+API 合成监控"),
     "47299551": ("in_domain", ["s7"], "竞品网站变更自动监控"),
     "47110844": ("in_domain", ["s7"], "追踪 LLM 供应商价格页变动"),
     "47072913": ("in_domain", ["s7"], "可用性监控与状态页"),
     "46968889": ("in_domain", ["s9"], "研究论文消化/汇总助手"),
-    "46935908": ("in_domain", ["s5", "s10"], "税率表数据获取+计算"),
+    "46935908": ("in_domain", ["s5"], "税率表数据获取（s10 裁撤，A.9 R2）"),
     "46934190": ("in_domain", ["s3", "s5"], "音乐节阵容对曲库匹配"),
     "46436419": ("in_domain", ["s1", "s9"], "HN 每日摘要（原工具失效）"),
-    "46034257": ("in_domain", ["s4", "s8"], "TikTok 评论导出"),
-    "45935825": ("in_domain", ["s5", "s8"], "在线消费/发票自动进表格"),
+    "46034257": ("excluded", None, "R2 排除域：社媒（TikTok）"),
+    "45935825": ("excluded", None, "R2 排除域：金融（银行/账单邮件数据源）"),
     "45491255": ("in_domain", ["s1", "s9"], "营销内容周报摘要"),
     "44955461": ("in_domain", ["s9", "s8"], "杂乱输入整理成报告/文档"),
     "44951198": ("in_domain", ["s7"], "sitemap 变更监控"),
     "44668970": ("in_domain", ["s5", "s7"], "公开披露交易数据自动追踪"),
     "43933727": ("in_domain", ["s1", "s7"], "追踪 AI 模型对品牌的回答"),
     "43852771": ("in_domain", ["s8"], "CSV/XLSX 转 JSON/XML"),
-    "43787586": ("in_domain", ["s5"], "GSC 数据拉取找 SEO 机会"),
+    "43787586": ("excluded", None, "R2 排除域：OAuth 深凭据（GSC）"),
     "43158425": ("in_domain", ["s3", "s7"], "Steam 数据月度抓取"),
-    "42768754": ("in_domain", ["s7"], "竞品社媒动态追踪"),
-    "42700687": ("in_domain", ["s3", "s10"], "硬件价格对比"),
+    "42768754": ("excluded", None, "R2 排除域：社媒（竞品社媒动态）"),
+    "42700687": ("in_domain", ["s3"], "硬件价格对比（s10 裁撤余 s3）"),
     "42400979": ("in_domain", ["s1", "s3", "s8"], "网络信息自动整理进表格"),
     "41428635": ("in_domain", ["s1", "s9"], "每周新闻主旨识别"),
     "41057815": ("in_domain", ["s5"], "REST API 数据自动抽取"),
@@ -64,8 +66,8 @@ HN_RULINGS: dict[str, tuple[str, list[str] | None, str]] = {
     "34461064": ("in_domain", ["s5", "s8"], "SEO 数据进表格"),
     "33622363": ("in_domain", ["s7"], "网页变更监控+全站爬取"),
     "32090795": ("in_domain", ["s8"], "数据库数据定时进表格邮件"),
-    "30699237": ("in_domain", ["s2"], "登录后页面数据读取"),
-    "27945573": ("in_domain", ["s3", "s10"], "电视订阅价格聚合比价"),
+    "30699237": ("out_of_domain", None, "登录域读取——s2 裁撤（A.9 R2①：登录类域内命中 0）"),
+    "27945573": ("in_domain", ["s3"], "电视订阅价格聚合（s10 裁撤余 s3）"),
     "26740888": ("in_domain", ["s7"], "网站监控服务"),
     # out_of_domain（有表达但形状不在 10 场景 / 供给侧产品无需求表达）
     "49785956": ("out_of_domain", None, "管理工具（1-on-1 会议）"),
@@ -154,7 +156,7 @@ SECOND_SOURCE: list[dict] = [
      "excerpt": "I simply need to read (get) the data and write them down into Spreadsheet.",
      "posted_at": "2025-02", "posted_at_precision": "month（WebFetch 页面核实）",
      "fetched_at": SESSION_FETCHED_AT, "fetched_at_precision": "采集会话（WebFetch 核验）",
-     "verdict": "in_domain", "domains": ["s3", "s8"], "note": "读站点数据写入表格"},
+     "verdict": "excluded", "domains": None, "note": "R2 排除域：博彩（R1 审计：目标站博彩类法务审慎）"},
     {"id": "zapier-38394", "source": "websearch", "community": "Zapier Community",
      "url": "https://community.zapier.com/troubleshooting-99/how-do-i-import-data-from-a-web-table-into-google-sheets-38394",
      "title": "How do I import data from a web table into Google Sheets?",
@@ -201,7 +203,7 @@ SECOND_SOURCE: list[dict] = [
 # Reddit 条目从 pullpush 归档生成（日期+selftext 已核验）
 REDDIT_RULINGS: dict[str, tuple[str, list[str] | None, str]] = {
     "1tehwy4": ("in_domain", ["s3", "s8"], "大量网站数据复制进 Excel"),
-    "1lpaq5i": ("in_domain", ["s3", "s8"], "DEX 总锁仓值进 Excel 单元格"),
+    "1lpaq5i": ("excluded", None, "R2 排除域：金融（DEX 链上）"),
     "1jcncvx": ("in_domain", ["s3", "s8"], "URL 清单逐页抽取建 Google Sheet"),
     "1bkqbp2": ("in_domain", ["s3", "s8"], "公司内网通讯录抽进 Excel"),
     "isiu8b": ("in_domain", ["s3", "s8"], "书目评分多站更新进表格"),
@@ -273,8 +275,8 @@ def main() -> int:
     communities = sorted({e["community"] for e in in_dom})
     pool = {
         "meta": {
-            "protocol": "docs/05 附录 A.10（T1.65a 备案）",
-            "domain_defs": "docs/14 C8",
+            "protocol": "docs/05 附录 A.10（R2 修订：A.9 R2 8 场景锚定 + 排除域硬校验）",
+            "domain_defs": "docs/14 C8（R2：场景集 8，A.9 R2①）",
             "generated_at": dt.datetime.now(dt.UTC).isoformat(timespec="seconds"),
             "counts": {"total": len(entries), "in_domain": len(in_dom),
                        "out_of_domain": len(out_dom), "excluded": len(excl)},
@@ -285,8 +287,8 @@ def main() -> int:
         "entries": entries,
     }
     COV.mkdir(parents=True, exist_ok=True)
-    (COV / "pool.json").write_text(json.dumps(pool, ensure_ascii=False, indent=1), encoding="utf-8")
-    snap = HERE / "evidence" / "coverage" / "pool_snapshot.json"
+    (COV / "pool_r2.json").write_text(json.dumps(pool, ensure_ascii=False, indent=1), encoding="utf-8")
+    snap = HERE / "evidence" / "coverage" / "pool_snapshot_r2.json"
     snap.write_text(json.dumps(pool, ensure_ascii=False, indent=1), encoding="utf-8")
     print(f"pool: total={len(entries)} in={len(in_dom)} out={len(out_dom)} excluded={len(excl)}")
     print(f"communities(in_domain): {communities}")

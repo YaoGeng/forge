@@ -163,27 +163,29 @@ def _count_chain_runs(app, app_name: str) -> int:
 class TestRunCoverage:
     def test_experiment_offline_end_to_end(self, server):
         app, client, store = server
-        # 只注册链式尝试所需两块；29 条 uncoverable 不运行
-        seed_block(client, app.state.session_factory, "text_clean")
-        seed_block(client, app.state.session_factory, "markdown_export")
-        wire_test_chain(app, ["text_clean", "markdown_export"])
+        # T1.78：R2 池/样本；注册 4 条链式尝试所需块（假执行器离线），26 条 uncoverable 不运行
+        for n in ("text_clean", "markdown_export", "arxiv_search", "hn_search_probe"):
+            seed_block(client, app.state.session_factory, n)
+        wire_test_chain(app, ["text_clean", "markdown_export", "arxiv_search", "hn_search_probe"])
 
         from run_coverage import run_experiment
 
         runs_dir = store / "runs"
         report = store / "report.md"
         out = run_experiment(app, client,
-                             pool_path=_ROOT / "spikes/coverage/pool.json",
-                             sample_path=_ROOT / "spikes/coverage/sample.json",
+                             pool_path=_ROOT / "spikes/coverage/pool_r2.json",
+                             sample_path=_ROOT / "spikes/coverage/sample_r2.json",
                              runs_dir=runs_dir, report_path=report)
         assert out["denominator"] == 30 and out["executed"] == 30 and out["resumed"] == 0
-        assert out["covered"] == 1  # hn-44955461 直连接线：rows=5 ≥ 标题+3 要点
-        assert out["categories"].get("site_not_covered") == 17
+        assert out["covered"] == 4  # R2 接线面：2×arxiv_search + hn_search_probe + text_clean→markdown_export
+        assert out["categories"].get("capability_missing") == 14
+        assert out["categories"].get("needs_genericization") == 7
+        assert out["categories"].get("site_not_covered") == 5
         rec = json.loads((runs_dir / "hn-44955461.json").read_text(encoding="utf-8"))
         assert rec["verdict"] == "covered" and rec["final_output"]["rows"] == 5
         assert rec["shape_digest"].startswith("sha256:")
         text = report.read_text(encoding="utf-8")
-        assert "3.3%" in text and "供给帖（Show HN 产品动机）18 条" in text
+        assert "13.3%" in text  # 4/30（离线假执行器排练值；真实复判见 T1.79）
         assert "人工复核" in text
 
     def test_resume_never_reexecutes_frozen_records(self, server):
@@ -194,8 +196,8 @@ class TestRunCoverage:
 
         from run_coverage import run_experiment
 
-        kw = dict(pool_path=_ROOT / "spikes/coverage/pool.json",
-                  sample_path=_ROOT / "spikes/coverage/sample.json",
+        kw = dict(pool_path=_ROOT / "spikes/coverage/pool_r2.json",
+                  sample_path=_ROOT / "spikes/coverage/sample_r2.json",
                   runs_dir=store / "runs", report_path=store / "report.md")
         run_experiment(app, client, **kw)
         before = (store / "runs" / "hn-44955461.json").stat().st_mtime_ns
@@ -212,9 +214,11 @@ class TestRunCoverage:
         from run_coverage import execute_chain_via_dryrun, registry_names
         from coverage_runner import load_sample, run_one
 
-        entries = load_sample(str(_ROOT / "spikes/coverage/sample.json"),
-                              str(_ROOT / "spikes/coverage/pool.json"))
-        chain_entry = next(e for e in entries if e["attempt"]["kind"] == "chain")
+        entries = load_sample(str(_ROOT / "spikes/coverage/sample_r2.json"),
+                              str(_ROOT / "spikes/coverage/pool_r2.json"))
+        chain_entry = next(e for e in entries
+                           if e["attempt"]["kind"] == "chain" and "markdown_export"
+                           in [st["block"] for st in e["attempt"]["steps"]])
         names = registry_names(client)
         assert "markdown_export" not in names
         rec = run_one(chain_entry, execute_chain_via_dryrun(client), registry=names)

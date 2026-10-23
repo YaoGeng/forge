@@ -40,7 +40,8 @@ def _write_pool(tmp_path, entries, counts=None):
 
 class TestLoadPool:
     def test_loads_real_pool_and_counts(self):
-        entries = load_pool("spikes/coverage/pool.json")
+        # T1.78：R1 池作废留档；现网池 = pool_r2.json（A.10 R2）
+        entries = load_pool("spikes/coverage/pool_r2.json")
         assert len(entries) >= 60
         in_dom = [e for e in entries if e["verdict"] == "in_domain"]
         assert len(in_dom) >= 35
@@ -74,7 +75,7 @@ class TestSelectSample:
         pool_entries = [
             _mk_entry("old", domains=["s1"], posted_at="2020-01-01T00:00:00Z"),
             _mk_entry("mid", domains=["s1"], posted_at="2023-06-01T00:00:00Z"),
-            _mk_entry("new", domains=["s2"], posted_at="2026-01-01T00:00:00Z"),
+            _mk_entry("new", domains=["s9"], posted_at="2026-01-01T00:00:00Z"),
         ] + [_mk_entry(f"f{i}", domains=["s1"], posted_at=f"2024-01-{i+1:02d}T00:00:00Z") for i in range(28)]
         p = _write_pool(tmp_path, pool_entries)
         s1 = select_sample(load_pool(str(p)), 30)
@@ -141,68 +142,6 @@ class TestLoadSample:
         sp.write_text(json.dumps(sample), encoding="utf-8")
         with pytest.raises(ValueError, match="domains"):
             load_sample(str(sp), str(pool))
-
-
-def test_known_domains_are_ten_scenarios():
-    assert KNOWN_DOMAINS == [f"s{i}" for i in range(1, 11)]
-
-
-class TestRealArtifacts:
-    """真实产物校验（池/样本落盘后跑；不触网）。"""
-
-    def test_real_sample_matches_mechanical_selection(self):
-        # I1：真实样本必须与机械选样逐条一致（id + 顺序），手工挑样即失败
-        pool = load_pool("spikes/coverage/pool.json")
-        entries = load_sample("spikes/coverage/sample.json", "spikes/coverage/pool.json")
-        assert [e["id"] for e in entries] == [e["id"] for e in select_sample(pool, 30)]
-
-    def test_real_sample_loads_and_domains_frozen(self):
-        entries = load_sample("spikes/coverage/sample.json", "spikes/coverage/pool.json")
-        assert len(entries) == 30
-        # 两阶段写入：阶段一产物（选样+域映射）与阶段二（形状+尝试）一致性由池快照钉死
-        for e in entries:
-            assert e["shape_digest"].startswith("sha256:")
-
-    def test_real_sample_pool_ref_pins_full_pool_content(self, tmp_path):
-        # 池条目内容被改（id/顺序不变）→ pool_ref 失配 → 拒绝
-        pool = load_pool("spikes/coverage/pool.json")
-        tampered = [dict(e) for e in pool]
-        tampered[0]["excerpt"] = tampered[0]["excerpt"] + "（事后追加）"
-        p = tmp_path / "tampered_pool.json"
-        p.write_text(json.dumps({"meta": {}, "entries": tampered}, ensure_ascii=False), encoding="utf-8")
-        with pytest.raises(ValueError, match="pool_ref"):
-            load_sample("spikes/coverage/sample.json", str(p))
-
-    def test_real_pool_fetch_times_all_present(self):
-        for e in load_pool("spikes/coverage/pool.json"):
-            assert e["fetched_at"]  # I3：可溯源性字段全量必填
-
-    def test_domain_mapping_recorded_before_attempt(self, tmp_path):
-        # 阶段二字段（attempt/expected_shape）不得回写阶段一域判定：
-        # 构造「阶段一 domains 与池一致、阶段二被篡改」的样本 → 必须拒绝
-        pool = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"])])
-        sample = {
-            "meta": {"pool_ref": pool_digest(load_pool(str(pool)))},
-            "entries": [{
-                "id": "a", "domains": ["s7"],  # 篡改：池登记 s1
-                "expected_shape": {"format": "digest"},
-                "attempt": {"kind": "uncoverable", "category": "site_not_covered", "reason": "x"},
-            }],
-        }
-        sp = tmp_path / "sample.json"
-        sp.write_text(json.dumps(sample), encoding="utf-8")
-        with pytest.raises(ValueError, match="domains"):
-            load_sample(str(sp), str(pool))
-
-    def test_real_sample_attempt_kinds_valid(self):
-        entries = load_sample("spikes/coverage/sample.json", "spikes/coverage/pool.json")
-        cats = {"site_not_covered", "capability_missing", "needs_genericization"}
-        for e in entries:
-            a = e["attempt"]
-            if a["kind"] == "uncoverable":
-                assert a["category"] in cats and a["reason"]
-            else:
-                assert a["kind"] == "chain" and a["steps"]
 
 
 # ---------- T1.65d run_one / tally / write_report ----------
@@ -330,3 +269,117 @@ class TestTallyReport:
         assert "人工复核" in text  # C10 复核列
         assert "sha256:x" in text  # 池快照引用可追溯
         assert "供给帖（Show HN 产品动机）18 条" in text  # I2 构成披露
+
+
+# ---------- T1.78 A.10 R2：排除域硬校验 + 8 场景锚定 ----------
+
+def test_known_domains_are_eight_scenarios_r2():
+    """A.9 R2①：场景集 10→8（砍 s2/s10）——域锚定集合同步收窄。"""
+    assert KNOWN_DOMAINS == ["s1", "s3", "s4", "s5", "s6", "s7", "s8", "s9"]
+
+
+class TestLoadPoolR2Exclusions:
+    """Review Focus 4：排除域条目入样即 load_pool 拒绝（硬校验而非标注）。"""
+
+    def _pool_with(self, tmp_path, **kw):
+        return _write_pool(tmp_path, [_mk_entry("a", domains=["s1"], **kw)])
+
+    def test_rejects_gambling(self, tmp_path):
+        p = self._pool_with(tmp_path, note="博彩 Odds 赔率聚合")
+        with pytest.raises(ValueError, match="排除域"):
+            load_pool(str(p))
+
+    def test_rejects_social_media(self, tmp_path):
+        p = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"], title="Export TikTok comments",
+                                             note="TikTok 评论导出")])
+        with pytest.raises(ValueError, match="排除域"):
+            load_pool(str(p))
+
+    def test_rejects_oauth_deep_credential(self, tmp_path):
+        p = self._pool_with(tmp_path, note="GSC 数据拉取做 SEO")
+        with pytest.raises(ValueError, match="排除域"):
+            load_pool(str(p))
+
+    def test_rejects_finance_dex(self, tmp_path):
+        p = self._pool_with(tmp_path, note="DEX 总锁仓值抓取")
+        with pytest.raises(ValueError, match="排除域"):
+            load_pool(str(p))
+
+    def test_excluded_verdict_not_judged_by_patterns(self, tmp_path):
+        """excluded 条目不走排除域判定（本就是被排除记录，只留痕）。"""
+        p = _write_pool(tmp_path, [_mk_entry("a", verdict="excluded", domains=None,
+                                             note="博彩类需求（法务排除）")])
+        assert len(load_pool(str(p))) == 1
+
+    def test_rejects_retired_scenario_domains(self, tmp_path):
+        """8 场景外形状（s2/s10）不入池：in_domain 引用被裁场景即拒绝。"""
+        p = _write_pool(tmp_path, [_mk_entry("a", domains=["s2"])])
+        with pytest.raises(ValueError, match="s2"):
+            load_pool(str(p))
+        p10 = _write_pool(tmp_path, [_mk_entry("b", domains=["s10"])])
+        with pytest.raises(ValueError, match="s10"):
+            load_pool(str(p10))
+
+
+class TestRealArtifactsR2:
+    """R2 真实产物（池重生成后跑；不触网）。R1 产物作废留档不加载。"""
+
+    POOL = "spikes/coverage/pool_r2.json"
+    SNAPSHOT = "spikes/evidence/coverage/pool_snapshot_r2.json"
+
+    def test_r2_pool_loads_with_thresholds(self):
+        entries = load_pool(self.POOL)
+        assert len(entries) >= 60  # A.10 池规模下限
+        in_dom = [e for e in entries if e["verdict"] == "in_domain"]
+        assert len(in_dom) >= 35
+        assert len({e["community"] for e in in_dom}) >= 2  # ≥2 来源
+        assert len(select_sample(entries, 30)) == 30  # 选样框充足
+
+    def test_r2_snapshot_matches_working_pool(self):
+        import json as _json
+        snap = _json.loads(open(self.SNAPSHOT, encoding="utf-8").read())
+        work = _json.loads(open(self.POOL, encoding="utf-8").read())
+        assert pool_digest(snap["entries"]) == pool_digest(work["entries"])
+
+
+class TestRealSampleR2:
+    """R2 样本复算与冻结（T1.78；样本=stage2 产物 sample_r2.json）。"""
+
+    POOL = "spikes/coverage/pool_r2.json"
+    SAMPLE = "spikes/coverage/sample_r2.json"
+
+    def test_r2_sample_matches_mechanical_selection(self):
+        pool = load_pool(self.POOL)
+        entries = load_sample(self.SAMPLE, self.POOL)
+        assert [e["id"] for e in entries] == [e["id"] for e in select_sample(pool, 30)]
+
+    def test_r2_sample_loads_and_shapes_frozen(self):
+        entries = load_sample(self.SAMPLE, self.POOL)
+        assert len(entries) == 30
+        for e in entries:
+            assert e["shape_digest"].startswith("sha256:")
+
+    def test_r2_sample_pool_ref_pins_full_pool(self, tmp_path):
+        pool = load_pool(self.POOL)
+        tampered = [dict(e) for e in pool]
+        tampered[0]["excerpt"] = tampered[0]["excerpt"] + "（事后追加）"
+        p = tmp_path / "tampered_pool_r2.json"
+        p.write_text(json.dumps({"meta": {}, "entries": tampered}, ensure_ascii=False), encoding="utf-8")
+        with pytest.raises(ValueError, match="pool_ref"):
+            load_sample(self.SAMPLE, str(p))
+
+    def test_r2_pool_fetch_times_all_present(self):
+        for e in load_pool(self.POOL):
+            assert e["fetched_at"]
+
+    def test_r2_sample_attempt_kinds_valid(self):
+        entries = load_sample(self.SAMPLE, self.POOL)
+        for e in entries:
+            att = e["attempt"]
+            if att["kind"] == "uncoverable":
+                assert att["category"] in ("site_not_covered", "capability_missing", "needs_genericization")
+                assert att["reason"]
+            else:
+                assert att["kind"] == "chain" and att["steps"]
+                for st in att["steps"]:
+                    assert st["block"] and isinstance(st.get("params", {}), dict)

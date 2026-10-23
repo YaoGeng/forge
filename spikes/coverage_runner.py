@@ -12,9 +12,22 @@ from __future__ import annotations
 import hashlib
 import json
 import pathlib
+import re
 
-KNOWN_DOMAINS = [f"s{i}" for i in range(1, 11)]
+# A.9 R2①：域内锚定场景集 10→8（砍 s2_login_inventory/s10_numeric_calc）
+KNOWN_DOMAINS = ["s1", "s3", "s4", "s5", "s6", "s7", "s8", "s9"]
 SAMPLE_SIZE = 30
+
+# A.10 R2②：入样排除域（硬校验）——in_domain 条目命中即拒绝入池（策展侧须改判 excluded）。
+# 三域口径见 A.9 R2②：社媒平台 / 金融（银行、DEX 链上、博彩）/ OAuth 深凭据（GSC/Spotify/邮箱）。
+EXCLUSION_DOMAIN_PATTERNS = {
+    "social_media": re.compile(
+        r"(?i)youtube|tiktok|instagram|facebook|twitter|社媒|social\s*media"),
+    "finance": re.compile(
+        r"(?i)\bbanks?\b|银行|\bdex\b|链上|on-chain|博彩|casino|gambling|betting|赌"),
+    "oauth_deep_credential": re.compile(
+        r"(?i)\bgsc\b|search\s+console|spotify|oauth|深凭据"),
+}
 
 _REQUIRED_FIELDS = ("id", "source", "community", "url", "title", "excerpt",
                     "posted_at", "verdict", "fetched_at")
@@ -51,7 +64,13 @@ def load_pool(path: str) -> list[dict]:
                 raise ValueError(f"in_domain 条目 {e['id']} 缺 domains")
             bad = [d for d in e["domains"] if d not in KNOWN_DOMAINS]
             if bad:
-                raise ValueError(f"条目 {e['id']} 含未知场景域 {bad}")
+                raise ValueError(f"条目 {e['id']} 含未知/已裁撤场景域 {bad}（A.9 R2 场景集恰 8）")
+            text = f"{e.get('title') or ''} {e.get('note') or ''}"
+            for dom, pat in EXCLUSION_DOMAIN_PATTERNS.items():
+                if pat.search(text):
+                    raise ValueError(
+                        f"in_domain 条目 {e['id']} 命中 R2 排除域 {dom}"
+                        f"（A.10 R2② 硬校验：排除域条目不得入样，策展侧须改判 excluded）")
             if not e.get("posted_at"):
                 raise ValueError(f"in_domain 条目 {e['id']} 缺 posted_at（无法定序入样）")
             if not (e.get("url") and e.get("excerpt")):
