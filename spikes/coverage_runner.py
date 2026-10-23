@@ -204,10 +204,13 @@ def tally(records: list[dict]) -> dict:
 
 
 def write_report(path, records: list[dict], t: dict, *, out_of_domain: dict,
-                 sample_meta: dict) -> None:
-    """C12 报告：只呈报数据（分母/分子/覆盖率/未覆盖分类/域外旁证/记录索引/复核列）。"""
+                 sample_meta: dict, title: str | None = None) -> None:
+    """C12 报告：只呈报数据（分母/分子/覆盖率/未覆盖分类/域外旁证/记录索引/复核列）。
+
+    title：轮次标题（R2 复判传入自己的轮次，缺省 T1.65e 原轮——不得错标）。
+    """
     lines = [
-        "# MS-1G 覆盖率实验报告（T1.65e 产出）",
+        f"# {title or 'MS-1G 覆盖率实验报告（T1.65e 产出）'}",
         "",
         f"- 池快照引用：{sample_meta.get('pool_ref', 'n/a')}；样本量 30（A.4 区间下限）",
         f"- 样本构成披露：供给帖（Show HN 产品动机）{sample_meta.get('supply_side', 'n/a')} 条 / "

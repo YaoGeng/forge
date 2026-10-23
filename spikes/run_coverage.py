@@ -70,7 +70,8 @@ def out_of_domain_stats(pool_entries: list[dict]) -> dict:
 
 
 def run_experiment(app, client, *, pool_path: Path, sample_path: Path,
-                   runs_dir: Path = RUNS_DIR, report_path: Path = REPORT) -> dict:
+                   runs_dir: Path = RUNS_DIR, report_path: Path = REPORT,
+                   report_title: str | None = None) -> dict:
     runs_dir.mkdir(parents=True, exist_ok=True)
     pool = load_pool(str(pool_path))
     entries = load_sample(str(sample_path), str(pool_path))
@@ -99,7 +100,8 @@ def run_experiment(app, client, *, pool_path: Path, sample_path: Path,
     write_report(report_path, records, t, out_of_domain=out_of_domain_stats(pool),
                  sample_meta={"pool_ref": meta.get("pool_ref") or "n/a",
                               "supply_side": supply,
-                              "demand_side": len(entries) - supply})
+                              "demand_side": len(entries) - supply},
+                 title=report_title)
     return {"executed": executed, "resumed": resumed, **t, "report": str(report_path)}
 
 
@@ -129,7 +131,8 @@ def main() -> int:
         out = run_experiment(app, client,
                              pool_path=COV / "pool_r2.json",
                              sample_path=COV / "sample_r2.json",
-                             runs_dir=cov_dir / "runs", report_path=cov_dir / "report.md")
+                             runs_dir=cov_dir / "runs", report_path=cov_dir / "report.md",
+                             report_title="MS-1G 覆盖率复判报告（R2 产出，A.10 R2）")
     else:
         out = run_experiment(app, client, pool_path=COV / "pool.json",
                              sample_path=COV / "sample.json")

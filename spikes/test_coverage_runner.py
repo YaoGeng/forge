@@ -418,3 +418,23 @@ class TestExclusionWindowWidened:
             url="https://youtube.com/watch?v=x", title="digest tool", note="聚合")])
         with pytest.raises(ValueError, match="排除域"):
             load_pool(str(p))
+
+
+class TestReportTitle:
+    """T1.79/终审 minor：报告头轮次参数化（R2 复判不得错标 T1.65e 轮次）。"""
+
+    def test_default_title_is_r1(self, tmp_path):
+        t = tally([])
+        out = tmp_path / "r.md"
+        write_report(out, [], t, out_of_domain={"total": 0, "top": []},
+                     sample_meta={"pool_ref": "n/a", "supply_side": 0, "demand_side": 0})
+        assert "T1.65e" in out.read_text(encoding="utf-8")
+
+    def test_custom_title_overrides(self, tmp_path):
+        t = tally([])
+        out = tmp_path / "r2.md"
+        write_report(out, [], t, out_of_domain={"total": 0, "top": []},
+                     sample_meta={"pool_ref": "n/a", "supply_side": 0, "demand_side": 0},
+                     title="MS-1G 覆盖率复判报告（R2 产出，A.10 R2）")
+        text = out.read_text(encoding="utf-8")
+        assert "复判报告（R2 产出" in text and "T1.65e" not in text
