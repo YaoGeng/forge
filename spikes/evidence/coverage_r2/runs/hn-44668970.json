@@ -1,0 +1,10 @@
+{
+ "id": "hn-44668970",
+ "shape_digest": "sha256:dbfbda2fb9f588f81ba69f3be04ae65a7f51ec62563af4c41dc22346122f125e",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "公开披露数据源（House 披露）无积木；定时抓取+可视化链超形状",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

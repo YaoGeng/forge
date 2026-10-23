@@ -1,0 +1,10 @@
+{
+ "id": "hn-41057815",
+ "shape_digest": "sha256:37b4982f97a5cad90ce4ded49a014e9dd7d4549e26605b5c9b0bcc4ad9eb518f",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "产品发布帖（dlt）无具体数据任务目标；通用匿名 GET（url_read）可实例化但帖内无目标 API",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

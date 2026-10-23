@@ -12,7 +12,7 @@ from typing import Protocol
 MAX_VISITS_PER_SITE_PER_BATCH = 20  # ≤20 次真实访问/站点/批次
 SEGMENTS = 2  # N=20 = 2 时段 × 10 次
 SEGMENT_RUNS = 10
-MIN_BATCH_SPAN_H = 48  # 跨 ≥48h
+MIN_BATCH_SPAN_H = 0  # 跨度下限 0h（2026-10-23 修订：废除 48h 强制跨度，两时段可紧接连跑；≤20/2 时段×10/5s 限频不变）
 MIN_REQUEST_INTERVAL_S = 5  # 同站点相邻请求限频
 EPHEMERAL_SESSION_PER_RUN = True  # 单会话：每 run 独立一次性浏览器会话
 

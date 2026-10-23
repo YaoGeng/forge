@@ -1,0 +1,10 @@
+{
+ "id": "hn-43852771",
+ "shape_digest": "sha256:8992ab46d56daa588025f0e2d7cd963dbda4e3ed1e9c69556c24b90c3c09ef6d",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "文件读取/CSV 解析无积木（json_export 已备但仅行集字符串写出，不能读入 CSV/XLSX）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

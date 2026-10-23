@@ -1,0 +1,10 @@
+{
+ "id": "hn-47110844",
+ "shape_digest": "sha256:ff6651af602805b13e86076c2c1421a83bed0b9169fc1dbaf5dca49a1fbf161e",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "多站定时抓取+变更对比无积木（数十个 LLM 定价页；url_read 仅单次静态读取）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:35:43+00:00"
+}

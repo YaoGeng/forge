@@ -94,30 +94,30 @@ def test_etiquette_caps_visits(make_scheduler, clock):
     assert d3.allowed
 
 
-def test_etiquette_span_enforced(make_scheduler, clock, get_row, drain):
+def test_etiquette_span_removed(make_scheduler, clock, get_row, drain):
+    """2026-10-23 修订（用户裁定）：48h 跨度废除——两时段可紧接连跑，仅受 5s 同站限频约束。"""
     sched = make_scheduler(hook=make_all_ok_hook())
     run_id = sched.submit("block", "probe", "1.0.0", "C2")
 
-    drain(sched, clock, until=START + timedelta(hours=MIN_BATCH_SPAN_H - 1))
-    assert get_row(sched, run_id).n == SEGMENT_RUNS  # 时段一完成
-
-    # 计划层：47h 间隔的两时段计划被 enforce 拒绝
-    early = BatchPlan(
-        batch_id="early",
+    # 计划层：两时段紧接（跨度 0h）放行——旧口径此处拒绝（47h 亦拒）
+    seg0 = START + timedelta(days=365)
+    tight = BatchPlan(
+        batch_id="tight",
         site="s",
         requests=plan_of_n(20).requests,
-        segment_starts=(START, START + timedelta(hours=MIN_BATCH_SPAN_H - 1)),
+        segment_starts=(seg0, seg0),
     )
-    assert not enforce(early, clock=clock).allowed
+    assert enforce(tight, clock=clock).allowed
 
-    clock.advance_to(START + timedelta(hours=MIN_BATCH_SPAN_H - 1))  # t0+47h
-    report = sched.tick()
-    assert len(report.executed) == 0  # 拒绝推进
-    assert sched.next_due() == START + timedelta(hours=MIN_BATCH_SPAN_H)
-
-    clock.advance_to(START + timedelta(hours=MIN_BATCH_SPAN_H))  # t0+48h
-    report = sched.tick()
-    assert len(report.executed) == 1  # ≥48h 放行
+    # 调度层：时段一完成后时段二紧接 due（旧口径 next_due = 时段一末 + 48h）
+    drain(sched, clock, until=START + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S + 1))
+    assert get_row(sched, run_id).n == SEGMENT_RUNS  # 时段一完成
+    assert sched.next_due() == START + timedelta(
+        hours=MIN_BATCH_SPAN_H, seconds=SEGMENT_RUNS * MIN_REQUEST_INTERVAL_S
+    )  # 时段二首请求 = 提交时错开式（现 +50s）
+    drain(sched, clock)
+    row = get_row(sched, run_id)
+    assert row.n == MAX_VISITS_PER_SITE_PER_BATCH and row.verdict == "pass"  # 同日 N=20
 
 
 def test_rate_limit_interval(make_scheduler, clock):
@@ -228,7 +228,8 @@ def test_rate_fields_carry_n_and_window(make_app, clock, drain):
     assert data["n"] == 20
     assert data["started_at"] == START.isoformat()
     assert data["finished_at"] == (
-        START + timedelta(hours=MIN_BATCH_SPAN_H) + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S)
+        START + timedelta(hours=MIN_BATCH_SPAN_H, seconds=SEGMENT_RUNS * MIN_REQUEST_INTERVAL_S)
+        + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S)
     ).isoformat()
 
 
@@ -291,7 +292,7 @@ def test_reattach_restores_plan_across_instances(make_scheduler, clock, drain, g
     """新进程（内存计划为空）reattach 后可续跑到 N=20 且口径不漂移。"""
     sched_a = make_scheduler(make_all_ok_hook())
     run_id = sched_a.submit("block", "reblock", "1.0.0", "C2", site_tier="standard")
-    drain(sched_a, clock, until=START + timedelta(seconds=60))
+    drain(sched_a, clock, until=START + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S + 1))
     assert get_row(sched_a, run_id).n == 10  # 时段一完成
 
     sched_b = make_scheduler(make_all_ok_hook())  # 模拟旧进程死亡后的新进程
@@ -299,7 +300,8 @@ def test_reattach_restores_plan_across_instances(make_scheduler, clock, drain, g
     assert sched_b.reattach(run_id) is True
     assert sched_b.plan_for(run_id) is not None
 
-    clock.advance_to(START + timedelta(hours=48) - timedelta(seconds=1))  # 停在时段二开始前 1s：drain 需单调时钟
+    clock.advance_to(START + timedelta(seconds=SEGMENT_RUNS * MIN_REQUEST_INTERVAL_S)
+                     - timedelta(seconds=1))  # 停在时段二开始前 1s：drain 需单调时钟
     drain(sched_b, clock)
     row = get_row(sched_b, run_id)
     assert row.n == 20 and row.verdict == "pass"
@@ -310,7 +312,7 @@ def test_reattach_legacy_row_without_plan_json(make_scheduler, clock, drain, get
     """旧版本行（无 plan_json，n=10）：按 started_at+n 确定性重建第二时段。"""
     sched = make_scheduler(make_all_ok_hook())
     run_id = sched.submit("block", "legacyblock", "1.0.0", "C2", site_tier="standard")
-    drain(sched, clock, until=START + timedelta(seconds=60))
+    drain(sched, clock, until=START + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S + 1))
     with sched.session_factory() as s:
         row = s.get(CertificationRun, run_id)
         row.plan_json = None  # 模拟 T1.30 旧版本写入的行
@@ -318,7 +320,8 @@ def test_reattach_legacy_row_without_plan_json(make_scheduler, clock, drain, get
 
     sched2 = make_scheduler(make_all_ok_hook())
     assert sched2.reattach(run_id) is True
-    clock.advance_to(START + timedelta(hours=48) - timedelta(seconds=1))  # 同上：drain 需单调时钟
+    clock.advance_to(START + timedelta(seconds=SEGMENT_RUNS * MIN_REQUEST_INTERVAL_S)
+                     - timedelta(seconds=1))  # 同上：drain 需单调时钟
     drain(sched2, clock)
     row = get_row(sched2, run_id)
     assert row.n == 20 and row.verdict == "pass"
@@ -328,7 +331,7 @@ def test_reattach_legacy_rounding_is_half_up(make_scheduler, clock, drain, get_r
     """缓办#12：旧回退 reg_ok 半进位确定性——banker's 在精确 .5 平局偏偶漂 -1。"""
     sched = make_scheduler(make_all_ok_hook())
     run_id = sched.submit("block", "roundingblock", "1.0.0", "C2", site_tier="standard")
-    drain(sched, clock, until=START + timedelta(seconds=60))
+    drain(sched, clock, until=START + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S + 1))
     with sched.session_factory() as s:
         row = s.get(CertificationRun, run_id)
         row.plan_json = None
@@ -344,7 +347,7 @@ def test_reattach_legacy_reconstructs_partials_from_fail_rows(make_scheduler, cl
     """缓办#12：旧回退 partials 从 fail_rows 归因重建（env_error → captcha_shortfall）。"""
     sched = make_scheduler(make_all_ok_hook())
     run_id = sched.submit("block", "partialblock", "1.0.0", "C2", site_tier="standard")
-    drain(sched, clock, until=START + timedelta(seconds=60))
+    drain(sched, clock, until=START + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S + 1))
     with sched.session_factory() as s:
         row = s.get(CertificationRun, run_id)
         row.plan_json = None
@@ -391,7 +394,7 @@ def test_reattach_legacy_row_uses_provided_site_tier(make_scheduler, clock, drai
     """
     sched = make_scheduler(make_all_ok_hook(live_fails={10, 11, 12}))
     run_id = sched.submit("block", "tierblock", "1.0.0", "C2", site_tier="medium")
-    drain(sched, clock, until=START + timedelta(seconds=60))
+    drain(sched, clock, until=START + timedelta(seconds=(SEGMENT_RUNS - 1) * MIN_REQUEST_INTERVAL_S + 1))
     with sched.session_factory() as s:
         row = s.get(CertificationRun, run_id)
         row.plan_json = None  # 模拟旧行
@@ -399,7 +402,8 @@ def test_reattach_legacy_row_uses_provided_site_tier(make_scheduler, clock, drai
 
     sched2 = make_scheduler(make_all_ok_hook(live_fails={10, 11, 12}))
     assert sched2.reattach(run_id, site_tier="medium") is True
-    clock.advance_to(START + timedelta(hours=48) - timedelta(seconds=1))
+    clock.advance_to(START + timedelta(seconds=SEGMENT_RUNS * MIN_REQUEST_INTERVAL_S)
+                     - timedelta(seconds=1))
     drain(sched2, clock)
     row = get_row(sched2, run_id)
     assert row.n == 20 and row.live_pass_rate == 0.85

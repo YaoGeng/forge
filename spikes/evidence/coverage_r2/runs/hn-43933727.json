@@ -1,0 +1,10 @@
+{
+ "id": "hn-43933727",
+ "shape_digest": "sha256:c2691bd281495253dd07bc68e9a69d97b37c570661b129ed3398d8015ef9ac1b",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "LLM API 多模型查询块未纳入（2026-10-19 人工拍板：方向甲不含 LLM 块）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

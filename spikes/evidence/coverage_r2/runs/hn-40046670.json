@@ -1,0 +1,10 @@
+{
+ "id": "hn-40046670",
+ "shape_digest": "sha256:e9fba816201490977683355a42f342c5ae9d5fc3bcb69c87d74aa346ffe1c7dd",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "通用文案变更监控无积木（baidu_home_watch 单站绑定；url_read 无基线对比/定时）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

@@ -1,0 +1,10 @@
+{
+ "id": "hn-42700687",
+ "shape_digest": "sha256:52b256cda1617e05469f6e9c1ef68d86456e85ca8384fe5d29a9e1f523143fd3",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点不适用：电商数据源 JS/反爬，静态读取不适用",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

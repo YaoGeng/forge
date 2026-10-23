@@ -115,7 +115,9 @@ class CertScheduler:
     ) -> int:
         now = self.clock.now()
         batch_id = uuid.uuid4().hex
-        seg1_start = now + timedelta(hours=MIN_BATCH_SPAN_H)
+        # 时段二起点 = 跨度下限 + 整段限频错开（SPAN=0 时段二首请求与时段一末请求仍隔 ≥5s，构造即合规）
+        seg1_start = now + timedelta(hours=MIN_BATCH_SPAN_H,
+                                     seconds=SEGMENT_RUNS * MIN_REQUEST_INTERVAL_S)
         requests = []
         for seg_start, seg in ((now, 0), (seg1_start, 1)):
             for i in range(SEGMENT_RUNS):
@@ -204,7 +206,8 @@ class CertScheduler:
         """跨进程重建调度态（gate seg2/批次驱动器换进程续跑的前置）。
 
         优先读行上 plan_json（计划时间戳与进度精确）；旧行（T1.30 版本，无 plan_json）
-        按 started_at + n 确定性重建：执行序 = ts 序 = index 序，时段跨度按礼仪下限 48h。
+        按 started_at + n 确定性重建：执行序 = ts 序 = index 序，时段跨度按礼仪下限
+        （MIN_BATCH_SPAN_H，2026-10-23 修订后 0h，时段二仅错开同站限频间隔）。
         旧行的 tier 无法从行内恢复——调用方必须以 site_tier 传入真实档位
         （终审 Important#3：静默默认 standard 会把 medium(0.85) 错降到 0.90 阈值）。
         """
@@ -233,7 +236,8 @@ class CertScheduler:
             if row.started_at is None:
                 return False  # 未起跑且无计划：无从重建
             seg0 = row.started_at
-            seg1 = seg0 + timedelta(hours=MIN_BATCH_SPAN_H)
+            seg1 = seg0 + timedelta(hours=MIN_BATCH_SPAN_H,
+                                    seconds=SEGMENT_RUNS * MIN_REQUEST_INTERVAL_S)
             total = SEGMENTS * SEGMENT_RUNS
             reqs = []
             for seg, start in ((0, seg0), (1, seg1)):

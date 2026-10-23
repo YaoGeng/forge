@@ -1,0 +1,43 @@
+{
+ "id": "hn-46968889",
+ "shape_digest": "sha256:b1129f5dd624580463eb0e969f721e397e1ff32470ef6ead8a6e888552c63267",
+ "expected_must": {
+  "list_key": "entries",
+  "min_items": 3
+ },
+ "ran": true,
+ "steps_view": [
+  {
+   "index": 0,
+   "block": "arxiv_search",
+   "ok": true,
+   "failure_class": null
+  }
+ ],
+ "final_output": {
+  "entries": [
+   {
+    "title": "The electronic structure of cuprates from high energy spectroscopy",
+    "id": "http://arxiv.org/abs/cond-mat/0011267v1"
+   },
+   {
+    "title": "Surface effects on the electronic energy loss of charged particles entering a metal surface",
+    "id": "http://arxiv.org/abs/cond-mat/0211289v1"
+   },
+   {
+    "title": "A geometrical meaning to the electron mass from breakdown of Lorentz invariance",
+    "id": "http://arxiv.org/abs/hep-th/0505137v1"
+   },
+   {
+    "title": "Ultrafast Electron Dynamics in the Topological Insulator Bi2Se3 Studied by Time-Resolved Photoemission Spectroscopy",
+    "id": "http://arxiv.org/abs/1401.3078v2"
+   },
+   {
+    "title": "Electronic and magnetic properties of the graphene densely decorated with 3d metallic adatoms",
+    "id": "http://arxiv.org/abs/1711.09828v1"
+   }
+  ]
+ },
+ "verdict": "covered",
+ "judged_at": "2026-10-23T13:35:46+00:00"
+}

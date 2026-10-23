@@ -1,0 +1,10 @@
+{
+ "id": "hn-43158425",
+ "shape_digest": "sha256:4c8113107d137fa5abf7888f52b1ad373155529d7321bcce689850b0fbb94db3",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点不适用：Steam 页面 JS 渲染，url_read 静态读取必 empty_content（稻草人禁令不接线）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

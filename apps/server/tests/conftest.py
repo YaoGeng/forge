@@ -100,12 +100,15 @@ def drain():
     """推时钟逐 tick 执行全部到期 run：到点执行，不做真实等待。"""
 
     def _drain(sched, clock, until=None, limit=200):
-        while True:
+        # limit 防护必须接线：同站限频挡执行时 next_due 恒返过去时刻、时钟不再前进，
+        # 无防护即纯死循环（2026-10-23 SPAN=0 修订时实测卡死）
+        for _ in range(limit):
             sched.tick()
             nxt = sched.next_due()
             if nxt is None or (until is not None and nxt > until):
                 return
             clock.advance_to(nxt)
+        raise AssertionError(f"drain exceeded {limit} ticks without converging")
 
     return _drain
 

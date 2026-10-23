@@ -1,0 +1,10 @@
+{
+ "id": "hn-41428635",
+ "shape_digest": "sha256:0862235543c4f21dc1391204023e5cda7fe2f3806840d7ddbe2880230c2fe5ef",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "主旨识别/排序（LLM）无积木；阿拉伯语周报来源亦未指明",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

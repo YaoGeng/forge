@@ -1,0 +1,10 @@
+{
+ "id": "hn-46935908",
+ "shape_digest": "sha256:23775d04644fccd2f18084392c708c67caecb5ad7c5453cd20d9a6252a05025a",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "site_not_covered",
+ "reason": "站点不可达：CRA 税率页匿名读取被拒（table_read 实测 http_error）；加拿大政府站区域限制",
+ "ran": false,
+ "judged_at": "2026-10-23T13:35:46+00:00"
+}

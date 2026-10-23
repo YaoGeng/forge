@@ -88,7 +88,9 @@ def run_experiment(app, client, *, pool_path: Path, sample_path: Path,
             continue
         rec = run_one(e, exec_chain, registry=names)
         rec["judged_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
-        rec_path.write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
+        tmp = rec_path.with_suffix(".json.tmp")
+        tmp.write_text(json.dumps(rec, ensure_ascii=False, indent=1), encoding="utf-8")
+        tmp.replace(rec_path)  # 原子落盘：撕裂记录会卡死恰一次补跑（终审 minor#3）
         records.append(rec)
         executed += 1
         print(f"  [{e['id']}] {rec['verdict']}"

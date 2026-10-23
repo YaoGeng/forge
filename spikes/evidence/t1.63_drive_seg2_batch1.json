@@ -1,6 +1,6 @@
 {
   "segment": 2,
-  "driven_at": "2026-10-18T15:54:13+00:00",
+  "driven_at": "2026-10-23T13:34:41+00:00",
   "blocks": {
     "bing_search": {
       "n": 20,
@@ -43,6 +43,38 @@
       "reached": true
     },
     "book_detail": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "url_read": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "table_read": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "json_export": {
+      "n": 20,
+      "pass": 20,
+      "live_pass_rate": 1.0,
+      "regression_pass_rate": 1.0,
+      "verdict": "pass",
+      "reached": true
+    },
+    "arxiv_search": {
       "n": 20,
       "pass": 20,
       "live_pass_rate": 1.0,

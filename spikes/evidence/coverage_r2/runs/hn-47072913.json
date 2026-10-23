@@ -1,0 +1,10 @@
+{
+ "id": "hn-47072913",
+ "shape_digest": "sha256:2b62bbc72038199036235b17097ffdcc411d004310d10372aaedcc49325505ce",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "可用性探测/告警/状态页能力无积木",
+ "ran": false,
+ "judged_at": "2026-10-23T13:35:43+00:00"
+}

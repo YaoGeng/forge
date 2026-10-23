@@ -1,0 +1,10 @@
+{
+ "id": "zapier-38394",
+ "shape_digest": "sha256:8a4c75891bb9946bd778d9130c0b9a7471e87751a2aaa284d2b4bb37b5dc66a3",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "通用表格读取已备（table_read），但帖内目标表 URL 未披露——无法参数化（稻草人禁令）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

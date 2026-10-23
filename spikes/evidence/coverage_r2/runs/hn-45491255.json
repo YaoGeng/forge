@@ -1,0 +1,10 @@
+{
+ "id": "hn-45491255",
+ "shape_digest": "sha256:017d293e53c9adf98d22b351af949fdf1ea618ce881581f94d3c88bd501c0f39",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "内容策展/语义摘要（LLM+人工）无积木，营销源亦未指明",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

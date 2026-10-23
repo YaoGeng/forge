@@ -1,0 +1,10 @@
+{
+ "id": "hn-40524772",
+ "shape_digest": "sha256:d1f576626b4f1eb56830a97104bc189e10902a22415fcc8889a4a22683c75124",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "可用性探测/定时/告警无积木（url_read 单次读取≠监控）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

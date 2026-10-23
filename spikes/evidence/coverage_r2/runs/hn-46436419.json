@@ -1,0 +1,24 @@
+{
+ "id": "hn-46436419",
+ "shape_digest": "sha256:577cb976c10aef745ffe49b0f349f58d5537ebf1b6648e883c221da415ea5f8a",
+ "expected_must": {
+  "list_key": "hits",
+  "min_items": 2
+ },
+ "ran": true,
+ "steps_view": [
+  {
+   "index": 0,
+   "block": "hn_search_probe",
+   "ok": true,
+   "failure_class": null
+  }
+ ],
+ "final_output": {
+  "hits": []
+ },
+ "verdict": "uncovered",
+ "category": "shape_mismatch",
+ "reason": "产出不符预登记预期形状（结构核对严格判定，不放宽）",
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

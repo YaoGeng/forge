@@ -1,0 +1,10 @@
+{
+ "id": "hn-47389369",
+ "shape_digest": "sha256:910def95cbc884c379121d6530ebbc17607948a4dec3ba61121248aeb8443323",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "指标聚合/告警/存储后端能力无积木（目标站点亦未指明）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:35:38+00:00"
+}

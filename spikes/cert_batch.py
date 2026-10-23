@@ -165,6 +165,12 @@ def drive(store_dir: Path, manifest, segment: int, *, app, routes: dict,
                     "verdict": row.verdict,
                     "reached": row.n >= target,
                 }
+        # 已达 target 即摘除计划：SPAN=0 修订后时段二紧随时段一 due，
+        # 不摘则 tick 继续执行溢出 run（n 钉不住 SEGMENT_RUNS*segment）
+        for name, v in blocks.items():
+            rid = run_ids[name]
+            if v["reached"] and rid in sched._plans:
+                sched.detach(rid)
         if all(v["reached"] for v in blocks.values()) and len(blocks) == len(targets):
             break
         time.sleep(poll_s)

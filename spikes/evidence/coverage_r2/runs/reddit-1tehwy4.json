@@ -1,0 +1,10 @@
+{
+ "id": "reddit-1tehwy4",
+ "shape_digest": "sha256:fff29ce7deb59443f4aa3d1164d5752d061db60a4669bda58c8f942322bfc8b5",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "目标 URL 未指明；url_read/table_read 需具体目标方可参数化（稻草人禁令）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:35:38+00:00"
+}

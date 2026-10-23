@@ -1,0 +1,10 @@
+{
+ "id": "hn-48848819",
+ "shape_digest": "sha256:c4ab0dd779ad97d39fa9ec545645ca276cbc7d92ae6dab9af09f2410c41cb85e",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "PR/贡献者维度数据端点无积木（github 块现含 stars/description 输出，但深度洞察超形状）",
+ "ran": false,
+ "judged_at": "2026-10-23T13:35:38+00:00"
+}

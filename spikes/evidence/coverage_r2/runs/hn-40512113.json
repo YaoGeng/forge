@@ -1,0 +1,10 @@
+{
+ "id": "hn-40512113",
+ "shape_digest": "sha256:3962f16846eaef621580f2f94079fa5001669050a129ff77e3a28f2a5ba70188",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "needs_genericization",
+ "reason": "产品发布帖（dlt+OpenAPI）无具体目标；OpenAPI 规范解析能力亦无积木",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

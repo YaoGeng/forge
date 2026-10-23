@@ -1,0 +1,10 @@
+{
+ "id": "hn-40233096",
+ "shape_digest": "sha256:2ef842fea3f8191035c58c7877e98bb35d3210e73f47b29eed2e89c107ff724a",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "站点脚本输出与链参数解耦（browse(port) 无参契约，T1.71）——月度帖参数化检索抽取缺失",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}

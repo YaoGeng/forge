@@ -1,0 +1,10 @@
+{
+ "id": "hn-41057356",
+ "shape_digest": "sha256:b974f66a3e4a63db5f41f9477b2f9e72b44afdd7aca23624097bb1b865ee7d71",
+ "expected_must": {},
+ "verdict": "uncovered",
+ "category": "capability_missing",
+ "reason": "语义摘要需 LLM 块（2026-10-19 拍板不纳入）；url_read+text_digest 仅结构化整理非语义摘要",
+ "ran": false,
+ "judged_at": "2026-10-23T13:36:09+00:00"
+}
