@@ -423,3 +423,20 @@ def test_publish_readonly_not_gated(demo_block_dir):
     src = 'DOC = """Sort records in order by title."""\n'
     result = lint(overlay(demo_block_dir, {"main.py": src}))
     assert not hits(result, "publish_requires_confirm")
+
+
+def test_no_direct_network_registered_waiver():
+    """A.9 R2③ 登记豁免（docs/05 备案）：url_read/table_read 冻结规格为 python/httpx
+    直连（best_effort 强制）；豁免只在登记清单内，清单外照常拦截。"""
+    import dataclasses
+
+    from forge_block_sdk.rules import rule_no_direct_network
+
+    src = "import httpx\n\n\ndef run(p):\n    httpx.get('https://x.example.com')\n"
+    base = load_block(CORPUS / "block.yaml")
+    for name in ("url_read", "table_read"):
+        spec = dataclasses.replace(base, name=name)
+        assert rule_no_direct_network(make_ctx(src, spec=spec)) == [], name
+    other = dataclasses.replace(base, name="some_other_block")
+    out = rule_no_direct_network(make_ctx(src, spec=other))
+    assert out and all(v["rule_id"] == "no_direct_network" for v in out)

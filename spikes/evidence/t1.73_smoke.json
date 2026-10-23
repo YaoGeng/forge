@@ -1,0 +1,9 @@
+{
+ "url": "https://books.toscrape.com/",
+ "ok": true,
+ "title": "All products | Books to Scrape - Sandbox",
+ "text_len": 1810,
+ "links_n": 20,
+ "content_bytes": 51294,
+ "failure_class": null
+}

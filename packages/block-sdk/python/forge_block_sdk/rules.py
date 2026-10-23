@@ -15,6 +15,11 @@ import yaml
 from .model import FAMILIES, BlockSpec, InteractionSpec, has_capability
 
 NETWORK_MODULES = {"requests", "urllib", "httpx", "socket", "http"}
+
+# D-4 收窄登记豁免（docs/05 附录 A.9 R2③，2026-10-19 人工拍板）：url_read/table_read
+# 通用读取块的冻结规格即 python/httpx 直连（best_effort 强制——空壳/挑战页如实失败）。
+# 豁免仅限清单内块名；其余块直连网络库照常拦截。
+NO_DIRECT_NETWORK_WAIVER = frozenset({"url_read", "table_read"})
 BROAD_EXCEPTIONS = {"Exception", "BaseException"}
 PUBLISH_VERBS = ("publish", "submit", "pay", "purchase", "checkout", "order")
 EXFIL_WORDS = ("url", "uri", "body", "query", "param", "payload", "header", "token")
@@ -88,6 +93,8 @@ def _iter_runtime_calls(tree: ast.Module, aliases: dict[str, str]):
 
 
 def rule_no_direct_network(ctx: LintContext) -> list[dict]:
+    if ctx.spec.name in NO_DIRECT_NETWORK_WAIVER:
+        return []
     out: list[dict] = []
     for rel, tree in ctx.py_sources:
         banned: set[str] = set()

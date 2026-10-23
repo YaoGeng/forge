@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: url_read
+version: 1.0.0
+title: url_read
+site_change_tier: standard
+side_effects: false
+capabilities:
+  - api_public_read
+permissions: []
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 url_read（场景 s4_text_extract；通用只读，best_effort 强制——A.9 R2，空壳/挑战页如实失败）

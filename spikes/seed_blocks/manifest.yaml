@@ -65,6 +65,10 @@ blocks:
   - {name: text_stats, site: null, scenario: s9_text_digest, level: C2,
      script: null, params: {text: the quick brown fox}, batch: 2, adapter: python}
 
+  # ── D-4 收窄新块（A.9 R2③；batch:1，T1.77 认证批次）──
+  - {name: url_read, site: null, scenario: s4_text_extract, level: C2,
+     script: null, params: {url: "https://books.toscrape.com/"}, batch: 1, adapter: python}
+
 # ── 保留清单（能力底座，注册/认证留存，不进场景承诺；A.9 R2 ⑤）──
 # 以下块随 s2_login_inventory/s10_numeric_calc 场景裁撤移出 blocks[]，目录/认证/注册不动：
 #   login_demo_probe（s2，C1，saucedemo.com 登录探针——30 样本中登录类真实需求全落排除域，域内命中 0）
