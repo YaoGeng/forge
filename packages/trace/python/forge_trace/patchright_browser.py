@@ -180,6 +180,10 @@ class PatchrightBrowser:
         self._flush_nav()
         return self._page.url
 
+    def inner_text(self, selector: str) -> str:
+        self._flush_nav()
+        return self._page.locator(selector).inner_text()
+
     # —— golden 面 ——
     def set_routes(self, matcher) -> None:
         def handle(route, request):

@@ -43,6 +43,7 @@ class ReplayResult:
     trace_ref: str
     mode: str
     step_results: tuple[StepResult, ...]
+    script_output: dict | None = None  # T1.71：站点脚本返回值（步回放后执行；None=无脚本/返回 None）
 
 
 @dataclass(frozen=True)
@@ -125,6 +126,7 @@ def run(
     *,
     store: RecordingsStore,
     browser_factory,
+    script: t.Callable[[BrowserPort], dict | None] | None = None,
 ) -> ReplayResult:
     if mode not in MODES:
         raise ValueError(f"mode 必须属于 {MODES}，得到 {mode!r}")
@@ -161,7 +163,12 @@ def run(
         fragile = [r["seq"] for r in results if not r["anchor_matched"]]
         if fragile:
             store.mark_fragile(trace_ref, fragile)
-    return ReplayResult(trace_ref=trace_ref, mode=mode, step_results=tuple(results))
+    # T1.71 站点脚本输出通道：步结果已定格后在同一端口执行 script（录制/回放同路径，
+    # 抽取逻辑天然一致）。script_output 不进一致性/相似度判定（只透传）；
+    # 脚本异常向上传播——由调用方（ChainRunner/scheduler_hook）如实归因。
+    script_output = script(port) if script is not None else None
+    return ReplayResult(trace_ref=trace_ref, mode=mode,
+                        step_results=tuple(results), script_output=script_output)
 
 
 def assert_consistent(

@@ -56,6 +56,28 @@ def runtime_kinds() -> dict[str, str]:
     return kinds
 
 
+def load_trace_scripts(name_to_ref: dict[str, str]) -> dict[str, object]:
+    """T1.71：trace 块 manifest script 引用 → {block_ref: browse 可调用}。
+
+    python 块与无 script 引用的块不装载；ref 缺失（未录制）不装载（回放本就找不到 ref）。
+    """
+    import importlib
+
+    from seedline import load_manifest
+
+    out: dict[str, object] = {}
+    for b in load_manifest(SEEDS / "manifest.yaml").blocks:
+        ref = name_to_ref.get(b.name)
+        if b.adapter != "trace" or not b.script or ref is None:
+            continue
+        module, _, fn = b.script.partition(":")
+        try:
+            out[ref] = getattr(importlib.import_module(module), fn)
+        except (ImportError, AttributeError):
+            continue  # 脚本不可导入如实跳过：该块退化为无输出（与改造前一致）
+    return out
+
+
 def build_server(store_dir: Path):
     from forge_server.app import create_app
 
@@ -112,7 +134,8 @@ def wire_chain_runner(app, store_dir: Path, names, *, browser_factory=None,
             # TypeError（NoneType 不可调用）；cert_batch.build_routes 同款兜底
             tr = TraceRunner(RecordingsStore(Path(store_dir)),
                              browser_factory or PatchrightBrowser,
-                             block_dirs=trace_dirs)
+                             block_dirs=trace_dirs,
+                             scripts=load_trace_scripts(name_to_ref))
         for name, ref in name_to_ref.items():
             routes[name] = (tr, ref)
     if py_dirs:

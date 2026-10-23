@@ -31,6 +31,7 @@ class FakeBrowser:
         self.scrolls: list[int] = []
         self.waits: list[tuple[str, int]] = []
         self.presses: list[str] = []
+        self.inner_texts: list[str] = []  # T1.71 抽取面记账
         self.hidden: set[str] = set()  # 测试模拟元素缺失（wait_selector 判 False）
 
     # —— 录制面 ——
@@ -130,6 +131,11 @@ class FakeBrowser:
 
     def current_url(self) -> str:
         return self.url
+
+    def inner_text(self, selector: str) -> str:
+        """T1.71 抽取面（只记账）：返回当前 html 由调用方解析；测试可覆写给固定片段。"""
+        self.inner_texts.append(selector)
+        return self.html
 
     # —— golden 面 ——
     def set_routes(self, matcher: RouteMatcher) -> None:

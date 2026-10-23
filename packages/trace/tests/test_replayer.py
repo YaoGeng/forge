@@ -123,3 +123,29 @@ def test_query_override_no_hit_and_duplicate_keys(root):
     ref, store = _record(root, _script_standard)
     _, browser = _replay(root, ref, store, params={"q:absent": "x"})
     assert browser.gotos == ["https://example.com/?q=old"]
+
+
+# ── T1.71：站点脚本输出通道（script_output）──
+
+def test_replay_runs_script_and_carries_script_output(root):
+    """步回放后在同一端口执行 script（browse 契约），返回值入 script_output。"""
+    ref, store = _record(root, _script_standard)
+    seen = {}
+
+    def browse(port):
+        seen["url"] = port.current_url()
+        return {"results": ["a", "b"]}
+
+    result, _ = _replay(root, ref, store, script=browse)
+    assert result.script_output == {"results": ["a", "b"]}
+    assert seen["url"] == "https://example.com/?q=old"  # 步回放后端口的落点状态
+
+    result2, _ = _replay(root, ref, store)
+    assert result2.script_output is None
+
+
+def test_replay_script_none_return_stays_none(root):
+    """browse 返回 None（既有块兼容）：script_output=None，不设 output。"""
+    ref, store = _record(root, _script_standard)
+    result, _ = _replay(root, ref, store, script=lambda port: None)
+    assert result.script_output is None

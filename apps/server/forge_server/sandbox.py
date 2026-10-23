@@ -75,11 +75,13 @@ class TraceRunner:
     """真实 RunnerPort：提交前置 validate_block_dir + lint 门（拒绝即 rejected 不排期、
     不触浏览器）；执行 = forge_trace replay.run（local=live / golden=regression）。"""
 
-    def __init__(self, store, browser_factory, *, block_dirs=None, run_timeout_s: float = 120.0):
+    def __init__(self, store, browser_factory, *, block_dirs=None, run_timeout_s: float = 120.0,
+                 scripts: dict[str, object] | None = None):
         self._store = store
         self._browser_factory = browser_factory
         self._block_dirs = dict(block_dirs or {})
         self._timeout_s = run_timeout_s
+        self._scripts = dict(scripts or {})  # T1.71：block_ref → browse(port)，回放后执行取输出
         self._last_port = None
 
     def _capture_factory(self, base):
@@ -128,6 +130,7 @@ class TraceRunner:
             result = replay.run(
                 block_ref, dict(params or {}), mode=mode, store=self._store,
                 browser_factory=self._capture_factory(browser_factory or self._browser_factory),
+                script=self._scripts.get(block_ref),
             )
         finally:
             port, self._last_port = self._last_port, None
@@ -146,6 +149,8 @@ class TraceRunner:
         timed_out = (time.perf_counter() - t0) > self._timeout_s
         shape = shape_drained
         failure = classify_failure(result.step_results, timed_out=timed_out)
+        # T1.71 口径（Review Focus 3）：output 仅透传（trace 块与 python 块同语义），
+        # 不进 golden 对拍/相似度判定——步结果才判 ok，脚本抽取值只随 RunOutcome 下行。
         return RunOutcome(
             mode=mode,
             ok=failure is None,
@@ -153,6 +158,7 @@ class TraceRunner:
             failure_class=failure,
             network_shape=shape,
             timed_out=timed_out,
+            output=result.script_output,
         )
 
 
