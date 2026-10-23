@@ -185,3 +185,21 @@ def test_login_demo_probe_legacy_untouched():
     import importlib.util
 
     assert importlib.util.find_spec("site_scripts.login_demo_probe") is None
+
+
+ATOM = """<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+<title type="html">ArXiv Query: search_query=all:electron</title>
+<entry><id>http://arxiv.org/abs/2401.00001v1</id><title>Paper One About Electrons</title></entry>
+<entry><id>http://arxiv.org/abs/2401.00002v1</id><title>Paper Two About Electrons</title></entry>
+</feed>"""
+
+
+def test_arxiv_search_contract():
+    out, port = _browse("arxiv_search", text=ATOM)
+    assert set(out) == {"entries"}
+    assert len(out["entries"]) == 2
+    for item in out["entries"]:
+        assert set(item) == {"title", "id"}
+    assert out["entries"][0]["id"] == "http://arxiv.org/abs/2401.00001v1"
+    assert "Electrons" in out["entries"][0]["title"]

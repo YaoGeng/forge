@@ -22,6 +22,7 @@ sites:
   httpbin.org: {tier: standard}        # 公开 HTTP 测试服务
   api.github.com: {tier: standard}     # 公开 REST API
   jsonplaceholder.typicode.com: {tier: standard} # 公开假数据 API
+  export.arxiv.org: {tier: standard}      # 公开 Atom API（A.9 R2③；公开学术 API 无反爬声明）
 
 blocks:
   # ── 批次一：场景 1/3/4/7 + 既有两块（48h 时钟最早起跑）──
@@ -72,6 +73,8 @@ blocks:
      script: null, params: {url: "https://docs.python.org/3/library/string.html", index: 0}, batch: 1, adapter: python}
   - {name: json_export, site: null, scenario: s8_data_export, level: C2,
      script: null, params: {rows: "alpha;beta", out: report.json}, batch: 1, adapter: python}
+  - {name: arxiv_search, site: export.arxiv.org, scenario: s5_public_api, level: C2,
+     script: site_scripts.arxiv_search:browse, params: {}, batch: 1, adapter: trace}
 
 # ── 保留清单（能力底座，注册/认证留存，不进场景承诺；A.9 R2 ⑤）──
 # 以下块随 s2_login_inventory/s10_numeric_calc 场景裁撤移出 blocks[]，目录/认证/注册不动：

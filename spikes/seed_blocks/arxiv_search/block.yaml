@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: arxiv_search
+version: 1.0.0
+title: arxiv_search
+site_change_tier: standard
+side_effects: false
+capabilities: []
+permissions:
+  - { type: domain, value: "export.arxiv.org", required: true }
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 arxiv_search（场景 s5_public_api；公开 Atom API 学术检索）
