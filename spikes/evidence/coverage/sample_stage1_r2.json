@@ -1,9 +1,9 @@
 {
  "stage": 1,
  "protocol": "docs/05 附录 A.10 R2；docs/14 T1.65c",
- "pool_ref": "sha256:882aaa30b463bc1e9bd4cde55e48f29151bb7162d58a737c7c69c7357bb7f70d",
+ "pool_ref": "sha256:c125e41c7d35b33f9fb19039669b9fb79b8ffc3d1ff9ecd4d45dd8a7920f1bb1",
  "selection_rule": "in_domain 按 posted_at 字符串降序取前 30；同刻按池序（零自由度；R2 池）",
- "generated_at": "2026-10-23T10:25:11+00:00",
+ "generated_at": "2026-10-23T10:49:02+00:00",
  "entries": [
   {
    "id": "hn-48848819",

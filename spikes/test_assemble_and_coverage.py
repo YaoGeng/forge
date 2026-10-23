@@ -177,7 +177,10 @@ class TestRunCoverage:
                              sample_path=_ROOT / "spikes/coverage/sample_r2.json",
                              runs_dir=runs_dir, report_path=report)
         assert out["denominator"] == 30 and out["executed"] == 30 and out["resumed"] == 0
-        assert out["covered"] == 4  # R2 接线面：2×arxiv_search + hn_search_probe + text_clean→markdown_export
+        # 终审 I-1：三条 trace 链形状硬核验——假执行器零输出（entries/hits 缺）→ shape_mismatch
+        # 如实不计覆盖；仅 text_clean→markdown_export（rows=5）covered。
+        assert out["covered"] == 1
+        assert out["categories"].get("shape_mismatch") == 3
         assert out["categories"].get("capability_missing") == 14
         assert out["categories"].get("needs_genericization") == 7
         assert out["categories"].get("site_not_covered") == 5
@@ -185,7 +188,7 @@ class TestRunCoverage:
         assert rec["verdict"] == "covered" and rec["final_output"]["rows"] == 5
         assert rec["shape_digest"].startswith("sha256:")
         text = report.read_text(encoding="utf-8")
-        assert "13.3%" in text  # 4/30（离线假执行器排练值；真实复判见 T1.79）
+        assert "3.3%" in text  # 1/30（离线假执行器排练值——零输出链被形状核验拦下；真实复判见 T1.79）
         assert "人工复核" in text
 
     def test_resume_never_reexecutes_frozen_records(self, server):

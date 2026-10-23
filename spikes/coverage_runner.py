@@ -65,7 +65,7 @@ def load_pool(path: str) -> list[dict]:
             bad = [d for d in e["domains"] if d not in KNOWN_DOMAINS]
             if bad:
                 raise ValueError(f"条目 {e['id']} 含未知/已裁撤场景域 {bad}（A.9 R2 场景集恰 8）")
-            text = f"{e.get('title') or ''} {e.get('note') or ''}"
+            text = " ".join(str(e.get(k) or "") for k in ("title", "note", "excerpt", "url"))
             for dom, pat in EXCLUSION_DOMAIN_PATTERNS.items():
                 if pat.search(text):
                     raise ValueError(
@@ -129,9 +129,14 @@ UNCOVERABLE_CATEGORIES = ("site_not_covered", "capability_missing", "needs_gener
 
 
 def check_shape(final_output: dict, must: dict) -> bool:
-    """结构化形状核对（C10）：markdown 行数核对（title_row 计 1 行）。严格判定。"""
+    """结构化形状核对（C10）：markdown 行数核对（title_row 计 1 行）或
+    列表型最小条目数（list_key/min_items——终审 I-1：站点块输出列表不得空计覆盖）。
+    严格判定。"""
     if not must:
         return True
+    if "list_key" in must:
+        items = final_output.get(must["list_key"])
+        return isinstance(items, list) and len(items) >= int(must.get("min_items", 1))
     rows = final_output.get("rows")
     if not isinstance(rows, int):
         return False

@@ -63,7 +63,7 @@ HN_RULINGS: dict[str, tuple[str, list[str] | None, str]] = {
     "37418853": ("in_domain", ["s7"], "竞品自动追踪（同人重发）"),
     "37064152": ("in_domain", ["s7"], "服务条款变更通知"),
     "35197795": ("in_domain", ["s7"], "网站监控"),
-    "34461064": ("in_domain", ["s5", "s8"], "SEO 数据进表格"),
+    "34461064": ("excluded", None, "R2 排除域：OAuth 深凭据（GSC API——终审 I-2，证据在 excerpt）"),
     "33622363": ("in_domain", ["s7"], "网页变更监控+全站爬取"),
     "32090795": ("in_domain", ["s8"], "数据库数据定时进表格邮件"),
     "30699237": ("out_of_domain", None, "登录域读取——s2 裁撤（A.9 R2①：登录类域内命中 0）"),

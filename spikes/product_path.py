@@ -60,11 +60,14 @@ def load_trace_scripts(name_to_ref: dict[str, str]) -> dict[str, object]:
     """T1.71：trace 块 manifest script 引用 → {block_ref: browse 可调用}。
 
     python 块与无 script 引用的块不装载；ref 缺失（未录制）不装载（回放本就找不到 ref）。
+    脚本导入失败如实跳过 + 告警（终审 I-1：块退化为无输出须可观测，不得静默）。
     """
     import importlib
+    import logging
 
     from seedline import load_manifest
 
+    log = logging.getLogger(__name__)
     out: dict[str, object] = {}
     for b in load_manifest(SEEDS / "manifest.yaml").blocks:
         ref = name_to_ref.get(b.name)
@@ -74,7 +77,7 @@ def load_trace_scripts(name_to_ref: dict[str, str]) -> dict[str, object]:
         try:
             out[ref] = getattr(importlib.import_module(module), fn)
         except (ImportError, AttributeError):
-            continue  # 脚本不可导入如实跳过：该块退化为无输出（与改造前一致）
+            log.warning("trace 脚本装载失败（该块退化为无输出）：%s", b.script)
     return out
 
 

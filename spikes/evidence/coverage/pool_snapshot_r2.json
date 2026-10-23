@@ -2,12 +2,12 @@
  "meta": {
   "protocol": "docs/05 附录 A.10（R2 修订：A.9 R2 8 场景锚定 + 排除域硬校验）",
   "domain_defs": "docs/14 C8（R2：场景集 8，A.9 R2①）",
-  "generated_at": "2026-10-23T10:25:11+00:00",
+  "generated_at": "2026-10-23T10:48:26+00:00",
   "counts": {
    "total": 136,
-   "in_domain": 47,
+   "in_domain": 46,
    "out_of_domain": 57,
-   "excluded": 32
+   "excluded": 33
   },
   "in_domain_communities": [
    "Hacker News",
@@ -1644,13 +1644,10 @@
    "posted_at": "2023-01-20T22:36:06Z",
    "posted_at_precision": "second（Algolia API）",
    "fetched_at": "2026-10-16T16:09:51+00:00",
-   "verdict": "in_domain",
-   "domains": [
-    "s5",
-    "s8"
-   ],
-   "reason": "SEO 数据进表格",
-   "note": "SEO 数据进表格"
+   "verdict": "excluded",
+   "domains": null,
+   "reason": "R2 排除域：OAuth 深凭据（GSC API——终审 I-2，证据在 excerpt）",
+   "note": "R2 排除域：OAuth 深凭据（GSC API——终审 I-2，证据在 excerpt）"
   },
   {
    "id": "hn-33622363",

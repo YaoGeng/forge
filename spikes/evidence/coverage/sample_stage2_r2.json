@@ -2,10 +2,10 @@
  "meta": {
   "stage": 2,
   "protocol": "docs/05 附录 A.10 R2；docs/14 T1.65c",
-  "pool_ref": "sha256:882aaa30b463bc1e9bd4cde55e48f29151bb7162d58a737c7c69c7357bb7f70d",
+  "pool_ref": "sha256:c125e41c7d35b33f9fb19039669b9fb79b8ffc3d1ff9ecd4d45dd8a7920f1bb1",
   "selection_rule": "in_domain 按 posted_at 字符串降序取前 30；同刻按池序（零自由度；R2 池）",
-  "generated_at": "2026-10-23T10:26:03+00:00",
-  "shape_note": "预期形状从需求语义登记，不迁就库能力；R2 接线按 v2 能力面（url_read/table_read/json_export/arxiv_search+输出通道）最优诚实重定"
+  "generated_at": "2026-10-23T10:49:02+00:00",
+  "shape_note": "预期形状从需求语义登记，不迁就库能力；链式形状硬核验（终审 I-1）"
  },
  "entries": [
   {
@@ -115,8 +115,12 @@
    "note": "arXiv 每日论文筛选摘要",
    "expected_shape": {
     "format": "digest_list",
-    "checked": false,
-    "note": "arXiv 检索条目列表（title/id）——A.9 R2③ 新块实例化",
+    "checked": true,
+    "must": {
+     "list_key": "entries",
+     "min_items": 3
+    },
+    "note": "arXiv 检索条目列表（title/id）——A.9 R2③ 新块实例化；终审 I-1：列表最小条目硬核验",
     "want": "论文条目列表 ≥3"
    },
    "attempt": {
@@ -211,7 +215,11 @@
    "note": "研究论文消化/汇总助手",
    "expected_shape": {
     "format": "digest_list",
-    "checked": false,
+    "checked": true,
+    "must": {
+     "list_key": "entries",
+     "min_items": 3
+    },
     "note": "研究论文检索汇总——arXiv 检索子域实例化（出版商/知识库消化超形状留旁证）",
     "want": "论文条目列表 ≥3"
    },
@@ -286,9 +294,13 @@
    "note": "HN 每日摘要（原工具失效）",
    "expected_shape": {
     "format": "digest_list",
-    "checked": false,
-    "note": "HN 检索要点列表——认证参数 q=python 实例化（个性化主题差距留人工复核列）",
-    "want": "检索结果条目列表"
+    "checked": true,
+    "must": {
+     "list_key": "hits",
+     "min_items": 2
+    },
+    "note": "HN 检索要点列表——认证参数 q=python 实例化（个性化主题差距留人工复核列）；脚本抽取上限 2 条",
+    "want": "检索结果条目列表 ≥2"
    },
    "attempt": {
     "kind": "chain",

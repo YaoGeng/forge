@@ -383,3 +383,38 @@ class TestRealSampleR2:
                 assert att["kind"] == "chain" and att["steps"]
                 for st in att["steps"]:
                     assert st["block"] and isinstance(st.get("params", {}), dict)
+
+
+# ---------- 终审 I-1 修复：列表型最小条目核验（假覆盖口封堵）----------
+
+class TestCheckShapeList:
+    def test_list_min_items_pass(self):
+        assert check_shape({"entries": [{"t": 1}, {"t": 2}, {"t": 3}]},
+                           {"list_key": "entries", "min_items": 3}) is True
+
+    def test_list_min_items_fail_on_short_list(self):
+        assert check_shape({"entries": []}, {"list_key": "entries", "min_items": 3}) is False
+
+    def test_list_min_items_fail_on_missing_or_non_list(self):
+        assert check_shape({}, {"list_key": "entries", "min_items": 3}) is False
+        assert check_shape({"entries": "not-a-list"}, {"list_key": "entries", "min_items": 1}) is False
+
+    def test_rows_semantics_unchanged(self):
+        assert check_shape({"rows": 5}, {"title_row": True, "min_point_rows": 3}) is True
+        assert check_shape({"rows": 2}, {"title_row": True, "min_point_rows": 3}) is False
+
+
+class TestExclusionWindowWidened:
+    """终审 I-2：排除域证据在 excerpt/url 的条目入池即拒（校验窗扩至四字段）。"""
+
+    def test_rejects_when_evidence_in_excerpt(self, tmp_path):
+        p = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"],
+            excerpt="pulls data from Google Search Console (GSC) API")])
+        with pytest.raises(ValueError, match="排除域"):
+            load_pool(str(p))
+
+    def test_rejects_when_evidence_in_url(self, tmp_path):
+        p = _write_pool(tmp_path, [_mk_entry("a", domains=["s1"],
+            url="https://youtube.com/watch?v=x", title="digest tool", note="聚合")])
+        with pytest.raises(ValueError, match="排除域"):
+            load_pool(str(p))
