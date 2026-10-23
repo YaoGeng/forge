@@ -5,7 +5,7 @@ v2（终审 #9 重录）：双 goto 直达——v1 的「点首书标题」文�
 """
 
 
-def browse(port) -> None:
+def browse(port) -> dict:
     import time
 
     port.goto("https://books.toscrape.com/")
@@ -14,3 +14,7 @@ def browse(port) -> None:
     port.goto("https://books.toscrape.com/catalogue/a-light-in-the-attic_1000/index.html")
     port.wait_selector(".product_main", 15_000)
     time.sleep(1.5)
+    lines = [ln.strip() for ln in port.inner_text(".product_main").splitlines() if ln.strip()]
+    return {"title": lines[0],
+            "price": next(ln for ln in lines if ln.startswith("£")),
+            "stock": next(ln for ln in lines if "stock" in ln.lower())}

@@ -5,7 +5,7 @@ v2（重录）：双 goto 直达页 1/页 2——v1 的「点 Next 按钮」被�
 """
 
 
-def browse(port) -> None:
+def browse(port) -> dict:
     import time
 
     port.goto("https://quotes.toscrape.com/tag/love/")
@@ -14,5 +14,9 @@ def browse(port) -> None:
     port.goto("https://quotes.toscrape.com/tag/love/page/2/")
     port.wait_selector(".quote .text", 15_000)
     time.sleep(1.5)
-
-
+    html = port.snapshot_html()
+    quotes = []
+    for chunk in html.split('class="quote"')[1:3]:
+        quotes.append({"text": chunk.split('class="text">', 1)[1].split("<", 1)[0],
+                       "author": chunk.split('class="author">', 1)[1].split("<", 1)[0]})
+    return {"quotes": quotes}

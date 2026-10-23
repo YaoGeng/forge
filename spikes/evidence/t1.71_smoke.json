@@ -1,0 +1,33 @@
+{
+ "ok": true,
+ "steps": [
+  {
+   "index": 0,
+   "block": "bing_search",
+   "ok": true,
+   "failure_class": null
+  },
+  {
+   "index": 1,
+   "block": "text_clean",
+   "ok": true,
+   "failure_class": null
+  }
+ ],
+ "bing_results": [
+  {
+   "title": "whatsapp.com",
+   "url": "https://web.whatsapp.com/"
+  },
+  {
+   "title": "wikipedia.org",
+   "url": "https://en.wikipedia.org/wiki/World_Wide_Web"
+  }
+ ],
+ "text_clean": {
+  "ok": true,
+  "text": "Hello World",
+  "length": 11
+ },
+ "ran_at": "2026-10-23T09:47:25+00:00"
+}
