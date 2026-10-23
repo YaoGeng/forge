@@ -1,0 +1,25 @@
+{
+  "headers": [
+    "Option",
+    "Meaning"
+  ],
+  "ok": true,
+  "rows": [
+    [
+      "'<'",
+      "Forces the field to be left-aligned within the available\nspace (this is the default for most objects)."
+    ],
+    [
+      "'>'",
+      "Forces the field to be right-aligned within the\navailable space (this is the default for numbers)."
+    ],
+    [
+      "'='",
+      "Forces the padding to be placed after the sign (if any)\nbut before the digits.  This is used for printing fields\nin the form ‘+000000120’. This alignment option is only\nvalid for numeric types, excluding complex .\nIt becomes the default for numbers when ‘0’ immediately\nprecedes the field width."
+    ],
+    [
+      "'^'",
+      "Forces the field to be centered within the available\nspace."
+    ]
+  ]
+}

@@ -1,0 +1,7 @@
+assertion: schema
+expect:
+  type: object
+  required:
+    - ok
+  properties:
+    ok: { type: boolean }

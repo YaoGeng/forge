@@ -1,0 +1,15 @@
+schema_version: 2
+kind: block
+name: table_read
+version: 1.0.0
+title: table_read
+site_change_tier: standard
+side_effects: false
+capabilities:
+  - api_public_read
+permissions: []
+runtime:
+  adapter: python
+  entry: main.py
+  timeout_sec: 120
+ai_description: seed 块 table_read（场景 s4_text_extract；通用表格读取，best_effort 强制——A.9 R2，无表如实 no_table）
