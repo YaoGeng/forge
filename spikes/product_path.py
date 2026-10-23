@@ -31,12 +31,29 @@ from forge_server.scheduler import WallClock  # noqa: E402
 
 SEEDS = _ROOT / "spikes" / "seed_blocks"
 
+# 保留清单（A.9 R2 ⑤）运行时镜像：s2/s10 原块移出 manifest blocks[]（文件尾注释为正本），
+# 但注册/认证留存——装配仍须按原 adapter 接线、遗留 ref 键仍须可解析（五应用不动）。
+# 两处登记须同步改：manifest.yaml 文件尾 + 本常量。
+RETAINED_BLOCKS = {
+    "login_demo_probe": {"adapter": "trace", "legacy_state_key": "c1"},
+    "price_calc": {"adapter": "python", "legacy_state_key": None},
+    "stats_summary": {"adapter": "python", "legacy_state_key": None},
+    "unit_convert": {"adapter": "python", "legacy_state_key": None},
+}
+
 
 def adapter_kinds() -> dict[str, str]:
     from seedline import load_manifest
 
     manifest = load_manifest(SEEDS / "manifest.yaml")
     return {b.name: b.adapter for b in manifest.blocks}
+
+
+def runtime_kinds() -> dict[str, str]:
+    """装配用 adapter 全集 = manifest v2 blocks[] ⊕ 保留清单（wire_chain_runner 缺省同款）。"""
+    kinds = {k: v["adapter"] for k, v in RETAINED_BLOCKS.items()}
+    kinds.update(adapter_kinds())
+    return kinds
 
 
 def build_server(store_dir: Path):
@@ -60,11 +77,13 @@ def wire_chain_runner(app, store_dir: Path, names, *, browser_factory=None,
     state_path = Path(store_dir) / "state.json"
     state = json.loads(state_path.read_text(encoding="utf-8")) if state_path.exists() else {}
     refs = state.get("trace_refs", {})
-    kinds = adapters if adapters is not None else adapter_kinds()
+    kinds = dict(adapters) if adapters is not None else runtime_kinds()
     from seedline import load_manifest
 
     legacy_keys = {b.name: b.legacy_state_key for b in load_manifest(SEEDS / "manifest.yaml").blocks
                    if getattr(b, "legacy_state_key", None)}
+    legacy_keys.update({k: v["legacy_state_key"] for k, v in RETAINED_BLOCKS.items()
+                        if v["legacy_state_key"]})
 
     def _ref_of(name: str) -> str:
         # 遗留块（hn_search_probe/login_demo_probe）的录制 ref 存在 state 遗留键下（c2/c1）

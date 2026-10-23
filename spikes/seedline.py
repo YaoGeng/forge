@@ -2,7 +2,7 @@
 
 manifest.yaml 结构：
   schema_version: 1
-  scenarios: [{id, title}]          # 恰 10 个（PRD「10 场景」）
+  scenarios: [{id, title}]          # 恰 8 个（D-4 收窄，A.9 R2：砍 s2_login_inventory/s10_numeric_calc）
   sites: {host: {tier}}             # tier ∈ standard|medium|high
   blocks: [{name, site?, scenario, level, script?, params, batch, adapter,
             exists?, legacy_state_key?}]
@@ -23,7 +23,7 @@ _NAME_RE = re.compile(r"^[a-z0-9_]+$")
 _TIERS = ("standard", "medium", "high")
 _LEVELS = ("C1", "C2")
 _ADAPTERS = ("trace", "python")
-_SCENARIO_COUNT = 10
+_SCENARIO_COUNT = 8  # D-4 收窄（A.9 R2，2026-10-19）：场景集 10→8，砍 s2/s10
 
 
 class ManifestError(Exception):
@@ -75,7 +75,7 @@ def load_manifest(path: Path | str) -> Manifest:
 
     raw_scen = doc.get("scenarios") or []
     if len(raw_scen) != _SCENARIO_COUNT:
-        raise ManifestError(f"scenarios 必须恰 {_SCENARIO_COUNT} 个（PRD「10 场景」），现 {len(raw_scen)}")
+        raise ManifestError(f"scenarios 必须恰 {_SCENARIO_COUNT} 个（D-4 收窄，A.9 R2），现 {len(raw_scen)}")
     scenarios = []
     seen_ids: set[str] = set()
     for s in raw_scen:

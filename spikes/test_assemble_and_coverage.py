@@ -26,9 +26,9 @@ from forge_server.chain import ChainRunner  # noqa: E402
 from forge_server.models import CertificationRun  # noqa: E402
 from forge_server.sandbox import AdapterRunner, RunOutcome  # noqa: E402
 
-from product_path import SEEDS, adapter_kinds, build_server  # noqa: E402
+from product_path import SEEDS, build_server, runtime_kinds  # noqa: E402
 
-KINDS = adapter_kinds()
+KINDS = runtime_kinds()
 
 
 class FakeTraceRunner:

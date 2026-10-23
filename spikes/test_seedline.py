@@ -14,7 +14,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from seedline import ManifestError, Site, load_manifest  # noqa: E402
 
-_SCENARIOS = [f"s{i}_x" for i in range(1, 11)]
+_SCENARIOS = [f"s{i}_x" for i in range(1, 9)]  # 恰 8（D-4 收窄，A.9 R2）
+_LIVE_MANIFEST = Path(__file__).resolve().parent / "seed_blocks" / "manifest.yaml"
 
 
 def _manifest_yaml(
@@ -57,8 +58,8 @@ def _write(tmp_path: Path, text: str) -> Path:
 
 
 def test_manifest_schema_rejects_bad(tmp_path):
-    # 坏 1：场景数 != 10
-    p = _write(tmp_path, _manifest_yaml(scenarios=_SCENARIOS[:9]))
+    # 坏 1：场景数 != 8（D-4 收窄，A.9 R2；11 与旧值 10 都不合法）
+    p = _write(tmp_path, _manifest_yaml(scenarios=[f"s{i}_x" for i in range(1, 12)]))
     with pytest.raises(ManifestError, match="scenarios"):
         load_manifest(p)
 
@@ -111,12 +112,27 @@ def _python_block() -> dict:
 def test_manifest_accepts_good_sample(tmp_path):
     p = _write(tmp_path, _manifest_yaml())
     manifest = load_manifest(p)
-    assert len(manifest.scenarios) == 10
+    assert len(manifest.scenarios) == 8
     assert manifest.sites["example.com"].tier == "standard"
     by_name = {b.name: b for b in manifest.blocks}
     assert by_name["probe_a"].level == "C2"
     assert by_name["excel_export"].adapter == "python"
     assert by_name["excel_export"].site is None
+
+
+def test_manifest_v2_scenario_set():
+    """T1.70 Produces：现网 manifest v2 恰 8 场景，id 集合 pin（D-4 收窄，A.9 R2）。"""
+    manifest = load_manifest(_LIVE_MANIFEST)
+    assert [s.id for s in manifest.scenarios] == [
+        "s1_search_digest", "s3_catalog_read", "s4_text_extract", "s5_public_api",
+        "s6_repo_meta", "s7_home_watch", "s8_data_export", "s9_text_digest",
+    ]
+    # s2/s10 原块已移保留清单：blocks[] 不得再引用被裁场景
+    assert all(b.scenario != "s2_login_inventory" for b in manifest.blocks)
+    assert all(b.scenario != "s10_numeric_calc" for b in manifest.blocks)
+    by_name = {b.name: b for b in manifest.blocks}
+    assert "login_demo_probe" not in by_name and "price_calc" not in by_name
+    assert "stats_summary" not in by_name and "unit_convert" not in by_name
 
 
 # ── T1.61：产线三函数（脚手架/录制幂等/输出快照）──

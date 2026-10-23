@@ -3,7 +3,6 @@ schema_version: 1
 
 scenarios:
   - {id: s1_search_digest, title: 搜索聚合读取}
-  - {id: s2_login_inventory, title: 登录态数据读取}
   - {id: s3_catalog_read, title: 目录/书目读取}
   - {id: s4_text_extract, title: 文本抽取}
   - {id: s5_public_api, title: 公开 API 数据拉取}
@@ -11,7 +10,6 @@ scenarios:
   - {id: s7_home_watch, title: 高变更首页监控}
   - {id: s8_data_export, title: 数据导出}
   - {id: s9_text_digest, title: 文本汇总整理}
-  - {id: s10_numeric_calc, title: 数值计算}
 
 sites:
   hn.algolia.com: {tier: medium}       # 既有（MS-1E C2 seed）
@@ -42,11 +40,8 @@ blocks:
      script: site_scripts.quotes_paged:browse, params: {tag: love}, batch: 1, adapter: trace}
   - {name: baidu_home_watch, site: baidu.com, scenario: s7_home_watch, level: C2,
      script: site_scripts.baidu_home_watch:browse, params: {}, batch: 1, adapter: trace}
-  - {name: login_demo_probe, site: saucedemo.com, scenario: s2_login_inventory, level: C1,
-     script: site_scripts.login_demo_probe:browse, params: {}, batch: 1, adapter: trace,
-     exists: true, legacy_state_key: c1}
 
-  # ── 批次二：场景 5/6/8/9/10 ──
+  # ── 批次二：场景 5/6/8/9 ──
   - {name: npm_pkg_meta, site: registry.npmmirror.com, scenario: s5_public_api, level: C2,
      script: site_scripts.npm_pkg_meta:browse, params: {pkg: pytest}, batch: 2, adapter: trace}
   - {name: httpbin_echo, site: httpbin.org, scenario: s5_public_api, level: C2,
@@ -69,9 +64,10 @@ blocks:
      script: null, params: {text: "  Hello   World  "}, batch: 2, adapter: python}
   - {name: text_stats, site: null, scenario: s9_text_digest, level: C2,
      script: null, params: {text: the quick brown fox}, batch: 2, adapter: python}
-  - {name: price_calc, site: null, scenario: s10_numeric_calc, level: C2,
-     script: null, params: {price: "199.0", qty: "3"}, batch: 2, adapter: python}
-  - {name: stats_summary, site: null, scenario: s10_numeric_calc, level: C2,
-     script: null, params: {nums: "1,2,3,4,5"}, batch: 2, adapter: python}
-  - {name: unit_convert, site: null, scenario: s10_numeric_calc, level: C2,
-     script: null, params: {cm: "180"}, batch: 2, adapter: python}
+
+# ── 保留清单（能力底座，注册/认证留存，不进场景承诺；A.9 R2 ⑤）──
+# 以下块随 s2_login_inventory/s10_numeric_calc 场景裁撤移出 blocks[]，目录/认证/注册不动：
+#   login_demo_probe（s2，C1，saucedemo.com 登录探针——30 样本中登录类真实需求全落排除域，域内命中 0）
+#   price_calc（s10，单价×数量）
+#   stats_summary（s10，数值序列统计——非文本汇总，禁止为留而归）
+#   unit_convert（s10，厘米→米/英尺）
