@@ -106,8 +106,11 @@ def run_experiment(app, client, *, pool_path: Path, sample_path: Path,
 def main() -> int:
     import argparse
 
-    parser = argparse.ArgumentParser(description="T1.65e 覆盖实验执行（前置：全库已 register）")
+    parser = argparse.ArgumentParser(
+        description="覆盖实验执行（前置：全库已 register）。R2 复判（T1.79）：--r2 指向 R2 池/样本")
     parser.add_argument("--store", default=str(STORE))
+    parser.add_argument("--r2", action="store_true",
+                        help="R2 复判：pool_r2/sample_r2 + 产物落 evidence/coverage_r2/（A.10 R2⑤）")
     args = parser.parse_args()
 
     from fastapi.testclient import TestClient
@@ -121,8 +124,15 @@ def main() -> int:
         names = [b.name for b in s.query(Block).all()]
     wire_chain_runner(app, store_dir, names)
     client = TestClient(app)
-    out = run_experiment(app, client, pool_path=COV / "pool.json",
-                         sample_path=COV / "sample.json")
+    if args.r2:
+        cov_dir = EVIDENCE / "coverage_r2"
+        out = run_experiment(app, client,
+                             pool_path=COV / "pool_r2.json",
+                             sample_path=COV / "sample_r2.json",
+                             runs_dir=cov_dir / "runs", report_path=cov_dir / "report.md")
+    else:
+        out = run_experiment(app, client, pool_path=COV / "pool.json",
+                             sample_path=COV / "sample.json")
     print(json.dumps({k: v for k, v in out.items() if k != "categories"},
                      ensure_ascii=False, indent=2))
     return 0
