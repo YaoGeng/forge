@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TAG: ${{ github.ref_name }}
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
     steps:
       - uses: actions/checkout@v4
 
@@ -30,7 +31,6 @@ jobs:
       - name: 推送镜像与滚动更新
         env:
           SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
         run: |
           printf '%s' "$SSH_KEY" > key && chmod 600 key
           docker save forge-backend:${TAG} | ssh -i key -o StrictHostKeyChecking=accept-new "$SERVER_HOST" docker load
