@@ -1,0 +1,27 @@
+# /opt/aim/forge/compose.yml（服务器侧；部署标准 §6.2 模板实例化）
+# 启动：FORGE_TAG=vX.Y.Z docker compose -p forge up -d
+services:
+  forge-backend:
+    image: forge-backend:${FORGE_TAG:?FORGE_TAG 未设置——部署脚本或 .env 注入}
+    container_name: forge-backend
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "127.0.0.1:8041:8041"     # 契约 1：仅绑定回环
+    volumes:
+      - ./data:/data               # FORGE_DATA_DIR=/data（golden/报告落盘，随 /opt/aim tar 备份）
+    networks: [forge-net, infra]
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+networks:
+  forge-net:
+  infra:
+    external: true                 # /opt/aim/infra 创建，承载 aim-pg

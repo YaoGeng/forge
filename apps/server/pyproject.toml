@@ -14,3 +14,14 @@ dependencies = [
 [project.optional-dependencies]
 # 生产 PG 载体（docs/16 决策 1）：镜像与 CI 装 `.[pg]`；本地开发缺省 sqlite 不装
 pg = ["psycopg[binary]>=3.1"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["forge_server"]
+
+[tool.setuptools.package-data]
+# creator_index.html = /creator 路由的 FileResponse 来源，必须进镜像
+forge_server = ["creator_index.html"]
