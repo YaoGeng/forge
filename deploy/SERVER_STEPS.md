@@ -12,7 +12,7 @@ Cloudflare 面板新增 A 记录：`forge → 43.160.219.44`，灰云（仅 DNS�
 ssh-keygen -t ed25519 -f forge-ci-deploy -C "forge-ci-deploy@github-actions" -N ""
 # 公钥追加到服务器 /home/deploy/.ssh/authorized_keys（独立一行，吊销=删该行）
 # 私钥整文件 → GitHub 仓库 Settings → Secrets → Actions：SERVER_SSH_KEY
-# 另配 secret：SERVER_HOST = deploy@43.160.219.44
+# 另配 secrets：SERVER_HOST = deploy@43.160.219.44；FORGE_BASIC = <basic用户:密码>（部署后公网 healthz 断言用）
 ```
 
 ## 3. 产品目录与 .env（【服务器】）

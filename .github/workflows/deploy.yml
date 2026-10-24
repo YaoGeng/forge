@@ -1,0 +1,46 @@
+name: deploy
+on:
+  push:
+    tags: ["v*"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 构建镜像
+        run: docker build -f deploy/Dockerfile -t forge-backend:${TAG} .
+
+      - name: 容器内冒烟门（部署前置——镜像级断裂不得上服务器）
+        run: |
+          docker run -d --name forge-smoke -p 127.0.0.1:18041:8041 \
+            -e FORGE_HOST=0.0.0.0 -e FORGE_DB_URL=sqlite:////tmp/smoke.db forge-backend:${TAG}
+          trap 'docker rm -f forge-smoke' EXIT
+          ok=""
+          for i in $(seq 1 15); do
+            sleep 1
+            if [ "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18041/healthz)" = 200 ]; then ok=1; break; fi
+          done
+          test "$ok" = 1
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://127.0.0.1:18041/docs)" = 404
+
+      - name: 推送镜像与滚动更新
+        env:
+          SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+        run: |
+          printf '%s' "$SSH_KEY" > key && chmod 600 key
+          docker save forge-backend:${TAG} | ssh -i key -o StrictHostKeyChecking=accept-new "$SERVER_HOST" docker load
+          ssh -i key "$SERVER_HOST" "cd /opt/aim/forge && FORGE_TAG=${TAG} docker compose -p forge up -d"
+
+      - name: 公网 healthz 断言（不通过即失败，禁止静默）
+        env:
+          FORGE_BASIC: ${{ secrets.FORGE_BASIC }}
+        run: |
+          sleep 5
+          curl -fsS -u "$FORGE_BASIC" https://forge.aim8848.com/healthz
+          ssh -i key "$SERVER_HOST" "docker image prune -f" || true
+        # prune 复用上一步的 key 文件；|| true 只容忍 prune 失败，healthz 失败即整步红
