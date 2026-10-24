@@ -1,4 +1,6 @@
 """apps/server 测试路径引导与公共夹具：forge_server 与各包均未安装为发行包。"""
+import itertools
+import os
 import sys
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -51,9 +53,31 @@ def clock() -> FrozenClock:
     return FrozenClock()
 
 
+_PG_TEST_DB_COUNTER = itertools.count()
+
+
 @pytest.fixture
-def db_url(tmp_path) -> str:
-    return f"sqlite:///{(tmp_path / 'cert.db').as_posix()}"
+def db_url(tmp_path):
+    """缺省 sqlite 临时库（本地载体不变）；FORGE_TEST_DB_URL 指向 PG 时
+    逐测试建独立库、测毕强删（docs/16 T1.81——PG 兼容验证入口，CI job3 消费；
+    要求该连接串具备建库权限，CI service 默认 postgres 超户满足）。"""
+    override = os.environ.get("FORGE_TEST_DB_URL")
+    if not override:
+        yield f"sqlite:///{(tmp_path / 'cert.db').as_posix()}"
+        return
+
+    from sqlalchemy import create_engine, text
+    from sqlalchemy.engine import make_url
+
+    base = make_url(override)
+    test_db = f"forge_test_{os.getpid()}_{next(_PG_TEST_DB_COUNTER)}"
+    admin = create_engine(base.set(database="postgres"))
+    with admin.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+        conn.execute(text(f'CREATE DATABASE "{test_db}"'))
+    yield str(base.set(database=test_db))
+    with admin.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
+        conn.execute(text(f'DROP DATABASE "{test_db}" WITH (FORCE)'))
+    admin.dispose()
 
 
 @pytest.fixture

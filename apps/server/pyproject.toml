@@ -10,3 +10,7 @@ dependencies = [
     "PyYAML>=6.0",
     "cryptography>=42",
 ]
+
+[project.optional-dependencies]
+# 生产 PG 载体（docs/16 决策 1）：镜像与 CI 装 `.[pg]`；本地开发缺省 sqlite 不装
+pg = ["psycopg[binary]>=3.1"]
