@@ -12,8 +12,13 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
       - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e apps/server
-      - name: spikes 全量（离线单测基线 120）
-        run: python -m pytest spikes -q
+      - name: spikes 全量（离线单测 116；4 个真浏览器用例 deselect——CI 不装 chromium，真浏览器验证留本地/部署清单）
+        run: |
+          python -m pytest spikes -q \
+            --deselect spikes/test_browser_link.py::test_patchright_open_read_screenshot \
+            --deselect spikes/test_manual_block.py::test_search_to_excel_report \
+            --deselect spikes/test_site_inspect.py::test_live_front_report \
+            --deselect spikes/test_site_inspect.py::test_live_search_page_report
 
   apps-packages:
     runs-on: ubuntu-latest
@@ -43,7 +48,7 @@ jobs:
           --health-timeout 5s
           --health-retries 10
     env:
-      FORGE_TEST_DB_URL: postgresql+psycopg://postgres:postgres@localhost:5432/postgres
+      FORGE_TEST_DB_URL: postgresql+psycopg://postgres:postgres@127.0.0.1:5432/postgres
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

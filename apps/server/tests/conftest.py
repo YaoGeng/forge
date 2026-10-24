@@ -71,10 +71,18 @@ def db_url(tmp_path):
 
     base = make_url(override)
     test_db = f"forge_test_{os.getpid()}_{next(_PG_TEST_DB_COUNTER)}"
+    # 自证诊断（密码不落日志，只证长度/用户/主机与预期一致——CI 首跑 psycopg 认证失败排查）
+    print(
+        f"[pg-fixture] user={base.username!r} pw_len={len(base.password or '')} "
+        f"host={base.host!r} port={base.port!r} admin_db={base.database!r} -> {test_db}",
+        file=sys.stderr,
+    )
     admin = create_engine(base.set(database="postgres"))
     with admin.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
         conn.execute(text(f'CREATE DATABASE "{test_db}"'))
-    yield str(base.set(database=test_db))
+    # 注意：str(url) 会把密码渲染成字面 ***（SQLAlchemy 2.x），必须 render_as_string——
+    # CI 首跑 psycopg 认证失败即栽在此（2026-10-25 实测定位）
+    yield base.set(database=test_db).render_as_string(hide_password=False)
     with admin.connect().execution_options(isolation_level="AUTOCOMMIT") as conn:
         conn.execute(text(f'DROP DATABASE "{test_db}" WITH (FORCE)'))
     admin.dispose()
