@@ -38,6 +38,7 @@ def create_app(
     executor_hook: SegRunHook | None = None,
     golden_root=None,
     report_root=None,
+    docs: bool = False,
 ) -> FastAPI:
     import tempfile
     from pathlib import Path
@@ -57,7 +58,13 @@ def create_app(
         yield
         task.cancel()
 
-    app = FastAPI(title="forge-server", lifespan=lifespan)
+    # 生产默认关交互文档（docs/16 决策 2：v0 全站 Basic 前不额外暴露 API 面）
+    fastapi_kwargs = {} if docs else {
+        "docs_url": None,
+        "redoc_url": None,
+        "openapi_url": None,
+    }
+    app = FastAPI(title="forge-server", lifespan=lifespan, **fastapi_kwargs)
     app.state.engine = engine
     app.state.session_factory = session_factory
     app.state.clock = clock
@@ -79,6 +86,11 @@ def create_app(
     register_creator_routes(app)
 
     from fastapi.responses import FileResponse
+
+    @app.get("/healthz", include_in_schema=False)
+    def healthz():
+        """部署契约探活（docs/16 接入契约 3）：进程活着即 200，不查库。"""
+        return {"status": "ok"}
 
     @app.get("/creator", include_in_schema=False)
     def creator_index():

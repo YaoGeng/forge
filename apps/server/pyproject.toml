@@ -5,6 +5,7 @@ description = "Forge 认证流水线服务端：CertScheduler/certification_runs
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.110",
+    "uvicorn>=0.29",
     "sqlalchemy>=2.0",
     "PyYAML>=6.0",
     "cryptography>=42",
