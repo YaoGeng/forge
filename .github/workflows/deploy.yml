@@ -36,11 +36,15 @@ jobs:
           docker save forge-backend:${TAG} | ssh -i key -o StrictHostKeyChecking=accept-new "$SERVER_HOST" docker load
           ssh -i key "$SERVER_HOST" "cd /opt/aim/forge && FORGE_TAG=${TAG} docker compose -p forge up -d"
 
-      - name: 公网 healthz 断言（不通过即失败，禁止静默）
+      - name: healthz 断言（回源层真链路；不通过即失败，禁止静默）
         env:
           FORGE_BASIC: ${{ secrets.FORGE_BASIC }}
         run: |
           sleep 5
-          curl -fsS -u "$FORGE_BASIC" https://forge.aim8848.com/healthz
+          # 公网 CF 边缘会拦 runner 数据中心 IP（v0.1.0 实测 403，正常访问 200）——
+          # 断言改回源层：nginx→backend 全链路，公网拨测归 UptimeRobot/人工清单
+          code=$(ssh -i key "$SERVER_HOST" \
+            "curl -sk --resolve forge.aim8848.com:443:127.0.0.1 -u '$FORGE_BASIC' -o /dev/null -w '%{http_code}' https://forge.aim8848.com/healthz")
+          echo "origin healthz: $code"
+          test "$code" = 200
           ssh -i key "$SERVER_HOST" "docker image prune -f" || true
-        # prune 复用上一步的 key 文件；|| true 只容忍 prune 失败，healthz 失败即整步红
