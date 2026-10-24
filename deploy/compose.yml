@@ -5,7 +5,11 @@ services:
     image: forge-backend:${FORGE_TAG:?FORGE_TAG 未设置——部署脚本或 .env 注入}
     container_name: forge-backend
     restart: unless-stopped
-    env_file: .env
+    env_file: .env              # 只承担机密（FORGE_DB_URL）
+    environment:                # 非机密契约值钉死在模板——漏写 .env 也不致容器绑错面（终审 I-2）
+      FORGE_HOST: 0.0.0.0
+      FORGE_PORT: "8041"
+      FORGE_DATA_DIR: /data
     ports:
       - "127.0.0.1:8041:8041"     # 契约 1：仅绑定回环
     volumes:

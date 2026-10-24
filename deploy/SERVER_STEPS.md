@@ -77,7 +77,7 @@ git tag v0.1.0 && git push origin main --tags   # 触发 .github/workflows/deplo
 
 ## 8. 监控与备份登记（【用户】+【服务器】）
 
-- 【用户】UptimeRobot 加 `https://forge.aim8848.com/healthz` HTTPS 探测（5 分钟）
+- 【用户】UptimeRobot 加 `https://forge.aim8848.com/healthz` HTTPS 探测（5 分钟）——**HTTP Basic 凭据必须一并配置**（全站在 Basic 之后，不带凭据全程 401 误报宕机；终审 M4）
 - 【服务器】`/opt/aim/scripts/backup.sh` 的 DB 清单加 `forge`
 
 ## 9. 文档回填（【服务器】记录，改动桌面两文档）

@@ -1,0 +1,8 @@
+.git
+.spikes/.venv
+spikes/.venv
+**/__pycache__
+**/.pytest_cache
+node_modules
+*.md
+!apps/server/README.md
