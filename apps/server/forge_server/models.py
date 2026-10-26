@@ -162,6 +162,26 @@ class AuthSession(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime)
 
 
+class RunReport(Base):
+    """MS-2 运行上报（docs/17 T2.02/T2.03）：首跑成功率唯一数据源。
+
+    口径四要素（PRD §14）：测量位置=本表 first_run 行；窗口=滚动 30 天（读侧聚合）；
+    归因=按 app 聚合不分类；目标=≥80% 且 n≥5 不同用户。
+    """
+
+    __tablename__ = "run_reports"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    entitlement_id: Mapped[int] = mapped_column(Integer, index=True)
+    app_name: Mapped[str] = mapped_column(String(255), index=True)  # 冗余落 app 名：按应用聚合不依赖 entitlements 连表
+    ok: Mapped[bool] = mapped_column(default=False)
+    failure_class: Mapped[str | None] = mapped_column(String(64), default=None)
+    env_class: Mapped[str] = mapped_column(String(64))
+    client_version: Mapped[str] = mapped_column(String(32), default="")
+    first_run: Mapped[bool] = mapped_column(default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+
+
 def run_to_dict(row: CertificationRun) -> dict:
     """API 出口（live/regression 分列原样，不做任何合计派生）。"""
 
