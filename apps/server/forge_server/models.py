@@ -4,7 +4,7 @@
 """
 from datetime import datetime
 
-from sqlalchemy import JSON, DateTime, ForeignKey, Integer, String, Text
+from sqlalchemy import JSON, DateTime, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -180,6 +180,22 @@ class RunReport(Base):
     client_version: Mapped[str] = mapped_column(String(32), default="")
     first_run: Mapped[bool] = mapped_column(default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class Entitlement(Base):
+    """MS-2 免费权益记录（docs/17 T2.03，S-3）：order_id 留作收款接入钩子。"""
+
+    __tablename__ = "entitlements"
+    __table_args__ = (UniqueConstraint("user_id", "app_name", name="uq_entitlement_user_app"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True)
+    app_name: Mapped[str] = mapped_column(String(255), index=True)
+    version: Mapped[str] = mapped_column(String(64))
+    source: Mapped[str] = mapped_column(String(32), default="free_ms2")
+    order_id: Mapped[int | None] = mapped_column(Integer, default=None)
+    acquired_at: Mapped[datetime] = mapped_column(DateTime)
+    activated_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
 
 
 def run_to_dict(row: CertificationRun) -> dict:

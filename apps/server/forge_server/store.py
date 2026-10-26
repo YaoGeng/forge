@@ -14,9 +14,10 @@ from __future__ import annotations
 
 from datetime import timedelta
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Response
 
-from .models import App, AppVersion, Block, BlockVersion, RunReport
+from .auth import current_user
+from .models import App, AppVersion, Block, BlockVersion, Entitlement, RunReport
 
 FOOTER_TEXT = "运行条件与成功率以信任字段为准；平台审核与认证不构成对运行结果的担保"
 USER_PASS_MIN_SAMPLES = 30
@@ -139,5 +140,125 @@ def register_store_routes(app) -> None:
         now = request.app.state.clock.now()
         with request.app.state.session_factory() as s:
             return trust_fields(s, _get_published_app(s, name), now=now)
+
+    @router.post("/apps/{name}/acquire", status_code=201)
+    def acquire(name: str, request: Request, response: Response):
+        """免费获取（S-1/S-3）：幂等——重复获取返回既有权益并标记 replay。"""
+        user = current_user(request)
+        now = request.app.state.clock.now()
+        with request.app.state.session_factory() as s:
+            app_row = _get_published_app(s, name)
+            existing = (
+                s.query(Entitlement)
+                .filter_by(user_id=user.id, app_name=app_row.name)
+                .first()
+            )
+            if existing is not None:
+                response.headers["X-Idempotent-Replay"] = "true"
+                return {"entitlement_id": existing.id}
+            av = _latest_published_version(s, app_row)
+            ent = Entitlement(user_id=user.id, app_name=app_row.name,
+                              version=av.version, acquired_at=now)
+            s.add(ent)
+            s.commit()
+            return {"entitlement_id": ent.id}
+
+    app.include_router(router)
+
+
+FAILURE_CLASSES = frozenset({
+    "component_timeout", "captcha_detected", "selector_missing",
+    "anchor_mismatch", "env_error", None, "",
+})
+
+
+def _own_entitlement(s, user_id: int, entitlement_id: int) -> Entitlement:
+    ent = s.get(Entitlement, entitlement_id)
+    if ent is None or ent.user_id != user_id:
+        raise HTTPException(status_code=404, detail="权益不存在")
+    return ent
+
+
+def register_report_routes(app) -> None:
+    """运行上报 + 权益激活/清单 + 首跑统计（docs/17 T2.03）——/api/v1 顶层前缀。"""
+    router = APIRouter(prefix="/api/v1", tags=["entitlements"])
+
+    @router.post("/entitlements/{entitlement_id}/activate")
+    def activate(entitlement_id: int, request: Request):
+        """激活校验（退款判据锚点语义保留，S-1 下无退款仅作首用时间戳）。"""
+        user = current_user(request)
+        now = request.app.state.clock.now()
+        with request.app.state.session_factory() as s:
+            ent = _own_entitlement(s, user.id, entitlement_id)
+            if ent.activated_at is None:
+                ent.activated_at = now
+                s.commit()
+            return {"activated_at": ent.activated_at.isoformat()}
+
+    @router.get("/me/entitlements")
+    def my_entitlements(request: Request):
+        user = current_user(request)
+        with request.app.state.session_factory() as s:
+            rows = (
+                s.query(Entitlement)
+                .filter_by(user_id=user.id)
+                .order_by(Entitlement.id)
+                .all()
+            )
+            return [{
+                "entitlement_id": e.id, "app": e.app_name, "version": e.version,
+                "source": e.source,
+                "acquired_at": e.acquired_at.isoformat(),
+                "activated_at": e.activated_at.isoformat() if e.activated_at else None,
+            } for e in rows]
+
+    @router.post("/run-reports", status_code=201)
+    def create_report(body: dict, request: Request):
+        user = current_user(request)
+        now = request.app.state.clock.now()
+        failure_class = body.get("failure_class")
+        if failure_class not in FAILURE_CLASSES:
+            raise HTTPException(status_code=422, detail="failure_class 不在 C4+env_error 枚举内")
+        with request.app.state.session_factory() as s:
+            ent = _own_entitlement(s, user.id, int(body.get("entitlement_id") or 0))
+            first_run = (
+                s.query(RunReport)
+                .filter(RunReport.entitlement_id.in_(
+                    e.id for e in s.query(Entitlement.id)
+                    .filter_by(user_id=user.id, app_name=ent.app_name).all()))
+                .count() == 0
+            )
+            s.add(RunReport(
+                entitlement_id=ent.id, app_name=ent.app_name,
+                ok=bool(body.get("ok")), failure_class=failure_class,
+                env_class=str(body.get("env_class") or "unknown"),
+                client_version=str(body.get("client_version") or ""),
+                first_run=first_run, created_at=now,
+            ))
+            s.commit()
+            return {"first_run": first_run}
+
+    @router.get("/stats/first-run")
+    def stats_first_run(request: Request):
+        """D-5' 面板数据源（docs/17 T2.24 消费）：first_run 行即不同用户首跑。"""
+        with request.app.state.session_factory() as s:
+            rows = (
+                s.query(RunReport)
+                .filter_by(first_run=True)
+                .order_by(RunReport.id)
+                .all()
+            )
+            agg: dict[str, dict] = {}
+            for r in rows:
+                bucket = agg.setdefault(
+                    r.app_name, {"app": r.app_name, "first_runs": 0, "ok_first_runs": 0})
+                bucket["first_runs"] += 1
+                bucket["ok_first_runs"] += 1 if r.ok else 0
+            out = []
+            for bucket in agg.values():
+                bucket["rate"] = round(
+                    bucket["ok_first_runs"] / bucket["first_runs"], 4)
+                out.append(bucket)
+            return out
 
     app.include_router(router)
