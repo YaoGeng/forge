@@ -4,7 +4,7 @@
 """
 from datetime import datetime
 
-from sqlalchemy import JSON, DateTime, Integer, String, Text
+from sqlalchemy import JSON, DateTime, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -137,6 +137,29 @@ class CreationSession(Base):
     step: Mapped[int] = mapped_column(Integer, default=1)
     draft_json: Mapped[dict | None] = mapped_column(JSON, default=None)
     autosave_at: Mapped[datetime | None] = mapped_column(DateTime, default=None)
+
+
+class User(Base):
+    """MS-2 买家账号（docs/17 T2.01）：密码只存 scrypt 摘要，绝无明文。"""
+
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
+    password_hash: Mapped[str] = mapped_column(String(255))
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+
+
+class AuthSession(Base):
+    """MS-2 会话（docs/17 T2.01）：token 服务端持有（可吊销），30 天过期。"""
+
+    __tablename__ = "auth_sessions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    token: Mapped[str] = mapped_column(String(128), unique=True, index=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), index=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime)
+    expires_at: Mapped[datetime] = mapped_column(DateTime)
 
 
 def run_to_dict(row: CertificationRun) -> dict:

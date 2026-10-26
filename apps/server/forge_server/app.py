@@ -8,6 +8,7 @@ from fastapi import FastAPI
 
 from .api_certifications import register_certification_routes
 from .api_devices import NonceStore, register_device_routes
+from .auth import register_auth_routes, register_me_routes
 from .db import make_engine
 from .etiquette import Clock
 from .models import Base
@@ -84,6 +85,8 @@ def create_app(
     register_spotcheck_routes(app)
     register_registry_routes(app)
     register_creator_routes(app)
+    register_auth_routes(app)
+    register_me_routes(app)
 
     from fastapi.responses import FileResponse
 
