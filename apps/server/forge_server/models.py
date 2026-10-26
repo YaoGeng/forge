@@ -88,6 +88,9 @@ class BlockVersion(Base):
     reliability_json: Mapped[dict | None] = mapped_column(JSON, default=None)
     side_effects: Mapped[bool] = mapped_column(default=False)
     domains_json: Mapped[list | None] = mapped_column(JSON, default=None)
+    # MS-2 T2.04：代码包分发（digest=sha256:<hex>；code_bundle=bundles 目录下文件名）
+    code_digest: Mapped[str | None] = mapped_column(String(128), default=None)
+    code_bundle: Mapped[str | None] = mapped_column(String(512), default=None)
     created_at: Mapped[datetime] = mapped_column(DateTime)
 
 

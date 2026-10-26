@@ -13,15 +13,17 @@ class ServeConfig:
     docs: bool
     golden_root: Path | None
     report_root: Path | None
+    bundles_root: Path | None
 
 
 def _serve_config() -> ServeConfig:
     data_dir = os.environ.get("FORGE_DATA_DIR")
-    golden_root = report_root = None
+    golden_root = report_root = bundles_root = None
     if data_dir:
         base = Path(data_dir)
         golden_root = base / "golden"
         report_root = base / "reports"
+        bundles_root = base / "bundles"
     return ServeConfig(
         db_url=os.environ.get("FORGE_DB_URL", "sqlite:///./forge.db"),
         host=os.environ.get("FORGE_HOST", "127.0.0.1"),
@@ -29,6 +31,7 @@ def _serve_config() -> ServeConfig:
         docs=os.environ.get("FORGE_DOCS", "") == "1",
         golden_root=golden_root,
         report_root=report_root,
+        bundles_root=bundles_root,
     )
 
 
@@ -42,10 +45,13 @@ def main() -> None:
         cfg.golden_root.mkdir(parents=True, exist_ok=True)
     if cfg.report_root is not None:
         cfg.report_root.mkdir(parents=True, exist_ok=True)
+    if cfg.bundles_root is not None:
+        cfg.bundles_root.mkdir(parents=True, exist_ok=True)
     app = create_app(
         cfg.db_url,
         golden_root=cfg.golden_root,
         report_root=cfg.report_root,
+        bundles_root=cfg.bundles_root,
         docs=cfg.docs,
     )
     uvicorn.run(app, host=cfg.host, port=cfg.port)

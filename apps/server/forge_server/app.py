@@ -13,6 +13,7 @@ from .db import make_engine
 from .etiquette import Clock
 from .models import Base
 from .creator import register_creator_routes
+from .packages import register_package_routes
 from .registry import register_registry_routes
 from .scheduler import CertScheduler, SegRunHook, WallClock
 from .spotcheck import register_spotcheck_routes
@@ -33,6 +34,19 @@ def _ensure_plan_json_column(engine) -> None:
             conn.execute(text(f"ALTER TABLE certification_runs ADD COLUMN {col} JSON"))
 
 
+def _ensure_new_columns(engine) -> None:
+    """旧库补列（幂等，v0.1.3 → v0.2 增量）：block_versions.code_digest/code_bundle。"""
+    from sqlalchemy import inspect, text
+
+    inspector = inspect(engine)
+    have = {c["name"] for c in inspector.get_columns("block_versions")}
+    for col, ddl in (("code_digest", "VARCHAR(128)"),
+                     ("code_bundle", "VARCHAR(512)")):
+        if col not in have:
+            with engine.begin() as conn:
+                conn.execute(text(f"ALTER TABLE block_versions ADD COLUMN {col} {ddl}"))
+
+
 def create_app(
     db_url: str,
     *,
@@ -40,14 +54,21 @@ def create_app(
     executor_hook: SegRunHook | None = None,
     golden_root=None,
     report_root=None,
+    bundles_root=None,
+    signing_key: bytes | None = None,
     docs: bool = False,
 ) -> FastAPI:
+    import base64
+    import logging
+    import os
+    import secrets
     import tempfile
     from pathlib import Path
 
     engine = make_engine(db_url)
     Base.metadata.create_all(engine)
     _ensure_plan_json_column(engine)  # v1 载体迁移：T1.30 旧库无此列（Alembic 后置，D-M1E.1）
+    _ensure_new_columns(engine)  # MS-2 T2.04：v0.1.3 旧库补 code_digest/code_bundle
     from sqlalchemy.orm import sessionmaker
 
     session_factory = sessionmaker(bind=engine, expire_on_commit=False)
@@ -78,6 +99,21 @@ def create_app(
     app.state.report_root = Path(report_root) if report_root else Path(
         tempfile.mkdtemp(prefix="forge-server-reports-")
     )
+    app.state.bundles_root = Path(bundles_root) if bundles_root else Path(
+        tempfile.mkdtemp(prefix="forge-server-bundles-")
+    )
+    # 签名钥（T2.04）：FORGE_SIGNING_KEY（base64 32B）注入；缺省生成临时钥+告警（开发态，
+    # 重启即换、TOFU 客户端拒连）。"无钥 503" 语义经 state.forge_signing_key=None 表达（测试用）。
+    env_key = os.environ.get("FORGE_SIGNING_KEY", "").strip()
+    if signing_key is not None:
+        app.state.forge_signing_key = signing_key
+    elif env_key:
+        app.state.forge_signing_key = base64.b64decode(env_key)
+    else:
+        app.state.forge_signing_key = secrets.token_bytes(32)
+        logging.getLogger(__name__).warning(
+            "FORGE_SIGNING_KEY 未注入——已生成临时签名钥（重启即换，TOFU 客户端将拒连；"
+            "仅限开发/测试，生产必须注入）")
     app.state.report_results = {}  # 幂等缓存：(run_id, report_hash, nonce) → 响应（v1 载体内存态）
     app.state.chain_runner = None  # T1.64a：chain 认证执行器（驱动器/工具装配；None → 503）
 
@@ -90,6 +126,7 @@ def create_app(
     register_me_routes(app)
     register_store_routes(app)
     register_report_routes(app)
+    register_package_routes(app)
 
     from fastapi.responses import FileResponse
 
