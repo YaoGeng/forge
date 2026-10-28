@@ -28,7 +28,7 @@ jobs:
         with: { python-version: "3.12" }
       - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e apps/server
       - name: apps/server + packages 全量（sqlite 载体）
-        run: python -m pytest apps/server/tests packages/block-sdk/tests packages/proto/tests packages/trace/tests packages/certifier/tests -q
+        run: python -m pytest apps/server/tests apps/runner/tests packages/block-sdk/tests packages/proto/tests packages/trace/tests packages/certifier/tests -q
 
   server-pg:
     # PG 兼容正式验证（docs/16 T1.81/T1.83）——禁只拿 sqlite 绿宣称 PG 可用

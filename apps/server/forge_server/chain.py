@@ -1,5 +1,9 @@
 """ChainRunner：应用管线执行（docs/13 C7）——线性管线、上下文绑定传递。
 
+⚠ 锚定声明（docs/17 T2.10）：本文件存在 runner 侧移植副本
+apps/runner/forge_runner/chain.py，一致性由 runner tests/test_chain.py
+对照测试钉死——两侧任何改动必须同步（A4 会签制）。
+
 执行语义：composition 每步 {block, params{字面量}|bindings{"入参": "上游块.出参键"}}；
 站点块经注入的 (runner, ref) 以 mode=local 真实执行；上一步输出并入上下文
 （以块名命名空间），绑定键按 "块名.键" 解析。ChainRunner 是端口注入的编排器，
