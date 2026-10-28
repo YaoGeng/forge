@@ -81,6 +81,16 @@ def _badge(level: str) -> str:
     return f'<span class="badge badge-{html.escape(level)}">{html.escape(level)}</span>'
 
 
+_HEALTH_LABEL = {"ok": "健康", "degraded": "降级", "stale": "待复检"}
+
+
+def _health_badge(health: str | None) -> str:
+    if health not in _HEALTH_LABEL:
+        return ""
+    cls = "tag-warn" if health == "degraded" else "tag-health"  # 豆沙红仅降级用
+    return f'<span class="{cls}">{_HEALTH_LABEL[health]}</span>'
+
+
 def register_web_routes(app) -> None:
     router = APIRouter(include_in_schema=False)
 
@@ -170,7 +180,7 @@ def register_web_routes(app) -> None:
                 best_effort = ('<span class="tag-warn">高变更</span>'
                                if d["best_effort"] else "")
                 cards.append(f"""<a class="card" href="/store/app/{html.escape(d["name"])}">
-  <div class="card-head"><h3>{html.escape(d["title"])}</h3>{_badge(d["level"])}{best_effort}</div>
+  <div class="card-head"><h3>{html.escape(d["title"])}</h3>{_badge(d["level"])}{_health_badge(d.get("health"))}{best_effort}</div>
   <div class="trust-row">认证实测 <b>{_pct(d["cert_pass"]["rate"], d["cert_pass"]["n"], d["cert_pass"]["window"])}</b></div>
   <div class="trust-row">{user_line}</div>
 </a>""")
@@ -207,7 +217,7 @@ def register_web_routes(app) -> None:
                   if d["best_effort"] else "")
         body = f"""
 {banner}
-<div class="detail-head"><h1>{html.escape(d["title"])}</h1>{_badge(d["level"])}</div>
+<div class="detail-head"><h1>{html.escape(d["title"])}</h1>{_badge(d["level"])}{_health_badge(d.get("health"))}</div>
 <p class="dim">{html.escape(d["name"])} · v{html.escape(str(av.version))}</p>
 <section class="panel">
   <h2>信任字段</h2>

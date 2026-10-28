@@ -56,6 +56,8 @@ def _composition_blocks(s, av: AppVersion) -> list[tuple[str, BlockVersion]]:
 
 def trust_fields(s, app: App, *, now) -> dict:
     """详情页信任字段 v2 全量（T2.03 获取流与 T2.20 Web 复用）。"""
+    from .health import app_health
+
     av = _latest_published_version(s, app)
     blocks = _composition_blocks(s, av)
     if blocks:
@@ -104,6 +106,7 @@ def trust_fields(s, app: App, *, now) -> dict:
         "login_sites": login_sites,
         "interactions": "无（无人值守可跑）",  # S-4：现库 5 应用声明并集为空
         "best_effort": best_effort,
+        "health": app_health(s, app, now=now),  # T2.23 分档（详情页渲染）
         "footer": FOOTER_TEXT,
     }
 
@@ -155,6 +158,8 @@ def register_store_routes(app) -> None:
 
     @router.get("/apps")
     def list_apps(request: Request):
+        from .health import app_health
+
         now = request.app.state.clock.now()
         with request.app.state.session_factory() as s:
             apps = s.query(App).order_by(App.id).all()
@@ -167,7 +172,7 @@ def register_store_routes(app) -> None:
                 out.append({  # 卡片精简字段（M03 §3.1）
                     "name": d["name"], "title": d["title"], "level": d["level"],
                     "cert_pass": d["cert_pass"], "user_pass": d["user_pass"],
-                    "health": None,  # T2.23 健康分级回填
+                    "health": app_health(s, app_row, now=now),  # T2.23
                 })
             return out
 
