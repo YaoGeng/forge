@@ -1,0 +1,16 @@
+server up
+bundle uploaded: excel_export
+bundle uploaded: hn_search_probe
+acquired entitlement 1
+runner login ok
+--- runner stdout ---
+  ✓ 步骤 1：hn_search_probe 
+  ✓ 步骤 2：excel_export 
+运行成功：hn_weekly
+  输出（hn_search_probe）：{'hits': []}
+  输出（excel_export）：{'ok': True, 'file': 'hn-weekly-smoke.xlsx', 'rows': 1}
+  （本次为首跑，已计入应用成功率统计）
+
+E2E SMOKE PASS: first_run=1 产物=C:\Users\yg\AppData\Local\Temp\forge-blocks\hn-weekly-smoke.xlsx
+
+已知备注：hn_search_probe 脚本在 domcontentloaded 节奏下抽取 hits=[]（页面 JS 渲染未及完成；块级脚本调优属 MS-3 块质量事项，不挡买家链路——本卡只验链路机械）

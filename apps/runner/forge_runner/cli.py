@@ -71,11 +71,40 @@ def cmd_library(client, home=None) -> None:
 
 
 def cmd_run(app_name: str, client, home=None) -> None:
-    """T2.12 装配完整执行流；当前护栏：登录检查 + 明确的未装配提示。"""
+    """完整执行流（T2.12）：acquire→下载验签→激活→执行→上报。"""
     token = _require_token()
-    from . import run as run_mod  # T2.12 提供（当前为占位模块）
+    from . import run as run_mod
+    from .blocks import BlockExecutionError
+    from .browser import BrowserUnavailable
+    from .pkg import PkgError
 
-    run_mod.app_run(app_name, client, token)
+    try:
+        result = run_mod.app_run(app_name, client, token)
+    except BrowserUnavailable as exc:
+        print(f"错误：{exc}", file=sys.stderr)
+        raise SystemExit(3) from exc
+    except (run_mod.RunFlowError, PkgError, BlockExecutionError) as exc:
+        raise CliError(str(exc)) from exc
+    print_run_result(app_name, result)
+
+
+def print_run_result(app_name: str, result: dict) -> None:
+    for step in result["steps"]:
+        mark = "✓" if step.get("ok") else "✗"
+        extra = step.get("failure_class") or ""
+        print(f"  {mark} 步骤 {step['index'] + 1}：{step['block']} {extra}")
+    if result["ok"]:
+        print(f"运行成功：{app_name}")
+        for block, out in result["context"].items():
+            if out:
+                print(f"  输出（{block}）：{out}")
+        if result.get("report_queued"):
+            print("  注意：结果上报暂存本地（网络恢复后下次运行自动补报）")
+    else:
+        print(f"运行失败：{app_name}")
+        raise SystemExit(1)
+    if result.get("first_run"):
+        print("  （本次为首跑，已计入应用成功率统计）")
 
 
 def main(argv: list[str] | None = None) -> int:

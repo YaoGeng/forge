@@ -1,8 +1,12 @@
-"""T2.04 平台侧代码包灌库（docs/17）。
+"""T2.04 平台侧代码包灌库（docs/17；T2.12 增补 trace/script 打包）。
+
+块包构成（docs/17 T2.12 锚定裁定）：
+  python 块 = block.yaml + main.py
+  trace 块  = block.yaml + main.py + trace/（manifest.yaml+steps.ndjson，自 ms1e_store）
+            + script.py（site_scripts.<mod> 的 browse 输出抽取，单文件自包含）
 
 用法：
   本地校验（不起服务）：python spikes/upload_bundles.py --local-check
-    —— 把 spikes/seed_blocks 每块按服务端同款校验（block.yaml 一致性/entry 存在）打包验证。
   灌库（对已部署服务）：python spikes/upload_bundles.py --base http://127.0.0.1:8041 [--basic user:pass]
     —— /api/v1/registry 为 Basic Auth 域；幂等（重复上传覆盖刷新 digest）。
 生产积木注册数据在 PG（MS-1F 26 块），灌库在生产部署后执行（T2.22）。
@@ -10,6 +14,7 @@
 from __future__ import annotations
 
 import io
+import json
 import sys
 import urllib.request
 import zipfile
@@ -20,6 +25,31 @@ import yaml
 _ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(_ROOT / "apps" / "server"))
 SEED = _ROOT / "spikes" / "seed_blocks"
+STORE = _ROOT / "spikes" / "evidence" / "ms1e_store"
+
+
+def _manifest() -> dict:
+    """manifest.yaml 块条目清单（含保留块——与 product_path.runtime_kinds 同口径）。"""
+    raw = yaml.safe_load((SEED / "manifest.yaml").read_text(encoding="utf-8"))
+    entries = {b["name"]: b for b in raw.get("blocks", [])}
+    entries.update({
+        "login_demo_probe": {"adapter": "trace", "script": "site_scripts.login_demo_probe:browse"},
+        "price_calc": {"adapter": "python"},
+        "stats_summary": {"adapter": "python"},
+        "unit_convert": {"adapter": "python"},
+    })
+    return entries
+
+
+def _trace_refs() -> dict[str, str]:
+    state = json.loads((STORE / "state.json").read_text(encoding="utf-8"))
+    refs = dict(state.get("trace_refs", {}))
+    # legacy 键（hn_search_probe→c2 等）解析为块名直键
+    for name, entry in _manifest().items():
+        legacy = entry.get("legacy_state_key")
+        if legacy and legacy in refs:
+            refs[name] = refs[legacy]
+    return refs
 
 
 def block_dirs() -> list[tuple[str, str, Path]]:
@@ -34,11 +64,24 @@ def block_dirs() -> list[tuple[str, str, Path]]:
 
 
 def zip_block(name: str, d: Path) -> bytes:
+    entries = _manifest()
+    ref = _trace_refs().get(name)
+    is_trace = entries.get(name, {}).get("adapter") == "trace" and ref is not None
+    script_ref = entries.get(name, {}).get("script")
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w") as z:
         for f in sorted(d.rglob("*")):
             if f.is_file():
                 z.writestr(f"{name}/{f.relative_to(d).as_posix()}", f.read_bytes())
+        if is_trace:
+            trace_dir = STORE / "traces" / ref
+            for fname in ("manifest.yaml", "steps.ndjson"):
+                z.writestr(f"{name}/trace/{fname}", (trace_dir / fname).read_bytes())
+            if script_ref:
+                module = script_ref.partition(":")[0].split(".")[-1]
+                script_path = _ROOT / "spikes" / "site_scripts" / f"{module}.py"
+                if script_path.exists():  # 部分保留块无结构化脚本（login_demo_probe）
+                    z.writestr(f"{name}/script.py", script_path.read_bytes())
     return buf.getvalue()
 
 

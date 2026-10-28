@@ -149,7 +149,10 @@ class PatchrightBrowser:
 
     # —— 回放面 ——
     def goto(self, url: str) -> None:
-        self._page.goto(url, timeout=_GOTO_TIMEOUT_MS, wait_until="load")
+        # wait_until=domcontentloaded（MS-2 T2.12 实测修订）：load 会被三方资源
+        # （统计/广告脚本）挂起——受限网络下 30s 必超时，也是买家首跑的真实失败
+        # 模式；DOM 就绪即返，元素等待由 wait_selector 独立兜底，锚语义不变。
+        self._page.goto(url, timeout=_GOTO_TIMEOUT_MS, wait_until="domcontentloaded")
         self._flush_nav()
 
     def click(self, selector: str) -> None:
