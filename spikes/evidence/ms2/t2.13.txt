@@ -1,0 +1,17 @@
+=== runner tests ===
+28 passed, 1 skipped in 1.13s
+=== server tests ===
+136 passed in 26.77s
+=== trace tests ===
+82 passed in 1.83s
+=== exe ===
+-rwxr-xr-x 1 yg 197611 64447803 Oct 29 00:37 apps/runner/build-dist/forge-runner.exe
+=== exe E2E ===
+  ✓ 步骤 1：hn_search_probe 
+  ✓ 步骤 2：excel_export 
+运行成功：hn_weekly
+  输出（hn_search_probe）：{'hits': []}
+  输出（excel_export）：{'ok': True, 'file': 'hn-weekly-smoke.xlsx', 'rows': 1}
+  （本次为首跑，已计入应用成功率统计）
+
+E2E SMOKE PASS: first_run=1 产物=C:\Users\yg\AppData\Local\Temp\forge-blocks\hn-weekly-smoke.xlsx

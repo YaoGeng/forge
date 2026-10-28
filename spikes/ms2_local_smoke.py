@@ -141,6 +141,7 @@ def main() -> int:
         print(f"acquired entitlement {acq['entitlement_id']}")
 
         home = tmp / "runner-home"
+        exe = os.environ.get("FORGE_SMOKE_EXE")  # 设定后用 exe 冒烟（T2.13）
         runner_env = {**os.environ,
                       "FORGE_SERVER": BASE, "FORGE_HOME": str(home),
                       "PYTHONPATH": ";".join(str(p) for p in [
@@ -149,16 +150,17 @@ def main() -> int:
                           _ROOT / "packages" / "proto" / "python",
                           _ROOT / "packages" / "block-sdk" / "python",
                       ])}
+        runner_cmd = [exe] if exe else [str(VENV_PY), "-m", "forge_runner"]
         r = subprocess.run(
-            [str(VENV_PY), "-m", "forge_runner", "login", "smoke@example.com",
+            [*runner_cmd, "login", "smoke@example.com",
              "--password", "smoke-pass-123"],
-            env=runner_env, cwd=str(tmp), capture_output=True, text=True, timeout=60)
+            env=runner_env, cwd=str(tmp), capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
         assert r.returncode == 0, f"login 失败:\n{r.stdout}\n{r.stderr}"
         print("runner login ok")
 
         r = subprocess.run(
-            [str(VENV_PY), "-m", "forge_runner", "run", "hn_weekly"],
-            env=runner_env, cwd=str(tmp), capture_output=True, text=True,
+            [*runner_cmd, "run", "hn_weekly"],
+            env=runner_env, cwd=str(tmp), capture_output=True, text=True, encoding="utf-8", errors="replace",
             timeout=300)
         print("--- runner stdout ---")
         print(r.stdout)

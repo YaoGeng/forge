@@ -1,0 +1,6 @@
+# 运行器构建期依赖（docs/17 T2.13；运行时依赖 = cryptography/PyYAML/openpyxl/patchright + 本仓 packages）
+cryptography>=42
+PyYAML>=6.0
+openpyxl>=3.1
+patchright>=0.1
+pyinstaller>=6.6

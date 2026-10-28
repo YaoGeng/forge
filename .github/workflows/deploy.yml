@@ -48,3 +48,55 @@ jobs:
           echo "origin healthz: $code"
           test "$code" = 200
           ssh -i key "$SERVER_HOST" "docker image prune -f" || true
+
+  runner-build:
+    # T2.13：tag 触发，服务部署完成后构建 Windows 单文件 exe 并上传服务器 dist 目录
+    needs: deploy
+    runs-on: windows-latest
+    env:
+      TAG: ${{ github.ref_name }}
+      SERVER_HOST: ${{ secrets.SERVER_HOST }}
+      VER: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 装依赖
+        run: pip install -r apps/runner/requirements-build.txt
+      - name: 运行器离线测试
+        run: python -m pytest apps/runner/tests -q
+        env:
+          PYTHONPATH: apps/server;packages/trace/python;packages/proto/python;packages/block-sdk/python
+      - name: 构建 exe
+        run: pyinstaller apps/runner/forge-runner.spec --noconfirm --distpath dist
+      - name: exe 冒烟（能起、鉴权护栏生效）
+        run: |
+          $out = dist\forge-runner.exe library 2>&1
+          $code = $LASTEXITCODE
+          if ($code -ne 2 -or -not ($out -match "登录")) { throw "exe 冒烟失败: $out" }
+      - name: 产物断言
+        shell: bash
+        run: |
+          test -f dist/forge-runner.exe
+          size=$(stat -c%s dist/forge-runner.exe)
+          test "$size" -gt 10000000
+          echo "exe size: $size"
+      - name: 上传服务器
+        env:
+          SSH_KEY: ${{ secrets.SERVER_SSH_KEY }}
+        shell: bash
+        run: |
+          printf '%s' "$SSH_KEY" > key && chmod 600 key
+          ver="${TAG#v}"
+          scp -i key -o StrictHostKeyChecking=accept-new \
+            dist/forge-runner.exe "$SERVER_HOST:/opt/aim/forge/dist/forge-runner-$ver-win.exe"
+          # 版本登记进 .env（compose FORGE_RUNNER_VERSION 消费）
+          ssh -i key "$SERVER_HOST" \
+            "cd /opt/aim/forge && sed -i '/^FORGE_RUNNER_VERSION=/d' .env && echo FORGE_RUNNER_VERSION=$ver >> .env && FORGE_TAG=${TAG} docker compose -p forge up -d"
+      - name: 下载端点断言（回源层）
+        env:
+          FORGE_BASIC: ${{ secrets.FORGE_BASIC }}
+        run: |
+          $code = ssh -i key "$env:SERVER_HOST" "curl -sk --resolve forge.aim8848.com:443:127.0.0.1 -u '$env:FORGE_BASIC' -o /dev/null -w '%{http_code}' https://forge.aim8848.com/api/v1/store/runner"
+          if ($code -ne 200) { throw "store/runner 断言失败: $code" }

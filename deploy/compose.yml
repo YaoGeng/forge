@@ -10,10 +10,13 @@ services:
       FORGE_HOST: 0.0.0.0
       FORGE_PORT: "8041"
       FORGE_DATA_DIR: /data
+      FORGE_DIST_DIR: /dist       # 运行器 exe 分发目录（T2.13；nginx /download 同源 alias）
+      FORGE_RUNNER_VERSION: "${FORGE_RUNNER_VERSION:-}"  # 部署时注入（tag 去掉 v 前缀）
     ports:
       - "127.0.0.1:8041:8041"     # 契约 1：仅绑定回环
     volumes:
       - ./data:/data               # FORGE_DATA_DIR=/data（golden/报告落盘，随 /opt/aim tar 备份）
+      - ./dist:/dist               # runner-build job scp 上传 forge-runner-<ver>-win.exe 到此
     networks: [forge-net, infra]
     logging:
       driver: json-file

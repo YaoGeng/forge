@@ -8,6 +8,17 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+from pathlib import Path
+
+# 浏览器落点必须稳定（用户目录）：onefile exe 每次运行解压到不同 _MEI 临时目录，
+# 装在驱动旁的浏览器下次必丢；装/启两侧都读 PLAYWRIGHT_BROWSERS_PATH 保持同源。
+_STABLE_BROWSERS = Path(
+    os.environ.get("LOCALAPPDATA") or Path.home()) / "forge" / "ms-playwright"
+os.environ.setdefault("PLAYWRIGHT_BROWSERS_PATH", str(_STABLE_BROWSERS))
+# 下载源默认 npmmirror 镜像（官方 CDN 在国内网络 ECONNRESET 实测；playwright 下载
+# 后自带哈希校验，镜像不改内容；显式设 PLAYWRIGHT_DOWNLOAD_HOST 可覆盖）
+os.environ.setdefault("PLAYWRIGHT_DOWNLOAD_HOST",
+                      "https://cdn.npmmirror.com/binaries/playwright")
 
 
 class BrowserUnavailable(Exception):
@@ -15,16 +26,28 @@ class BrowserUnavailable(Exception):
 
 
 def _install_chromium() -> None:
-    """首启安装：优先 FORGE_BROWSER_INSTALL_CMD（PyInstaller exe 场景），
+    """首启安装。三种执行形态：
 
-    缺省走当前解释器 `python -m patchright install chromium`。"""
-    cmd = os.environ.get("FORGE_BROWSER_INSTALL_CMD")
-    if cmd:
-        result = subprocess.run(cmd, shell=True, capture_output=True, text=True)
+    - PyInstaller exe（sys.frozen）：`sys.executable -m patchright` 会把参数发给
+      exe 自身（实测 argparse 报 invalid choice）——改调 patchright 自带 node driver；
+    - FORGE_BROWSER_INSTALL_CMD：显式覆盖（预留）；
+    - 源码运行：当前解释器 `python -m patchright install chromium`。
+    """
+    if getattr(sys, "frozen", False):
+        from patchright._impl._driver import compute_driver_executable
+
+        node, cli = compute_driver_executable()  # 返回 (node.exe, cli.js) 二元组
+        cmd = [str(node), str(cli), "install", "chromium"]
+        result = subprocess.run(cmd, capture_output=True, text=True)
     else:
-        result = subprocess.run(
-            [sys.executable, "-m", "patchright", "install", "chromium"],
-            capture_output=True, text=True)
+        override = os.environ.get("FORGE_BROWSER_INSTALL_CMD")
+        if override:
+            result = subprocess.run(override, shell=True,
+                                    capture_output=True, text=True)
+        else:
+            result = subprocess.run(
+                [sys.executable, "-m", "patchright", "install", "chromium"],
+                capture_output=True, text=True)
     if result.returncode != 0:
         raise BrowserUnavailable(
             f"Chromium 首启下载失败：{result.stderr or result.stdout}\n"

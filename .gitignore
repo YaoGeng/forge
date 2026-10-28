@@ -8,3 +8,8 @@ __pycache__/
 *.py[cod]
 packages/proto/ts/node_modules/
 spikes/evidence/coverage/_rehearsal/
+
+# MS-2 运行器构建产物（apps/runner/build.md）
+apps/runner/build-dist/
+apps/runner/build/
+apps/runner/dist/

@@ -111,7 +111,14 @@ class PatchrightBrowser:
 
     def __init__(self, *, headless: bool = True, html_sink: list[str] | None = None):
         self._pw = sync_playwright().start()
-        self._browser = self._pw.chromium.launch(headless=headless)
+        try:
+            self._browser = self._pw.chromium.launch(headless=headless)
+        except BaseException:
+            # 启动失败必须停掉已起的 dispatcher——否则其常驻线程会让本进程内的
+            # 下一次 sync_playwright() 误报 "Sync API inside asyncio loop"
+            # （MS-2 运行器首启安装后重试路径实测）；零引用泄漏留给 GC 必炸重试。
+            self._pw.stop()
+            raise
         self._context = self._browser.new_context()
         self._page = self._context.new_page()
         self._page.expose_binding("forgeEvent", self._binding)

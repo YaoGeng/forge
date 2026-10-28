@@ -109,6 +109,10 @@ def print_run_result(app_name: str, result: dict) -> None:
 
 def main(argv: list[str] | None = None) -> int:
     import argparse
+    import logging
+
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s",
+                        stream=sys.stderr)
 
     from .client import Client, ClientError
 

@@ -101,7 +101,11 @@ class TraceBlockPort:
             output = dict(result.script_output) if result.script_output else None
             return RunOutcome(mode="local", ok=ok_all, step_results=steps,
                               failure_class=failure, output=output)
-        except Exception as exc:  # noqa: BLE001 —— 端口/回放异常如实归因
+        except Exception as exc:  # noqa: BLE001 —— 端口/回放异常如实归因并留痕
+            import logging
+
+            logging.getLogger(__name__).warning(
+                "站点块执行异常 block=%s: %s", ref, exc, exc_info=True)
             return RunOutcome(mode="local", ok=False, failure_class="env_error",
                               markers=(f"{type(exc).__name__}: {exc}",))
         finally:
