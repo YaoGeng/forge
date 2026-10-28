@@ -146,3 +146,25 @@ class TestUserPassThreshold:
     def test_at_30_samples_rate_shown_with_n(self, api):
         d = self._seed_with_reports(api, count=30, ok=24)
         assert d["user_pass"] == {"rate": 0.8, "n": 30}
+
+
+class TestRunnerEndpoint:
+    def test_runner_info_with_published_exe(self, api, tmp_path):
+        exe = tmp_path / "forge-runner-0.1.0-win.exe"
+        exe.write_bytes(b"fake-exe-bytes")
+        api.app.state.dist_root = tmp_path
+        api.app.state.runner_version = "0.1.0"
+        import hashlib
+        r = api.client.get("/api/v1/store/runner")
+        assert r.status_code == 200
+        body = r.json()
+        assert body["version"] == "0.1.0"
+        assert body["url"] == "/download/forge-runner-0.1.0-win.exe"
+        assert body["sha256"] == "sha256:" + hashlib.sha256(b"fake-exe-bytes").hexdigest()
+
+    def test_runner_not_published_404(self, api):
+        api.app.state.dist_root = None
+        api.app.state.runner_version = ""
+        r = api.client.get("/api/v1/store/runner")
+        assert r.status_code == 404
+        assert r.json()["detail"] == "运行器尚未发布"

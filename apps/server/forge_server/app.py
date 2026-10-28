@@ -102,6 +102,11 @@ def create_app(
     app.state.bundles_root = Path(bundles_root) if bundles_root else Path(
         tempfile.mkdtemp(prefix="forge-server-bundles-")
     )
+    # 运行器分发（T2.13）：dist_root 指向 exe 存放目录（生产 = FORGE_DIST_DIR，
+    # __main__ 缺省 data_dir/dist）；runner_version 来自 FORGE_RUNNER_VERSION
+    app.state.dist_root = Path(os.environ.get("FORGE_DIST_DIR") or "") if \
+        os.environ.get("FORGE_DIST_DIR") else None
+    app.state.runner_version = os.environ.get("FORGE_RUNNER_VERSION", "")
     # 签名钥（T2.04）：FORGE_SIGNING_KEY（base64 32B）注入；缺省生成临时钥+告警（开发态，
     # 重启即换、TOFU 客户端拒连）。"无钥 503" 语义经 state.forge_signing_key=None 表达（测试用）。
     env_key = os.environ.get("FORGE_SIGNING_KEY", "").strip()

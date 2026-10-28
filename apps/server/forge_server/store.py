@@ -141,6 +141,21 @@ def register_store_routes(app) -> None:
         with request.app.state.session_factory() as s:
             return trust_fields(s, _get_published_app(s, name), now=now)
 
+    @router.get("/runner")
+    def runner_info(request: Request):
+        """运行器分发信息（T2.13）：版本/下载路径/sha256；未发布 → 404。"""
+        import hashlib
+        from pathlib import Path
+
+        version = getattr(request.app.state, "runner_version", "") or ""
+        dist = getattr(request.app.state, "dist_root", None)
+        fname = f"forge-runner-{version}-win.exe"
+        if not version or dist is None or not (Path(dist) / fname).exists():
+            raise HTTPException(status_code=404, detail="运行器尚未发布")
+        content = (Path(dist) / fname).read_bytes()
+        return {"version": version, "url": f"/download/{fname}",
+                "sha256": "sha256:" + hashlib.sha256(content).hexdigest()}
+
     @router.post("/apps/{name}/acquire", status_code=201)
     def acquire(name: str, request: Request, response: Response):
         """免费获取（S-1/S-3）：幂等——重复获取返回既有权益并标记 replay。"""
