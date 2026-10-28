@@ -108,6 +108,42 @@ def trust_fields(s, app: App, *, now) -> dict:
     }
 
 
+def acquire_entitlement(s, user_id: int, app_name: str, now) -> tuple[Entitlement, bool]:
+    """免费获取核心（S-1/S-3，API 与 Web 表单共用）：幂等，返回 (权益, 是否重放)。"""
+    app_row = s.query(App).filter_by(name=app_name).first()
+    av = None
+    if app_row is not None:
+        av = (s.query(AppVersion)
+              .filter_by(app_id=app_row.id, status="published")
+              .order_by(AppVersion.id.desc()).first())
+    if app_row is None or av is None:
+        raise HTTPException(status_code=404, detail="应用不存在或未上架")
+    existing = (s.query(Entitlement)
+                .filter_by(user_id=user_id, app_name=app_name).first())
+    if existing is not None:
+        return existing, True
+    ent = Entitlement(user_id=user_id, app_name=app_name, version=av.version,
+                      acquired_at=now)
+    s.add(ent)
+    s.commit()
+    return ent, False
+
+
+def runner_info_data(app_state) -> dict | None:
+    """运行器分发数据（T2.13/T2.21 共用）：未发布返回 None。"""
+    import hashlib
+    from pathlib import Path
+
+    version = getattr(app_state, "runner_version", "") or ""
+    dist = getattr(app_state, "dist_root", None)
+    fname = f"forge-runner-{version}-win.exe"
+    if not version or dist is None or not (Path(dist) / fname).exists():
+        return None
+    content = (Path(dist) / fname).read_bytes()
+    return {"version": version, "url": f"/download/{fname}",
+            "sha256": "sha256:" + hashlib.sha256(content).hexdigest()}
+
+
 def register_store_routes(app) -> None:
     router = APIRouter(prefix="/api/v1/store", tags=["store"])
 
@@ -144,17 +180,10 @@ def register_store_routes(app) -> None:
     @router.get("/runner")
     def runner_info(request: Request):
         """运行器分发信息（T2.13）：版本/下载路径/sha256；未发布 → 404。"""
-        import hashlib
-        from pathlib import Path
-
-        version = getattr(request.app.state, "runner_version", "") or ""
-        dist = getattr(request.app.state, "dist_root", None)
-        fname = f"forge-runner-{version}-win.exe"
-        if not version or dist is None or not (Path(dist) / fname).exists():
+        data = runner_info_data(request.app.state)
+        if data is None:
             raise HTTPException(status_code=404, detail="运行器尚未发布")
-        content = (Path(dist) / fname).read_bytes()
-        return {"version": version, "url": f"/download/{fname}",
-                "sha256": "sha256:" + hashlib.sha256(content).hexdigest()}
+        return data
 
     @router.post("/apps/{name}/acquire", status_code=201)
     def acquire(name: str, request: Request, response: Response):
@@ -162,20 +191,9 @@ def register_store_routes(app) -> None:
         user = current_user(request)
         now = request.app.state.clock.now()
         with request.app.state.session_factory() as s:
-            app_row = _get_published_app(s, name)
-            existing = (
-                s.query(Entitlement)
-                .filter_by(user_id=user.id, app_name=app_row.name)
-                .first()
-            )
-            if existing is not None:
+            ent, replayed = acquire_entitlement(s, user.id, name, now)
+            if replayed:
                 response.headers["X-Idempotent-Replay"] = "true"
-                return {"entitlement_id": existing.id}
-            av = _latest_published_version(s, app_row)
-            ent = Entitlement(user_id=user.id, app_name=app_row.name,
-                              version=av.version, acquired_at=now)
-            s.add(ent)
-            s.commit()
             return {"entitlement_id": ent.id}
 
     app.include_router(router)

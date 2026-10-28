@@ -9,6 +9,7 @@ dependencies = [
     "sqlalchemy>=2.0",
     "PyYAML>=6.0",
     "cryptography>=42",
+    "python-multipart>=0.0.9",  # T2.21 表单 + T2.04 bundle 上传（multipart 解析）
 ]
 
 [project.optional-dependencies]

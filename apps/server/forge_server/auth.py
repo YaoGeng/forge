@@ -59,18 +59,29 @@ class RateLimiter:
         return len(bucket) <= limit
 
 
+def issue_session(session_factory, user_id: int, now) -> str:
+    """签发会话（API login 与 Web 表单登录共用）：token 服务端持有，30 天。"""
+    token = secrets.token_urlsafe(32)
+    with session_factory() as s:
+        s.add(AuthSession(token=token, user_id=user_id, created_at=now,
+                          expires_at=now + timedelta(days=SESSION_DAYS)))
+        s.commit()
+    return token
+
+
+def _validate(email: str, password: str) -> None:
+    if not email or not _EMAIL_RE.match(email) or len(email) > 255:
+        raise HTTPException(status_code=422, detail="邮箱格式不正确")
+    if not 8 <= len(password) <= 128:
+        raise HTTPException(status_code=422, detail="密码长度需在 8-128 位之间")
+
+
 def register_auth_routes(app) -> None:
     router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
     app.state.auth_limiter = RateLimiter()
 
     def _client_ip(request: Request) -> str:
         return request.client.host if request.client else "unknown"
-
-    def _validate(email: str, password: str) -> None:
-        if not email or not _EMAIL_RE.match(email) or len(email) > 255:
-            raise HTTPException(status_code=422, detail="邮箱格式不正确")
-        if not 8 <= len(password) <= 128:
-            raise HTTPException(status_code=422, detail="密码长度需在 8-128 位之间")
 
     @router.post("/register", status_code=201)
     def register(body: dict, request: Request):
@@ -103,15 +114,7 @@ def register_auth_routes(app) -> None:
             user = s.query(User).filter_by(email=email).first()
             if user is None or not verify_password(password, user.password_hash):
                 raise HTTPException(status_code=401, detail="邮箱或密码错误")
-            token = secrets.token_urlsafe(32)
-            session = AuthSession(
-                token=token,
-                user_id=user.id,
-                created_at=now,
-                expires_at=now + timedelta(days=SESSION_DAYS),
-            )
-            s.add(session)
-            s.commit()
+            token = issue_session(request.app.state.session_factory, user.id, now)
             response.set_cookie(
                 "forge_sid", token, httponly=True, samesite="lax",
                 max_age=SESSION_DAYS * 86400,
