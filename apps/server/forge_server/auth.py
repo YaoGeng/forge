@@ -81,6 +81,11 @@ def register_auth_routes(app) -> None:
     app.state.auth_limiter = RateLimiter()
 
     def _client_ip(request: Request) -> str:
+        """买家真实 IP：优先 X-Forwarded-For 首值（后端仅回环/内网可达，nginx 注入可信；
+        无头（本地开发/测试）退回直连地址——否则全部买家共享 nginx 单 IP 桶）。"""
+        xff = request.headers.get("x-forwarded-for", "")
+        if xff:
+            return xff.split(",")[0].strip()
         return request.client.host if request.client else "unknown"
 
     @router.post("/register", status_code=201)

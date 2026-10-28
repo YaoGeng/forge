@@ -36,17 +36,27 @@ jobs:
           docker save forge-backend:${TAG} | ssh -i key -o StrictHostKeyChecking=accept-new "$SERVER_HOST" docker load
           ssh -i key "$SERVER_HOST" "cd /opt/aim/forge && FORGE_TAG=${TAG} docker compose -p forge up -d"
 
-      - name: healthz 断言（回源层真链路；不通过即失败，禁止静默）
+      - name: 公开面/管理域断言（回源层真链路；不通过即失败，禁止静默）
         env:
           FORGE_BASIC: ${{ secrets.FORGE_BASIC }}
         run: |
           sleep 5
           # 公网 CF 边缘会拦 runner 数据中心 IP（v0.1.0 实测 403，正常访问 200）——
-          # 断言改回源层：nginx→backend 全链路，公网拨测归 UptimeRobot/人工清单
-          code=$(ssh -i key "$SERVER_HOST" \
-            "curl -sk --resolve forge.aim8848.com:443:127.0.0.1 -u '$FORGE_BASIC' -o /dev/null -w '%{http_code}' https://forge.aim8848.com/healthz")
-          echo "origin healthz: $code"
-          test "$code" = 200
+          # 断言走回源层：nginx→backend 全链路，公网拨测归 UptimeRobot/人工清单
+          probe() {  # probe <path> [basic]
+            local path="$1"; local auth=""
+            [ -n "${2:-}" ] && auth="-u '$FORGE_BASIC'"
+            ssh -i key "$SERVER_HOST" \
+              "curl -sk --resolve forge.aim8848.com:443:127.0.0.1 $auth -o /dev/null -w '%{http_code}' https://forge.aim8848.com$path"
+          }
+          # T2.22：买家公开面匿名可达
+          h=$(probe /healthz);           echo "anon /healthz: $h"; test "$h" = 200
+          s=$(probe /store);             echo "anon /store: $s";   test "$s" = 200
+          l=$(probe /login);             echo "anon /login: $l";   test "$l" = 200
+          st=$(probe /api/v1/store/apps); echo "anon /api/v1/store/apps: $st"; test "$st" = 200
+          # 管理域维持 Basic：匿名 401、带凭据 200
+          r=$(probe /api/v1/registry/blocks); echo "anon registry: $r"; test "$r" = 401
+          rb=$(probe /api/v1/registry/blocks basic); echo "basic registry: $rb"; test "$rb" = 200
           ssh -i key "$SERVER_HOST" "docker image prune -f" || true
 
   runner-build:

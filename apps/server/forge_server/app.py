@@ -19,6 +19,7 @@ from .scheduler import CertScheduler, SegRunHook, WallClock
 from .spotcheck import register_spotcheck_routes
 from .store import register_report_routes, register_store_routes
 from .web import register_static, register_web_routes
+from .web_admin import register_admin_routes
 
 
 def _ensure_plan_json_column(engine) -> None:
@@ -135,6 +136,7 @@ def create_app(
     register_package_routes(app)
     register_web_routes(app)
     register_static(app)
+    register_admin_routes(app)
 
     from fastapi.responses import FileResponse
 
