@@ -83,6 +83,9 @@ jobs:
         run: pyinstaller apps/runner/forge-runner.spec --noconfirm --distpath dist
       - name: exe 冒烟（能起、鉴权护栏生效）
         run: |
+          # GitHub Actions pwsh 全局 EAP=Stop：exe 写 stderr 经 2>&1 会变 ErrorRecord
+          # 直接 throw（v0.2.3 实测）——本步必须先放开
+          $ErrorActionPreference = 'Continue'
           [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
           $out = dist\forge-runner.exe library 2>&1
           $code = $LASTEXITCODE
@@ -110,5 +113,6 @@ jobs:
         env:
           FORGE_BASIC: ${{ secrets.FORGE_BASIC }}
         run: |
+          $ErrorActionPreference = 'Continue'   # ssh 的 stderr 横幅不得触发 throw
           $code = ssh -i key "$env:SERVER_HOST" "curl -sk --resolve forge.aim8848.com:443:127.0.0.1 -u '$env:FORGE_BASIC' -o /dev/null -w '%{http_code}' https://forge.aim8848.com/api/v1/store/runner"
           if ($code -ne 200) { throw "store/runner 断言失败: $code" }
