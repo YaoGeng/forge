@@ -1,0 +1,24 @@
+# T0 目录重组（docs/18 §4）：apps/server -> apps/backend + 四端 workspace 基座
+# 日期：2026-10-31 ｜ 基线 main@3f9165c ｜ 改动：git mv + 22 处引用修复 + 根 package.json/pnpm-workspace.yaml + .gitignore 追加
+
+## 验收 1：全量回归（新路径）
+$ spikes/.venv/Scripts/python.exe -m pytest apps/backend/tests apps/runner/tests packages/block-sdk/tests packages/proto/tests packages/trace/tests packages/certifier/tests -q
+413 passed, 1 skipped in 32.48s
+口径说明：414 collected（backend 172 + runner 29 + block-sdk 83 + proto 38 + trace 82 + certifier 10，与 docs/18 基线分解逐项一致）；
+其中 1 skipped = apps/runner/tests/test_cli.py:54（chmod 0600 仅 posix 可校验，Windows 环境性 skip）。
+改动前基线实测同为 413 passed + 1 skipped（改名零回归）。
+
+## 验收 2：零命中断言
+$ git grep -n "apps/server" -- ':!docs' ':!spikes/evidence'
+exit=1 （无输出、exit 1 = 零命中，达卡上口径）
+
+## 验收 3：compose config
+$ FORGE_TAG=v0 docker compose -f deploy/compose.yml config -q
+/usr/bin/bash: line 21: docker: command not found
+exit=127 —— 本机无 docker（docker: command not found），按卡口径改 CI 验证；deploy/compose.yml 本卡零改动（git diff 无该文件）且 grep 零 apps/server 引用（纯 image 消费，卡上实测声明成立）
+
+## 验收 4：docker build（卡上第 4 条）
+本机无 docker → 卡上口径：以 CI apps-packages + server-pg 双绿为证据；本卡不 push，CI 双绿待 push 后由 .github/workflows/ci.yml 链给出（ci.yml 已同步改 apps/backend）。
+
+## workspace 基座 sanity（附）
+package.json: private=true, packageManager=pnpm@12.11.2, engines.node=>=24；pnpm-workspace.yaml: apps/web-admin|apps/portal|apps/client；本机 pnpm -v = 12.11.2

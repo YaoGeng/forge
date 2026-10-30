@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
-for rel in ("apps/server", "spikes", "packages/trace/python",
+for rel in ("apps/backend", "spikes", "packages/trace/python",
             "packages/proto/python", "packages/block-sdk/python",
             "packages/certifier/python"):
     p = _ROOT / rel

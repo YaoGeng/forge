@@ -24,7 +24,7 @@ for rel in (
     "packages/proto/python",
     "packages/block-sdk/python",
     "packages/certifier/python",
-    "apps/server",
+    "apps/backend",
     "spikes",
 ):
     p = _ROOT / rel

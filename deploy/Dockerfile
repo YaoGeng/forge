@@ -9,7 +9,7 @@ COPY packages/proto/python /srv/pkg/proto
 COPY packages/block-sdk/python /srv/pkg/block-sdk
 COPY packages/trace/python /srv/pkg/trace
 COPY packages/certifier/python /srv/pkg/certifier
-COPY apps/server /srv/app
+COPY apps/backend /srv/app
 
 RUN pip install --no-cache-dir \
       /srv/pkg/proto /srv/pkg/block-sdk /srv/pkg/trace /srv/pkg/certifier \

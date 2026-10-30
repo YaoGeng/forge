@@ -7,7 +7,7 @@ from pathlib import Path
 _HERE = Path(__file__).resolve().parent
 for rel in (
     "../../certifier/python",
-    "../../../apps/server",
+    "../../../apps/backend",
     "../../../packages/trace/python",
     "../../../packages/trace/tests",
     "../../../packages/block-sdk/python",

@@ -24,7 +24,7 @@ for rel in (
     "packages/proto/python",
     "packages/block-sdk/python",
     "packages/certifier/python",
-    "apps/server",
+    "apps/backend",
 ):
     p = _ROOT / rel
     if str(p) not in sys.path:

@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e apps/server
+      - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e apps/backend
       - name: spikes 全量（离线单测 116；4 个真浏览器用例 deselect——CI 不装 chromium，真浏览器验证留本地/部署清单）
         run: |
           python -m pytest spikes -q \
@@ -26,9 +26,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e apps/server
-      - name: apps/server + packages 全量（sqlite 载体）
-        run: python -m pytest apps/server/tests apps/runner/tests packages/block-sdk/tests packages/proto/tests packages/trace/tests packages/certifier/tests -q
+      - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e apps/backend
+      - name: apps/backend + packages 全量（sqlite 载体）
+        run: python -m pytest apps/backend/tests apps/runner/tests packages/block-sdk/tests packages/proto/tests packages/trace/tests packages/certifier/tests -q
 
   server-pg:
     # PG 兼容正式验证（docs/16 T1.81/T1.83）——禁只拿 sqlite 绿宣称 PG 可用
@@ -53,10 +53,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.12" }
-      - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e 'apps/server[pg]'
+      - run: pip install -r spikes/requirements.txt -e packages/proto/python -e packages/block-sdk/python -e packages/trace/python -e packages/certifier/python -e 'apps/backend[pg]'
       - name: PG 连通性预检（失败时直接指认容器/凭据层）
         run: |
           pg_isready -h localhost -p 5432
           PGPASSWORD=postgres psql -h localhost -U postgres -tAc 'select version();'
-      - name: apps/server 全量（PG 载体，逐测试独立库）
-        run: python -m pytest apps/server/tests -q
+      - name: apps/backend 全量（PG 载体，逐测试独立库）
+        run: python -m pytest apps/backend/tests -q

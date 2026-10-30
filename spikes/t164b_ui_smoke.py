@@ -9,7 +9,7 @@ from datetime import datetime
 from pathlib import Path
 
 _ROOT = Path(__file__).resolve().parent.parent
-for rel in ("apps/server", "packages/trace/python", "packages/proto/python",
+for rel in ("apps/backend", "packages/trace/python", "packages/proto/python",
             "packages/block-sdk/python"):
     p = _ROOT / rel
     if str(p) not in sys.path:

@@ -224,3 +224,8 @@
 - **T1.65e 覆盖实验**：30 判定记录恰一次冻结（`coverage/runs/` ×30，重跑 executed=0/resumed=30）；`report.md` 只呈报数据——**覆盖 1/30（3.3%），未覆盖 17/7/5（站点未覆盖/能力缺失/需通用化）**，与彩排预测逐条一致；池快照引用 sha256:d2c0…df964；构成披露供给 18/求助 12。run_coverage 报告回填缺陷（pool_ref 显式 None 压过缺省值）同轮修复。
 - **rows-golden 缓办（理由更新）**：manifest `rows:"[]"` golden 改参数将打脱已完成认证的参数口径（N=20 认证绑定录制时参数）——cert 已落库不可再动，该项随种子库重做（D-4 fail 路径）一并处理。
 - 全仓 **362/362**。
+
+## MS-3 T0 目录重组（docs/18，2026-10-31）
+
+- **apps/server → apps/backend**（git mv 保历史，包名 forge_server 不变）+ 引用修复 22 处（Dockerfile / .dockerignore / ci.yml ×7 / deploy.yml / certifier conftest / spikes 10 脚本 + 注释级 backend conftest ×2 与 runner chain.py）；根 `package.json` + `pnpm-workspace.yaml`（web-admin/portal/client 三 JS 端）+ `.gitignore` 追加 `node_modules/`、`apps/client/release/`。compose.yml / SERVER_STEPS.md / remote_setup.sh 实测零命中不改（卡上声明成立）。
+- 验收：全量回归 **414 collected = 413 passed + 1 skipped**（skip 为 runner test_cli.py:54 chmod posix-only 环境性，改动前基线同值，零回归）；`git grep "apps/server"` 排除 docs/evidence 后零输出；本机无 docker → compose config 与 docker build 按卡口径转 CI 验证（待 push 后 ci.yml apps-packages + server-pg 双绿）。证据 `ms3/t0.1-rename-grep.txt`。

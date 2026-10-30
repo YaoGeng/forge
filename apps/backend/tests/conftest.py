@@ -1,4 +1,4 @@
-"""apps/server 测试路径引导与公共夹具：forge_server 与各包均未安装为发行包。"""
+"""apps/backend 测试路径引导与公共夹具：forge_server 与各包均未安装为发行包。"""
 import itertools
 import os
 import sys
@@ -8,7 +8,7 @@ from pathlib import Path
 
 _HERE = Path(__file__).resolve().parent
 for rel in (
-    "..",  # apps/server（forge_server 包根）
+    "..",  # apps/backend（forge_server 包根）
     "../../../packages/trace/python",
     "../../../packages/trace/tests",  # FakeBrowser 假体（T1.31 起复用）
     "../../../packages/block-sdk/python",

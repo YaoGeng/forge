@@ -78,7 +78,7 @@ jobs:
       - name: 运行器离线测试
         run: python -m pytest apps/runner/tests -q
         env:
-          PYTHONPATH: apps/server;packages/trace/python;packages/proto/python;packages/block-sdk/python
+          PYTHONPATH: apps/backend;packages/trace/python;packages/proto/python;packages/block-sdk/python
       - name: 构建 exe
         run: pyinstaller apps/runner/forge-runner.spec --noconfirm --distpath dist
       - name: exe 冒烟（能起、鉴权护栏生效）

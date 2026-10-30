@@ -1,0 +1,4 @@
+packages:
+  - apps/web-admin
+  - apps/portal
+  - apps/client

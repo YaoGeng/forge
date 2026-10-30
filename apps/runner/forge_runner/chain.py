@@ -1,4 +1,4 @@
-"""ChainRunner（docs/17 T2.10 移植）：与 apps/server/forge_server/chain.py 同契约。
+"""ChainRunner（docs/17 T2.10 移植）：与 apps/backend/forge_server/chain.py 同契约。
 
 一致性由 apps/runner/tests/test_chain.py 对照测试钉死——两处改动必须同步
 （docs/17 A4 会签制）。执行语义：线性管线、字面量 params + "块名.出参键" 绑定、

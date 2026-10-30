@@ -5,4 +5,4 @@ spikes/.venv
 **/.pytest_cache
 node_modules
 *.md
-!apps/server/README.md
+!apps/backend/README.md
