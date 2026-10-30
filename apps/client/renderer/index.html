@@ -1,0 +1,65 @@
+<!doctype html>
+<!-- v1 壳 = 品牌标题 + 当前版本 + 更新状态行 + 打开商店（无渲染层框架，MUST NOT） -->
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'" />
+    <title>Forge 客户端</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body {
+        margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+        font-family: "Segoe UI", "Microsoft YaHei", sans-serif;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); color: #e2e8f0;
+      }
+      .card { max-width: 640px; padding: 48px 56px; text-align: center; }
+      h1 { font-size: 44px; letter-spacing: 4px; margin: 0 0 8px; }
+      .slogan { color: #94a3b8; margin-bottom: 28px; }
+      .ver { font-size: 15px; color: #cbd5e1; margin: 6px 0; }
+      #update-status {
+        margin: 22px auto; padding: 10px 18px; border-radius: 8px; display: inline-block;
+        background: rgba(148, 163, 184, 0.12); font-size: 14px; min-width: 320px;
+      }
+      .btns { margin-top: 24px; display: flex; gap: 16px; justify-content: center; }
+      button {
+        padding: 12px 32px; font-size: 15px; border-radius: 8px; cursor: pointer; border: none;
+      }
+      #open-store { background: #f59e0b; color: #1c1917; font-weight: 600; }
+      #restart-update { background: #10b981; color: #052e23; font-weight: 600; display: none; }
+      #log {
+        margin-top: 28px; text-align: left; font: 12px/1.7 Consolas, monospace;
+        background: rgba(0, 0, 0, 0.35); padding: 12px 16px; border-radius: 8px;
+        max-height: 200px; overflow: auto; color: #a5b4fc; white-space: pre-wrap;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <h1>Forge</h1>
+      <p class="slogan">块即资产 · 首跑即认证</p>
+      <p class="ver" id="version">当前版本：…</p>
+      <p class="ver" id="feed" style="font-size:12px;color:#64748b"></p>
+      <div><span id="update-status">更新检查未开始</span></div>
+      <div class="btns">
+        <button id="open-store">打开商店</button>
+        <button id="restart-update">重启更新</button>
+      </div>
+      <div id="log"></div>
+    </main>
+    <script>
+      const forge = window.forge;
+      const $ = (id) => document.getElementById(id);
+      forge.appInfo().then((info) => {
+        $("version").textContent = "当前版本：" + info.version;
+        $("feed").textContent = "更新源：" + info.feed;
+      });
+      forge.onUpdaterLog((line) => {
+        $("update-status").textContent = line;
+        $("log").textContent += line + "\n";
+        if (line.includes("update-downloaded")) $("restart-update").style.display = "inline-block";
+      });
+      $("open-store").onclick = () => forge.openStore();
+      $("restart-update").onclick = () => forge.quitAndInstall();
+    </script>
+  </body>
+</html>

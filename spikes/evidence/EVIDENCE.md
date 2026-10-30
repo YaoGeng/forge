@@ -233,4 +233,19 @@
 ## MS-3 T1 backend 只读端点（docs/18，2026-10-31）
 
 - **E1-E4 四端点 TDD 落地**（RED 14 失败 → GREEN；三测试文件 `test_client_feed.py`/`test_admin_readonly.py`/`test_cors.py` 新增 19 例）：E1 `GET /api/v1/apps/{id}/versions`（registry 既有 router）；E2 `GET /api/v1/store/client`(+`/latest.yml`，electron-updater generic——sha512 双口径：JSON=sha512:hex 仿 runner、yml=base64 摘要，均与文件字节一致；`client_version`=env `FORGE_CLIENT_VERSION`+既有 `dist_root`，仿 `runner_info_data`）；E3 `GET /api/v1/stats/run-reports?limit=1..100`（默认 50，id desc）；E4 `FORGE_CORS_ORIGINS` 非空才挂 CORSMiddleware（逗号白名单、credentials=False、仅 GET）。
-- 验收：backend 全量 **191 passed**（172+19）；六包全量 **432 passed + 1 skipped**（基线 413+1，skip 为 runner chmod posix-only 环境性，零回退）。买家面既有端点零改动（store.py/web.py 仅新增路由）；不碰 apps/runner；nginx 零改动（`/api/v1/store/` 既有豁免覆盖 client feed）。证据 `ms3/t1.1-endpoints.txt`（含新端点 pytest 断言摘要 + env 全链路活探针 + sha512 双口径 MATCH 核对）。待 code-reviewer 评审后合入。
+- 验收：backend 全量 **191 passed**（172+19）；六包全量 **432 passed + 1 skipped**（基线 413+1，skip 为 runner chmod posix-only 环境性，零回退）。买家面既有端点零改动（store.py/web.py 仅新增路由）；不碰 apps/runner；nginx 零改动（`/api/v1/store/` 既有豁免覆盖 client feed）。证据 `ms3/t1.1-endpoints.txt`（含新端点 pytest 断言摘要 + env 全链路活探针 + sha512 双口径 MATCH 核对）。code-reviewer 评审**通过**（2026-10-31：契约/sha512 双口径/只读性/公开面仅元数据核验；3 条非阻塞建议登记缓办：_client_release 哈希缓存、E1 分页、CORS POST 钉子），已合入 `b549743`。
+
+## MS-3 T2 web-admin 只读管理面（docs/18，2026-10-31）
+
+- **antd5 只读三视图落地**（Vite react-ts，`base:'/admin/'` + dev `/api` 代理 127.0.0.1:8041；无 redux/react-query/JWT/RBAC/路由库，antd Layout+Menu 本地态切页，零写操作 UI）：①首跑统计 `GET /api/v1/stats/first-run`（gate 纯函数 `src/gate.ts`：rate≥0.8 且 n≥5，GATE_TEXT 与 web_admin.py 逐字符 MATCH，未达标红 Tag + n 不足 reason）②应用与版本 `GET /api/v1/apps` Table 行展开懒拉 E1 `/apps/{id}/versions` ③认证记录 E3 `?limit=50`。偏差：React 19.3.1 + antd 官方 v5-patch-for-react-19（并行车道 @types/react@19 公共提升击穿 18 类型链，统一 19 根因消除，证据 D2）。
+- 验收：gate vitest 真值表 RED 4 失败 → GREEN **8/8**；`pnpm -F web-admin exec tsc --noEmit` exit 0；`pnpm -F web-admin build` 成功（真类型门 tsc -b 注入式验证有效）；`test -f dist/index.html` 与 `grep -q "/admin/" dist/assets/*.js`（GNU grep；本机默认 grep 为 ugrep 包装）均过；vite preview 冒烟 /admin/ 探针 200/200/302。证据 `ms3/t2.1-admin-build.txt`；dev 三页截图「人工触发一次」待用户执行。已合入 `f992cdf`。
+
+## MS-3 T3 portal 门户（docs/18，2026-10-31）
+
+- **Next 16.4.3 静态 export 单页落地**（`output:'export'` + `images:{unoptimized:true}` + `trailingSlash:true` 三配置钉死；Hero「买之前，就知道它能不能跑」/ 三大支柱 积木·认证·健康分 / 信任字段说明 / CTA → `/store`×4 + `/download/`；footer 担保声明与 docs/17 逐字一致）。品牌色板逐值取自 prototype.html：橄榄绿 `#3E5C3A/#2C3E28/#6B8E5A/#F4F6F1` 主 ≈90%，豆沙红 `#C25E5E/#E8C4C4` 仅主 CTA/重点数字/徽标 ≤10%；动效自研 CSS keyframes + IntersectionObserver 渐入（未引 framer-motion），`prefers-reduced-motion` 全停。
+- 验收：`pnpm -F portal build` exit 0（4 静态页，out/ 928K）；`test -f apps/portal/out/index.html`（62251B）；`grep 'href="/store'` 命中 4 处；i18n/cms/localStorage 全目录零命中（卡面 grep 指向 src/ 与 --no-src-dir 矛盾，D2 以全目录口径取证）；lint 零输出。偏差 D1-D5 见证据文件（并发锁冲突独立 store 修复 D3）。证据 `ms3/t3.1-portal-build.txt`；dev 冒烟截图「人工触发一次」待用户执行。已合入 `8b76009`。
+
+## MS-3 T4 client Electron（docs/18，2026-10-31）
+
+- **Electron 45.2.0 壳 + updater 假 feed 本地闭环**（实测 `npm view electron version`=45.2.0，≥45 达标；手工最小壳 main/preload/renderer 零框架；PROD feed `…/api/v1/store/client/` + `FORGE_UPDATE_FEED` 覆盖；electron-builder.yml appId `com.aim8848.forge.client`、artifactName `forge-client-${version}-win.${ext}` 与 E2 契约钉死）。闭环日志：0.1.0 packaged 启动 → checking → update-available 0.2.0 → download-progress 100% → **update-downloaded**；sha512 base64 口径经 updater 实际校验（错哈希只会 error 不会 downloaded）。未用 /S 静默安装回退（win-unpacked 即触发全事件链，系统零安装）；临时 8099 http.server 与应用进程已按 PID 清杀复核。
+- 验收：`pnpm -F client exec tsc --noEmit` exit 0；`test -f apps/client/release/forge-client-0.1.0-win.exe`（121,541,243B）；`grep "update-downloaded" t4.1-updater.log` 命中；`git grep -niE "better-sqlite3|monaco|reactflow" apps/client` 零输出。偏差 7 条见任务报告（TS 5.9.3 非 7、.npmrc 追加 builder 二进制镜像、pnpm 自动追加 minimumReleaseAgeExclude、electron postinstall 手动 install.js、autoInstallOnAppQuit=false、executableName 钉名）。exe 115.9MB 超 GitHub 100MB 限 → `fake-feed/*.exe` gitignore 本地存证，指纹见 `fake-feed/README.md`。证据 `ms3/t4.1-updater.log` + `fake-feed/{latest.yml,README.md}`；更新弹窗截图「人工触发一次」待用户执行（win-unpacked + 假 feed 即现「重启更新」）。

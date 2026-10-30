@@ -1,0 +1,8 @@
+version: 0.2.0
+files:
+  - url: forge-client-0.2.0-win.exe
+    sha512: kHSbiWmjCUOeagciDYwdK6UkwiZZCUvCF4w6dnTgJmqksPJZOuUUxbd7k77+v9pQ0TAWyeYeuqn0vJ3Sq6LaZg==
+    size: 121541374
+path: forge-client-0.2.0-win.exe
+sha512: kHSbiWmjCUOeagciDYwdK6UkwiZZCUvCF4w6dnTgJmqksPJZOuUUxbd7k77+v9pQ0TAWyeYeuqn0vJ3Sq6LaZg==
+releaseDate: '2026-10-30T20:31:02Z'

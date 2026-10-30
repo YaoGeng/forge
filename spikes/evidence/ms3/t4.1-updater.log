@@ -1,0 +1,114 @@
+=== session A: v0.1.0 win-unpacked, default PROD feed（事件链验证，预期 404/连接错误即证明事件可触发）===
+
+[2026-10-30T20:28:27.184Z] app: 启动完成 version=0.1.0 packaged=true
+Checking for update
+[2026-10-30T20:28:27.186Z] updater: checking-for-update (feed=https://forge.aim8848.com/api/v1/store/client/)
+Generated new staging user ID: 829ff298-d1f2-5571-8692-684d403575b3
+[32280:1031/042827.262:INFO:CONSOLE:8] "Applying inline style violates the following Content Security Policy directive 'default-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-zH2l9Cv4VMLePDFkSgYLm0bvlx8OSHnULkIqYWyzqTs='), or a nonce ('nonce-...') is required to enable inline execution. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.", source: file:///C:/Users/yg/Desktop/forge/apps/client/release/win-unpacked/resources/app.asar/renderer/index.html (8)
+[32280:1031/042827.264:INFO:CONSOLE:41] "Applying inline style violates the following Content Security Policy directive 'default-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-ZifXf/EJPtTItbwJxlTOV3HCw9ofqL6Pw0DVPDo+SUg='), or a nonce ('nonce-...') is required to enable inline execution. Note that hashes do not apply to event handlers, style attributes and javascript: navigations unless the 'unsafe-hashes' keyword is present. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.", source: file:///C:/Users/yg/Desktop/forge/apps/client/release/win-unpacked/resources/app.asar/renderer/index.html (41)
+[32280:1031/042827.265:INFO:CONSOLE:49] "Uncaught SyntaxError: Identifier 'forge' has already been declared", source: file:///C:/Users/yg/Desktop/forge/apps/client/release/win-unpacked/resources/app.asar/renderer/index.html (49)
+Error: Error: Cannot find channel "latest.yml" update info: HttpError: 404 
+"method: GET url: https://forge.aim8848.com/api/v1/store/client/latest.yml?noCache=1k677vnms\n\nPlease double check that your authentication token is correct. Due to security reasons, actual status maybe not reported, but 404.\n"
+Headers: {
+  "alt-svc": "h3=\":443\"; ma=86400",
+  "cf-cache-status": "DYNAMIC",
+  "cf-ray": "a52d2aa29f078537-SJC",
+  "content-length": "22",
+  "content-type": "application/json",
+  "date": "Fri, 30 Oct 2026 20:28:28 GMT",
+  "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8jxbLIFoS31Yk10W9KbK3vDjb0E5x5AkHAC4teSUXoIletGJmPF0zEgXCbWQXw7QC%2B47DvLwewD1KywIkGB35A0IG3%2BwHoDzIbVrxL%2BU9gNK1Bo1eAc2CUVJdMGL6IslJPwuj%2BNY4mSkAeqEpKcQ%2Bw%3D%3D\"}]}",
+  "server": "cloudflare",
+  "server-timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=32,cfOrigin;dur=519",
+  "speculation-rules": "\"/cdn-cgi/speculation\"",
+  "strict-transport-security": "max-age=31536000",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "SAMEORIGIN"
+}
+    at createHttpError (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:53:12)
+    at ElectronHttpExecutor.handleResponse (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:157:20)
+    at ClientRequest.<anonymous> (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:122:26)
+    at ClientRequest.emit (node:events:514:28)
+    at SimpleURLLoaderWrapper.<anonymous> (node:internal/electron/js2c/browser_init:4:32350)
+    at SimpleURLLoaderWrapper.emit (node:events:514:28)
+    at newError (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\error.js:5:19)
+    at GenericProvider.getLatestVersion (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\electron-updater\out\providers\GenericProvider.js:27:63)
+    at async NsisUpdater.getUpdateInfoAndProvider (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\electron-updater\out\AppUpdater.js:389:19)
+    at async NsisUpdater.doCheckForUpdates (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\electron-updater\out\AppUpdater.js:402:24)
+[2026-10-30T20:28:28.742Z] updater: error Error: Cannot find channel "latest.yml" update info: HttpError: 404 
+"method: GET url: https://forge.aim8848.com/api/v1/store/client/latest.yml?noCache=1k677vnms\n\nPlease double check that your authentication token is correct. Due to security reasons, actual status maybe not reported, but 404.\n"
+Headers: {
+  "alt-svc": "h3=\":443\"; ma=86400",
+  "cf-cache-status": "DYNAMIC",
+  "cf-ray": "a52d2aa29f078537-SJC",
+  "content-length": "22",
+  "content-type": "application/json",
+  "date": "Fri, 30 Oct 2026 20:28:28 GMT",
+  "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8jxbLIFoS31Yk10W9KbK3vDjb0E5x5AkHAC4teSUXoIletGJmPF0zEgXCbWQXw7QC%2B47DvLwewD1KywIkGB35A0IG3%2BwHoDzIbVrxL%2BU9gNK1Bo1eAc2CUVJdMGL6IslJPwuj%2BNY4mSkAeqEpKcQ%2Bw%3D%3D\"}]}",
+  "server": "cloudflare",
+  "server-timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=32,cfOrigin;dur=519",
+  "speculation-rules": "\"/cdn-cgi/speculation\"",
+  "strict-transport-security": "max-age=31536000",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "SAMEORIGIN"
+}
+    at createHttpError (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:53:12)
+    at ElectronHttpExecutor.handleResponse (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:157:20)
+    at ClientRequest.<anonymous> (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:122:26)
+    at ClientRequest.emit (node:events:514:28)
+    at SimpleURLLoaderWrapper.<anonymous> (node:internal/electron/js2c/browser_init:4:32350)
+    at SimpleURLLoaderWrapper.emit (node:events:514:28)
+(node:32280) UnhandledPromiseRejectionWarning: Error: Cannot find channel "latest.yml" update info: HttpError: 404 
+"method: GET url: https://forge.aim8848.com/api/v1/store/client/latest.yml?noCache=1k677vnms\n\nPlease double check that your authentication token is correct. Due to security reasons, actual status maybe not reported, but 404.\n"
+Headers: {
+  "alt-svc": "h3=\":443\"; ma=86400",
+  "cf-cache-status": "DYNAMIC",
+  "cf-ray": "a52d2aa29f078537-SJC",
+  "content-length": "22",
+  "content-type": "application/json",
+  "date": "Fri, 30 Oct 2026 20:28:28 GMT",
+  "nel": "{\"report_to\":\"cf-nel\",\"success_fraction\":0.0,\"max_age\":604800}",
+  "report-to": "{\"group\":\"cf-nel\",\"max_age\":604800,\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v4?s=8jxbLIFoS31Yk10W9KbK3vDjb0E5x5AkHAC4teSUXoIletGJmPF0zEgXCbWQXw7QC%2B47DvLwewD1KywIkGB35A0IG3%2BwHoDzIbVrxL%2BU9gNK1Bo1eAc2CUVJdMGL6IslJPwuj%2BNY4mSkAeqEpKcQ%2Bw%3D%3D\"}]}",
+  "server": "cloudflare",
+  "server-timing": "cfCacheStatus;desc=\"DYNAMIC\", cfEdge;dur=32,cfOrigin;dur=519",
+  "speculation-rules": "\"/cdn-cgi/speculation\"",
+  "strict-transport-security": "max-age=31536000",
+  "x-content-type-options": "nosniff",
+  "x-frame-options": "SAMEORIGIN"
+}
+    at createHttpError (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:53:12)
+    at ElectronHttpExecutor.handleResponse (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:157:20)
+    at ClientRequest.<anonymous> (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:122:26)
+    at ClientRequest.emit (node:events:514:28)
+    at SimpleURLLoaderWrapper.<anonymous> (node:internal/electron/js2c/browser_init:4:32350)
+    at SimpleURLLoaderWrapper.emit (node:events:514:28)
+    at newError (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\error.js:5:19)
+    at GenericProvider.getLatestVersion (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\electron-updater\out\providers\GenericProvider.js:27:63)
+    at async NsisUpdater.getUpdateInfoAndProvider (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\electron-updater\out\AppUpdater.js:389:19)
+    at async NsisUpdater.doCheckForUpdates (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\electron-updater\out\AppUpdater.js:402:24)
+(Use `forge-client --trace-warnings ...` to show where the warning was created)
+(node:32280) UnhandledPromiseRejectionWarning: Unhandled promise rejection. This error originated either by throwing inside of an async function without a catch block, or by rejecting a promise which was not handled with .catch(). To terminate the node process on unhandled promise rejection, use the CLI flag `--unhandled-rejections=strict` (see https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode). (rejection id: 1)
+
+=== session B: v0.1.0 win-unpacked + FORGE_UPDATE_FEED=http://127.0.0.1:8099/（假 feed v0.2.0）===
+
+[2026-10-30T20:41:48.620Z] app: 启动完成 version=0.1.0 packaged=true
+Checking for update
+[2026-10-30T20:41:48.621Z] updater: checking-for-update (feed=http://127.0.0.1:8099/)
+Found version 0.2.0 (url: forge-client-0.2.0-win.exe)
+[2026-10-30T20:41:48.756Z] updater: update-available 0.2.0
+Downloading update from forge-client-0.2.0-win.exe
+updater cache dir: C:\Users\yg\AppData\Local\client-updater
+disableWebInstaller is set to false, you should set it to true if you do not plan on using a web installer. This will default to true in a future version.
+Download block maps (old: "http://127.0.0.1:8099/forge-client-0.1.0-win.exe.blockmap", new: http://127.0.0.1:8099/forge-client-0.2.0-win.exe.blockmap)
+Cannot download differentially, fallback to full download: Error: Cannot download "http://127.0.0.1/forge-client-0.2.0-win.exe.blockmap", status 404: File not found
+    at ClientRequest.<anonymous> (C:\Users\yg\Desktop\forge\apps\client\release\win-unpacked\resources\app.asar\node_modules\builder-util-runtime\out\httpExecutor.js:245:34)
+    at ClientRequest.emit (node:events:514:28)
+    at SimpleURLLoaderWrapper.<anonymous> (node:internal/electron/js2c/browser_init:4:32350)
+    at SimpleURLLoaderWrapper.emit (node:events:514:28)
+[16564:1031/044149.434:INFO:CONSOLE:8] "Applying inline style violates the following Content Security Policy directive 'default-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-zH2l9Cv4VMLePDFkSgYLm0bvlx8OSHnULkIqYWyzqTs='), or a nonce ('nonce-...') is required to enable inline execution. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.", source: file:///C:/Users/yg/Desktop/forge/apps/client/release/win-unpacked/resources/app.asar/renderer/index.html (8)
+[16564:1031/044149.434:INFO:CONSOLE:41] "Applying inline style violates the following Content Security Policy directive 'default-src 'self''. Either the 'unsafe-inline' keyword, a hash ('sha256-ZifXf/EJPtTItbwJxlTOV3HCw9ofqL6Pw0DVPDo+SUg='), or a nonce ('nonce-...') is required to enable inline execution. Note that hashes do not apply to event handlers, style attributes and javascript: navigations unless the 'unsafe-hashes' keyword is present. Note also that 'style-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.", source: file:///C:/Users/yg/Desktop/forge/apps/client/release/win-unpacked/resources/app.asar/renderer/index.html (41)
+[16564:1031/044149.436:INFO:CONSOLE:49] "Uncaught SyntaxError: Identifier 'forge' has already been declared", source: file:///C:/Users/yg/Desktop/forge/apps/client/release/win-unpacked/resources/app.asar/renderer/index.html (49)
+[2026-10-30T20:41:49.639Z] updater: download-progress 100.0% (121541374/121541374)
+New version 0.2.0 has been downloaded to C:\Users\yg\AppData\Local\client-updater\pending\forge-client-0.2.0-win.exe
+[2026-10-30T20:41:49.658Z] updater: update-downloaded 0.2.0（可重启安装）

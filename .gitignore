@@ -18,3 +18,5 @@ apps/runner/dist/
 node_modules/
 apps/client/release/
 apps/web-admin/dist/
+# T4 假 feed exe 115.9MB 超 GitHub 100MB 单文件硬限，仅本地存证（指纹见 fake-feed/README.md）
+spikes/evidence/ms3/fake-feed/*.exe

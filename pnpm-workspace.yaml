@@ -2,3 +2,5 @@ packages:
   - apps/web-admin
   - apps/portal
   - apps/client
+minimumReleaseAgeExclude:
+  - electron@45.2.0

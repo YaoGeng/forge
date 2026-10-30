@@ -1,0 +1,20 @@
+# docs/18 §6 T4：appId/artifactName 与 E2 契约钉死（backend store.py 按文件名
+# forge-client-<ver>-win.exe 定位发布物）。
+appId: com.aim8848.forge.client
+productName: Forge Client
+executableName: forge-client
+artifactName: forge-client-${version}-win.${ext}
+directories:
+  output: release
+files:
+  - dist/**
+  - renderer/**
+  - package.json
+asar: true
+win:
+  target: nsis
+nsis:
+  oneClick: true
+publish:
+  - provider: generic
+    url: https://forge.aim8848.com/api/v1/store/client/
