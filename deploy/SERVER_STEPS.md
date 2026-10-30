@@ -84,3 +84,51 @@ git tag v0.1.0 && git push origin main --tags   # 触发 .github/workflows/deplo
 
 - 《数据架构文档》§5.4 表加行：forge / forge_app / 8041
 - 《服务器部署标准》§11.2 追加 forge 部署记录、§11.3 版本行
+
+## 10. 门户 / 管理面静态产物与 client 版本登记（MS-3 T5）
+
+> **R6 待确认【用户，部署前】**：aim-nginx 容器需将静态卷挂载为容器内路径
+> `/opt/aim/infra/nginx/serving`（与 conf.d 同父目录——建议 infra 仓为 nginx 服务追加
+> `/opt/aim/infra/nginx/serving:/opt/aim/infra/nginx/serving` 卷）。挂载不符时 forge.conf
+> 的 root 找不到产物（`/` 与 `/admin/` 均失败），确认前本节命令暂缓执行。
+
+上传目标结构（`<serving>` = /opt/aim/infra/nginx/serving）：
+
+```bash
+# 本地构建（【用户】，node ≥24；产物目录 portal=out/、web-admin=dist/）
+pnpm -F portal build && pnpm -F web-admin build
+# 上传：<serving>/portal ← apps/portal/out/、<serving>/admin ← apps/web-admin/dist/
+# （--delete 保持服务器目录与构建产物严格对齐）
+rsync -a --delete apps/portal/out/     deploy@43.160.219.44:/opt/aim/infra/nginx/serving/portal/
+rsync -a --delete apps/web-admin/dist/ deploy@43.160.219.44:/opt/aim/infra/nginx/serving/admin/
+```
+
+client 发布版本登记进 .env（【服务器】，§3 同文件；仿 FORGE_RUNNER_VERSION——compose
+`env_file: .env` 注入容器，backend E2 消费）：
+
+```bash
+# exe 先传 dist/：scp apps/client/release/forge-client-<ver>-win.exe deploy@43.160.219.44:/opt/aim/forge/dist/
+ssh deploy@43.160.219.44 "cd /opt/aim/forge \
+  && sed -i '/^FORGE_CLIENT_VERSION=/d' .env && echo FORGE_CLIENT_VERSION=<ver> >> .env \
+  && FORGE_TAG=<当前tag> docker compose -p forge up -d"
+# <ver> = electron-builder 版本去 v 前缀；up -d 重建容器使新 env 生效（runner-build 同款手法）
+```
+
+nginx 配置同步与 reload（【服务器】，§5 同款）：
+
+```bash
+cp deploy/nginx/forge.conf /opt/aim/infra/nginx/conf.d/forge.conf
+docker exec aim-nginx nginx -t && docker exec aim-nginx nginx -s reload
+curl -sk https://forge.aim8848.com/ -o /dev/null -w "%{http_code}\n"         # 预期 200（匿名门户）
+curl -sk https://forge.aim8848.com/admin/ -o /dev/null -w "%{http_code}\n"  # 预期 401（匿名管理面）
+```
+
+注记：
+
+- 静态产物必须**先于下一次 tag 部署**上传到位——deploy.yml 断言 `/` anon=200、
+  `/admin/` anon=401 + basic=200，产物缺位即部署失败（禁止静默）
+- `/` 公开后，无专属 location 的后端路径改由门户 SPA 接管：§7 清单的 `/docs → 404`
+  口径失效（现返回门户页 200）；后端 HTML 面板 `/admin/first-run` 由 web-admin SPA
+  取代（回滚 = 删 forge.conf 的 `location /admin/` 块）
+- 管理面入口统一 `/admin/`（带尾斜杠）：`/admin` 无尾斜杠不命中该前缀，落入门户页
+  （无泄漏——admin 资产均在 /admin/ 前缀 Basic 之后）

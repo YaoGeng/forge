@@ -58,6 +58,14 @@ jobs:
           # v0.2.0 实测踩坑：registry/blocks 是 POST-only，带凭据返回 405 而非 200）
           r=$(probe /api/v1/certifications/spotcheck/tasks); echo "anon mgmt: $r"; test "$r" = 401
           rb=$(probe /api/v1/certifications/spotcheck/tasks basic); echo "basic mgmt: $rb"; test "$rb" = 200
+          # MS-3 T5：门户公开化 + /admin/ 静态管理面 + client feed
+          # （/ 与 /admin/ basic=200 依赖静态产物已按 SERVER_STEPS §10 上传到位）
+          p=$(probe /);                    echo "anon /: $p";                 test "$p" = 200
+          a=$(probe /admin/);              echo "anon /admin/: $a";           test "$a" = 401
+          ab=$(probe /admin/ basic);       echo "basic /admin/: $ab";         test "$ab" = 200
+          c=$(probe /api/v1/store/client); echo "anon /api/v1/store/client: $c"
+          # 口径：发布 client 后 200、未发布 404——二者其一即过（401/502 = 豁免或链路失败）
+          test "$c" = 200 || test "$c" = 404
           ssh -i key "$SERVER_HOST" "docker image prune -f" || true
 
   runner-build:

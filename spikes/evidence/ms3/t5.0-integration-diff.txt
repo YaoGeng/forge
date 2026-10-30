@@ -1,0 +1,130 @@
+================================================================================
+MS-3 T5.0 集成验收——nginx / SERVER_STEPS / deploy.yml 变更与逐项自查
+日期：2026-10-31 ｜ 基线 main@2faac78（工作树干净起步）｜ 改动留工作树未 commit，
+待 arch-reviewer 公开面豁免审计（t5.1）后合入
+================================================================================
+
+一、改动摘要（git diff --stat：3 files changed, 80 insertions(+), 2 deletions(-)；
+    compose.yml 零改动——git diff 无该文件条目，卡面"纯 image 消费"声明成立）
+
+1. deploy/nginx/forge.conf（+24/-2，头注 v0.2 → v0.3）——卡面四变更逐条落位：
+   a. 新增 location /admin/：root /opt/aim/infra/nginx/serving（统一 <serving> 布局，
+      <serving>/admin/ 下即 web-admin dist 内容——规避 alias+try_files 经典坑）；
+      块内不写 auth_basic = 继承 server 级全局（管理域 Basic 维持）；SPA 回退
+      try_files $uri /admin/index.html（卡面原文）。路径沿用文件既有基准写法
+      （与 /download/ 的 alias /opt/aim/forge/dist/ 同为宿主绝对路径字面量，未造新变量）
+   b. location / 改写：auth_basic off; + root /opt/aim/infra/nginx/serving/portal +
+      try_files $uri $uri/ /index.html——门户公开化，本次唯一鉴权面放宽（R7）；
+      conf 内已加豁免边界依据注记（见自查清单第 5 条）
+   c. 新增 location = /creator：proxy 8 指令与旧 location / 逐字一致（proxy_pass
+      $upstream / Host / X-Real-IP / X-Forwarded-For / http 1.1 / Upgrade /
+      Connection "upgrade" / limit_req zone=api burst=40 nodelay）；块内不写
+      auth_basic = Basic 维持（与接管前一致）
+   d. 既有 12 个 location（= /healthz、/static/、/download/、= /login、= /register、
+      /store、/api/v1/auth/、/api/v1/pubkey、/api/v1/run-reports、/api/v1/me、
+      /api/v1/entitlements/、/api/v1/store/、/api/）逐字未动（diff 仅有新增行与
+      旧 location / 块替换；/download/ 内三行亦无波及）
+
+2. deploy/SERVER_STEPS.md（+48，§1-9 未动，仅追加 §10"门户 / 管理面静态产物与
+   client 版本登记"）：
+   - R6 待确认【用户，部署前】置顶块：aim-nginx 容器静态卷需挂载为容器内路径
+     /opt/aim/infra/nginx/serving（与 conf.d 同父目录，建议 infra 仓追加同路径卷）；
+     未确认前本节命令暂缓
+   - 上传目标结构：<serving>/portal ← apps/portal/out/（Next export）、
+     <serving>/admin ← apps/web-admin/dist/（rsync -a --delete 对齐）
+   - .env 追加 FORGE_CLIENT_VERSION（仿 FORGE_RUNNER_VERSION；sed 删旧+echo 追加+
+     compose up -d 重建——与 deploy.yml runner-build job 同款手法；backend E2 消费
+     env 的事实经 store.py:238 与 app.py:114 核实）
+   - nginx reload 循 §5 同款：cp forge.conf → docker exec aim-nginx nginx -t &&
+     nginx -s reload → curl 匿名 /（200）与 /admin/（401）探针
+   - 注记：静态产物须先于下一次 tag 部署上传（deploy.yml 断言依赖）；/docs 口径
+     失效；/admin/first-run 由 SPA 取代（回滚=删 /admin/ location）；入口统一 /admin/
+
+3. .github/workflows/deploy.yml（+8，deploy job 断言步新增，probe 函数复用不新造）：
+   - p=$(probe /) → anon 200（门户公开）
+   - a=$(probe /admin/) → anon 401；ab=$(probe /admin/ basic) → 200（管理面静态）
+   - c=$(probe /api/v1/store/client) → 口径：发布 client 后 200、未发布 404，二者
+     其一即过（401/502 = 豁免或链路失败）——404 口径经 store.py:242-243 核实
+     （client_info 未发布 raise 404"客户端尚未发布"）；注释注明依赖 §10 产物上传
+
+二、forge.conf 逐行自查清单（本机无 nginx -t，以下为人工+脚本静态核对）
+
+ 1. 花括号配对：Python 逐字符计数 open=18 / close=18，栈式解析 final depth=0
+    （无多余 }；本机 grep 为 ugrep 包装，计数口径不可信，已弃用 grep 计数结论）
+ 2. 块结构：16 个 location（11 单行豁免 + /download/ + /api/ + 新 /admin/ +
+    新 = /creator + 改写 /）×2 server 块；逐行花括号落点清单已过（7/90、32/36、
+    49/58、62/65、69/78、85/89、92/96 为多行块开闭对，30-31/37-45 单行自闭合）
+ 3. location 优先级：全文无 regex location（无 ~ 修饰符）→ 纯最长前缀 + 精确匹配
+    裁决，与书写顺序无关；= 精确匹配 4 个（/healthz /login /register /creator）
+    最优先；/admin/（7 字符）> /（1 字符）→ 管理面全部资产（含 /admin/assets/*）
+    落 Basic 块；买家豁免前缀（/api/v1/store/ 等 11 字符级）均长于 /api/ 与 /，
+    优先级不受本次改动影响
+ 4. auth_basic 继承链：server 级 auth_basic "Forge" + admin.htpasswd 为唯一全局源；
+    /admin/ 与 = /creator 块内未写 auth_basic（继承=开）；location / 显式 off
+    （唯一放宽点，与既有 11 个买家豁免块同款写法 auth_basic off;）
+ 5. R7 豁免边界注记（conf 内 4 行）：明示"nginx 取最长前缀匹配（= 精确匹配最优
+    先、与书写顺序无关）"，列举全部比 / 更长而先行命中的既有 location——买家
+    公开面与管理域的 Basic/豁免口径不受影响，auth_basic off 仅暴露门户静态产物
+ 6. root 映射推演：/admin/x → <serving>/admin/x；/admin/ → try_files 回落
+    /admin/index.html → <serving>/admin/index.html；/ → $uri/ 命中目录 + 默认
+    index → <serving>/portal/index.html；任意深链 → /index.html SPA 回退
+    （产物缺位时 try_files 终参循环 → 500，即 §10"先上传后部署"约束的机制根源）
+ 7. add_header 继承：HSTS/nosniff/X-Frame-Options（always）server 级，新静态块
+    块内无 add_header → 不截断继承，静态响应同款安全头
+ 8. limit_req：新静态块未挂限频（与既有 /download/ 静态先例一致）；= /creator
+    保留 zone=api burst=40 nodelay（跨仓契约注记原样保留）
+ 9. resolver 127.0.0.11 + set $upstream 位于所有 location 之前，未动
+10. 头注版本链 v0.2 → v0.3 追加变更来源（MS-3 T5）与 R6 指针，沿用文件既有
+    逐版注记惯例
+
+三、后端路由面核对（门户接管 `/` 的波及分析；grep 实测 app.py/web.py/creator.py/
+    web_admin.py/store.py/auth.py/api_certifications.py/api_devices.py 全路由清单）
+
+  既有专属 location 覆盖（不受影响）：/healthz、/login GET+POST（= 精确匹配含
+  POST 表单）、/register GET+POST、/store、/store/app/{name} GET、
+  /store/app/{name}/acquire POST（/store 前缀覆盖全部子路径）、/static/、
+  /api/v1/*（auth/pubkey/run-reports/me/entitlements/store 豁免 + 其余 /api/ Basic）
+  = /creator 页面 + 其 XHR /api/v1/creator/*（creator.py:358 include prefix="/api/v1"
+  → 落 /api/ 块，实测确认）
+
+  【计划外发现 1——买家面回归风险，报 arch-reviewer 裁决】/me/library（web.py:263
+  买家"我的应用"页；web.py:57 nav 链接 + web.py:261 登录后 302 跳转目标）今天经
+  location / 代理回源，门户接管 `/` 后被 portal 吞（返回门户页而非图书馆页）。
+  docs/18 §7 仅列 /creator 保漏，属计划遗漏。本次严守卡面四变更未擅自加
+  location（如 anon 代理的 location /me/）；建议 arch-reviewer 审计时裁决补块或
+  portal 改链
+  【计划外发现 2——有意取代】/admin/first-run（web_admin.py:24 后端 HTML 首跑
+  面板）被新 /admin/ 静态块遮蔽；T2 SPA 视图①同数据源 /api/v1/stats/first-run
+  （/api/ 前缀保留不受影响），属取代而非丢失；回滚手段已写入 SERVER_STEPS §10 注记
+  【发现 3——口径失效，已注记】/docs、/openapi.json 无专属 location，原经
+  location / 回源（生产关文档得 404），现返回门户页 200；SERVER_STEPS §7 的
+  "/docs → 404" 检查项口径失效，已在 §10 注记声明
+  【发现 4——非泄漏】/admin（无尾斜杠）不命中 /admin/ 前缀 → 落门户页；admin
+  资产全在 /admin/ 前缀 Basic 之后，无泄漏；入口统一 /admin/，已注记
+  【核实】backend 确无裸 / 路由（app.py 顶层仅 /healthz:162、/creator:167；
+  web.py router 无 / 路由）——docs/18"backend 无 `/` 路由已核实"声明复验成立
+
+四、本机不可执行项如实登记（未伪造任何运行结果）
+
+  - 本机无 docker、无 nginx（which nginx docker 双双 exit 2，PATH 实测）：
+    · FORGE_TAG=v0 docker compose -f deploy/compose.yml config -q 未跑——但
+      compose.yml 零改动（git diff 无条目），配置面无增量，风险仅在于"卡面命令
+      无法本机复跑"，转 CI/部署期验证
+    · nginx -t 未跑——以第二节静态自查清单替代，正式 nginx -t 在部署期
+      SERVER_STEPS §10（cp 后 docker exec aim-nginx nginx -t）执行
+  - 本机已执行的验证：Python 花括号配对/栈深（18/18/0）、deploy.yml YAML
+    safe_load 通过（jobs deploy+runner-build 完整、断言步 27 行）、git diff 逐行
+    人工核对（三文件全量 diff 过目）
+
+五、CI 待验证项（push 后）
+  1. deploy job 公开面/管理域断言新增 5 条：anon /=200、anon /admin/=401、
+     basic /admin/=200、anon /api/v1/store/client ∈{200,404}（口径注明）+
+     既有 7 条不回退
+  2. runner-build job 未动（仅 PYTHONPATH 属 T0 已改），tag 链全绿
+  3. 部署期（R6 确认后按 §10）：aim-nginx nginx -t + reload；curl 匿名 /（200）/
+     /admin/（401）探针
+  4. e2e 走查（人工触发一次）：t5.2-e2e-*.png（portal 截图、/store 匿名、/admin/
+     Basic 三页、client 生产 feed 日志）
+  5. arch-reviewer 门：t5.1-arch-review.md——重点审计 / 豁免、/admin/、client feed
+     三处 + 本证据第三节发现 1（/me/library 被吞）的裁决
+================================================================================
