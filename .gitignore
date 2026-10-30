@@ -17,3 +17,4 @@ apps/runner/dist/
 # MS-3 JS 端（docs/18 T0）：pnpm workspace 仅纳管三个 JS 端
 node_modules/
 apps/client/release/
+apps/web-admin/dist/

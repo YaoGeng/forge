@@ -1,0 +1,143 @@
+MS-3 T2 web-admin 只读管理面（docs/18 §6 T2 卡）—— 证据归档
+========================================================
+日期：2026-10-31；基线 main@b549743（工作树含本卡未提交改动 + 并行 T3/T4 车道未提交改动）
+环境：node v24.6.0；pnpm 12.11.2；npm 源仅命令级 --registry=https://registry.npmmirror.com（未改全局）
+栈：create-vite@9.3.3 react-ts 模板 → Vite 8.3.5 + React 19.3.1 + antd 5.29.3 +
+    @ant-design/icons 6.3.4 + @ant-design/v5-patch-for-react-19 1.0.3（官方 React19 兼容
+    补丁，见偏差 D2）+ TypeScript 7.0.2 + vitest 5.0.5 + oxlint 1.89.0
+脚手架：pnpm create vite@latest apps/web-admin --template react-ts；package.json name="web-admin"
+（pnpm -F web-admin 全程可用）；deps 按卡面 antd@5 + @ant-design/icons。
+
+改动文件（全部新增于 apps/web-admin/；模板自带文件计入，模板残留已删）：
+  package.json            脚手架 + deps（antd@5 / @ant-design/icons / React 栈 / vitest）
+  vite.config.ts          base:'/admin/' + server.proxy {'/api':'http://127.0.0.1:8041'}（仅 dev；
+                          生产 nginx 同域 Basic 自动携带，前端零凭据逻辑）
+  index.html              lang="zh-CN"、标题「Forge 管理域 · web-admin」
+  src/main.tsx            ConfigProvider(zhCN) + antd React19 补丁引入
+  src/App.tsx             antd Layout + Sider Menu 本地 useState 切三视图（无路由库）；
+                          三视图 React.lazy 分包（入口 chunk 内烙下 /admin/ 动态加载前缀）
+  src/gate.ts             GATE 判定纯函数 + GATE_TEXT / GATE_RATE=0.8 / GATE_MIN_USERS=5
+  src/gate.test.ts        vitest：真值表 6 例 + 常量钉子 2 例（GATE_TEXT 逐字符钉死）
+  src/api.ts              只读 API 适配层（4 个 GET；服务端字段仅在此收口，含 ApiError）
+  src/useApi.ts           loading/error/done 状态机 hook（卸载后弃置迟到响应，无竞态 setState）
+  src/views/FirstRunView.tsx    视图① 首跑统计：GATE_TEXT 顶栏一字不差；达标绿 Tag /
+                          未达标红 Tag + reason「（n=x<5）」；空态文案与 backend 同文
+  src/views/AppsView.tsx        视图② 应用与版本：GET /api/v1/apps Table + 行展开懒拉
+                          E1 /apps/{id}/versions（按 app 缓存 + 行级 loading/重试）
+  src/views/RunReportsView.tsx  视图③ 认证记录：GET /api/v1/stats/run-reports?limit=50
+  其余为模板文件（tsconfig 三件 / .gitignore / .oxlintrc.json / public/ / README.md）
+删除模板残留：src/App.css、src/assets/{hero.png,react.svg,vite.svg}
+MUST NOT 合规：无 redux / react-query / JWT / RBAC / 路由库；全部网络交互为只读 GET
+（重试/刷新按钮均为只读重拉）；无任何写操作 UI。
+
+数据源契约（读 backend 实测，端点均在 /api/v1 前缀的 Basic 域）：
+  GET /api/v1/stats/first-run          → [{"app","first_runs","ok_first_runs","rate"}]（rate=round(ok/n,4)）
+  GET /api/v1/apps                     → [{"id","name","title","status","version"}]（latest 摘要）
+  GET /api/v1/apps/{app_id}/versions   → [{"id","version","status","created_at"}] id desc（E1）
+  GET /api/v1/stats/run-reports?limit  → [{"id","app_name","ok","failure_class","env_class",
+                                           "first_run","created_at"}] id desc（E3，本面板钉 limit=50）
+
+----------------------------------------------------------------
+1) TDD RED（gate.test.ts 先行；gate.ts 占位实现 return {met:false, reason:''}）
+----------------------------------------------------------------
+$ pnpm -F web-admin exec vitest run
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+失败 4 例 = 真值表正向例（n=5/rate=0.8 双压线、n=10/rate=0.9）与 reason 拼装例
+（n=4 →「（n=4<5）」、n=0 →「（n=0<5）」）；当轮即过 4 例 = 否定态钉子
+（n=10/rate=0.79 与 n=7/rate=0.7999 的 reason 空）+ 常量钉子 2 例。
+
+----------------------------------------------------------------
+2) TDD GREEN + 文案一字不差核对
+----------------------------------------------------------------
+$ pnpm -F web-admin exec vitest run
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+
+gate.ts 实现（与 web_admin.py 判定式同构）：
+  met = n >= GATE_MIN_USERS && rate >= GATE_RATE
+  reason = met ? '' : (n < GATE_MIN_USERS ? `（n=${n}<${GATE_MIN_USERS}）` : '')
+
+GATE_TEXT 交叉核对（spikes/.venv python 逐字符比对 web_admin.py vs gate.ts）：
+  backend: 'MS-2 通过 = 每个上架应用首跑成功率 ≥80% 且 n≥5 不同真实注册用户；任一不达 → 不进 MS-3'
+  gate.ts: 'MS-2 通过 = 每个上架应用首跑成功率 ≥80% 且 n≥5 不同真实注册用户；任一不达 → 不进 MS-3'
+  MATCH
+（产物内抽查：dist/assets/FirstRunView-*.js 含 GATE_TEXT 全文；API 四路径模板均在
+  dist/assets/useApi-*.js：/api/v1/stats/first-run、/api/v1/apps、/api/v1/apps/…/versions、
+  run-reports?limit= ← 50 被压缩为变量拼接）
+
+----------------------------------------------------------------
+3) 验收（零人工，逐条原样输出）
+----------------------------------------------------------------
+$ pnpm -F web-admin exec tsc --noEmit
+exit=0
+（说明见偏差 D3：模板根 tsconfig 为 solution 式 files:[]+references，该命令不对 src 实际
+ 检查；真实类型门 = build 内 tsc -b。已做注入式 sanity：临时文件含
+ const _tscSanity: number = "not-a-number" 时 tsc -b 报 error TS2322 + TS6133，删除后复绿，
+ 证明类型检查真实生效。）
+
+$ pnpm -F web-admin build
+$ tsc -b && vite build
+vite v8.3.5 building client environment for production...
+transforming...
+✓ 3090 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                             0.59 kB │ gzip:   0.37 kB
+dist/assets/index-Df38RR2u.css              0.19 kB │ gzip:   0.17 kB
+dist/assets/rolldown-runtime-WkwZ5CU-.js    0.59 kB │ gzip:   0.36 kB
+dist/assets/RunReportsView-aMVVmXLw.js      1.34 kB │ gzip:   0.79 kB
+dist/assets/FirstRunView-Da-qQBwG.js        1.60 kB │ gzip:   0.95 kB
+dist/assets/AppsView-CFKXI-Z6.js            2.22 kB │ gzip:   1.03 kB
+dist/assets/useApi-CvQQtHUz.js            332.76 kB │ gzip: 103.38 kB
+dist/assets/index-BTnnLXhG.js             575.04 kB │ gzip: 184.09 kB
+(!) Some chunks are larger than 500 kB after minification. Consider: ...（体积提示，非错误；
+    antd 全量在入口 chunk，三视图已按需分包）
+✓ built in 824ms
+exit=0
+
+$ test -f apps/web-admin/dist/index.html
+exit=0
+
+$ grep -q "/admin/" apps/web-admin/dist/assets/*.js
+exit=0（GNU grep /usr/bin/grep；命中 dist/assets/index-BTnnLXhG.js —— base 烙进入口 chunk
+  的动态加载前缀 Cy=function(e){return `/admin/`+e}；执行口径说明见偏差 D1）
+
+$ pnpm -F web-admin exec vitest run
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+
+额外（非卡面，补充信心）：
+$ pnpm -F web-admin lint（oxlint）→ Found 1 warning and 0 errors，exit=0
+  （唯一 warning：useApi effect 内同步 setState 的 React Compiler 风格提示——loading
+   状态机的固有写法，非缺陷）
+$ vite preview 冒烟（--port 4188，curl）：
+  GET /admin/                   → 200；<title>Forge 管理域 · web-admin</title>；
+                                  src="/admin/assets/index-BTnnLXhG.js"
+  GET /admin/assets/<entry>.js  → 200
+  GET /                         → 302 重定向 /admin/（vite preview 的 base 语义）
+
+----------------------------------------------------------------
+4) 偏差登记
+----------------------------------------------------------------
+D1 grep 执行口径：本机 shell 的 grep 是 ZCode ugrep 包装函数，对含 "/" 的模式有解析怪癖
+   （printf 'x/admin/y' | grep -F "/admin/" 亦 exit 1，ugrep 7.8.4 实测），故卡面 grep 用
+   /usr/bin/grep（GNU）执行；CI/Linux 环境 grep 即 GNU，口径不变。
+D2 React 大版本（React19 vs plan §3 树标注 React18）：脚手架 create-vite@9.3.3 出 React 19；
+   先按 plan 钉 18.3.1，随即构建被并行车道击穿——portal 车道 @types/react@19 经 pnpm 公共
+   提升进入 antd 类型解析链，tsc -b 报 TS2786 ×N（antd 组件类型被解析到
+   node_modules/.pnpm/@types+react@19.3.0 与本包 18 冲突，'bigint is not assignable to
+   ReactNode'）。工作区统一 React 19.3.1 后根因消除，另按 antd 官方指引加
+   @ant-design/v5-patch-for-react-19（防御性；本面板未用 message/Modal 静态法）。
+   antd 5.29.3 peer 允许 react>=16.9.0；MUST NOT 清单未钉 React 大版本。曾出现的失败构建
+   已在复跑中覆盖（本文件只归档最终绿态 + 根因）。
+D3 tsc --noEmit 说明：模板根 tsconfig 为 solution 式（files:[] + references），卡面命令对
+   src 实际不做检查、恒 exit 0；真实类型门 = build 脚本内 tsc -b（有效性已由注入式 sanity
+   证明，见第 3 节注）。
+
+----------------------------------------------------------------
+5) 卡面「人工触发一次」项——未执行（登记待办）
+----------------------------------------------------------------
+dev 冒烟三页截图（t2.1-admin-*.png）：卡面标注人工触发，本轮跳过，待用户亲自执行后归档。
+建议步骤：backend 起在 127.0.0.1:8041 → pnpm -F web-admin dev（5173，/api 自动代理）→
+首跑统计 / 应用与版本（行展开看版本列表）/ 认证记录 三页各截一张。
