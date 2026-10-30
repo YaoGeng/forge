@@ -1,7 +1,10 @@
 # 运行器构建期依赖（docs/17 T2.13；运行时依赖 = cryptography/PyYAML/openpyxl/patchright + 本仓 packages）
+# 注：含 server 核心依赖——runner 测试含 ChainRunner 一致性对照（import forge_server 侧）
 cryptography>=42
 PyYAML>=6.0
 openpyxl>=3.1
 patchright>=0.1
 pyinstaller>=6.6
 pytest>=8
+fastapi>=0.110
+sqlalchemy>=2.0
