@@ -1,0 +1,325 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/*
+  Forge portal 主题 · 人民币双色系 × 玻璃拟态
+  色值逐条取自 docs/prototypes/prototype.html :root（不得擅改）：
+  主色（≈90% 面积 · 一元纸币橄榄绿）
+    bg #F4F6F1 · primary #3E5C3A · primary-deep #324C30 · moss #6B8E5A
+    mist #A8B89B · ink #2C3E28 · ink2 #7A8B74 · glass #C9D6C0
+  点缀（≤10% 面积 · 百元纸币豆沙红）
+    #C25E5E / #B04A4A / #A34B4B / #E8C4C4 —— 仅用于主按钮 / 重点数字 /
+    状态标签 / 单张强调卡片等极小面积；严禁大面积铺色，严禁红绿五五开
+  其它：ok-bg #E7EFDC · warn #8A6A2C · warn-bg rgba(246,238,214,.8)
+*/
+
+:root {
+  --background: #f4f6f1;
+  --foreground: #2c3e28;
+  --card: rgba(255, 255, 255, 0.72);
+  --card-foreground: #2c3e28;
+  --popover: #ffffff;
+  --popover-foreground: #2c3e28;
+  --primary: #3e5c3a;
+  --primary-foreground: #f4f6f1;
+  --secondary: #e7efdc;
+  --secondary-foreground: #324c30;
+  --muted: rgba(201, 214, 192, 0.45);
+  --muted-foreground: #7a8b74;
+  --accent: rgba(201, 214, 192, 0.5);
+  --accent-foreground: #2c3e28;
+  --destructive: #a34b4b;
+  --border: rgba(62, 92, 58, 0.14);
+  --input: rgba(62, 92, 58, 0.2);
+  --ring: #6b8e5a;
+  --radius: 0.75rem;
+
+  /* 品牌延伸 token（@theme 内映射为 Tailwind 颜色类） */
+  --brand: #c25e5e;
+  --brand-deep: #b04a4a;
+  --brand-ink: #a34b4b;
+  --brand-soft: #e8c4c4;
+  --brand-bg: rgba(194, 94, 94, 0.14);
+  --moss: #6b8e5a;
+  --mist: #a8b89b;
+  --glass: #c9d6c0;
+  --ink-soft: #7a8b74;
+  --primary-deep: #324c30;
+  --warn: #8a6a2c;
+  --warn-bg: rgba(246, 238, 214, 0.8);
+  --warn-line: rgba(196, 164, 84, 0.4);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans:
+    -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-mono:
+    ui-monospace, "Cascadia Mono", Consolas, monospace;
+
+  /* 品牌延伸色 → text-brand / bg-moss / border-glass 等 */
+  --color-brand: var(--brand);
+  --color-brand-deep: var(--brand-deep);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-bg: var(--brand-bg);
+  --color-moss: var(--moss);
+  --color-mist: var(--mist);
+  --color-glass: var(--glass);
+  --color-ink-soft: var(--ink-soft);
+  --color-primary-deep: var(--primary-deep);
+  --color-warn: var(--warn);
+  --color-warn-bg: var(--warn-bg);
+  --color-warn-line: var(--warn-line);
+
+  --shadow-soft: 0 6px 24px rgba(62, 92, 58, 0.08);
+  --shadow-lifted: 0 18px 50px rgba(62, 92, 58, 0.16);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  ::selection {
+    background: rgba(106, 142, 90, 0.3);
+  }
+}
+
+/* ============ 背景光晕（原型 .orbs 同款，纯 CSS） ============ */
+.orbs {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.55;
+  will-change: transform;
+}
+.orb-1 {
+  width: 560px;
+  height: 560px;
+  left: -120px;
+  top: -140px;
+  background: radial-gradient(
+    circle,
+    rgba(107, 142, 90, 0.34),
+    transparent 68%
+  );
+  animation: orb-drift-1 52s ease-in-out infinite alternate;
+}
+.orb-2 {
+  width: 680px;
+  height: 680px;
+  right: -180px;
+  top: 16%;
+  background: radial-gradient(
+    circle,
+    rgba(168, 184, 155, 0.42),
+    transparent 66%
+  );
+  animation: orb-drift-2 64s ease-in-out infinite alternate;
+}
+.orb-3 {
+  width: 520px;
+  height: 520px;
+  left: 26%;
+  bottom: -220px;
+  background: radial-gradient(
+    circle,
+    rgba(107, 142, 90, 0.26),
+    transparent 70%
+  );
+  animation: orb-drift-3 70s ease-in-out infinite alternate;
+}
+.orb-4 {
+  width: 300px;
+  height: 300px;
+  right: 24%;
+  top: -90px;
+  background: radial-gradient(
+    circle,
+    rgba(201, 214, 192, 0.6),
+    transparent 70%
+  );
+  animation: orb-drift-1 46s ease-in-out infinite alternate-reverse;
+}
+@keyframes orb-drift-1 {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(90px, 60px, 0) scale(1.12);
+  }
+}
+@keyframes orb-drift-2 {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(-110px, 80px, 0) scale(0.94);
+  }
+}
+@keyframes orb-drift-3 {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(70px, -90px, 0) scale(1.08);
+  }
+}
+
+/* ============ 滚动渐入（IntersectionObserver 驱动） ============ */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ============ Hero 渐变标题与豆沙红衬底 ============ */
+.headline-gradient {
+  background: linear-gradient(120deg, #324c30 0%, #3e5c3a 38%, #6b8e5a 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.headline-underline {
+  position: relative;
+  white-space: nowrap;
+}
+.headline-underline::after {
+  content: "";
+  position: absolute;
+  left: 0.06em;
+  right: 0.06em;
+  bottom: 0.04em;
+  height: 0.16em;
+  border-radius: 999px;
+  background: rgba(194, 94, 94, 0.32);
+  z-index: -1;
+}
+
+/* ============ 玻璃卡片 ============ */
+.glass-card {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(62, 92, 58, 0.14);
+  box-shadow: 0 6px 24px rgba(62, 92, 58, 0.08);
+  border-radius: 16px;
+}
+.glass-strong {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+/* ============ 特性卡悬停 ============ */
+.feature-card {
+  transition:
+    transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 50px rgba(62, 92, 58, 0.16);
+  border-color: rgba(107, 142, 90, 0.45);
+}
+
+/* ============ 通过率环（示意） ============ */
+.ring-track {
+  stroke: rgba(62, 92, 58, 0.12);
+}
+.ring-bar {
+  stroke: #6b8e5a;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: center;
+}
+.ring-dot-pulse {
+  animation: dot-pulse 2.6s ease-in-out infinite;
+  transform-origin: center;
+}
+@keyframes dot-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.72);
+  }
+}
+
+/* ============ 顶栏 ============ */
+.site-header {
+  background: rgba(244, 246, 241, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(62, 92, 58, 0.1);
+}
+
+/* ============ 呼吸徽标格 ============ */
+.logo-tile {
+  background: linear-gradient(
+    135deg,
+    rgba(107, 142, 90, 0.22),
+    rgba(201, 214, 192, 0.55)
+  );
+  color: var(--primary);
+}
+
+/* 尊重减弱动态偏好：停用装饰动画与平滑滚动 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .orb,
+  .ring-dot-pulse {
+    animation: none;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

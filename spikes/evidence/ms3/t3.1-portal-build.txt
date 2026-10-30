@@ -1,0 +1,116 @@
+T3.1 portal · 自动化验收证据（零人工部分）
+日期：2026-10-31 ｜ 执行者：前端 agent ｜ 工作树：main@b549743（未 commit，按要求）
+
+──────────────────────────────────────────────
+0. 版本实测（开工日锁定）
+──────────────────────────────────────────────
+$ npm view next version
+16.4.3
+$ node -v
+v24.6.0
+$ pnpm -v
+12.11.2
+脚手架：pnpm create next-app@latest apps/portal --ts --tailwind --app --no-src-dir --import-alias "@/*" --use-pnpm --eslint --yes --disable-git
+产出：next 16.4.3 / react 19.3.0 / tailwindcss 4.3.3 / typescript 5.9.3
+next.config.ts 三配置钉死：output:'export' + images:{unoptimized:true} + trailingSlash:true（实测文件见 apps/portal/next.config.ts）
+
+──────────────────────────────────────────────
+1. pnpm -F portal build（原样输出）
+──────────────────────────────────────────────
+$ pnpm -F portal build
+$ next build
+▲ Next.js 16.4.3 (Turbopack)
+✓ Running next.config.ts took 87ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 732ms
+  Running TypeScript ...
+  Finished TypeScript in 6.3s ...
+  Collecting page data using 5 workers ...
+  Generating static pages using 5 workers (0/4) ...
+  Generating static pages using 5 workers (1/4) 
+  Generating static pages using 5 workers (2/4) 
+  Generating static pages using 5 workers (3/4) 
+✓ Generating static pages using 5 workers (4/4) in 1205ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+└ ○ /_not-found
+
+
+○  (Static)  prerendered as static content
+
+build exit=0（重复跑第二次同 exit 0）
+产物目录 apps/portal/out/：index.html、404.html、_next/、favicon.ico 等，共 928K
+
+──────────────────────────────────────────────
+2. test -f apps/portal/out/index.html
+──────────────────────────────────────────────
+$ test -f apps/portal/out/index.html && echo OK
+exit 0（index.html 存在，62251 bytes）
+
+──────────────────────────────────────────────
+3. grep -q 'href="/store' apps/portal/out/index.html
+──────────────────────────────────────────────
+$ grep -q 'href="/store' apps/portal/out/index.html
+exit 0（/store 链接出现 4 处；/download/ 链接同在，含尾部斜杠）
+
+──────────────────────────────────────────────
+4. git grep -niE "i18n|cms|localStorage" apps/portal/src
+──────────────────────────────────────────────
+$ git grep -niE "i18n|cms|localStorage" apps/portal/src
+fatal: ambiguous argument 'apps/portal/src': unknown revision or path not in the working tree.
+Use '--' to separate paths from revisions, like this: 'git <command> [<revision>...] -- [<file>...]'
+exit 128
+↑ 卡面命令原样执行：路径不存在——脚手架按卡面旗标 --no-src-dir 生成，无 src/ 目录，
+命令对不存在的 pathspec 报 fatal 而非「无输出」（见偏差登记 D2）。
+同口径有效替代（含未追踪文件 + 纯文本兜底，均零命中）：
+$ git grep --untracked -niE "i18n|cms|localStorage" -- apps/portal
+exit 1（无输出 = 零命中）
+$ grep -rniE "i18n|cms|localStorage" apps/portal/app apps/portal/components
+exit 1（无输出 = 零命中）
+
+──────────────────────────────────────────────
+5. footer 担保声明逐字校验
+──────────────────────────────────────────────
+$ grep -c "运行条件与成功率以信任字段为准；平台审核与认证不构成对运行结果的担保" apps/portal/out/index.html
+1
+（源出 docs/17-MS2执行计划.md L35 铁律原文，page.tsx 以常量逐字引用渲染）
+
+──────────────────────────────────────────────
+6. 附加（交付卫生，非卡面要求）
+──────────────────────────────────────────────
+$ pnpm -F portal lint（eslint 9.39.4 flat config）
+exit 0，无输出
+$ grep -inE "warn|error" <build log>
+零命中（build 无警告无错误）
+
+──────────────────────────────────────────────
+7. 卡面「人工触发一次」项（未执行，待用户触发）
+──────────────────────────────────────────────
+- dev 冒烟截图 t3.1-portal-*.png：未执行。触发方式：仓库根 `pnpm -F portal dev` →
+  http://localhost:3000 截图（Hero/三大支柱/信任字段/CTA/footer 各一张）。
+
+──────────────────────────────────────────────
+偏差登记
+──────────────────────────────────────────────
+D1 shadcn init 部分失败→按卡面回退路径手装主题
+   `pnpm dlx shadcn@latest init` 在「Installing dependencies」步被 pnpm 的
+   ERR_PNPM_IGNORED_BUILDS（apps/client 的 electron-winstaller、apps/web-admin 的
+   unrs-resolver 构建脚本未批准，pnpm 12 判 fatal exit 1）打断；
+   components.json 与依赖（radix-ui/lucide-react/cva/cn/tw-animate-css）已落盘，
+   `shadcn add button card badge` 成功生成三组件；
+   globals.css 的 Tailwind4 CSS 变量主题按卡面回退条款手写（色值逐条取自
+   docs/prototypes/prototype.html :root，人民币双色系：橄榄绿主色 + 豆沙红 ≤10% 点缀）。
+D2 卡面 grep 命令指向 apps/portal/src，而卡面脚手架旗标 --no-src-dir 决定无 src/ 目录，
+   原样命令 fatal（exit 128）；以 --untracked 全目录同口径零命中作为有效证据（见第 4 节）。
+D3 并发 install 锁冲突善后：三 agent 并行装依赖导致共享 store 内容缺失
+   （@eslint-community/eslint-utils 符号链接目标被掏空，eslint 起不来）；
+   常规重装不自愈，改用独立 store `pnpm install --store-dir "C:/Users/yg/.pnpm-store-portal"`
+   全量重物化后修复（store 在仓库外，不污染 repo；根 pnpm-lock.yaml 内容不变）。
+   该 install 尾部仍打印 ignored-builds 提示（属 client/web-admin 两包，非 portal 范畴）。
+D4 create-next-app 在 apps/portal 内生成的嵌套 pnpm-workspace.yaml/pnpm-lock.yaml 已删除
+   （否则 portal 脱离根 workspace，pnpm -F portal 失效），依赖并入根 lockfile。
+D5 未引入 framer-motion：渐入用自研 Reveal（IntersectionObserver + CSS 过渡），
+   背景光晕/脉冲均为 CSS keyframes，prefers-reduced-motion 下全部停用（卡面允许的取轻路径）。
