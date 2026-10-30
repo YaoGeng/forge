@@ -82,9 +82,11 @@ jobs:
       - name: 构建 exe
         run: pyinstaller apps/runner/forge-runner.spec --noconfirm --distpath dist
       - name: exe 冒烟（能起、鉴权护栏生效）
-        shell: bash   # pwsh 下 2>&1 的 ErrorRecord 语义踩坑两次（v0.2.3/4 实测零输出退出），bash 直测
+        shell: bash   # Actions bash 默认 -e：exe 预期退出码 2 会当场中断脚本——采样段须放开 -e
         run: |
+          set +e
           out=$(./dist/forge-runner.exe library 2>&1); code=$?
+          set -e
           echo "$out"
           test "$code" -eq 2
           echo "$out" | grep -q "登录"
