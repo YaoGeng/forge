@@ -105,10 +105,13 @@ def create_app(
         tempfile.mkdtemp(prefix="forge-server-bundles-")
     )
     # 运行器分发（T2.13）：dist_root 指向 exe 存放目录（生产 = FORGE_DIST_DIR，
-    # __main__ 缺省 data_dir/dist）；runner_version 来自 FORGE_RUNNER_VERSION
+    # __main__ 缺省 data_dir/dist）；runner_version 来自 FORGE_RUNNER_VERSION。
+    # 客户端分发（MS-3 T1 E2）：client_version 来自 FORGE_CLIENT_VERSION，
+    # 发布物 forge-client-<ver>-win.exe 同落 dist 卷（nginx /download/ 已有 alias）。
     app.state.dist_root = Path(os.environ.get("FORGE_DIST_DIR") or "") if \
         os.environ.get("FORGE_DIST_DIR") else None
     app.state.runner_version = os.environ.get("FORGE_RUNNER_VERSION", "")
+    app.state.client_version = os.environ.get("FORGE_CLIENT_VERSION", "")
     # 签名钥（T2.04）：FORGE_SIGNING_KEY（base64 32B）注入；缺省生成临时钥+告警（开发态，
     # 重启即换、TOFU 客户端拒连）。"无钥 503" 语义经 state.forge_signing_key=None 表达（测试用）。
     env_key = os.environ.get("FORGE_SIGNING_KEY", "").strip()
@@ -123,6 +126,22 @@ def create_app(
             "仅限开发/测试，生产必须注入）")
     app.state.report_results = {}  # 幂等缓存：(run_id, report_hash, nonce) → 响应（v1 载体内存态）
     app.state.chain_runner = None  # T1.64a：chain 认证执行器（驱动器/工具装配；None → 503）
+
+    # E4（MS-3 T1）env 门控 CORS：仅 FORGE_CORS_ORIGINS 非空挂 CORSMiddleware
+    # （逗号白名单，credentials=False）；缺省关闭 = 生产同域零 CORS。只读管理面
+    # 仅放开 GET 跨域（web-admin dev 场景），写路径保持同域 Basic。
+    cors_origins = [o.strip() for o in
+                    os.environ.get("FORGE_CORS_ORIGINS", "").split(",") if o.strip()]
+    if cors_origins:
+        from fastapi.middleware.cors import CORSMiddleware
+
+        app.add_middleware(
+            CORSMiddleware,
+            allow_origins=cors_origins,
+            allow_credentials=False,
+            allow_methods=["GET"],
+            allow_headers=["*"],
+        )
 
     register_certification_routes(app)
     register_device_routes(app)

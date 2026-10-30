@@ -229,3 +229,8 @@
 
 - **apps/server → apps/backend**（git mv 保历史，包名 forge_server 不变）+ 引用修复 22 处（Dockerfile / .dockerignore / ci.yml ×7 / deploy.yml / certifier conftest / spikes 10 脚本 + 注释级 backend conftest ×2 与 runner chain.py）；根 `package.json` + `pnpm-workspace.yaml`（web-admin/portal/client 三 JS 端）+ `.gitignore` 追加 `node_modules/`、`apps/client/release/`。compose.yml / SERVER_STEPS.md / remote_setup.sh 实测零命中不改（卡上声明成立）。
 - 验收：全量回归 **414 collected = 413 passed + 1 skipped**（skip 为 runner test_cli.py:54 chmod posix-only 环境性，改动前基线同值，零回归）；`git grep "apps/server"` 排除 docs/evidence 后零输出；本机无 docker → compose config 与 docker build 按卡口径转 CI 验证（待 push 后 ci.yml apps-packages + server-pg 双绿）。证据 `ms3/t0.1-rename-grep.txt`。
+
+## MS-3 T1 backend 只读端点（docs/18，2026-10-31）
+
+- **E1-E4 四端点 TDD 落地**（RED 14 失败 → GREEN；三测试文件 `test_client_feed.py`/`test_admin_readonly.py`/`test_cors.py` 新增 19 例）：E1 `GET /api/v1/apps/{id}/versions`（registry 既有 router）；E2 `GET /api/v1/store/client`(+`/latest.yml`，electron-updater generic——sha512 双口径：JSON=sha512:hex 仿 runner、yml=base64 摘要，均与文件字节一致；`client_version`=env `FORGE_CLIENT_VERSION`+既有 `dist_root`，仿 `runner_info_data`）；E3 `GET /api/v1/stats/run-reports?limit=1..100`（默认 50，id desc）；E4 `FORGE_CORS_ORIGINS` 非空才挂 CORSMiddleware（逗号白名单、credentials=False、仅 GET）。
+- 验收：backend 全量 **191 passed**（172+19）；六包全量 **432 passed + 1 skipped**（基线 413+1，skip 为 runner chmod posix-only 环境性，零回退）。买家面既有端点零改动（store.py/web.py 仅新增路由）；不碰 apps/runner；nginx 零改动（`/api/v1/store/` 既有豁免覆盖 client feed）。证据 `ms3/t1.1-endpoints.txt`（含新端点 pytest 断言摘要 + env 全链路活探针 + sha512 双口径 MATCH 核对）。待 code-reviewer 评审后合入。

@@ -12,9 +12,13 @@
 """
 from __future__ import annotations
 
+import base64
+import hashlib
 from datetime import timedelta
+from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, Request, Response
+import yaml
+from fastapi import APIRouter, HTTPException, Query, Request, Response
 
 from .auth import current_user
 from .models import App, AppVersion, Block, BlockVersion, Entitlement, RunReport
@@ -147,6 +151,47 @@ def runner_info_data(app_state) -> dict | None:
             "sha256": "sha256:" + hashlib.sha256(content).hexdigest()}
 
 
+def _client_release(app_state):
+    """客户端发布物定位（MS-3 T1 E2）：未发布（无版本号/dist 未落文件）→ None。"""
+    version = getattr(app_state, "client_version", "") or ""
+    dist = getattr(app_state, "dist_root", None)
+    fname = f"forge-client-{version}-win.exe"
+    if not version or dist is None or not (Path(dist) / fname).exists():
+        return None
+    return version, fname, (Path(dist) / fname).read_bytes()
+
+
+def client_info_data(app_state) -> dict | None:
+    """客户端分发信息（E2，仿 runner_info_data）：sha512 口径（非 runner 的
+    sha256，docs/18 风险 R5），JSON 出 sha512:<hex>。"""
+    rel = _client_release(app_state)
+    if rel is None:
+        return None
+    version, fname, content = rel
+    return {"version": version, "url": f"/download/{fname}",
+            "sha512": "sha512:" + hashlib.sha512(content).hexdigest()}
+
+
+def client_feed_yml(app_state, now) -> str | None:
+    """electron-updater generic latest.yml（E2）：sha512 = base64 摘要
+    （electron-updater 校验约定，hex 串会被按 base64 解码致下载校验必败）；
+    files[0].url 绝对路径 /download/...——updater 按 feed 域解析到站点根。
+    未发布 → None。"""
+    rel = _client_release(app_state)
+    if rel is None:
+        return None
+    version, fname, content = rel
+    digest = base64.b64encode(hashlib.sha512(content).digest()).decode()
+    url = f"/download/{fname}"
+    return yaml.safe_dump({
+        "version": version,
+        "files": [{"url": url, "sha512": digest, "size": len(content)}],
+        "path": url,
+        "sha512": digest,
+        "releaseDate": now.isoformat() + "Z",
+    }, sort_keys=False)
+
+
 def register_store_routes(app) -> None:
     router = APIRouter(prefix="/api/v1/store", tags=["store"])
 
@@ -189,6 +234,23 @@ def register_store_routes(app) -> None:
         if data is None:
             raise HTTPException(status_code=404, detail="运行器尚未发布")
         return data
+
+    @router.get("/client")
+    def client_info(request: Request):
+        """客户端分发信息（MS-3 T1 E2）：版本/下载路径/sha512；未发布 → 404。
+        鉴权归属：nginx /api/v1/store/ 既有公开豁免（updater 无凭据可拉）。"""
+        data = client_info_data(request.app.state)
+        if data is None:
+            raise HTTPException(status_code=404, detail="客户端尚未发布")
+        return data
+
+    @router.get("/client/latest.yml")
+    def client_latest(request: Request):
+        """electron-updater generic feed（MS-3 T1 E2）；未发布 → 404。"""
+        text = client_feed_yml(request.app.state, request.app.state.clock.now())
+        if text is None:
+            raise HTTPException(status_code=404, detail="客户端尚未发布")
+        return Response(text, media_type="text/yaml")
 
     @router.post("/apps/{name}/acquire", status_code=201)
     def acquire(name: str, request: Request, response: Response):
@@ -298,5 +360,18 @@ def register_report_routes(app) -> None:
                     bucket["ok_first_runs"] / bucket["first_runs"], 4)
                 out.append(bucket)
             return out
+
+    @router.get("/stats/run-reports")
+    def stats_run_reports(request: Request,
+                          limit: int = Query(default=50, ge=1, le=100)):
+        """运行上报浏览（MS-3 T1 E3，web-admin 认证记录数据源）：只读，
+        id desc；limit 1..100、缺省 50（既有 /api/v1/certifications 无列表端点）。"""
+        with request.app.state.session_factory() as s:
+            rows = (s.query(RunReport).order_by(RunReport.id.desc())
+                    .limit(limit).all())
+            return [{"id": r.id, "app_name": r.app_name, "ok": r.ok,
+                     "failure_class": r.failure_class, "env_class": r.env_class,
+                     "first_run": r.first_run,
+                     "created_at": r.created_at.isoformat()} for r in rows]
 
     app.include_router(router)

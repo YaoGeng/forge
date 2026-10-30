@@ -1,0 +1,119 @@
+MS-3 T1 backend 只读端点（docs/18 §5 T1 卡）—— 证据归档
+========================================================
+日期：2026-10-31；基线 main@1ad799f（工作树未提交改动，待 code-reviewer 评审后合入）
+Python：spikes/.venv/Scripts/python.exe -m pytest（Python 3.12）
+
+改动文件（全部为新增端点/门控，既有买家面端点零改动）：
+  apps/backend/forge_server/registry.py   E1  GET /api/v1/apps/{app_id}/versions（registry 既有 router，/api/v1 前缀）
+  apps/backend/forge_server/store.py      E2  GET /api/v1/store/client + /client/latest.yml（store 既有 router 公开豁免域）
+                                          E3  GET /api/v1/stats/run-reports（report router，/api/v1 前缀）
+  apps/backend/forge_server/app.py        E4  FORGE_CORS_ORIGINS 非空才挂 CORSMiddleware；E2 state.client_version=env(FORGE_CLIENT_VERSION)
+  apps/backend/tests/test_client_feed.py      新增 7 测试
+  apps/backend/tests/test_admin_readonly.py   新增 7 测试（E1×3 + E3×4）
+  apps/backend/tests/test_cors.py             新增 5 测试（合计新增 19 ≥ 卡面 10）
+
+----------------------------------------------------------------
+1) TDD RED（三测试文件先于实现）
+----------------------------------------------------------------
+$ pytest apps/backend/tests/test_client_feed.py apps/backend/tests/test_admin_readonly.py apps/backend/tests/test_cors.py -q
+14 failed, 4 passed in 3.61s
+失败原因逐类（实现缺失，非笔误）：
+  E1 → 405 Method Not Allowed（仅 POST /apps/{id}/versions 存在，GET 未实现）
+  E2 → 404 Not Found（路由不存在）/ detail="Not Found" ≠ "客户端尚未发布"
+  E3 → 404 Not Found（路由不存在）
+  E4 → KeyError: 'access-control-allow-origin'（无 CORSMiddleware）/ 预检 405
+4 个当轮即过的用例均为"否定态钉子"（CORS 缺省关、非白名单源无许可头、dist 缺文件 404）：
+断言的是"无_header_/404"，中间件一旦挂上即生效守卫，属卡面"有无 env 双态"要求。
+
+----------------------------------------------------------------
+2) TDD GREEN（实现后）+ 补充用例的 revert-fail-restore
+----------------------------------------------------------------
+$ pytest apps/backend/tests/test_client_feed.py apps/backend/tests/test_admin_readonly.py apps/backend/tests/test_cors.py -q
+18 passed in 2.85s
+补充 E2 env 管线用例 test_env_plumbing_client_version_and_dist（FORGE_CLIENT_VERSION/
+FORGE_DIST_DIR → state → 端点，对齐 T5 发布流 .env 契约）：
+  摘除 app.py 的 client_version 注入行 → 该用例 RED：assert 404 == 200（1 failed）
+  恢复注入行 → test_client_feed.py 全绿：7 passed
+
+----------------------------------------------------------------
+3) 验收①：backend 全量
+----------------------------------------------------------------
+$ pytest apps/backend/tests -q
+191 passed in 36.38s        （基线 172 + 新增 19 = 191，全绿，≥ 卡面 172+新增≥10）
+
+----------------------------------------------------------------
+4) 验收②：六包全量回归（不回退）
+----------------------------------------------------------------
+$ pytest apps/backend/tests apps/runner/tests packages/block-sdk/tests packages/proto/tests packages/trace/tests packages/certifier/tests -q
+432 passed, 1 skipped in 47.90s
+（基线 413 passed + 1 skipped → 413+19=432；skip 为 apps/runner test_cli.py chmod
+posix-only 环境性 skip，与 T0 基线同值，零回退）
+
+----------------------------------------------------------------
+5) 新端点 pytest 断言摘要
+----------------------------------------------------------------
+test_client_feed.py（E2，7 例）：
+  - TestClientInfoJson.test_shape_and_sha512_hex：200；恰 {"version","url","sha512"}；
+    url=/download/forge-client-<ver>-win.exe；sha512 == "sha512:"+sha512(文件字节).hexdigest()
+  - TestClientInfoJson.test_unpublished_404_chinese：404 + detail=="客户端尚未发布"
+  - TestClientInfoJson.test_version_set_but_file_missing_404：版本号已设、dist 无 exe → 404
+  - TestLatestYml.test_electron_updater_schema：200 text/yaml；yaml.safe_load 后
+    version/files[0]{url,sha512,size}/path/sha512/releaseDate 齐备；files[0].url 为
+    绝对路径 /download/...；sha512==base64(sha512(文件字节).digest())；size==字节数；
+    releaseDate==冻结时钟 ISO+Z
+  - TestLatestYml.test_sha512_base64_decodes_to_file_digest：base64 解码即文件 sha512 摘要字节
+  - TestLatestYml.test_unpublished_404_chinese：404 + 中文 detail
+  - test_env_plumbing_client_version_and_dist：FORGE_DIST_DIR/FORGE_CLIENT_VERSION
+    经 create_app → app.state → 端点 200（发布流 env 契约）
+test_admin_readonly.py（E1+E3，7 例）：
+  - E1.test_shape_and_id_desc：200；恰 {"id","version","status","created_at"}；id desc；
+    created_at ISO
+  - E1.test_unknown_app_404_chinese：404 + "不存在" 中文 detail
+  - E1.test_app_without_versions_empty_list：空版本应用 → []
+  - E3.test_shape_and_id_desc：200；恰 {"id","app_name","ok","failure_class",
+    "env_class","first_run","created_at"}；id desc（[5,4,3,2,1]）；字段值逐项核对
+  - E3.test_default_limit_50_takes_newest：60 条种子 → 恰 50 条且取最新（id 60..11）
+  - E3.test_limit_param：?limit=2 → [5,4]
+  - E3.test_limit_bounds：limit=0 → 422；limit=101 → 422；limit=100 → 200
+test_cors.py（E4，5 例）：
+  - 无 env：简单请求无 access-control-allow-origin；预检 405（无中间件拦截）
+  - 仅逗号空白 env：" , " → 视同关闭
+  - 白名单源：ACAO 回显源；无 allow-credentials:true（credentials=False）
+  - 预检：OPTIONS 200 + ACAO
+  - 非白名单源：直连 200 但无 ACAO（CORS 非访问控制，不给跨域许可）
+
+----------------------------------------------------------------
+6) 端点活探针（spikes/t11_probe.py：env 全链路装配 create_app 后实打，含哈希现场核对）
+----------------------------------------------------------------
+[E2 JSON] 200 {'version': '0.2.0', 'url': '/download/forge-client-0.2.0-win.exe', 'sha512': 'sha512:a118e2bf0a4725ce948f0c7548e97922639c09777277c52742845720e1571e51d5f83dc514a2bfb87d877ba1a2e87668c71a05341062e80fde0fa44fca44fec2'}
+[E2 JSON sha512=sha512:<hex>(文件字节)] MATCH
+[E2 yml] 200 text/yaml; charset=utf-8
+version: 0.2.0
+files:
+- url: /download/forge-client-0.2.0-win.exe
+  sha512: oRjivwpHJc6Ujwx1SOl5ImOcCXdyd8UnQoRXIOFXHlHV+D3FFKK/uH2He6Gi6HZoxxoFNBBi6A/eD6RPykT+wg==
+  size: 27
+path: /download/forge-client-0.2.0-win.exe
+sha512: oRjivwpHJc6Ujwx1SOl5ImOcCXdyd8UnQoRXIOFXHlHV+D3FFKK/uH2He6Gi6HZoxxoFNBBi6A/eD6RPykT+wg==
+releaseDate: '2026-10-30T20:13:47.286154Z'
+[E2 yml sha512=base64(文件字节) 双处一致] MATCH
+[E1] 200 [{'id': 2, 'version': '0.2.0', 'status': 'published', 'created_at': '2026-10-16T09:00:00'}, {'id': 1, 'version': '0.1.0', 'status': 'published', 'created_at': '2026-10-16T09:00:00'}]
+[E3 limit=2] 200 [{'id': 3, 'app_name': 'probe_app', 'ok': False, 'failure_class': 'captcha_detected', 'env_class': 'windows', 'first_run': False, 'created_at': '2026-10-16T09:00:00'}, {'id': 2, 'app_name': 'probe_app', 'ok': False, 'failure_class': 'captcha_detected', 'env_class': 'windows', 'first_run': False, 'created_at': '2026-10-16T09:00:00'}]
+[E3 limit=101 越界] 422
+[E4 预检 白名单源] 200 acao=http://localhost:5173
+[E4 非白名单源] 200 acao=None
+
+----------------------------------------------------------------
+7) 契约口径登记（卡面未细化处的裁定，供 code-reviewer 核）
+----------------------------------------------------------------
+- E2 sha512 双口径：JSON = "sha512:"+hex（仿既有 runner_info_data 的 sha256 房式，
+  供管理面/脚本核对）；latest.yml = base64 摘要（electron-updater 校验约定，hex 会被
+  按 base64 解码致下载校验必败——风险 R5 的落点）。两者均与文件字节一致（见上 MATCH×2）。
+- E2 鉴权归属：路由挂 store 既有 router（/api/v1/store 前缀），nginx `location /api/v1/store/`
+  既有 auth_basic off 豁免天然覆盖 /client 与 /client/latest.yml（deploy/nginx/forge.conf:42
+  实测），后端零 nginx 改动；updater 无凭据可拉。
+- E1 404 detail 复用 registry 既有 `_get_or_404(App,...)`："应用 不存在"。
+- E4 白名单解析：逗号分隔、逐项 strip、剔除空段；仅放行 GET 跨域（只读管理面），
+  allow_credentials=False 显式钉死；缺省（env 缺失/全空白）不挂中间件 = 生产同域零 CORS。
+
+待办：合入前过 code-reviewer（契约/只读性/无密钥泄漏）——本文件即其输入之一。

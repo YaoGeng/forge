@@ -157,6 +157,17 @@ def register_registry_routes(app) -> None:
             return {"id": a.id, "name": a.name, "title": a.title,
                     "versions": [_version_view(s, av, app_id) for av in versions]}
 
+    @router.get("/apps/{app_id}/versions")
+    def list_app_versions(app_id: int):
+        """应用版本列表（MS-3 T1 E1，web-admin 数据源）：只读，id desc。
+        既有 GET /apps 只含 latest 摘要，版本全列表无出口（docs/18 已核实）。"""
+        _get_or_404(App, app_id, "应用")
+        with session_factory() as s:
+            rows = (s.query(AppVersion).filter_by(app_id=app_id)
+                    .order_by(AppVersion.id.desc()).all())
+            return [{"id": av.id, "version": av.version, "status": av.status,
+                     "created_at": av.created_at.isoformat()} for av in rows]
+
     @router.post("/apps/{app_id}/versions")
     def create_version(app_id: int, body: dict):
         _get_or_404(App, app_id, "应用")
