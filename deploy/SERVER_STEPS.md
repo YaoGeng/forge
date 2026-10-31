@@ -87,20 +87,20 @@ git tag v0.1.0 && git push origin main --tags   # 触发 .github/workflows/deplo
 
 ## 10. 门户 / 管理面静态产物与 client 版本登记（MS-3 T5）
 
-> **R6 待确认【用户，部署前】**：aim-nginx 容器需将静态卷挂载为容器内路径
-> `/opt/aim/infra/nginx/serving`（与 conf.d 同父目录——建议 infra 仓为 nginx 服务追加
-> `/opt/aim/infra/nginx/serving:/opt/aim/infra/nginx/serving` 卷）。挂载不符时 forge.conf
-> 的 root 找不到产物（`/` 与 `/admin/` 均失败），确认前本节命令暂缓执行。
+> **R6 定案（2026-10-31，docker inspect 实测）**：aim-nginx 既有共享挂载
+> `html → /opt/aim/portal (ro)`，**零容器改动**——forge 静态面放其子目录：
+> 宿主 `/opt/aim/infra/nginx/html/forge/{portal,admin}` = 容器 `/opt/aim/portal/forge/{portal,admin}`，
+> forge.conf root 已按此写定（追加式，不动共享 index.html，不重建容器）。
 
-上传目标结构（`<serving>` = /opt/aim/infra/nginx/serving）：
+上传目标结构（`<serving>` = /opt/aim/infra/nginx/html/forge，容器内 = /opt/aim/portal/forge）：
 
 ```bash
 # 本地构建（【用户】，node ≥24；产物目录 portal=out/、web-admin=dist/）
 pnpm -F portal build && pnpm -F web-admin build
 # 上传：<serving>/portal ← apps/portal/out/、<serving>/admin ← apps/web-admin/dist/
 # （--delete 保持服务器目录与构建产物严格对齐）
-rsync -a --delete apps/portal/out/     deploy@43.160.219.44:/opt/aim/infra/nginx/serving/portal/
-rsync -a --delete apps/web-admin/dist/ deploy@43.160.219.44:/opt/aim/infra/nginx/serving/admin/
+rsync -a --delete apps/portal/out/     deploy@43.160.219.44:/opt/aim/infra/nginx/html/forge/portal/
+rsync -a --delete apps/web-admin/dist/ deploy@43.160.219.44:/opt/aim/infra/nginx/html/forge/admin/
 ```
 
 client 发布版本登记进 .env（【服务器】，§3 同文件；仿 FORGE_RUNNER_VERSION——compose
