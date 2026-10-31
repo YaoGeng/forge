@@ -2,6 +2,7 @@
 // 禁事项（MUST NOT）：不引 better-sqlite3 / Monaco / React Flow / 渲染层框架。
 import { app, BrowserWindow, ipcMain, shell } from "electron";
 import { autoUpdater } from "electron-updater";
+import * as fs from "node:fs";
 import * as path from "node:path";
 
 const STORE_URL = "https://forge.aim8848.com/store";
@@ -14,6 +15,13 @@ function feedUrl(): string {
 }
 
 let win: BrowserWindow | null = null;
+
+// 自截开关（仅证据采集用）：--self-capture=<png 路径>。update-downloaded 后离屏
+// capturePage 存图即退——不抢前台、不碰用户桌面（CopyFromScreen 会拍到无关窗口）。
+const selfCapturePath = (() => {
+  const arg = process.argv.find((a) => a.startsWith("--self-capture="));
+  return arg ? arg.slice("--self-capture=".length) : null;
+})();
 
 /** 事件写 console（打包后经 --enable-logging 落 t4.1-updater.log）+ 推 UI 状态行。 */
 function log(line: string): void {
@@ -48,9 +56,18 @@ function setupUpdater(): void {
   autoUpdater.on("download-progress", (p) =>
     log(`updater: download-progress ${p.percent.toFixed(1)}% (${p.transferred}/${p.total})`),
   );
-  autoUpdater.on("update-downloaded", (i) =>
-    log(`updater: update-downloaded ${i?.version ?? "?"}（可重启安装）`),
-  );
+  autoUpdater.on("update-downloaded", (i) => {
+    log(`updater: update-downloaded ${i?.version ?? "?"}（可重启安装）`);
+    if (selfCapturePath && win && !win.isDestroyed()) {
+      setTimeout(() => {
+        win!.webContents
+          .capturePage()
+          .then((img) => fs.writeFileSync(selfCapturePath, img.toPNG()))
+          .then(() => log(`self-capture: saved ${selfCapturePath}`))
+          .finally(() => app.quit());
+      }, 500);
+    }
+  });
   autoUpdater.on("error", (e) => log(`updater: error ${String(e)}`));
 }
 

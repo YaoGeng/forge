@@ -1,0 +1,11 @@
+
+[2026-10-31T09:25:33.772Z] app: 启动完成 version=0.1.0 packaged=true
+Checking for update
+[2026-10-31T09:25:33.775Z] updater: checking-for-update (feed=http://127.0.0.1:8099/)
+Found version 0.2.0 (url: forge-client-0.2.0-win.exe)
+[2026-10-31T09:25:33.904Z] updater: update-available 0.2.0
+Downloading update from forge-client-0.2.0-win.exe
+updater cache dir: C:\Users\yg\AppData\Local\client-updater
+Update has already been downloaded to C:\Users\yg\AppData\Local\client-updater\pending\forge-client-0.2.0-win.exe).
+[2026-10-31T09:25:34.518Z] updater: update-downloaded 0.2.0（可重启安装）
+[2026-10-31T09:25:35.154Z] self-capture: saved C:/Users/yg/Desktop/forge/spikes/evidence/ms3/t4.1-updater-popup.png

@@ -3,7 +3,7 @@
 <html lang="zh-CN">
   <head>
     <meta charset="utf-8" />
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'" />
     <title>Forge 客户端</title>
     <style>
       :root { color-scheme: light dark; }
@@ -47,19 +47,21 @@
       <div id="log"></div>
     </main>
     <script>
-      const forge = window.forge;
+      // 注意：contextBridge 暴露的全局属性不可配置，const 同名声明会 SyntaxError，
+      // 必须换名承接（T4 缺陷 D8：白屏 = CSP 缺 style-src + const forge 撞名）。
+      const forgeApi = window.forge;
       const $ = (id) => document.getElementById(id);
-      forge.appInfo().then((info) => {
+      forgeApi.appInfo().then((info) => {
         $("version").textContent = "当前版本：" + info.version;
         $("feed").textContent = "更新源：" + info.feed;
       });
-      forge.onUpdaterLog((line) => {
+      forgeApi.onUpdaterLog((line) => {
         $("update-status").textContent = line;
         $("log").textContent += line + "\n";
         if (line.includes("update-downloaded")) $("restart-update").style.display = "inline-block";
       });
-      $("open-store").onclick = () => forge.openStore();
-      $("restart-update").onclick = () => forge.quitAndInstall();
+      $("open-store").onclick = () => forgeApi.openStore();
+      $("restart-update").onclick = () => forgeApi.quitAndInstall();
     </script>
   </body>
 </html>
