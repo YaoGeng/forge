@@ -238,12 +238,12 @@
 ## MS-3 T2 web-admin 只读管理面（docs/18，2026-10-31）
 
 - **antd5 只读三视图落地**（Vite react-ts，`base:'/admin/'` + dev `/api` 代理 127.0.0.1:8041；无 redux/react-query/JWT/RBAC/路由库，antd Layout+Menu 本地态切页，零写操作 UI）：①首跑统计 `GET /api/v1/stats/first-run`（gate 纯函数 `src/gate.ts`：rate≥0.8 且 n≥5，GATE_TEXT 与 web_admin.py 逐字符 MATCH，未达标红 Tag + n 不足 reason）②应用与版本 `GET /api/v1/apps` Table 行展开懒拉 E1 `/apps/{id}/versions` ③认证记录 E3 `?limit=50`。偏差：React 19.3.1 + antd 官方 v5-patch-for-react-19（并行车道 @types/react@19 公共提升击穿 18 类型链，统一 19 根因消除，证据 D2）。
-- 验收：gate vitest 真值表 RED 4 失败 → GREEN **8/8**；`pnpm -F web-admin exec tsc --noEmit` exit 0；`pnpm -F web-admin build` 成功（真类型门 tsc -b 注入式验证有效）；`test -f dist/index.html` 与 `grep -q "/admin/" dist/assets/*.js`（GNU grep；本机默认 grep 为 ugrep 包装）均过；vite preview 冒烟 /admin/ 探针 200/200/302。证据 `ms3/t2.1-admin-build.txt`；dev 三页截图「人工触发一次」待用户执行。已合入 `f992cdf`。
+- 验收：gate vitest 真值表 RED 4 失败 → GREEN **8/8**；`pnpm -F web-admin exec tsc --noEmit` exit 0；`pnpm -F web-admin build` 成功（真类型门 tsc -b 注入式验证有效）；`test -f dist/index.html` 与 `grep -q "/admin/" dist/assets/*.js`（GNU grep；本机默认 grep 为 ugrep 包装）均过；vite preview 冒烟 /admin/ 探针 200/200/302。证据 `ms3/t2.1-admin-build.txt` + `ms3/t2.1-admin-{1-firstrun,2-apps-versions,3-runreports}.png`（dev 三页走查截图，2026-10-31 归档，T5.2 生产走查即以此三帧覆盖 /admin/）。已合入 `f992cdf`。
 
 ## MS-3 T3 portal 门户（docs/18，2026-10-31）
 
 - **Next 16.4.3 静态 export 单页落地**（`output:'export'` + `images:{unoptimized:true}` + `trailingSlash:true` 三配置钉死；Hero「买之前，就知道它能不能跑」/ 三大支柱 积木·认证·健康分 / 信任字段说明 / CTA → `/store`×4 + `/download/`；footer 担保声明与 docs/17 逐字一致）。品牌色板逐值取自 prototype.html：橄榄绿 `#3E5C3A/#2C3E28/#6B8E5A/#F4F6F1` 主 ≈90%，豆沙红 `#C25E5E/#E8C4C4` 仅主 CTA/重点数字/徽标 ≤10%；动效自研 CSS keyframes + IntersectionObserver 渐入（未引 framer-motion），`prefers-reduced-motion` 全停。
-- 验收：`pnpm -F portal build` exit 0（4 静态页，out/ 928K）；`test -f apps/portal/out/index.html`（62251B）；`grep 'href="/store'` 命中 4 处；i18n/cms/localStorage 全目录零命中（卡面 grep 指向 src/ 与 --no-src-dir 矛盾，D2 以全目录口径取证）；lint 零输出。偏差 D1-D5 见证据文件（并发锁冲突独立 store 修复 D3）。证据 `ms3/t3.1-portal-build.txt`；dev 冒烟截图「人工触发一次」待用户执行。已合入 `8b76009`。
+- 验收：`pnpm -F portal build` exit 0（4 静态页，out/ 928K）；`test -f apps/portal/out/index.html`（62251B）；`grep 'href="/store'` 命中 4 处；i18n/cms/localStorage 全目录零命中（卡面 grep 指向 src/ 与 --no-src-dir 矛盾，D2 以全目录口径取证）；lint 零输出。偏差 D1-D5 见证据文件（并发锁冲突独立 store 修复 D3）。证据 `ms3/t3.1-portal-build.txt` + `ms3/t3.1-portal-{1-hero,2-pillars,3-trust-cta,full}.png`（dev 冒烟四帧，2026-10-31 归档，橄榄绿主+豆沙红点缀逐值合规）。已合入 `8b76009`。
 
 ## MS-3 T4 client Electron（docs/18，2026-10-31）
 
