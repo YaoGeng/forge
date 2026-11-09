@@ -20,3 +20,6 @@ apps/client/release/
 apps/web-admin/dist/
 # T4 假 feed exe 115.9MB 超 GitHub 100MB 单文件硬限，仅本地存证（指纹见 fake-feed/README.md）
 spikes/evidence/ms3/fake-feed/*.exe
+
+# 2026-11-09 项目暂停下线：服务器 forge 库最终快照（含试点用户数据，不入库）
+.decommission-backup/
